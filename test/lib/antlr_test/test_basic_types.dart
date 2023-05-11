@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, prefer_single_quotes
+// ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, directives_ordering, always_specify_types
 
 // Package imports:
 import 'package:antlr4/antlr4.dart';
@@ -249,7 +249,7 @@ void testBasicTypes() {
       // TODO(Dokotela): escape sequence
       // expect(
       //     walkFhirPath(
-      //         context: resource.toJson(), pathExpression: r"'\' // ''"),
+      //         context: resource.toJson(), pathExpression: r""' // '""),
       //     ['']);
     });
   });

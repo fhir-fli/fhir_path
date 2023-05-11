@@ -66,7 +66,7 @@ List? _$visitDateLiteral(
   FhirPathDartVisitor visitor,
 ) {
   visitor.context = <dynamic>[
-    Date(ctx.text.startsWith('@') ? ctx.text.substring(1) : ctx.text)
+    FhirDate(ctx.text.startsWith('@') ? ctx.text.substring(1) : ctx.text)
   ];
   return visitor.context;
 }
@@ -86,7 +86,7 @@ List? _$visitTimeLiteral(
   FhirPathDartVisitor visitor,
 ) {
   visitor.context = <dynamic>[
-    Time(ctx.text.startsWith('@T') ? ctx.text.substring(2) : ctx.text)
+    FhirTime(ctx.text.startsWith('@T') ? ctx.text.substring(2) : ctx.text)
   ];
   return visitor.context;
 }

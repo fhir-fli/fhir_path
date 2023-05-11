@@ -301,8 +301,8 @@ class ToDateParser extends FhirPathParser {
       ? []
       : results.length > 1
           ? throw _conversionException('.toDate()', results)
-          : Date(results.first.toString()).isValid
-              ? [Date(results.first.toString())]
+          : FhirDate(results.first.toString()).isValid
+              ? [FhirDate(results.first.toString())]
               : [];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -334,7 +334,7 @@ class ConvertsToDateParser extends FhirPathParser {
       ? []
       : results.length > 1
           ? throw _conversionException('.convertsToDate()', results)
-          : [Date(results.first.toString()).isValid];
+          : [FhirDate(results.first.toString()).isValid];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -577,10 +577,10 @@ class ToTimeParser extends FhirPathParser {
       ? []
       : results.length > 1
           ? throw _conversionException('.toTime()', results)
-          : results.first is Time
+          : results.first is FhirTime
               ? [results.first]
-              : results.first is String && Time(results.first).isValid
-                  ? [Time(results.first)]
+              : results.first is String && FhirTime(results.first).isValid
+                  ? [FhirTime(results.first)]
                   : [];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -612,8 +612,8 @@ class ConvertsToTimeParser extends FhirPathParser {
       ? []
       : results.length > 1
           ? throw _conversionException('.convertsToTime()', results)
-          : results.first is Time ||
-                  (results.first is String && Time(results.first).isValid)
+          : results.first is FhirTime ||
+                  (results.first is String && FhirTime(results.first).isValid)
               ? [true]
               : [false];
 
@@ -739,9 +739,9 @@ bool _isAllTypes(List results) =>
     results.first is! bool &&
     results.first is! num &&
     results.first is! String &&
-    results.first is! Date &&
+    results.first is! FhirDate &&
     results.first is! FhirDateTime &&
-    results.first is! Time &&
+    results.first is! FhirTime &&
     results.first is! DateTime &&
     results.first is! FhirPathQuantity;
 

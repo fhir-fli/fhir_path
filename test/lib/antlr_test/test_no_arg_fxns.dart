@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, prefer_single_quotes
+// ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, unnecessary_statements, leading_newlines_in_multiline_strings, directives_ordering, always_specify_types
 
 // Package imports:
 import 'package:fhir/r4.dart';
@@ -780,7 +780,7 @@ void testNoArgFxns() {
       // expect(
       //     walkFhirPath(
       //         context: resource.toJson(),
-      //         pathExpression: "'10 \'mg[Hg]\''.toQuantity()"),
+      //         pathExpression: ""10 \'mg[Hg]'".toQuantity()"),
       //     ['true']);
     });
 
@@ -795,7 +795,7 @@ void testNoArgFxns() {
       // expect(
       //     walkFhirPath(
       //         context: resource.toJson(),
-      //         pathExpression: "'10 \'mg[Hg]\''.convertsToQuantity()"),
+      //         pathExpression: ""10 \'mg[Hg]'".convertsToQuantity()"),
       //     ['true']);
     });
 

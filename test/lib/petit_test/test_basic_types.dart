@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_parenthesis, depend_on_referenced_packages, prefer_single_quotes, avoid_dynamic_calls
+// ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, unnecessary_statements, leading_newlines_in_multiline_strings, directives_ordering, always_specify_types, unnecessary_parenthesis, avoid_dynamic_calls
 
 // Package imports:
 import 'package:test/test.dart';
@@ -236,7 +236,7 @@ void testBasicTypes() {
       //         .value,
       //     'u005');
       // expect(
-      //     ((parseResult("'\' // ''") as ParserList).first as StringParser)
+      //     ((parseResult(""' // '"") as ParserList).first as StringParser)
       //         .value
       //         .value,
       //     '');

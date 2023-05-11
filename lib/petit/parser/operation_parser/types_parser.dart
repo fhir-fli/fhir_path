@@ -35,15 +35,15 @@ class IsParser extends OperatorParser {
             'Operand2: $executedAfter',
             collection: results)
         : (passed.isVersion(FhirVersion.r4)
-                    ? r4.ResourceUtils.resourceTypeFromStringMap.keys
+                    ? r4.resourceTypeFromStringMap.keys
                         .contains(executedAfter.first)
                     : passed.isVersion(FhirVersion.r5)
-                        ? r5.ResourceUtils.resourceTypeFromStringMap.keys
+                        ? r5.resourceTypeFromStringMap.keys
                             .contains(executedAfter.first)
                         : passed.isVersion(FhirVersion.dstu2)
-                            ? dstu2.ResourceUtils.resourceTypeFromStringMap.keys
+                            ? dstu2.resourceTypeFromStringMap.keys
                                 .contains(executedAfter.first)
-                            : stu3.ResourceUtils.resourceTypeFromStringMap.keys
+                            : stu3.resourceTypeFromStringMap.keys
                                 .contains(executedAfter.first)) &&
                 executedBefore.first is Map &&
                 executedBefore.first['resourceType'] == executedAfter.first
@@ -53,12 +53,12 @@ class IsParser extends OperatorParser {
                 : executedAfter.first == 'Boolean'
                     ? [
                         executedBefore.first is bool ||
-                            executedBefore.first is Boolean
+                            executedBefore.first is FhirBoolean
                       ]
                     : executedAfter.first == 'Integer'
                         ? [
                             (executedBefore.first is int ||
-                                    executedBefore.first is Integer) &&
+                                    executedBefore.first is FhirInteger) &&
 
                                 /// This is because of transpilation to javascript
                                 !executedBefore.first.toString().contains('.')
@@ -66,7 +66,7 @@ class IsParser extends OperatorParser {
                         : executedAfter.first == 'Decimal'
                             ? [
                                 (executedBefore.first is double ||
-                                        executedBefore.first is Decimal) &&
+                                        executedBefore.first is FhirDecimal) &&
 
                                     /// This is because of transpilation to javascript
                                     executedBefore.first
@@ -74,14 +74,14 @@ class IsParser extends OperatorParser {
                                         .contains('.')
                               ]
                             : executedAfter.first == 'Date'
-                                ? [executedBefore.first is Date]
+                                ? [executedBefore.first is FhirDate]
                                 : executedAfter.first == 'DateTime'
                                     ? [
                                         executedBefore.first is DateTime ||
                                             executedBefore.first is FhirDateTime
                                       ]
                                     : executedAfter.first == 'Time'
-                                        ? [executedBefore.first is Time]
+                                        ? [executedBefore.first is FhirTime]
                                         : executedAfter.first == 'Quantity'
                                             ? [isQuantity(executedBefore.first)]
                                             : [false];
@@ -139,15 +139,14 @@ class AsParser extends OperatorParser {
     }
     final identifierValue = (after.first as IdentifierParser).value;
     if (((passed.isVersion(FhirVersion.r4)
-                ? r4.ResourceUtils.resourceTypeFromStringMap.keys
-                    .contains(identifierValue)
+                ? r4.resourceTypeFromStringMap.keys.contains(identifierValue)
                 : passed.isVersion(FhirVersion.r5)
-                    ? r5.ResourceUtils.resourceTypeFromStringMap.keys
+                    ? r5.resourceTypeFromStringMap.keys
                         .contains(identifierValue)
                     : passed.isVersion(FhirVersion.dstu2)
-                        ? dstu2.ResourceUtils.resourceTypeFromStringMap.keys
+                        ? dstu2.resourceTypeFromStringMap.keys
                             .contains(identifierValue)
-                        : stu3.ResourceUtils.resourceTypeFromStringMap.keys
+                        : stu3.resourceTypeFromStringMap.keys
                             .contains(identifierValue)) &&
             executedBefore.first is Map &&
             executedBefore.first['resourceType'] == identifierValue) ||
@@ -155,19 +154,20 @@ class AsParser extends OperatorParser {
             (executedBefore.first is String)) ||
         (identifierValue.toLowerCase() == 'boolean' &&
             (executedBefore.first is bool ||
-                executedBefore.first is Boolean)) ||
+                executedBefore.first is FhirBoolean)) ||
         (identifierValue.toLowerCase() == 'integer' &&
-            (executedBefore.first is int || executedBefore.first is Integer)) ||
+            (executedBefore.first is int ||
+                executedBefore.first is FhirInteger)) ||
         (identifierValue.toLowerCase() == 'decimal' &&
             (executedBefore.first is double ||
-                executedBefore.first is Decimal)) ||
+                executedBefore.first is FhirDecimal)) ||
         (identifierValue.toLowerCase() == 'date' &&
-            executedBefore.first is Date) ||
+            executedBefore.first is FhirDate) ||
         (identifierValue.toLowerCase() == 'datetime' &&
             (executedBefore.first is DateTime ||
                 executedBefore.first is FhirDateTime)) ||
         (identifierValue.toLowerCase() == 'time' &&
-            executedBefore.first is Time) ||
+            executedBefore.first is FhirTime) ||
         (identifierValue == 'quantity' &&
             executedBefore.first is FhirPathQuantity)) {
       return executedBefore;

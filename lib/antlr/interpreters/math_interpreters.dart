@@ -95,8 +95,8 @@ List? _$visitAdditiveExpression(
         'this was passed the incorrect number of arguments: ${ctx.childCount}\n'
         '${ctx.children?.map((e) => e.text).toList()}');
   }
-  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
+  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
   final operator = ctx.getChild(1)!.text;
 
   if (operator == '&') {
@@ -173,7 +173,7 @@ List? _$visitAdditiveExpression(
             throw _wrongTypes('+', [lhs, rhs], visitor.context);
           }
           break;
-        case Date:
+        case FhirDate:
           if (rhs.first is FhirPathQuantity) {
             visitor.context = <dynamic>[
               (rhs.first as FhirPathQuantity).add(lhs.first).toString()
@@ -182,7 +182,7 @@ List? _$visitAdditiveExpression(
             throw _wrongTypes('+', [lhs, rhs], visitor.context);
           }
           break;
-        case Time:
+        case FhirTime:
           if (rhs.first is FhirPathQuantity) {
             visitor.context = <dynamic>[
               (rhs.first as FhirPathQuantity).add(lhs.first).toString()
@@ -203,9 +203,11 @@ List? _$visitAdditiveExpression(
                     .add(FhirDateTime(lhs.first))
                     .toString()
               ];
-            } else if (Time(lhs.first).isValid) {
+            } else if (FhirTime(lhs.first).isValid) {
               visitor.context = <dynamic>[
-                (rhs.first as FhirPathQuantity).add(Time(lhs.first)).toString()
+                (rhs.first as FhirPathQuantity)
+                    .add(FhirTime(lhs.first))
+                    .toString()
               ];
             } else {
               throw _wrongTypes('+', [lhs, rhs], visitor.context);
@@ -253,7 +255,7 @@ List? _$visitAdditiveExpression(
             throw _wrongTypes('-', [lhs, rhs], visitor.context);
           }
           break;
-        case Date:
+        case FhirDate:
           if (rhs.first is FhirPathQuantity) {
             visitor.context = <dynamic>[
               (rhs.first as FhirPathQuantity).subtract(lhs.first).toString()
@@ -262,7 +264,7 @@ List? _$visitAdditiveExpression(
             throw _wrongTypes('-', [lhs, rhs], visitor.context);
           }
           break;
-        case Time:
+        case FhirTime:
           if (rhs.first is FhirPathQuantity) {
             visitor.context = <dynamic>[
               (rhs.first as FhirPathQuantity).subtract(lhs.first).toString()
@@ -281,10 +283,10 @@ List? _$visitAdditiveExpression(
                     .subtract(FhirDateTime(lhs.first))
                     .toString()
               ];
-            } else if (Time(lhs.first).isValid) {
+            } else if (FhirTime(lhs.first).isValid) {
               visitor.context = <dynamic>[
                 (rhs.first as FhirPathQuantity)
-                    .subtract(Time(lhs.first))
+                    .subtract(FhirTime(lhs.first))
                     .toString()
               ];
             } else {
@@ -311,8 +313,8 @@ List? _$visitMultiplicativeExpression(
         'this was passed the incorrect number of arguments: ${ctx.childCount}\n'
         '${ctx.children?.map((e) => e.text).toList()}');
   }
-  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
+  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
   final operator = ctx.getChild(1)!.text;
   if ((lhs?.isEmpty ?? true) || (rhs?.isEmpty ?? true)) {
     visitor.context = <dynamic>[];

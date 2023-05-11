@@ -13,15 +13,12 @@ List? _$visitTypeExpression(
   final rhsText = ctx.getChild(2)!.text;
 
   List<dynamic>? rhs = (visitor.environment.isVersion(FhirVersion.r4)
-              ? r4.ResourceUtils.resourceTypeFromStringMap.keys
-                  .contains(rhsText)
+              ? r4.resourceTypeFromStringMap.keys.contains(rhsText)
               : visitor.environment.isVersion(FhirVersion.r5)
-                  ? r5.ResourceUtils.resourceTypeFromStringMap.keys
-                      .contains(rhsText)
+                  ? r5.resourceTypeFromStringMap.keys.contains(rhsText)
                   : visitor.environment.isVersion(FhirVersion.dstu2)
-                      ? dstu2.ResourceUtils.resourceTypeFromStringMap.keys
-                          .contains(rhsText)
-                      : stu3.ResourceUtils.resourceTypeFromStringMap.keys
+                      ? dstu2.resourceTypeFromStringMap.keys.contains(rhsText)
+                      : stu3.resourceTypeFromStringMap.keys
                           .contains(rhsText)) ||
           [
             'string',
@@ -42,7 +39,7 @@ List? _$visitTypeExpression(
     visitor.identifierOnly = false;
   }
 
-  final operator = ctx.getChild(1)?.text;
+  final String? operator = ctx.getChild(1)?.text;
 
   if ((lhs?.isEmpty ?? true) ||
       lhs!.length != 1 ||
@@ -56,15 +53,13 @@ List? _$visitTypeExpression(
         collection: visitor.context);
   } else if (operator == 'is') {
     visitor.context = (visitor.environment.isVersion(FhirVersion.r4)
-                ? r4.ResourceUtils.resourceTypeFromStringMap.keys
-                    .contains(rhs.first)
+                ? r4.resourceTypeFromStringMap.keys.contains(rhs.first)
                 : visitor.environment.isVersion(FhirVersion.r5)
-                    ? r5.ResourceUtils.resourceTypeFromStringMap.keys
-                        .contains(rhs.first)
+                    ? r5.resourceTypeFromStringMap.keys.contains(rhs.first)
                     : visitor.environment.isVersion(FhirVersion.dstu2)
-                        ? dstu2.ResourceUtils.resourceTypeFromStringMap.keys
+                        ? dstu2.resourceTypeFromStringMap.keys
                             .contains(rhs.first)
-                        : stu3.ResourceUtils.resourceTypeFromStringMap.keys
+                        : stu3.resourceTypeFromStringMap.keys
                             .contains(rhs.first)) &&
             lhs.first is Map &&
             (lhs.first as Map)['resourceType'] == rhs.first
@@ -72,57 +67,54 @@ List? _$visitTypeExpression(
         : rhs.first == 'String'
             ? [lhs.first is String]
             : rhs.first == 'Boolean'
-                ? [lhs.first is bool || lhs.first is Boolean]
+                ? [lhs.first is bool || lhs.first is FhirBoolean]
                 : rhs.first == 'Integer'
                     ? [
-                        (lhs.first is int || lhs.first is Integer) &&
+                        (lhs.first is int || lhs.first is FhirInteger) &&
 
                             /// This is because of transpilation to javascript
                             !lhs.first.toString().contains('.')
                       ]
                     : rhs.first == 'Decimal'
                         ? [
-                            (lhs.first is double || lhs.first is Decimal) &&
+                            (lhs.first is double || lhs.first is FhirDecimal) &&
 
                                 /// This is because of transpilation to javascript
                                 lhs.first.toString().contains('.')
                           ]
                         : rhs.first == 'Date'
-                            ? [lhs.first is Date]
+                            ? [lhs.first is FhirDate]
                             : rhs.first == 'DateTime'
                                 ? [
                                     lhs.first is DateTime ||
                                         lhs.first is FhirDateTime
                                   ]
                                 : rhs.first == 'Time'
-                                    ? [lhs.first is Time]
+                                    ? [lhs.first is FhirTime]
                                     : rhs.first == 'Quantity'
                                         ? [isQuantity(lhs.first)]
                                         : [false];
   } else if (((visitor.environment.isVersion(FhirVersion.r4)
-              ? r4.ResourceUtils.resourceTypeFromStringMap.keys
-                  .contains(rhs.first)
+              ? r4.resourceTypeFromStringMap.keys.contains(rhs.first)
               : visitor.environment.isVersion(FhirVersion.r5)
-                  ? r5.ResourceUtils.resourceTypeFromStringMap.keys
-                      .contains(rhs.first)
+                  ? r5.resourceTypeFromStringMap.keys.contains(rhs.first)
                   : visitor.environment.isVersion(FhirVersion.dstu2)
-                      ? dstu2.ResourceUtils.resourceTypeFromStringMap.keys
-                          .contains(rhs.first)
-                      : stu3.ResourceUtils.resourceTypeFromStringMap.keys
+                      ? dstu2.resourceTypeFromStringMap.keys.contains(rhs.first)
+                      : stu3.resourceTypeFromStringMap.keys
                           .contains(rhs.first)) &&
           lhs.first is Map &&
           (lhs.first as Map)['resourceType'] == rhs.first) ||
       (rhs.first.toLowerCase() == 'string' && (lhs.first is String)) ||
       (rhs.first.toLowerCase() == 'boolean' &&
-          (lhs.first is bool || lhs.first is Boolean)) ||
+          (lhs.first is bool || lhs.first is FhirBoolean)) ||
       (rhs.first.toLowerCase() == 'integer' &&
-          (lhs.first is int || lhs.first is Integer)) ||
+          (lhs.first is int || lhs.first is FhirInteger)) ||
       (rhs.first.toLowerCase() == 'decimal' &&
-          (lhs.first is double || lhs.first is Decimal)) ||
-      (rhs.first.toLowerCase() == 'date' && lhs.first is Date) ||
+          (lhs.first is double || lhs.first is FhirDecimal)) ||
+      (rhs.first.toLowerCase() == 'date' && lhs.first is FhirDate) ||
       (rhs.first.toLowerCase() == 'datetime' &&
           (lhs.first is DateTime || lhs.first is FhirDateTime)) ||
-      (rhs.first.toLowerCase() == 'time' && lhs.first is Time) ||
+      (rhs.first.toLowerCase() == 'time' && lhs.first is FhirTime) ||
       (rhs.first == 'quantity' && lhs.first is FhirPathQuantity)) {
     visitor.context = lhs;
   } else if (FhirDatatypes.contains(rhs.first)) {

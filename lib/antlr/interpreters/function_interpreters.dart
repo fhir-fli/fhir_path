@@ -2,7 +2,7 @@
 
 part of '../fhir_path_dart_visitor.dart';
 
-List? _$visitFunction(
+List<dynamic>? _$visitFunction(
   FunctionContext ctx,
   FhirPathDartVisitor visitor,
 ) {
@@ -117,12 +117,13 @@ List? _$visitFunction(
           }
         }
         break;
-      case 'toBoolean':
+      case 'toFhirBoolean':
         {
           visitor.context = visitor.context.isEmpty
               ? <dynamic>[]
               : visitor.context.length > 1
-                  ? throw _conversionException('.toBoolean()', visitor.context)
+                  ? throw _conversionException(
+                      '.toFhirBoolean()', visitor.context)
                   : _isNotAcceptedType(visitor.context)
                       ? <dynamic>[]
                       : visitor.context.first == true ||
@@ -148,13 +149,13 @@ List? _$visitFunction(
                               : <dynamic>[];
         }
         break;
-      case 'convertsToBoolean':
+      case 'convertsToFhirBoolean':
         {
           visitor.context = visitor.context.isEmpty
               ? <dynamic>[]
               : visitor.context.length > 1
                   ? throw _conversionException(
-                      '.convertsToBoolean()', visitor.context)
+                      '.convertsToFhirBoolean()', visitor.context)
                   : _isNotAcceptedType(visitor.context)
                       ? <dynamic>[false]
                       : visitor.context.first is bool ||
@@ -237,8 +238,8 @@ List? _$visitFunction(
               ? <dynamic>[]
               : visitor.context.length > 1
                   ? throw _conversionException('.toDate()', visitor.context)
-                  : Date(visitor.context.first.toString()).isValid
-                      ? <dynamic>[Date(visitor.context.first.toString())]
+                  : FhirDate(visitor.context.first.toString()).isValid
+                      ? <dynamic>[FhirDate(visitor.context.first.toString())]
                       : <dynamic>[];
         }
         break;
@@ -249,7 +250,9 @@ List? _$visitFunction(
               : visitor.context.length > 1
                   ? throw _conversionException(
                       '.convertsToDate()', visitor.context)
-                  : <dynamic>[Date(visitor.context.first.toString()).isValid];
+                  : <dynamic>[
+                      FhirDate(visitor.context.first.toString()).isValid
+                    ];
         }
         break;
       case 'toDateTime':
@@ -352,11 +355,11 @@ List? _$visitFunction(
               ? <dynamic>[]
               : visitor.context.length > 1
                   ? throw _conversionException('.toTime()', visitor.context)
-                  : visitor.context.first is Time
+                  : visitor.context.first is FhirTime
                       ? <dynamic>[visitor.context.first]
                       : visitor.context.first is String &&
-                              Time(visitor.context.first).isValid
-                          ? <dynamic>[Time(visitor.context.first)]
+                              FhirTime(visitor.context.first).isValid
+                          ? <dynamic>[FhirTime(visitor.context.first)]
                           : <dynamic>[];
         }
         break;
@@ -367,10 +370,10 @@ List? _$visitFunction(
               : visitor.context.length > 1
                   ? throw _conversionException(
                       '.convertsToTime()', visitor.context)
-                  : visitor.context.first is Time
+                  : visitor.context.first is FhirTime
                       ? <dynamic>[true]
                       : visitor.context.first is String &&
-                              Time(visitor.context.first).isValid
+                              FhirTime(visitor.context.first).isValid
                           ? <dynamic>[true]
                           : <dynamic>[false];
         }
@@ -770,24 +773,20 @@ List? _$visitFunction(
         break;
       case 'ofType':
         {
-          bool checkOfType(String? _type) {
-            if (_type == null) {
+          bool checkOfType(String? type) {
+            if (type == null) {
               throw FhirPathEvaluationException(
                   'The function ofType was not passed a Type',
                   collection: visitor.context);
             } else if (visitor.environment.isVersion(FhirVersion.r4)
-                ? r4.ResourceUtils.resourceTypeFromStringMap.keys
-                    .contains(_type)
+                ? r4.resourceTypeFromStringMap.keys.contains(type)
                 : visitor.environment.isVersion(FhirVersion.r5)
-                    ? r5.ResourceUtils.resourceTypeFromStringMap.keys
-                        .contains(_type)
+                    ? r5.resourceTypeFromStringMap.keys.contains(type)
                     : visitor.environment.isVersion(FhirVersion.dstu2)
-                        ? dstu2.ResourceUtils.resourceTypeFromStringMap.keys
-                            .contains(_type)
-                        : stu3.ResourceUtils.resourceTypeFromStringMap.keys
-                            .contains(_type)) {
+                        ? dstu2.resourceTypeFromStringMap.keys.contains(type)
+                        : stu3.resourceTypeFromStringMap.keys.contains(type)) {
               visitor.context.retainWhere((element) =>
-                  element is Map && element['resourceType'] == _type);
+                  element is Map && element['resourceType'] == type);
               return true;
             } else if ([
               'string',
@@ -798,24 +797,24 @@ List? _$visitFunction(
               'dateTime',
               'time',
               'quantity',
-            ].contains(_type.toLowerCase())) {
-              _type = _type.toLowerCase();
-              visitor.context.retainWhere((element) => _type == 'string'
+            ].contains(type.toLowerCase())) {
+              type = type.toLowerCase();
+              visitor.context.retainWhere((dynamic element) => type == 'string'
                   ? element is String
-                  : _type == 'boolean'
-                      ? element is bool || element is Boolean
-                      : _type == 'integer'
-                          ? element is int || element is Integer
-                          : _type == 'decimal'
-                              ? element is double || element is Decimal
-                              : _type == 'date'
-                                  ? element is Date
-                                  : _type == 'datetime'
-                                      ? element is DateTime ||
+                  : type == 'boolean'
+                      ? element is bool || element is FhirBoolean
+                      : type == 'integer'
+                          ? element is int || element is FhirInteger
+                          : type == 'decimal'
+                              ? element is double || element is FhirDecimal
+                              : type == 'date'
+                                  ? element is FhirDate
+                                  : type == 'datetime'
+                                      ? element is FhirDateTime ||
                                           element is FhirDateTime
-                                      : _type == 'time'
-                                          ? element is Time
-                                          : _type == 'quantity'
+                                      : type == 'time'
+                                          ? element is FhirTime
+                                          : type == 'quantity'
                                               ? isQuantity(element)
                                               : false);
               return true;
@@ -824,8 +823,8 @@ List? _$visitFunction(
             }
           }
 
-          final _type = ctx.getChild(2)?.text;
-          final success = checkOfType(_type);
+          final type = ctx.getChild(2)?.text;
+          final success = checkOfType(type);
           if (!success) {
             final result = visitor.copyWith().visit(ctx.getChild(2)!);
             if (result != null && result.isNotEmpty && result.first is String) {
@@ -1138,14 +1137,14 @@ List? _$visitFunction(
               );
             } else {
               /// Just checking on the off chance the returned value is actually
-              /// a FHIR Boolean value (which really shouldn't happen).
+              /// a FhirBoolean value (which really shouldn't happen).
               /// TODO: for now we're assuming that non-empty, non-bool is true
               /// I'm not sure if this is a correct assumption or not
               final bool conditionBool = condition.first is bool
                   ? condition.first as bool
-                  : condition.first is Boolean
-                      ? (condition.first as Boolean).isValid &&
-                          (condition.first as Boolean).value!
+                  : condition.first is FhirBoolean
+                      ? (condition.first as FhirBoolean).isValid &&
+                          (condition.first as FhirBoolean).value!
                       : true;
 
               /// If criterion is true, the function returns the value of the
@@ -1211,20 +1210,20 @@ List? _$visitFunction(
         break;
       case 'today':
         {
-          visitor.context = [
-            Date(DateTime.now().toIso8601String().split('T').first)
+          visitor.context = <dynamic>[
+            FhirDate(DateTime.now().toIso8601String().split('T').first)
           ];
         }
         break;
       case 'now':
         {
-          visitor.context = [DateTime.now()];
+          visitor.context = <dynamic>[DateTime.now()];
         }
         break;
       case 'timeOfDay':
         {
-          visitor.context = [
-            Time(DateTime.now()
+          visitor.context = <dynamic>[
+            FhirTime(DateTime.now()
                 .toIso8601String()
                 .split('T')
                 .last
@@ -1343,10 +1342,10 @@ bool _isAllTypes(List results) =>
     results.first is! bool &&
     results.first is! num &&
     results.first is! String &&
-    results.first is! Date &&
+    results.first is! FhirDate &&
     results.first is! FhirDateTime &&
-    results.first is! Time &&
-    results.first is! DateTime &&
+    results.first is! FhirTime &&
+    results.first is! FhirDateTime &&
     results.first is! FhirPathQuantity;
 
 Exception _conversionException(String function, List results) =>

@@ -412,7 +412,7 @@ class PlusParser extends OperatorParser {
 
             break;
           }
-        case Date:
+        case FhirDate:
           {
             if (executedAfter.first is FhirPathQuantity) {
               return [
@@ -423,7 +423,7 @@ class PlusParser extends OperatorParser {
             }
             break;
           }
-        case Time:
+        case FhirTime:
           {
             if (executedAfter.first is FhirPathQuantity) {
               return [
@@ -446,10 +446,10 @@ class PlusParser extends OperatorParser {
                       .add(FhirDateTime(executedBefore.first))
                       .toString()
                 ];
-              } else if (Time(executedBefore.first).isValid) {
+              } else if (FhirTime(executedBefore.first).isValid) {
                 return [
                   (executedAfter.first as FhirPathQuantity)
-                      .add(Time(executedBefore.first))
+                      .add(FhirTime(executedBefore.first))
                       .toString()
                 ];
               }
@@ -554,7 +554,7 @@ class MinusParser extends OperatorParser {
             }
             break;
           }
-        case Date:
+        case FhirDate:
           {
             if (executedAfter.first is FhirPathQuantity) {
               return [
@@ -565,7 +565,7 @@ class MinusParser extends OperatorParser {
             }
             break;
           }
-        case Time:
+        case FhirTime:
           {
             if (executedAfter.first is FhirPathQuantity) {
               return [
@@ -585,10 +585,10 @@ class MinusParser extends OperatorParser {
                       .subtract(FhirDateTime(executedBefore.first))
                       .toString()
                 ];
-              } else if (Time(executedBefore.first).isValid) {
+              } else if (FhirTime(executedBefore.first).isValid) {
                 return [
                   (executedAfter.first as FhirPathQuantity)
-                      .subtract(Time(executedBefore.first))
+                      .subtract(FhirTime(executedBefore.first))
                       .toString()
                 ];
               }

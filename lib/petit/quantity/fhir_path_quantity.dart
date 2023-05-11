@@ -347,12 +347,12 @@ class FhirPathQuantity {
     final minuteAmount = (unit == 'minute' ? amount : 0).toInt();
     final secondAmount = (unit == 'second' ? amount : 0).toInt();
     final millisecondAmount = (unit == 'millisecond' ? amount : 0).toInt();
-    if ((lhs is primitives.Date &&
+    if ((lhs is primitives.FhirDate &&
             (hourAmount != 0 ||
                 minuteAmount != 0 ||
                 secondAmount != 0 ||
                 millisecondAmount != 0)) ||
-        (lhs is primitives.Time &&
+        (lhs is primitives.FhirTime &&
             (yearAmount != 0 || monthAmount != 0 || dayAmount != 0))) {
       throw FhirPathEvaluationException(
         'Date & Time additions must be done with the proper units.\n'
@@ -362,17 +362,17 @@ class FhirPathQuantity {
         arguments: [lhs, this],
       );
     }
-    if (lhs is primitives.Date && lhs.isValid && lhs.value != null) {
+    if (lhs is primitives.FhirDate && lhs.isValid && lhs.value != null) {
       final newDate = DateTime.utc(lhs.value!.year + yearAmount,
           lhs.value!.month + monthAmount, lhs.value!.day + dayAmount);
       if (lhs.precision == primitives.DatePrecision.YYYY) {
-        return primitives.Date(newDate.toString().substring(0, 4));
+        return primitives.FhirDate(newDate.toString().substring(0, 4));
       } else if (lhs.precision == primitives.DatePrecision.YYYYMM) {
-        return primitives.Date(newDate.toString().substring(0, 7));
+        return primitives.FhirDate(newDate.toString().substring(0, 7));
       } else {
-        return primitives.Date(newDate.toString().substring(0, 10));
+        return primitives.FhirDate(newDate.toString().substring(0, 10));
       }
-    } else if (lhs is primitives.Time && lhs.isValid && lhs.value != null) {
+    } else if (lhs is primitives.FhirTime && lhs.isValid && lhs.value != null) {
       final timeList = lhs.value!.split(':');
       final duration = Duration(
         hours: int.tryParse(timeList.first) ?? 0 + hourAmount,
@@ -390,7 +390,7 @@ class FhirPathQuantity {
       final durationList = duration.toString().split(':');
       durationList.first =
           int.parse(durationList.first).remainder(24).toString();
-      return primitives.Time(durationList.join(':'));
+      return primitives.FhirTime(durationList.join(':'));
     } else if (lhs is primitives.FhirDateTime &&
         lhs.isValid &&
         lhs.value != null) {

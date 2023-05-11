@@ -233,9 +233,9 @@ List executeComparisons(List results, ParserList before, ParserList after,
                 : rhs is String && num.tryParse(rhs) != null
                     ? makeComparison(comparator, lhs, num.parse(rhs))
                     : throw cannotCompareException(lhs, rhs);
-      case Date:
+      case FhirDate:
         return rhs is FhirDateTimeBase
-            ? (lhs as Date).isValid && rhs.isValid
+            ? (lhs as FhirDate).isValid && rhs.isValid
                 ? makeComparison(comparator, lhs, rhs)
                 : throw invalidException(lhs, rhs)
             : rhs is String && FhirDateTime(rhs).isValid
@@ -259,13 +259,13 @@ List executeComparisons(List results, ParserList before, ParserList after,
             : rhs is String && FhirDateTime(rhs).isValid
                 ? makeComparison(comparator, lhs, FhirDateTime(rhs))
                 : throw cannotCompareException(lhs, rhs);
-      case Time:
-        return rhs is Time
-            ? (lhs as Time).isValid && rhs.isValid
+      case FhirTime:
+        return rhs is FhirTime
+            ? (lhs as FhirTime).isValid && rhs.isValid
                 ? makeComparison(comparator, lhs, rhs)
                 : throw invalidException(lhs, rhs)
-            : rhs is String && Time(rhs).isValid
-                ? makeComparison(comparator, lhs, Time(rhs))
+            : rhs is String && FhirTime(rhs).isValid
+                ? makeComparison(comparator, lhs, FhirTime(rhs))
                 : throw cannotCompareException(lhs, rhs);
       case FhirPathQuantity:
         return rhs is FhirPathQuantity
@@ -290,9 +290,9 @@ List executeComparisons(List results, ParserList before, ParserList after,
                     : comparator == Comparator.gte
                         ? stringGt(lhs, rhs)
                         : !stringGt(lhs, rhs);
-          } else if (rhs is Time && Time(lhs).isValid) {
-            return makeComparison(comparator, Time(lhs), rhs);
-          } else if ((rhs is Date || rhs is FhirDateTime) &&
+          } else if (rhs is FhirTime && FhirTime(lhs).isValid) {
+            return makeComparison(comparator, FhirTime(lhs), rhs);
+          } else if ((rhs is FhirDate || rhs is FhirDateTime) &&
               FhirDateTime(lhs).isValid) {
             return makeComparison(comparator, FhirDateTime(lhs), rhs);
           }
@@ -357,9 +357,9 @@ const _allowedTypes = [
   num,
   int,
   double,
-  Date,
+  FhirDate,
   FhirDateTime,
-  Time,
+  FhirTime,
   FhirPathQuantity,
 ];
 

@@ -36,7 +36,7 @@ class SingletonEvaluation {
     if (item is Map) {
       if (item['value'] != null && item['code'] != null) {
         return [
-          FhirPathQuantity(Decimal(item['value']).value ?? double.nan,
+          FhirPathQuantity(FhirDecimal(item['value']).value ?? double.nan,
               item['code'] as String)
         ];
       }

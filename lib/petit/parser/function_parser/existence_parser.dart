@@ -377,7 +377,7 @@ class SubsetOfParser extends ValueParser<ParserList> {
 
 class SupersetOfParser extends FhirPathParser {
   SupersetOfParser();
-  dynamic value;
+  late ParserList value;
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

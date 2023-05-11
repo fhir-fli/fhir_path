@@ -174,19 +174,15 @@ class OfTypeParser extends ValueParser<ParserList> {
     final finalResults = [];
     results.forEach((e) {
       if (((passed.isVersion(FhirVersion.r4)
-                  ? r4.ResourceUtils.resourceTypeFromStringMap.keys
+                  ? r4.resourceTypeFromStringMap.keys
                       .contains((executedValue.first as IdentifierParser).value)
                   : passed.isVersion(FhirVersion.r5)
-                      ? r5.ResourceUtils.resourceTypeFromStringMap.keys
-                          .contains(
-                              (executedValue.first as IdentifierParser).value)
+                      ? r5.resourceTypeFromStringMap.keys.contains(
+                          (executedValue.first as IdentifierParser).value)
                       : passed.isVersion(FhirVersion.dstu2)
-                          ? dstu2.ResourceUtils.resourceTypeFromStringMap.keys
-                              .contains(
-                                  (executedValue.first as IdentifierParser)
-                                      .value)
-                          : stu3.ResourceUtils.resourceTypeFromStringMap.keys
-                              .contains(
+                          ? dstu2.resourceTypeFromStringMap.keys.contains(
+                              (executedValue.first as IdentifierParser).value)
+                          : stu3.resourceTypeFromStringMap.keys.contains(
                               (executedValue.first as IdentifierParser).value,
                             )) &&
               e is Map &&
@@ -195,19 +191,19 @@ class OfTypeParser extends ValueParser<ParserList> {
           ((executedValue.first as IdentifierParser).value == 'string' &&
               (e is String)) ||
           ((executedValue.first as IdentifierParser).value == 'boolean' &&
-              (e is bool || e is Boolean)) ||
+              (e is bool || e is FhirBoolean)) ||
           ((executedValue.first as IdentifierParser).value == 'integer' &&
-              (e is int || e is Integer) &&
+              (e is int || e is FhirInteger) &&
               !e.toString().contains('.')) ||
           ((executedValue.first as IdentifierParser).value == 'decimal' &&
-              (e is double || e is Decimal) &&
+              (e is double || e is FhirDecimal) &&
               e.toString().contains('.')) ||
           ((executedValue.first as IdentifierParser).value == 'date' &&
-              e is Date) ||
+              e is FhirDate) ||
           ((executedValue.first as IdentifierParser).value == 'datetime' &&
               (e is DateTime || e is FhirDateTime)) ||
           ((executedValue.first as IdentifierParser).value == 'time' &&
-              e is Time) ||
+              e is FhirTime) ||
           ((executedValue.first as IdentifierParser).value == 'quantity' &&
               e is FhirPathQuantity)) {
         finalResults.add(e);

@@ -30,15 +30,12 @@ List? _$visitIdentifier(
     visitor.environment['__extension'] = null;
 
     if (visitor.environment.isVersion(FhirVersion.r4)
-        ? r4.ResourceUtils.resourceTypeFromStringMap.keys
-            .contains(identifierName)
+        ? r4.resourceTypeFromStringMap.keys.contains(identifierName)
         : visitor.environment.isVersion(FhirVersion.r5)
-            ? r5.ResourceUtils.resourceTypeFromStringMap.keys
-                .contains(identifierName)
+            ? r5.resourceTypeFromStringMap.keys.contains(identifierName)
             : visitor.environment.isVersion(FhirVersion.dstu2)
-                ? dstu2.ResourceUtils.resourceTypeFromStringMap.keys
-                    .contains(identifierName)
-                : stu3.ResourceUtils.resourceTypeFromStringMap.keys
+                ? dstu2.resourceTypeFromStringMap.keys.contains(identifierName)
+                : stu3.resourceTypeFromStringMap.keys
                     .contains(identifierName)) {
       if (visitor.environment.context?['resourceType'] == identifierName &&
           !visitor.environment.hasNoContext) {

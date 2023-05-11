@@ -79,12 +79,12 @@ List? _$visitAndExpression(
   if (ctx.childCount != 3) {
     throw _wrongArgLength('and', ctx.children ?? []);
   }
-  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
+  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
 
   bool? convertValue(dynamic value) => value is bool
       ? value
-      : value is Boolean
+      : value is FhirBoolean
           ? value.isValid
               ? value.value
               : null
@@ -134,13 +134,13 @@ List? _$visitOrExpression(
   if (ctx.childCount != 3) {
     throw _wrongArgLength(ctx.text, ctx.children ?? []);
   }
-  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
+  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
   final operator = ctx.getChild(1)!.text;
 
   bool? convertValue(dynamic value) => value is bool
       ? value
-      : value is Boolean
+      : value is FhirBoolean
           ? value.isValid
               ? value.value
               : null
@@ -200,12 +200,12 @@ List? _$visitImpliesExpression(
   if (ctx.childCount != 3) {
     throw _wrongArgLength(ctx.text, ctx.children ?? []);
   }
-  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
+  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
 
   bool? convertValue(dynamic value) => value is bool
       ? value
-      : value is Boolean
+      : value is FhirBoolean
           ? value.isValid
               ? value.value
               : null
@@ -269,8 +269,8 @@ List? _$visitMembershipExpression(
   if (ctx.childCount != 3) {
     throw _wrongArgLength(ctx.text, ctx.children ?? []);
   }
-  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
+  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
   final operator = ctx.getChild(1)!.text;
   final objectList = operator == 'in' ? lhs : rhs;
   if (objectList?.isEmpty ?? true) {
@@ -288,9 +288,9 @@ List? _$visitMembershipExpression(
       visitor.context = [
         collection!.indexWhere((element) {
               if (object is FhirDateTime ||
-                  object is Date ||
+                  object is FhirDate ||
                   element is FhirDateTime ||
-                  element is Date) {
+                  element is FhirDate) {
                 /// As long as one is, we convert them both to strings then back
                 /// to DateTimes
                 final lhsDateTime = FhirDateTime(object.toString());

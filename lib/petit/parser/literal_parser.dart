@@ -285,15 +285,12 @@ class IdentifierParser extends ValueParser<String> {
     passed[ExtensionParser.extensionKey] = null;
 
     if (passed.isVersion(FhirVersion.r4)
-        ? r4.ResourceUtils.resourceTypeFromStringMap.keys
-            .contains(identifierName)
+        ? r4.resourceTypeFromStringMap.keys.contains(identifierName)
         : passed.isVersion(FhirVersion.r5)
-            ? r5.ResourceUtils.resourceTypeFromStringMap.keys
-                .contains(identifierName)
+            ? r5.resourceTypeFromStringMap.keys.contains(identifierName)
             : passed.isVersion(FhirVersion.dstu2)
-                ? dstu2.ResourceUtils.resourceTypeFromStringMap.keys
-                    .contains(identifierName)
-                : stu3.ResourceUtils.resourceTypeFromStringMap.keys
+                ? dstu2.resourceTypeFromStringMap.keys.contains(identifierName)
+                : stu3.resourceTypeFromStringMap.keys
                     .contains(identifierName)) {
       if (!passed.hasNoContext &&
           passed.context?['resourceType'] == identifierName) {
@@ -402,15 +399,12 @@ class DelimitedIdentifierParser extends ValueParser<String> {
     passed[ExtensionParser.extensionKey] = null;
 
     if (passed.isVersion(FhirVersion.r4)
-        ? r4.ResourceUtils.resourceTypeFromStringMap.keys
-            .contains(identifierName)
+        ? r4.resourceTypeFromStringMap.keys.contains(identifierName)
         : passed.isVersion(FhirVersion.r5)
-            ? r5.ResourceUtils.resourceTypeFromStringMap.keys
-                .contains(identifierName)
+            ? r5.resourceTypeFromStringMap.keys.contains(identifierName)
             : passed.isVersion(FhirVersion.dstu2)
-                ? dstu2.ResourceUtils.resourceTypeFromStringMap.keys
-                    .contains(identifierName)
-                : stu3.ResourceUtils.resourceTypeFromStringMap.keys
+                ? dstu2.resourceTypeFromStringMap.keys.contains(identifierName)
+                : stu3.resourceTypeFromStringMap.keys
                         .contains(identifierName) &&
                     (passed.hasNoContext
                         ? false
@@ -561,7 +555,7 @@ class DateTimeParser extends BaseDateTimeParser<List> {
         throw FormatException(
             'The DateTime provided was not properly formatted', stringValue);
       }
-      value = [Date(removeAt.split('T').first)];
+      value = [FhirDate(removeAt.split('T').first)];
     }
   }
   late List value;
@@ -608,11 +602,11 @@ class DateTimeParser extends BaseDateTimeParser<List> {
 
 /// The Date type represents date and partial date values in the range
 /// @0001-01-01 to @9999-12-31 with a 1 day step size.
-class DateParser extends BaseDateTimeParser<Date> {
+class DateParser extends BaseDateTimeParser<FhirDate> {
   DateParser(String valueString) {
-    value = Date(valueString.replaceFirst('@', ''));
+    value = FhirDate(valueString.replaceFirst('@', ''));
   }
-  late Date value;
+  late FhirDate value;
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -647,12 +641,12 @@ class DateParser extends BaseDateTimeParser<Date> {
 /// provide support for higher precision, but must provide at least the range
 /// and precision defined here. Time values in FHIRPath do not have a timezone
 /// or timezone offset.
-class TimeParser extends BaseDateTimeParser<Time> {
+class TimeParser extends BaseDateTimeParser<FhirTime> {
   TimeParser(String stringValue) {
     final removeAt = stringValue.replaceFirst('@', '');
-    value = Time(removeAt.replaceFirst('T', ''));
+    value = FhirTime(removeAt.replaceFirst('T', ''));
   }
-  late Time value;
+  late FhirTime value;
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

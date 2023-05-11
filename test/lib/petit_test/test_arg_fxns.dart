@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, prefer_const_constructors, prefer_single_quotes, unnecessary_string_escapes, leading_newlines_in_multiline_strings
+// ignore_for_file: depend_on_referenced_packages, prefer_const_constructors, prefer_single_quotes, unnecessary_string_escapes, leading_newlines_in_multiline_strings, unnecessary_statements, directives_ordering, always_specify_types
 
 // Dart imports:
 import 'dart:convert';

@@ -28,9 +28,9 @@ class EqualsParser extends OperatorParser {
       for (var i = 0; i < lhs.length; i++) {
         /// we check to see if any of the values are DateTimes
         if (lhs[i] is FhirDateTime ||
-            lhs[i] is Date ||
+            lhs[i] is FhirDate ||
             rhs[i] is FhirDateTime ||
-            rhs[i] is Date) {
+            rhs[i] is FhirDate) {
           /// As long as one is, we convert them both to strings then back
           /// to DateTimes
           final lhsDateTime = FhirDateTime(lhs[i].toString());
@@ -137,9 +137,9 @@ class EquivalentParser extends OperatorParser {
       executedBefore.removeWhere((lhsElement) =>
           executedAfter.indexWhere((rhsElement) {
             if (lhsElement is FhirDateTime ||
-                lhsElement is Date ||
+                lhsElement is FhirDate ||
                 rhsElement is FhirDateTime ||
-                rhsElement is Date) {
+                rhsElement is FhirDate) {
               /// As long as one is, we convert them both to strings then back
               /// to DateTimes
               final lhsDateTime = FhirDateTime(lhsElement.toString());

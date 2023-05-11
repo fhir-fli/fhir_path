@@ -69,8 +69,10 @@ class TimeOfDayParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
-      [Time(DateTime.now().toIso8601String().split('T').last.substring(0, 12))];
+  List execute(List results, Map<String, dynamic> passed) => [
+        FhirTime(
+            DateTime.now().toIso8601String().split('T').last.substring(0, 12))
+      ];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -97,7 +99,7 @@ class TodayParser extends FhirPathParser {
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) =>
-      [Date(DateTime.now().toIso8601String().split('T').first)];
+      [FhirDate(DateTime.now().toIso8601String().split('T').first)];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
