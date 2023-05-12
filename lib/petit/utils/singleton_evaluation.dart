@@ -21,7 +21,7 @@ class SingletonEvaluation {
     List<dynamic>? collection,
   }) {
     if (input.isEmpty) {
-      return [];
+      return <dynamic>[];
     }
 
     if (input.length > 1) {
@@ -32,10 +32,10 @@ class SingletonEvaluation {
           collection: collection);
     }
 
-    final item = input.first;
+    final dynamic item = input.first;
     if (item is Map) {
       if (item['value'] != null && item['code'] != null) {
-        return [
+        return <dynamic>[
           FhirPathQuantity(FhirDecimal(item['value']).value ?? double.nan,
               item['code'] as String)
         ];
@@ -72,7 +72,7 @@ class SingletonEvaluation {
 
     if (input.first == 0 ||
         (input.first is String &&
-            ['false', 'f', 'no', 'n', '0', '0.0']
+            <String>['false', 'f', 'no', 'n', '0', '0.0']
                 .contains(input.first.toString().toLowerCase()))) {
       return false;
     }

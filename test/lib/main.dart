@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
           child: Scaffold(
             body: Center(
                 child: Column(
-              children: const [
+              children: const <Widget>[
                 RunTests('Antlr Tests', antlrFhirPathTest),
                 SizedBox(height: 8),
                 RunTests('Petit Tests', petitFhirPathTest),

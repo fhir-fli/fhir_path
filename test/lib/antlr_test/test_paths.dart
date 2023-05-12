@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, unnecessary_statements, leading_newlines_in_multiline_strings, directives_ordering, always_specify_types
+// ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, unnecessary_statements, leading_newlines_in_multiline_strings, directives_ordering, always_specify_types, avoid_escaping_inner_quotes, no_adjacent_strings_in_list
 
 // Package imports:
 import 'package:fhir/r4.dart';

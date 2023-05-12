@@ -1,14 +1,12 @@
-// ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, unnecessary_string_escapes, leading_newlines_in_multiline_strings
+// ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, unnecessary_string_escapes, leading_newlines_in_multiline_strings, always_specify_types
 
 // Dart imports:
 import 'dart:convert';
 
 // Package imports:
 import 'package:fhir/r4.dart';
-import 'package:test/test.dart';
-
-// Project imports:
 import 'package:fhir_path/antlr/antlr_fhir_path.dart';
+import 'package:test/test.dart';
 
 void testArgFxns() {
   group('Functions with Arguments: ', () {

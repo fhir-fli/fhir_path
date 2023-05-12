@@ -1,13 +1,11 @@
-// ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, unnecessary_statements, leading_newlines_in_multiline_strings
+// ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, unnecessary_statements, leading_newlines_in_multiline_strings, always_specify_types
 
 // Dart imports:
 import 'dart:convert';
 
 // Package imports:
-import 'package:test/test.dart';
-
-// Project imports:
 import 'package:fhir_path/petit/petit_fhir_path.dart';
+import 'package:test/test.dart';
 
 /// FHIRPath Test Suite - reference="http://hl7.org/fhirpath|2.0.0"
 void testFhirPathTestSuite() {

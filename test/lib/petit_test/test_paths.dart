@@ -2,10 +2,8 @@
 
 // Package imports:
 import 'package:fhir/r4.dart';
-import 'package:test/test.dart';
-
-// Project imports:
 import 'package:fhir_path/petit/petit_fhir_path.dart';
+import 'package:test/test.dart';
 
 dynamic walkPath(String arg) =>
     walkFhirPath(context: resource.toJson(), pathExpression: arg).toString();

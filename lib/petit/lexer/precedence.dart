@@ -5,7 +5,7 @@ import 'package:petitparser/petitparser.dart';
 import '../petit_fhir_path.dart';
 
 /// Trying to enforce Operator Order Precedence
-const operatorOrderMap = {
+const Map<Type, int> operatorOrderMap = <Type, int>{
   CommaParser: 14,
 
   /// #13: implies
