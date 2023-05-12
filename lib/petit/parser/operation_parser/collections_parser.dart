@@ -11,9 +11,10 @@ class UnionOperatorParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) {
-    final executedBefore = before.execute(results.toList(), passed);
-    final executedAfter = after.execute(results.toList(), passed);
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
+    final List<dynamic> executedBefore =
+        before.execute(results.toList(), passed);
+    final List<dynamic> executedAfter = after.execute(results.toList(), passed);
     executedBefore.forEach((e) {
       if (notFoundInList(executedAfter, e)) {
         executedAfter.add(e);
@@ -54,7 +55,7 @@ class ContainsOperatorParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) {
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
     final leftOperand = before.execute(results.toList(), passed);
     final rightOperand = after.execute(results.toList(), passed);
 
@@ -114,9 +115,10 @@ class InParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) {
-    final executedBefore = before.execute(results.toList(), passed);
-    final executedAfter = after.execute(results.toList(), passed);
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
+    final List<dynamic> executedBefore =
+        before.execute(results.toList(), passed);
+    final List<dynamic> executedAfter = after.execute(results.toList(), passed);
 
     if (executedBefore.isEmpty) {
       return (executedAfter.isEmpty) ? [] : [false];
@@ -168,7 +170,7 @@ class CommaParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) {
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
     final beforeResults = results.toList();
     final afterResults = results.toList();
     final beforeList = before.execute(beforeResults, passed);

@@ -4,7 +4,8 @@
 abstract class FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
-  List execute(List results, Map<String, dynamic> passed) => [];
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      [];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -30,7 +31,7 @@ abstract class ValueParser<T> extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed);
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed);
   @override
   String toString();
 }
@@ -44,7 +45,7 @@ abstract class OperatorParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed);
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed);
 
   @override
   String toString();
@@ -64,7 +65,7 @@ class ParserList extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) {
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
     void addToList(List toAdd) => results
       ..clear()
       ..addAll(toAdd);

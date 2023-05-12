@@ -534,12 +534,12 @@ void testNoArgFxns() {
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "@2021-01-01.toDate()"),
-          [Date('2021-01-01')]);
+          [FhirDate('2021-01-01')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "'2021-01-01'.toDate()"),
-          [Date('2021-01-01')]);
+          [FhirDate('2021-01-01')]);
     });
     test('convertsToDate', () {
       expect(
@@ -906,21 +906,21 @@ void testNoArgFxns() {
       expect(
           walkFhirPath(
               context: resource.toJson(), pathExpression: "@T12:22.toTime()"),
-          [Time('12:22')]);
+          [FhirTime('12:22')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "@T12:22:33.toTime()"),
-          [Time('12:22:33')]);
+          [FhirTime('12:22:33')]);
       expect(
           walkFhirPath(
               context: resource.toJson(), pathExpression: "'12:22'.toTime()"),
-          [Time('12:22')]);
+          [FhirTime('12:22')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "'12:22:33.321'.toTime()"),
-          [Time('12:22:33.321')]);
+          [FhirTime('12:22:33.321')]);
     });
     test('convertsToTime', () {
       expect(
@@ -1246,32 +1246,32 @@ void testNoArgFxns() {
                       .isAtSameMomentAs(toDateTime(resultNow.first))),
           true);
 
-      final startTimeOfDay = Time(
+      final startTimeOfDay = FhirTime(
           DateTime.now().toIso8601String().split('T').last.substring(0, 12));
       final resultTimeOfDay = walkFhirPath(
               context: resource.toJson(), pathExpression: "timeOfDay()")
           .first;
-      final endTimeOfDay = Time(
+      final endTimeOfDay = FhirTime(
           DateTime.now().toIso8601String().split('T').last.substring(0, 12));
       expect(
-          startTimeOfDay <= (resultTimeOfDay as Time) &&
+          startTimeOfDay <= (resultTimeOfDay as FhirTime) &&
               endTimeOfDay >= resultTimeOfDay,
           true);
       expect(
           walkFhirPath(context: resource.toJson(), pathExpression: "today()")
               .first,
-          Date(DateTime.now().toIso8601String().split('T').first));
+          FhirDate(DateTime.now().toIso8601String().split('T').first));
     });
   });
 }
 
 final resource = Patient(
-  active: Boolean(true),
+  active: FhirBoolean(true),
   telecom: [
     ContactPoint(
         system: ContactPointSystem.email,
         use: ContactPointUse.mobile,
-        rank: PositiveInt(3)),
+        rank: FhirPositiveInt(3)),
   ],
   address: [
     Address(
@@ -1335,7 +1335,7 @@ final resource = Patient(
       ),
     ),
   ],
-  deceasedBoolean: Boolean(false),
+  deceasedBoolean: FhirBoolean(false),
   name: [
     HumanName(
       use: HumanNameUse.official,

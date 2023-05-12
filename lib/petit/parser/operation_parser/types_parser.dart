@@ -18,7 +18,7 @@ class IsParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) {
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
     final executedBefore = before.execute(results.toList(), passed);
     final executedAfter = after.length == 1 && after.first is IdentifierParser
         ? [(after.first as IdentifierParser).value]
@@ -118,7 +118,7 @@ class AsParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) {
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
     final executedBefore = before.execute(results.toList(), passed);
     if (executedBefore.length != 1) {
       throw FhirPathEvaluationException(

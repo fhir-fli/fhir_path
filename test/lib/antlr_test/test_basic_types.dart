@@ -101,32 +101,32 @@ void testBasicTypes() {
       final result1 = parseResult('@2015-02-04');
       expect(lastChildType(result1.getChild(result1.childCount - 1)!),
           DateLiteralContext);
-      expect(visitor.visit(result1)?.first, Date('2015-02-04'));
+      expect(visitor.visit(result1)?.first, FhirDate('2015-02-04'));
 
       final result2 = parseResult('@2018-06-12');
       expect(lastChildType(result2.getChild(result2.childCount - 1)!),
           DateLiteralContext);
-      expect(visitor.visit(result2)?.first, Date('2018-06-12'));
+      expect(visitor.visit(result2)?.first, FhirDate('2018-06-12'));
 
       final result3 = parseResult('@2018-06-12');
       expect(lastChildType(result3.getChild(result3.childCount - 1)!),
           DateLiteralContext);
-      expect(visitor.visit(result3)?.first, Date('2018-06-12'));
+      expect(visitor.visit(result3)?.first, FhirDate('2018-06-12'));
 
       final result4 = parseResult('@2018-06-12');
       expect(lastChildType(result4.getChild(result4.childCount - 1)!),
           DateLiteralContext);
-      expect(visitor.visit(result4)?.first, Date('2018-06-12'));
+      expect(visitor.visit(result4)?.first, FhirDate('2018-06-12'));
 
       final result5 = parseResult('@2018-06');
       expect(lastChildType(result5.getChild(result5.childCount - 1)!),
           DateLiteralContext);
-      expect(visitor.visit(result5)?.first, Date('2018-06'));
+      expect(visitor.visit(result5)?.first, FhirDate('2018-06'));
 
       final result6 = parseResult('@2018');
       expect(lastChildType(result6.getChild(result6.childCount - 1)!),
           DateLiteralContext);
-      expect(visitor.visit(result6)?.first, Date('2018'));
+      expect(visitor.visit(result6)?.first, FhirDate('2018'));
     });
 
     test('DateTime', () {
@@ -184,27 +184,27 @@ void testBasicTypes() {
       final result1 = parseResult('@T14:34:28');
       expect(lastChildType(result1.getChild(result1.childCount - 1)!),
           TimeLiteralContext);
-      expect(visitor.visit(result1)?.first, Time('14:34:28'));
+      expect(visitor.visit(result1)?.first, FhirTime('14:34:28'));
 
       final result2 = parseResult('@T06:55:28');
       expect(lastChildType(result2.getChild(result2.childCount - 1)!),
           TimeLiteralContext);
-      expect(visitor.visit(result2)?.first, Time('06:55:28'));
+      expect(visitor.visit(result2)?.first, FhirTime('06:55:28'));
 
       final result3 = parseResult('@T06:55:28.559');
       expect(lastChildType(result3.getChild(result3.childCount - 1)!),
           TimeLiteralContext);
-      expect(visitor.visit(result3)?.first, Time('06:55:28.559'));
+      expect(visitor.visit(result3)?.first, FhirTime('06:55:28.559'));
 
       final result4 = parseResult('@T06:55');
       expect(lastChildType(result4.getChild(result4.childCount - 1)!),
           TimeLiteralContext);
-      expect(visitor.visit(result4)?.first, Time('06:55'));
+      expect(visitor.visit(result4)?.first, FhirTime('06:55'));
 
       final result5 = parseResult('@T06:54');
       expect(lastChildType(result5.getChild(result5.childCount - 1)!),
           TimeLiteralContext);
-      expect(visitor.visit(result5)?.first, Time('06:54'));
+      expect(visitor.visit(result5)?.first, FhirTime('06:54'));
     });
 
     test('Quantity', () {

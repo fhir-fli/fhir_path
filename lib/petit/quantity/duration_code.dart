@@ -1,5 +1,5 @@
 // http://hl7.org/fhirpath/#time-valued-quantities
-const timeValuedQuantitiesUnits = {
+const Map<String, String> timeValuedQuantitiesUnits = <String, String>{
   'milliseconds': 'millisecond',
   'seconds': 'second',
   'minutes': 'minute',
@@ -19,7 +19,7 @@ const timeValuedQuantitiesUnits = {
 };
 
 // https://www.hl7.org/fhir/fhirpath.html#quantity
-const definiteQuantityDurationUnits = {
+const Map<String, String> definiteQuantityDurationUnits = <String, String>{
   'a': 'year',
   'mo': 'month',
   'd': 'day',

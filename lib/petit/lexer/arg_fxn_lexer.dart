@@ -114,8 +114,8 @@ final Parser<ReplaceMatchesParser> replaceMatchesLexer =
         .map((_) => ReplaceMatchesParser());
 
 /// identifies skips
-final Parser<SkipParser> skipLexer =
-    (string('skip(') | string('.skip(')).map((value) => SkipParser());
+final Parser<FpSkipParser> skipLexer =
+    (string('skip(') | string('.skip(')).map((value) => FpSkipParser());
 
 /// identifies takes
 final Parser<TakeParser> takeLexer =

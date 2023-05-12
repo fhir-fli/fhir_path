@@ -12,15 +12,16 @@ class SingleParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.length == 1
-      ? results
-      : results.isEmpty
-          ? []
-          : throw FhirPathEvaluationException(
-              'The List $results is only allowed to contain one '
-              'item if evaluated using the .single() function',
-              operation: '.single()',
-              collection: results);
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.length == 1
+          ? results
+          : results.isEmpty
+              ? []
+              : throw FhirPathEvaluationException(
+                  'The List $results is only allowed to contain one '
+                  'item if evaluated using the .single() function',
+                  operation: '.single()',
+                  collection: results);
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -46,7 +47,7 @@ class FirstParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
       results.isEmpty ? [] : [results.first];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -73,7 +74,7 @@ class LastParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
       results.isEmpty ? [] : [results.last];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -100,7 +101,7 @@ class TailParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) {
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
     if (results.length < 2) {
       return [];
     } else {
@@ -127,14 +128,14 @@ class TailParser extends FhirPathParser {
   String prettyPrint([int indent = 2]) => '.tail()';
 }
 
-class SkipParser extends FunctionParser {
-  SkipParser();
+class FpSkipParser extends FunctionParser {
+  FpSkipParser();
   late ParserList value;
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) {
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
     final executedValue = value.execute(results.toList(), passed);
     return executedValue.length != 1 || executedValue.first is! int
         ? throw FhirPathEvaluationException(
@@ -182,7 +183,7 @@ class TakeParser extends FunctionParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) {
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
     final executedValue = value.execute(results.toList(), passed);
     final newResults = value.length != 1 || value.first is! IntegerParser
         ? throw FhirPathEvaluationException(
@@ -230,7 +231,7 @@ class IntersectParser extends ValueParser<ParserList> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) {
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
     final other = value.execute(results.toList(), passed);
     final inBag = [...results];
 
@@ -281,7 +282,7 @@ class ExcludeParser extends ValueParser<ParserList> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) {
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
     final executedValue = value.execute(results.toList(), passed);
     results.removeWhere((e) =>
         executedValue.indexWhere(

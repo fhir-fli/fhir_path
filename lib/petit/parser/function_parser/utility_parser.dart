@@ -12,7 +12,7 @@ class FpNotParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) {
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
     final input = SingletonEvaluation.toBool(results,
         name: 'input for .not()', operation: 'not()', collection: results);
     return input != null ? [!input] : [];
@@ -42,7 +42,7 @@ class NowParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
       [FhirDateTime(DateTime.now())];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -69,7 +69,7 @@ class TimeOfDayParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) => [
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) => [
         FhirTime(
             DateTime.now().toIso8601String().split('T').last.substring(0, 12))
       ];
@@ -98,7 +98,7 @@ class TodayParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
       [FhirDate(DateTime.now().toIso8601String().split('T').first)];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -126,7 +126,8 @@ class TraceParser extends ValueParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) => results;
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results;
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in

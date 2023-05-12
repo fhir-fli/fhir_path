@@ -1047,7 +1047,7 @@ final resource = Patient(
     ContactPoint(
         system: ContactPointSystem.email,
         use: ContactPointUse.mobile,
-        rank: PositiveInt(3)),
+        rank: FhirPositiveInt(3)),
   ],
   address: [
     Address(
@@ -1111,7 +1111,7 @@ final resource = Patient(
       ),
     ),
   ],
-  deceasedBoolean: Boolean(false),
+  deceasedBoolean: FhirBoolean(false),
   name: [
     HumanName(
       use: HumanNameUse.official,

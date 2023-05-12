@@ -153,16 +153,13 @@ class FhirPathDeprecatedExpressionException extends FhirPathException {
 
 /// The evaluation of the expression failed with the given parameters.
 class FhirPathEvaluationException extends FhirPathException {
-  FhirPathEvaluationException({
-    super.message,
+  FhirPathEvaluationException(
+    super.message, {
     super.pathExpression,
     super.cause,
     super.operation,
     super.arguments,
     super.collection,
     Map<dynamic, dynamic>? variables,
-  }) : super(
-          message,
-          environment: variables,
-        );
+  }) : super(environment: variables);
 }

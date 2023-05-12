@@ -267,7 +267,7 @@ final resource = Patient(
       ),
     ),
   ],
-  deceasedBoolean: Boolean(false),
+  deceasedBoolean: FhirBoolean(false),
   name: [
     HumanName(
       family: 'Faulkenberry',

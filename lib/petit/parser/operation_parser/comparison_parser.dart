@@ -14,7 +14,7 @@ class GreaterParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
       executeComparisons(results, before, after, passed, Comparator.gt);
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -47,7 +47,7 @@ class LessParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
       executeComparisons(results, before, after, passed, Comparator.lt);
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -80,7 +80,7 @@ class GreaterEqualParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) {
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
     return executeComparisons(results, before, after, passed, Comparator.gte);
   }
 
@@ -114,7 +114,7 @@ class LessEqualParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
       executeComparisons(results, before, after, passed, Comparator.lte);
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -143,8 +143,8 @@ enum Comparator { gt, gte, lt, lte }
 
 // TODO(Dokotela): review if appropriately comparing different types
 @override
-List executeComparisons(List results, ParserList before, ParserList after,
-    Map<String, dynamic> passed, Comparator comparator,
+List<dynamic> executeComparisons(List results, ParserList before,
+    ParserList after, Map<String, dynamic> passed, Comparator comparator,
     {bool where = false}) {
   // TODO(Dokotela): Currently, this is going to assume that if a String is being compared
   // with a Date, DateTime, or Time, and the String is a valid format of a Time
