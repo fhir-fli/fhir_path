@@ -6,7 +6,7 @@ enum FhirVersion {
 }
 
 extension FhirPathVersionExtension on Map<String, dynamic> {
-  static const versionKey = '_version';
+  static const String versionKey = '_version';
 
   bool isVersion(FhirVersion version) => this[versionKey] == version;
   set version(FhirVersion version) => this[versionKey] = version;

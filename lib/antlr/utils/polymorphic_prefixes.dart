@@ -1,5 +1,5 @@
 bool startsWithAPolymorphicPrefix(String value) {
-  for (final prefix in polymorphicPrefixes) {
+  for (final String prefix in polymorphicPrefixes) {
     if (value.startsWith(prefix)) {
       return true;
     }
@@ -7,7 +7,7 @@ bool startsWithAPolymorphicPrefix(String value) {
   return false;
 }
 
-const polymorphicPrefixes = {
+const Set<String> polymorphicPrefixes = <String>{
   'abatement',
   'additive',
   'age',

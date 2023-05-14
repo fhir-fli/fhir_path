@@ -1,5 +1,5 @@
 // Generated from FhirPath.g4 by ANTLR 4.11.1
-// ignore_for_file: unused_import, unused_local_variable, prefer_single_quotes, argument_type_not_assignable, unnecessary_getters_setters
+// ignore_for_file: unused_import, unused_local_variable, prefer_single_quotes, argument_type_not_assignable, unnecessary_getters_setters, always_specify_types, sort_unnamed_constructors_first
 
 // Dart imports:
 import 'dart:convert';

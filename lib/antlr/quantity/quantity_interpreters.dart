@@ -2,32 +2,32 @@
 
 part of '../fhir_path_dart_visitor.dart';
 
-List? _$visitQuantityLiteral(
+List<dynamic>? _$visitQuantityLiteral(
   QuantityLiteralContext ctx,
   FhirPathDartVisitor visitor,
 ) {
   return visitor.visitChildren(ctx);
 }
 
-List? _$visitUnit(
+List<dynamic>? _$visitUnit(
   UnitContext ctx,
   FhirPathDartVisitor visitor,
 ) {
-  visitor.context = [ctx.text];
+  visitor.context = <dynamic>[ctx.text];
   return visitor.context;
 }
 
-List? _$visitQuantity(
+List<dynamic>? _$visitQuantity(
   QuantityContext ctx,
   FhirPathDartVisitor visitor,
 ) {
   if (ctx.childCount == 2) {
-    final amount = [
+    final List<Object?> amount = <Object?>[
       ctx.getChild(0).runtimeType == TerminalNodeImpl
           ? ctx.getChild(0)!.text
           : visitor.visit(ctx.getChild(0)!)
     ];
-    final unit = visitor.visit(ctx.getChild(1)!);
+    final List<dynamic>? unit = visitor.visit(ctx.getChild(1)!);
     if (amount.length != 1 || unit?.length != 1) {
       throw FhirPathInvalidExpressionException(
           'A quantity requires both a unit '
@@ -35,7 +35,7 @@ List? _$visitQuantity(
           'amount = $amount\n'
           'unit = $unit');
     } else {
-      visitor.context = [
+      visitor.context = <dynamic>[
         FhirPathQuantity.fromString('${amount.first} ${unit!.first}')
       ];
     }

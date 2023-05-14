@@ -1,4 +1,4 @@
-// ignore_for_file: argument_type_not_assignable, invalid_assignment, return_of_invalid_type, unused_import, unused_local_variable, prefer_single_quotes, prefer_function_declarations_over_variables, use_raw_strings, prefer_final_locals, always_put_control_body_on_new_line, unnecessary_new, unnecessary_parenthesis, avoid_dynamic_calls, avoid_renaming_method_parameters, unnecessary_overrides, always_specify_types, non_constant_identifier_names, sort_constructors_first, use_super_parameters, no_leading_underscores_for_local_identifiers
+// ignore_for_file: argument_type_not_assignable, invalid_assignment, return_of_invalid_type, unused_import, unused_local_variable, prefer_single_quotes, prefer_function_declarations_over_variables, use_raw_strings, prefer_final_locals, always_put_control_body_on_new_line, unnecessary_new, unnecessary_parenthesis, avoid_dynamic_calls, avoid_renaming_method_parameters, unnecessary_overrides, always_specify_types, non_constant_identifier_names, sort_constructors_first, use_super_parameters, no_leading_underscores_for_local_identifiers, avoid_redundant_argument_values
 
 // Generated from FhirPath.g4 by ANTLR 4.11.1
 

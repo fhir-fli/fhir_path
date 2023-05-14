@@ -1,7 +1,7 @@
 // Package imports:
 import 'package:units_converter/units_converter.dart';
 
-const stringUnitToProperty = {
+const Map<String, Enum> stringUnitToProperty = <String, Enum>{
   ///
   /// LENGTH
   ///
