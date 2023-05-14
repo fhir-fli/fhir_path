@@ -14,17 +14,17 @@ class AbsParser extends FhirPathParser {
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
       results.isEmpty
-          ? []
+          ? <dynamic>[]
           : results.length > 1
               ? throw _wrongLength('.abs()', results)
               : results.first is num
                   ? (results.first as num).abs().isNaN
-                      ? []
-                      : [(results.first as num).abs()]
+                      ? <dynamic>[]
+                      : <dynamic>[(results.first as num).abs()]
                   : results.first is FhirPathQuantity
                       ? (results.first as FhirPathQuantity).abs().isNaN
-                          ? []
-                          : [(results.first as FhirPathQuantity).abs()]
+                          ? <dynamic>[]
+                          : <dynamic>[(results.first as FhirPathQuantity).abs()]
                       : throw _wrongTypes('.abs()', results, 'none');
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -53,11 +53,11 @@ class CeilingParser extends FhirPathParser {
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
       results.isEmpty
-          ? []
+          ? <dynamic>[]
           : results.length > 1
               ? throw _wrongLength('.ceiling()', results)
               : results.first is num
-                  ? [(results.first as num).ceil()]
+                  ? <dynamic>[(results.first as num).ceil()]
                   : throw _wrongTypes('.ceiling()', results, 'none');
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -86,11 +86,11 @@ class ExpParser extends FhirPathParser {
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
       results.isEmpty
-          ? []
+          ? <dynamic>[]
           : results.length > 1
               ? throw _wrongLength('.exp()', results)
               : results.first is num
-                  ? [exp(results.first as num)]
+                  ? <dynamic>[exp(results.first as num)]
                   : throw _wrongTypes('.exp()', results, 'none');
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -119,11 +119,11 @@ class FloorParser extends FhirPathParser {
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
       results.isEmpty
-          ? []
+          ? <dynamic>[]
           : results.length > 1
               ? throw _wrongLength('.floor()', results)
               : results.first is num
-                  ? [(results.first as num).floor()]
+                  ? <dynamic>[(results.first as num).floor()]
                   : throw _wrongTypes('.floor()', results, 'none');
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -152,11 +152,11 @@ class LnParser extends FhirPathParser {
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
       results.isEmpty
-          ? []
+          ? <dynamic>[]
           : results.length > 1
               ? throw _wrongLength('.ln()', results)
               : results.first is num
-                  ? [log(results.first as num)]
+                  ? <dynamic>[log(results.first as num)]
                   : throw _wrongTypes('.ln()', results, 'none');
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -185,15 +185,15 @@ class LogParser extends ValueParser<ParserList> {
   /// expression one object at a time
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final executedValue = value.execute(results.toList(), passed);
+    final List<dynamic> executedValue = value.execute(results.toList(), passed);
     return results.isEmpty
-        ? []
+        ? <dynamic>[]
         : results.length > 1
             ? throw _wrongLength('.log()', results)
             : executedValue.length > 1
                 ? throw _wrongArgLength('log()', executedValue)
                 : executedValue.first is num && results.first is num
-                    ? [
+                    ? <dynamic>[
                         log(results.first as num) /
                             log(executedValue.first as num)
                       ]
@@ -229,23 +229,23 @@ class PowerParser extends ValueParser<ParserList> {
   /// expression one object at a time
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final executedValue = value.execute(results.toList(), passed);
+    final List<dynamic> executedValue = value.execute(results.toList(), passed);
     if (results.isEmpty || executedValue.isEmpty) {
-      return [];
+      return <dynamic>[];
     } else if (results.length > 1) {
       throw _wrongLength('.power()', results);
     } else if (executedValue.length > 1) {
       throw _wrongArgLength('.power()', executedValue);
     }
-    final finalResults = results.first is num
+    final dynamic finalResults = results.first is num
         ? results.first
         : throw _wrongTypes('.power()', results, executedValue);
-    final finalValue = executedValue.first is num
+    final dynamic finalValue = executedValue.first is num
         ? executedValue.first
         : throw _wrongTypes('.power()', results, executedValue);
     return pow(finalResults as num, finalValue as num).isNaN
-        ? []
-        : [pow(finalResults, finalValue)];
+        ? <dynamic>[]
+        : <dynamic>[pow(finalResults, finalValue)];
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -277,9 +277,9 @@ class RoundParser extends ValueParser<ParserList> {
   /// expression one object at a time
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final executedValue = value.execute(results.toList(), passed);
+    final List<dynamic> executedValue = value.execute(results.toList(), passed);
     return results.isEmpty
-        ? []
+        ? <dynamic>[]
         : results.length > 1
             ? throw _wrongLength('.round()', results)
             : executedValue.isEmpty ||
@@ -288,7 +288,7 @@ class RoundParser extends ValueParser<ParserList> {
                 ? throw _wrongTypes('.round()', results, executedValue)
                 : results.first is! num
                     ? throw _wrongTypes('.round()', results, executedValue)
-                    : [
+                    : <dynamic>[
                         executedValue.isEmpty
                             ? (results.first as num).round()
                             : double.parse((results.first as num)
@@ -326,13 +326,13 @@ class SqrtParser extends FhirPathParser {
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
       results.isEmpty
-          ? []
+          ? <dynamic>[]
           : results.length > 1
               ? throw _wrongLength('.sqrt()', results)
               : results.first is num
                   ? (sqrt(results.first as num).isNaN
-                      ? []
-                      : [sqrt(results.first as num)])
+                      ? <dynamic>[]
+                      : <dynamic>[sqrt(results.first as num)])
                   : throw _wrongTypes('.sqrt()', results, 'none');
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -353,7 +353,7 @@ class SqrtParser extends FhirPathParser {
   String prettyPrint([int indent = 2]) => '.sqrt()';
 }
 
-class TruncateParser extends ValueParser {
+class TruncateParser extends ValueParser<dynamic> {
   TruncateParser();
   dynamic value;
 
@@ -362,11 +362,11 @@ class TruncateParser extends ValueParser {
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
       results.isEmpty
-          ? []
+          ? <dynamic>[]
           : results.length > 1
               ? throw _wrongLength('.truncate()', results)
               : results.first is num
-                  ? [(results.first as num).toInt()]
+                  ? <dynamic>[(results.first as num).toInt()]
                   : throw _wrongTypes('.truncate()', results, 'none');
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -395,20 +395,21 @@ class TruncateParser extends ValueParser {
   }
 }
 
-Exception _wrongLength(String functionName, List results) =>
+Exception _wrongLength(String functionName, List<dynamic> results) =>
     FhirPathEvaluationException(
         'The function $functionName can only work on a collection'
         ' with 0 or 1 item.',
         collection: results);
 
-Exception _wrongArgLength(String functionName, List value) =>
+Exception _wrongArgLength(String functionName, List<dynamic> value) =>
     FhirPathEvaluationException(
         'The function $functionName must have an argument that '
         'evaluates to 0 or 1 item.',
         operation: functionName,
         arguments: value);
 
-Exception _wrongTypes(String functionName, List results, dynamic value) =>
+Exception _wrongTypes(
+        String functionName, List<dynamic> results, dynamic value) =>
     FhirPathEvaluationException(
         'The function $functionName cannot work with the types '
         'passed.',

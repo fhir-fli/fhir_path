@@ -5,7 +5,7 @@ abstract class FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      [];
+      <dynamic>[];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -39,8 +39,8 @@ abstract class ValueParser<T> extends FhirPathParser {
 /// OperatorParser: operators
 abstract class OperatorParser extends FhirPathParser {
   OperatorParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  ParserList before = ParserList(<FhirPathParser>[]);
+  ParserList after = ParserList(<FhirPathParser>[]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -66,11 +66,11 @@ class ParserList extends FhirPathParser {
   /// expression one object at a time
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    void addToList(List toAdd) => results
+    void addToList(List<dynamic> toAdd) => results
       ..clear()
       ..addAll(toAdd);
 
-    value.forEach((v) {
+    value.forEach((FhirPathParser v) {
       addToList(v.execute(results, passed).toList());
     });
     return results;
@@ -83,7 +83,8 @@ class ParserList extends FhirPathParser {
   FhirPathParser removeAt(int i) => value.removeAt(i);
 
   @override
-  String toString() => 'PL(${value.length}): ${value.map((e) => e.toString())}';
+  String toString() =>
+      'PL(${value.length}): ${value.map((FhirPathParser e) => e.toString())}';
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -94,8 +95,8 @@ class ParserList extends FhirPathParser {
   /// that you use [prettyPrint] instead
   @override
   String verbosePrint(int indent) {
-    var returnString = '${"  " * indent}PL(${value.length})';
-    for (final item in value) {
+    String returnString = '${"  " * indent}PL(${value.length})';
+    for (final FhirPathParser item in value) {
       returnString += '\n${item.verbosePrint(indent + 1)}';
     }
     return returnString;
@@ -107,8 +108,8 @@ class ParserList extends FhirPathParser {
   /// and nested according to this package
   @override
   String prettyPrint([int indent = 2]) {
-    var returnString = '';
-    for (final item in value) {
+    String returnString = '';
+    for (final FhirPathParser item in value) {
       returnString += item.prettyPrint(indent + 1);
     }
     return returnString;

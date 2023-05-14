@@ -15,7 +15,7 @@ List<dynamic>? _$visitFunction(
           ctx.getChild(3) is! TerminalNodeImpl)) {
     throw _wrongTypes(ctx.text, visitor.context, ctx.children);
   } else {
-    final function = ctx.childCount == 4
+    final String? function = ctx.childCount == 4
         ? ctx.getChild(0)!.text
         : ctx.text.replaceAll('()', '');
     switch (function) {
@@ -27,28 +27,28 @@ List<dynamic>? _$visitFunction(
       case 'allTrue':
         {
           visitor.context = <dynamic>[
-            !visitor.context.any((element) => element == false)
+            !visitor.context.any((dynamic element) => element == false)
           ];
         }
         break;
       case 'anyTrue':
         {
           visitor.context = <dynamic>[
-            visitor.context.any((element) => element == true)
+            visitor.context.any((dynamic element) => element == true)
           ];
         }
         break;
       case 'allFalse':
         {
           visitor.context = <dynamic>[
-            !visitor.context.any((element) => element == true)
+            !visitor.context.any((dynamic element) => element == true)
           ];
         }
         break;
       case 'anyFalse':
         {
           visitor.context = <dynamic>[
-            visitor.context.any((element) => element == false)
+            visitor.context.any((dynamic element) => element == false)
           ];
         }
         break;
@@ -59,8 +59,8 @@ List<dynamic>? _$visitFunction(
         break;
       case 'distinct':
         {
-          final resultsList = <dynamic>[];
-          for (final results in visitor.context) {
+          final List<dynamic> resultsList = <dynamic>[];
+          for (final dynamic results in visitor.context) {
             if (notFoundInList(resultsList, results)) {
               resultsList.add(results);
             }
@@ -70,8 +70,8 @@ List<dynamic>? _$visitFunction(
         break;
       case 'isDistinct':
         {
-          final resultsList = <dynamic>[];
-          for (final results in visitor.context) {
+          final List<dynamic> resultsList = <dynamic>[];
+          for (final dynamic results in visitor.context) {
             if (notFoundInList(resultsList, results)) {
               resultsList.add(results);
             }
@@ -1178,24 +1178,28 @@ List<dynamic>? _$visitFunction(
         break;
       case 'extension':
         if (visitor.context.isNotEmpty) {
-          final extensionUrl = visitor.copyWith().visit(ctx.getChild(2)!);
+          final List<dynamic>? extensionUrl =
+              visitor.copyWith().visit(ctx.getChild(2)!);
           if (extensionUrl == null) {
-            visitor.context = [];
+            visitor.context = <dynamic>[];
           } else {
             // .extension(exturl) is short-hand for .extension.where(url='exturl')
-            final newExtension = "extension.where(url='${extensionUrl.first}')";
-            final newContext = visitor.newContext(newExtension);
-            visitor.context = visitor.copyWith().visit(newContext) ?? [];
+            final String newExtension =
+                "extension.where(url='${extensionUrl.first}')";
+            final ExpressionContext newContext =
+                visitor.newContext(newExtension);
+            visitor.context =
+                visitor.copyWith().visit(newContext) ?? <String>[];
           }
         }
         break;
       case 'aggregate':
         {
-          final aggregator = ctx.getChild(2)!;
-          final aggregatorExpression = aggregator.getChild(0)!;
-          var total = aggregator.childCount == 3
+          final ParseTree aggregator = ctx.getChild(2)!;
+          final ParseTree aggregatorExpression = aggregator.getChild(0)!;
+          List<dynamic>? total = aggregator.childCount == 3
               ? visitor.copyWith().visit(aggregator.getChild(2)!)
-              : [];
+              : <dynamic>[];
 
           for (final context in visitor.context) {
             final newEnvironment = visitor.environment;

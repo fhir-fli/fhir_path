@@ -13,9 +13,9 @@ class FpNotParser extends FhirPathParser {
   /// expression one object at a time
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final input = SingletonEvaluation.toBool(results,
+    final bool? input = SingletonEvaluation.toBool(results,
         name: 'input for .not()', operation: 'not()', collection: results);
-    return input != null ? [!input] : [];
+    return input != null ? <dynamic>[!input] : <dynamic>[];
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -43,7 +43,7 @@ class NowParser extends FhirPathParser {
   /// expression one object at a time
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      [FhirDateTime(DateTime.now())];
+      <dynamic>[FhirDateTime(DateTime.now())];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -69,7 +69,8 @@ class TimeOfDayParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) => [
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      <dynamic>[
         FhirTime(
             DateTime.now().toIso8601String().split('T').last.substring(0, 12))
       ];
@@ -99,7 +100,7 @@ class TodayParser extends FhirPathParser {
   /// expression one object at a time
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      [FhirDate(DateTime.now().toIso8601String().split('T').first)];
+      <dynamic>[FhirDate(DateTime.now().toIso8601String().split('T').first)];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -119,7 +120,7 @@ class TodayParser extends FhirPathParser {
   String prettyPrint([int indent = 2]) => '.today()';
 }
 
-class TraceParser extends ValueParser {
+class TraceParser extends ValueParser<dynamic> {
   TraceParser();
   dynamic value;
 

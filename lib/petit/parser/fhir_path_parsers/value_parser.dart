@@ -12,10 +12,10 @@ abstract class BaseDateTimeParser<T> extends ValueParser<T> {
   /// expression one object at a time
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      [value];
+      <dynamic>[value];
   @override
   String toString() => value.toString();
-  int get length => (value as List).length;
+  int get length => (value as List<dynamic>).length;
   bool isComparable(Object o) => o is BaseDateTimeParser;
 }
 

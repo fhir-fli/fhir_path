@@ -1,4 +1,4 @@
-// ignore_for_file: annotate_overrides, overridden_fields, avoid_function_literals_in_foreach_calls
+// ignore_for_file: annotate_overrides, overridden_fields, avoid_function_literals_in_foreach_calls, sort_constructors_first
 
 // Package imports:
 import 'package:collection/collection.dart';
@@ -19,13 +19,14 @@ class FpWhereParser extends FunctionParser {
   /// expression one object at a time
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final returnList =
-        IterationContext.withIterationContext((iterationContext) {
-      final iterationResult = [];
-      results.forEachIndexed((i, element) {
+    final List<dynamic> returnList = IterationContext.withIterationContext(
+        (IterationContext iterationContext) {
+      final List<dynamic> iterationResult = <dynamic>[];
+      results.forEachIndexed((int i, dynamic element) {
         iterationContext.indexValue = i;
         iterationContext.thisValue = element;
-        final newResult = value.execute([element], passed);
+        final List<dynamic> newResult =
+            value.execute(<dynamic>[element], passed);
         if (newResult.isNotEmpty) {
           if (!(newResult.length == 1 && newResult.first == false)) {
             iterationResult.add(element);
@@ -68,12 +69,13 @@ class SelectParser extends ValueParser<ParserList> {
   /// expression one object at a time
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    return IterationContext.withIterationContext((iterationContext) {
-      final outputCollection = [];
-      results.forEachIndexed((i, e) {
+    return IterationContext.withIterationContext(
+        (IterationContext iterationContext) {
+      final List<dynamic> outputCollection = <dynamic>[];
+      results.forEachIndexed((int i, dynamic e) {
         iterationContext.thisValue = e;
         iterationContext.indexValue = i;
-        outputCollection.addAll(value.execute([e], passed));
+        outputCollection.addAll(value.execute(<dynamic>[e], passed));
       });
       return outputCollection;
     }, passed);
@@ -107,20 +109,20 @@ class RepeatParser extends ValueParser<ParserList> {
   /// expression one object at a time
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final finalResults = [];
-    results.forEach((r) {
-      value.execute([r], passed).forEach((e) {
+    final List<dynamic> finalResults = <dynamic>[];
+    results.forEach((dynamic r) {
+      value.execute(<dynamic>[r], passed).forEach((dynamic e) {
         if (notFoundInList(finalResults, e)) {
           finalResults.add(e);
         }
       });
     });
-    var len = -1;
+    int len = -1;
     while (len != finalResults.length) {
       results = finalResults.toList();
       len = finalResults.length;
-      results.forEach((r) {
-        value.execute([r], passed).forEach((e) {
+      results.forEach((dynamic r) {
+        value.execute(<dynamic>[r], passed).forEach((dynamic e) {
           if (notFoundInList(finalResults, e)) {
             finalResults.add(e);
           }
@@ -159,9 +161,10 @@ class OfTypeParser extends ValueParser<ParserList> {
   /// expression one object at a time
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final executedValue = value.length == 1 && value.first is IdentifierParser
-        ? [value.first]
-        : value.execute(results.toList(), passed);
+    final List<dynamic> executedValue =
+        value.length == 1 && value.first is IdentifierParser
+            ? <dynamic>[value.first]
+            : value.execute(results.toList(), passed);
     if (executedValue.length != 1) {
       throw FhirPathEvaluationException(
         'The "ofType" function requires an argument that '
@@ -171,8 +174,8 @@ class OfTypeParser extends ValueParser<ParserList> {
         collection: results,
       );
     }
-    final finalResults = [];
-    results.forEach((e) {
+    final List<dynamic> finalResults = <dynamic>[];
+    results.forEach((dynamic e) {
       if (((passed.isVersion(FhirVersion.r4)
                   ? r4.resourceTypeFromStringMap.keys
                       .contains((executedValue.first as IdentifierParser).value)
@@ -234,7 +237,7 @@ class OfTypeParser extends ValueParser<ParserList> {
 }
 
 class ExtensionParser extends ValueParser<ParserList> {
-  static const extensionKey = '__extension';
+  static const String extensionKey = '__extension';
 
   ExtensionParser();
 
@@ -245,25 +248,27 @@ class ExtensionParser extends ValueParser<ParserList> {
   @override
   List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
     if (results.isEmpty) {
-      return [];
+      return <dynamic>[];
     }
 
-    final extensionUrl = value.execute(results.toList(), passed).firstOrNull;
+    final dynamic extensionUrl =
+        value.execute(results.toList(), passed).firstOrNull;
     if (extensionUrl == null) {
-      return [];
+      return <dynamic>[];
     }
 
     // .extension(exturl) is short-hand for .extension.where(url='exturl')
-    final urlEquals = EqualsParser();
-    urlEquals.before = ParserList([IdentifierParser('url')]);
-    urlEquals.after = ParserList([StringParser("'$extensionUrl'")]);
-    final extensionUrlPredicate = ParserList([
+    final EqualsParser urlEquals = EqualsParser();
+    urlEquals.before = ParserList(<FhirPathParser>[IdentifierParser('url')]);
+    urlEquals.after =
+        ParserList(<FhirPathParser>[StringParser("'$extensionUrl'")]);
+    final ParserList extensionUrlPredicate = ParserList(<FhirPathParser>[
       urlEquals,
     ]);
-    final whereParser = FpWhereParser();
+    final FpWhereParser whereParser = FpWhereParser();
     whereParser.value = extensionUrlPredicate;
-    final extensionParsers =
-        ParserList([IdentifierParser('extension'), whereParser]);
+    final ParserList extensionParsers = ParserList(
+        <FhirPathParser>[IdentifierParser('extension'), whereParser]);
 
     return extensionParsers.execute(results.toList(), passed);
   }
