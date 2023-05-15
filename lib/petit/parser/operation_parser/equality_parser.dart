@@ -14,18 +14,18 @@ class EqualsParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> lhs = before.execute(results.toList(), passed);
-    final List<dynamic> rhs = after.execute(results.toList(), passed);
+  List execute(List results, Map<String, dynamic> passed) {
+    final lhs = before.execute(results.toList(), passed);
+    final rhs = after.execute(results.toList(), passed);
 
     if (lhs.isEmpty || rhs.isEmpty) {
-      return <dynamic>[];
+      return [];
     } else if (lhs.length != rhs.length) {
-      return <dynamic>[false];
+      return [false];
     } else {
       /// for each entry in lhs and rhs (we checked above to ensure they
       /// were the same length)
-      for (int i = 0; i < lhs.length; i++) {
+      for (var i = 0; i < lhs.length; i++) {
         /// we check to see if any of the values are DateTimes
         if (lhs[i] is FhirDateTime ||
             lhs[i] is FhirDate ||
@@ -33,23 +33,23 @@ class EqualsParser extends OperatorParser {
             rhs[i] is FhirDate) {
           /// As long as one is, we convert them both to strings then back
           /// to DateTimes
-          final FhirDateTime lhsDateTime = FhirDateTime(lhs[i].toString());
-          final FhirDateTime rhsDateTime = FhirDateTime(rhs[i].toString());
+          final lhsDateTime = FhirDateTime(lhs[i].toString());
+          final rhsDateTime = FhirDateTime(rhs[i].toString());
 
           /// As long as they are both valid we try and compare them
           if (lhsDateTime.isValid && rhsDateTime.isValid) {
             try {
               if (lhsDateTime != rhsDateTime) {
-                int lhsDatePrecision =
+                var lhsDatePrecision =
                     '-'.allMatches(lhsDateTime.toString()).length;
                 lhsDatePrecision = lhsDatePrecision > 2 ? 2 : lhsDatePrecision;
-                int rhsDatePrecision =
+                var rhsDatePrecision =
                     '-'.allMatches(rhsDateTime.toString()).length;
                 rhsDatePrecision = rhsDatePrecision > 2 ? 2 : rhsDatePrecision;
-                int lhsTimePrecision =
+                var lhsTimePrecision =
                     ':'.allMatches(lhsDateTime.toString()).length;
                 lhsTimePrecision = lhsTimePrecision > 2 ? 2 : lhsTimePrecision;
-                int rhsTimePrecision =
+                var rhsTimePrecision =
                     ':'.allMatches(rhsDateTime.toString()).length;
                 rhsTimePrecision = rhsTimePrecision > 2 ? 2 : rhsTimePrecision;
                 if (lhsDatePrecision != rhsDatePrecision ||
@@ -82,7 +82,7 @@ class EqualsParser extends OperatorParser {
           }
         }
       }
-      return <dynamic>[true];
+      return [true];
     }
   }
 
@@ -116,37 +116,34 @@ class EqualsParser extends OperatorParser {
 // TODO(Dokotela): write test
 class EquivalentParser extends OperatorParser {
   EquivalentParser();
-  ParserList before = ParserList(<FhirPathParser>[]);
-  ParserList after = ParserList(<FhirPathParser>[]);
+  ParserList before = ParserList([]);
+  ParserList after = ParserList([]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> executedBefore =
-        before.execute(results.toList(), passed);
-    final List<dynamic> executedAfter = after.execute(results.toList(), passed);
+  List execute(List results, Map<String, dynamic> passed) {
+    final executedBefore = before.execute(results.toList(), passed);
+    final executedAfter = after.execute(results.toList(), passed);
     if (executedBefore.isEmpty) {
       if (executedAfter.isEmpty) {
-        return <dynamic>[true];
+        return [true];
       } else {
-        return <dynamic>[false];
+        return [false];
       }
     } else if (executedBefore.length != executedAfter.length) {
-      return <dynamic>[false];
+      return [false];
     } else {
-      executedBefore.removeWhere((dynamic lhsElement) =>
-          executedAfter.indexWhere((dynamic rhsElement) {
+      executedBefore.removeWhere((lhsElement) =>
+          executedAfter.indexWhere((rhsElement) {
             if (lhsElement is FhirDateTime ||
                 lhsElement is FhirDate ||
                 rhsElement is FhirDateTime ||
                 rhsElement is FhirDate) {
               /// As long as one is, we convert them both to strings then back
               /// to DateTimes
-              final FhirDateTime lhsDateTime =
-                  FhirDateTime(lhsElement.toString());
-              final FhirDateTime rhsDateTime =
-                  FhirDateTime(rhsElement.toString());
+              final lhsDateTime = FhirDateTime(lhsElement.toString());
+              final rhsDateTime = FhirDateTime(rhsElement.toString());
 
               /// As long as they are both valid we try and compare them
               if (lhsDateTime.isValid && rhsDateTime.isValid) {
@@ -163,14 +160,12 @@ class EquivalentParser extends OperatorParser {
                     .equivalent(lhsElement as Object);
               }
             } else if (lhsElement is num || rhsElement is num) {
-              final List<String>? sigDigsLhs =
-                  num.tryParse(lhsElement.toString())
-                      ?.toStringAsExponential()
-                      .split('e');
-              final List<String>? sigDigsRhs =
-                  num.tryParse(rhsElement.toString())
-                      ?.toStringAsExponential()
-                      .split('e');
+              final sigDigsLhs = num.tryParse(lhsElement.toString())
+                  ?.toStringAsExponential()
+                  .split('e');
+              final sigDigsRhs = num.tryParse(rhsElement.toString())
+                  ?.toStringAsExponential()
+                  .split('e');
               if (sigDigsLhs == null || sigDigsRhs == null) {
                 return false;
               } else {
@@ -194,7 +189,7 @@ class EquivalentParser extends OperatorParser {
             }
           }) !=
           -1);
-      return <dynamic>[executedBefore.isEmpty];
+      return [executedBefore.isEmpty];
     }
   }
 
@@ -229,11 +224,11 @@ class NotEqualsParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final EqualsParser equalsParser = EqualsParser();
+  List execute(List results, Map<String, dynamic> passed) {
+    final equalsParser = EqualsParser();
     equalsParser.before = this.before;
     equalsParser.after = this.after;
-    final List<dynamic> equality = equalsParser.execute(results, passed);
+    final equality = equalsParser.execute(results, passed);
     return FpNotParser().execute(equality, passed);
   }
 
@@ -265,11 +260,11 @@ class NotEquivalentParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final EquivalentParser equivalentParser = EquivalentParser();
+  List execute(List results, Map<String, dynamic> passed) {
+    final equivalentParser = EquivalentParser();
     equivalentParser.before = this.before;
     equivalentParser.after = this.after;
-    final List<dynamic> equality = equivalentParser.execute(results, passed);
+    final equality = equivalentParser.execute(results, passed);
     return FpNotParser().execute(equality, passed);
   }
 

@@ -2,7 +2,7 @@
 
 part of '../fhir_path_dart_visitor.dart';
 
-List<dynamic>? _$visitFunction(
+List? _$visitFunction(
   FunctionContext ctx,
   FhirPathDartVisitor visitor,
 ) {
@@ -117,13 +117,12 @@ List<dynamic>? _$visitFunction(
           }
         }
         break;
-      case 'toFhirBoolean':
+      case 'toBoolean':
         {
           visitor.context = visitor.context.isEmpty
               ? <dynamic>[]
               : visitor.context.length > 1
-                  ? throw _conversionException(
-                      '.toFhirBoolean()', visitor.context)
+                  ? throw _conversionException('.toBoolean()', visitor.context)
                   : _isNotAcceptedType(visitor.context)
                       ? <dynamic>[]
                       : visitor.context.first == true ||
@@ -149,13 +148,13 @@ List<dynamic>? _$visitFunction(
                               : <dynamic>[];
         }
         break;
-      case 'convertsToFhirBoolean':
+      case 'convertsToBoolean':
         {
           visitor.context = visitor.context.isEmpty
               ? <dynamic>[]
               : visitor.context.length > 1
                   ? throw _conversionException(
-                      '.convertsToFhirBoolean()', visitor.context)
+                      '.convertsToBoolean()', visitor.context)
                   : _isNotAcceptedType(visitor.context)
                       ? <dynamic>[false]
                       : visitor.context.first is bool ||
@@ -773,20 +772,20 @@ List<dynamic>? _$visitFunction(
         break;
       case 'ofType':
         {
-          bool checkOfType(String? type) {
-            if (type == null) {
+          bool checkOfType(String? _type) {
+            if (_type == null) {
               throw FhirPathEvaluationException(
                   'The function ofType was not passed a Type',
                   collection: visitor.context);
             } else if (visitor.environment.isVersion(FhirVersion.r4)
-                ? r4.resourceTypeFromStringMap.keys.contains(type)
+                ? r4.resourceTypeFromStringMap.keys.contains(_type)
                 : visitor.environment.isVersion(FhirVersion.r5)
-                    ? r5.resourceTypeFromStringMap.keys.contains(type)
+                    ? r5.resourceTypeFromStringMap.keys.contains(_type)
                     : visitor.environment.isVersion(FhirVersion.dstu2)
-                        ? dstu2.resourceTypeFromStringMap.keys.contains(type)
-                        : stu3.resourceTypeFromStringMap.keys.contains(type)) {
+                        ? dstu2.resourceTypeFromStringMap.keys.contains(_type)
+                        : stu3.resourceTypeFromStringMap.keys.contains(_type)) {
               visitor.context.retainWhere((element) =>
-                  element is Map && element['resourceType'] == type);
+                  element is Map && element['resourceType'] == _type);
               return true;
             } else if ([
               'string',
@@ -797,24 +796,24 @@ List<dynamic>? _$visitFunction(
               'dateTime',
               'time',
               'quantity',
-            ].contains(type.toLowerCase())) {
-              type = type.toLowerCase();
-              visitor.context.retainWhere((dynamic element) => type == 'string'
+            ].contains(_type.toLowerCase())) {
+              _type = _type.toLowerCase();
+              visitor.context.retainWhere((element) => _type == 'string'
                   ? element is String
-                  : type == 'boolean'
+                  : _type == 'boolean'
                       ? element is bool || element is FhirBoolean
-                      : type == 'integer'
+                      : _type == 'integer'
                           ? element is int || element is FhirInteger
-                          : type == 'decimal'
+                          : _type == 'decimal'
                               ? element is double || element is FhirDecimal
-                              : type == 'date'
+                              : _type == 'date'
                                   ? element is FhirDate
-                                  : type == 'datetime'
-                                      ? element is FhirDateTime ||
+                                  : _type == 'datetime'
+                                      ? element is DateTime ||
                                           element is FhirDateTime
-                                      : type == 'time'
+                                      : _type == 'time'
                                           ? element is FhirTime
-                                          : type == 'quantity'
+                                          : _type == 'quantity'
                                               ? isQuantity(element)
                                               : false);
               return true;
@@ -823,8 +822,8 @@ List<dynamic>? _$visitFunction(
             }
           }
 
-          final type = ctx.getChild(2)?.text;
-          final success = checkOfType(type);
+          final _type = ctx.getChild(2)?.text;
+          final success = checkOfType(_type);
           if (!success) {
             final result = visitor.copyWith().visit(ctx.getChild(2)!);
             if (result != null && result.isNotEmpty && result.first is String) {
@@ -1137,7 +1136,7 @@ List<dynamic>? _$visitFunction(
               );
             } else {
               /// Just checking on the off chance the returned value is actually
-              /// a FhirBoolean value (which really shouldn't happen).
+              /// a FHIR Boolean value (which really shouldn't happen).
               /// TODO: for now we're assuming that non-empty, non-bool is true
               /// I'm not sure if this is a correct assumption or not
               final bool conditionBool = condition.first is bool
@@ -1210,19 +1209,19 @@ List<dynamic>? _$visitFunction(
         break;
       case 'today':
         {
-          visitor.context = <dynamic>[
+          visitor.context = [
             FhirDate(DateTime.now().toIso8601String().split('T').first)
           ];
         }
         break;
       case 'now':
         {
-          visitor.context = <dynamic>[DateTime.now()];
+          visitor.context = [DateTime.now()];
         }
         break;
       case 'timeOfDay':
         {
-          visitor.context = <dynamic>[
+          visitor.context = [
             FhirTime(DateTime.now()
                 .toIso8601String()
                 .split('T')
@@ -1345,7 +1344,7 @@ bool _isAllTypes(List results) =>
     results.first is! FhirDate &&
     results.first is! FhirDateTime &&
     results.first is! FhirTime &&
-    results.first is! FhirDateTime &&
+    results.first is! DateTime &&
     results.first is! FhirPathQuantity;
 
 Exception _conversionException(String function, List results) =>

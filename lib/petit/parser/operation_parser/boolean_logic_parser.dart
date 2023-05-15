@@ -11,10 +11,9 @@ class AndStringParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> executedBefore =
-        before.execute(results.toList(), passed);
-    final List<dynamic> executedAfter = after.execute(results.toList(), passed);
+  List execute(List results, Map<String, dynamic> passed) {
+    final executedBefore = before.execute(results.toList(), passed);
+    final executedAfter = after.execute(results.toList(), passed);
 
     final beforeBool = SingletonEvaluation.toBool(executedBefore,
         name: "parameter before 'and'", operation: 'and', collection: results);
@@ -62,10 +61,9 @@ class XorParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> executedBefore =
-        before.execute(results.toList(), passed);
-    final List<dynamic> executedAfter = after.execute(results.toList(), passed);
+  List execute(List results, Map<String, dynamic> passed) {
+    final executedBefore = before.execute(results.toList(), passed);
+    final executedAfter = after.execute(results.toList(), passed);
 
     final beforeBool = SingletonEvaluation.toBool(executedBefore,
         name: "parameter before 'xor'", operation: 'xor', collection: results);
@@ -117,10 +115,9 @@ class OrStringParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> executedBefore =
-        before.execute(results.toList(), passed);
-    final List<dynamic> executedAfter = after.execute(results.toList(), passed);
+  List execute(List results, Map<String, dynamic> passed) {
+    final executedBefore = before.execute(results.toList(), passed);
+    final executedAfter = after.execute(results.toList(), passed);
 
     final beforeBool = SingletonEvaluation.toBool(executedBefore,
         name: "parameter before 'or'", operation: 'or', collection: results);
@@ -168,33 +165,32 @@ class ImpliesParser extends OperatorParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> executedBefore =
-        before.execute(results.toList(), passed);
-    final List<dynamic> executedAfter = after.execute(results.toList(), passed);
+  List execute(List results, Map<String, dynamic> passed) {
+    final executedBefore = before.execute(results.toList(), passed);
+    final executedAfter = after.execute(results.toList(), passed);
 
-    final bool? beforeBool = SingletonEvaluation.toBool(executedBefore,
+    final beforeBool = SingletonEvaluation.toBool(executedBefore,
         name: "parameter before 'implies'",
         operation: 'implies',
         collection: results);
-    final bool? afterBool = SingletonEvaluation.toBool(executedAfter,
+    final afterBool = SingletonEvaluation.toBool(executedAfter,
         name: "parameter after 'implies'",
         operation: 'implies',
         collection: results);
 
-    if (beforeBool ?? false) {
-      return afterBool != null ? <dynamic>[afterBool] : <dynamic>[];
+    if (beforeBool == true) {
+      return afterBool != null ? [afterBool] : [];
     }
 
-    if (!(beforeBool ?? true)) {
-      return <dynamic>[true];
+    if (beforeBool == false) {
+      return [true];
     }
 
-    if (afterBool ?? false) {
-      return <dynamic>[true];
+    if (afterBool == true) {
+      return [true];
     }
 
-    return <dynamic>[];
+    return [];
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL

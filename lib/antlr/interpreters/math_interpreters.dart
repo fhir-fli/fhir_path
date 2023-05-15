@@ -95,8 +95,8 @@ List? _$visitAdditiveExpression(
         'this was passed the incorrect number of arguments: ${ctx.childCount}\n'
         '${ctx.children?.map((e) => e.text).toList()}');
   }
-  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
+  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
   final operator = ctx.getChild(1)!.text;
 
   if (operator == '&') {
@@ -313,8 +313,8 @@ List? _$visitMultiplicativeExpression(
         'this was passed the incorrect number of arguments: ${ctx.childCount}\n'
         '${ctx.children?.map((e) => e.text).toList()}');
   }
-  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
+  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
   final operator = ctx.getChild(1)!.text;
   if ((lhs?.isEmpty ?? true) || (rhs?.isEmpty ?? true)) {
     visitor.context = <dynamic>[];

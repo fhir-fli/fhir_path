@@ -1148,13 +1148,13 @@ final resource = Patient(
 
 final bundle = Bundle(
   entry: [
-    BundleEntry(resource: Patient(id: '1')),
-    BundleEntry(resource: Practitioner(id: '2')),
-    BundleEntry(resource: Patient(id: '3')),
-    BundleEntry(resource: Practitioner(id: '4')),
-    BundleEntry(resource: Practitioner(id: '5')),
-    BundleEntry(resource: Patient(id: '6')),
-    BundleEntry(resource: Patient(id: '7')),
+    BundleEntry(resource: Patient(fhirId: '1')),
+    BundleEntry(resource: Practitioner(fhirId: '2')),
+    BundleEntry(resource: Patient(fhirId: '3')),
+    BundleEntry(resource: Practitioner(fhirId: '4')),
+    BundleEntry(resource: Practitioner(fhirId: '5')),
+    BundleEntry(resource: Patient(fhirId: '6')),
+    BundleEntry(resource: Patient(fhirId: '7')),
   ],
 );
 
@@ -1180,7 +1180,7 @@ const patientJsonString = r'''{
 					}
 				]
 			},
-			"system": "urn:oid:1.2.36.146.595.217.0.1",
+			"system": "urn:ofhirId:1.2.36.146.595.217.0.1",
 			"value": "12345",
 			"period": {
 				"start": "2001-05-06"

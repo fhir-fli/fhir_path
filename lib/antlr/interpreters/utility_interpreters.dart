@@ -79,8 +79,8 @@ List? _$visitAndExpression(
   if (ctx.childCount != 3) {
     throw _wrongArgLength('and', ctx.children ?? []);
   }
-  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
+  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
 
   bool? convertValue(dynamic value) => value is bool
       ? value
@@ -134,8 +134,8 @@ List? _$visitOrExpression(
   if (ctx.childCount != 3) {
     throw _wrongArgLength(ctx.text, ctx.children ?? []);
   }
-  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
+  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
   final operator = ctx.getChild(1)!.text;
 
   bool? convertValue(dynamic value) => value is bool
@@ -200,8 +200,8 @@ List? _$visitImpliesExpression(
   if (ctx.childCount != 3) {
     throw _wrongArgLength(ctx.text, ctx.children ?? []);
   }
-  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
+  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
 
   bool? convertValue(dynamic value) => value is bool
       ? value
@@ -269,8 +269,8 @@ List? _$visitMembershipExpression(
   if (ctx.childCount != 3) {
     throw _wrongArgLength(ctx.text, ctx.children ?? []);
   }
-  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
+  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
   final operator = ctx.getChild(1)!.text;
   final objectList = operator == 'in' ? lhs : rhs;
   if (objectList?.isEmpty ?? true) {

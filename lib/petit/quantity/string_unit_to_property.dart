@@ -4,7 +4,7 @@ import 'package:units_converter/units_converter.dart';
 // Project imports:
 import 'ratios.dart';
 
-const Map<String, Enum> stringUnitToProperty = <String, Enum>{
+const stringUnitToProperty = {
   ///
   /// LENGTH
   ///

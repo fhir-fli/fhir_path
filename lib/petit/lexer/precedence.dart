@@ -1,8 +1,11 @@
+// Package imports:
+import 'package:petitparser/petitparser.dart';
+
 // Project imports:
 import '../petit_fhir_path.dart';
 
 /// Trying to enforce Operator Order Precedence
-const Map<Type, int> operatorOrderMap = <Type, int>{
+const operatorOrderMap = {
   CommaParser: 14,
 
   /// #13: implies

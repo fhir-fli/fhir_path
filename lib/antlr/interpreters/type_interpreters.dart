@@ -39,7 +39,7 @@ List? _$visitTypeExpression(
     visitor.identifierOnly = false;
   }
 
-  final String? operator = ctx.getChild(1)?.text;
+  final operator = ctx.getChild(1)?.text;
 
   if ((lhs?.isEmpty ?? true) ||
       lhs!.length != 1 ||

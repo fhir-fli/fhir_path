@@ -110,7 +110,7 @@ class FhirPathDartVisitor extends ParseTreeVisitor<List>
   }
 
   /// This is the beginning of how you evaluate an expression
-  List<dynamic> execute(ExpressionContext ctx) => visit(ctx) ?? [];
+  List execute(ExpressionContext ctx) => visit(ctx) ?? [];
 
   @override
   List? visitIndexerExpression(IndexerExpressionContext ctx) =>

@@ -18,7 +18,7 @@ class FpWhereParser extends FunctionParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
+  List execute(List results, Map<String, dynamic> passed) {
     final returnList =
         IterationContext.withIterationContext((iterationContext) {
       final iterationResult = [];
@@ -67,7 +67,7 @@ class SelectParser extends ValueParser<ParserList> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
+  List execute(List results, Map<String, dynamic> passed) {
     return IterationContext.withIterationContext((iterationContext) {
       final outputCollection = [];
       results.forEachIndexed((i, e) {
@@ -106,7 +106,7 @@ class RepeatParser extends ValueParser<ParserList> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
+  List execute(List results, Map<String, dynamic> passed) {
     final finalResults = [];
     results.forEach((r) {
       value.execute([r], passed).forEach((e) {
@@ -158,7 +158,7 @@ class OfTypeParser extends ValueParser<ParserList> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
+  List execute(List results, Map<String, dynamic> passed) {
     final executedValue = value.length == 1 && value.first is IdentifierParser
         ? [value.first]
         : value.execute(results.toList(), passed);
@@ -243,7 +243,7 @@ class ExtensionParser extends ValueParser<ParserList> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
+  List execute(List results, Map<String, dynamic> passed) {
     if (results.isEmpty) {
       return [];
     }

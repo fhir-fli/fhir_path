@@ -125,7 +125,7 @@ IDENTIFIER: ([A-Za-z] | '_') ([A-Za-z0-9] | '_')*
 
 DELIMITEDIDENTIFIER: '`' (ESC | .)*? '`';
 
-STRING: "\'' (ESC | .)*? ''";
+STRING: '\'' (ESC | .)*? '\'';
 
 // Also allows leading zeroes now (just like CQL and XSD)
 NUMBER: [0-9]+ ('.' [0-9]+)?;

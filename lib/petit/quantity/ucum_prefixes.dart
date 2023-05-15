@@ -16,7 +16,7 @@ class UcumPrefix {
   String? exp_;
 }
 
-final List<UcumPrefix> prefixData = <UcumPrefix>[
+final prefixData = [
   UcumPrefix('E', 'EX', 'exa', 'E', 1e18, '18'),
   UcumPrefix('G', 'GA', 'giga', 'G', 1e9, '9'),
   UcumPrefix('Gi', 'GIB', 'gibi', 'Gi', 1073741824, null),

@@ -6,7 +6,7 @@ import 'package:petitparser/petitparser.dart';
 //  * specification (which has not yet been fully implemented)
 //  * ***************************************************************************
 
-final ChoiceParser<dynamic> durationLexer = string('milliseconds') |
+final durationLexer = string('milliseconds') |
     string('seconds') |
     string('minutes') |
     string('hours') |

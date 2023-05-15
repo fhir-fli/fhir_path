@@ -2,16 +2,16 @@
 
 part of '../fhir_path_dart_visitor.dart';
 
-List<dynamic>? _$visitEqualityExpression(
+List? _$visitEqualityExpression(
   EqualityExpressionContext ctx,
   FhirPathDartVisitor visitor,
 ) {
   if (ctx.childCount != 3) {
-    throw _wrongArgLength(ctx.text, ctx.children ?? <ParseTree>[]);
+    throw _wrongArgLength(ctx.text, ctx.children ?? []);
   }
-  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
-  final String? operator = ctx.getChild(1)?.text;
+  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
+  final operator = ctx.getChild(1)?.text;
   void compare(bool equivalent) {
     if ((lhs?.isEmpty ?? true) || (rhs?.isEmpty ?? true)) {
       if (equivalent) {
@@ -28,18 +28,16 @@ List<dynamic>? _$visitEqualityExpression(
       visitor.context = <dynamic>[true];
 
       if (equivalent) {
-        lhs.removeWhere((dynamic lhsElement) =>
-            rhs.indexWhere((dynamic rhsElement) {
+        lhs.removeWhere((lhsElement) =>
+            rhs.indexWhere((rhsElement) {
               if (lhsElement is FhirDateTime ||
                   lhsElement is FhirDate ||
                   rhsElement is FhirDateTime ||
                   rhsElement is FhirDate) {
                 /// As long as one is, we convert them both to strings then back
-                /// to FhirDateTimes
-                final FhirDateTime lhsDateTime =
-                    FhirDateTime(lhsElement.toString());
-                final FhirDateTime rhsDateTime =
-                    FhirDateTime(rhsElement.toString());
+                /// to DateTimes
+                final lhsDateTime = FhirDateTime(lhsElement.toString());
+                final rhsDateTime = FhirDateTime(rhsElement.toString());
 
                 /// As long as they are both valid we try and compare them
                 if (lhsDateTime.isValid && rhsDateTime.isValid) {
@@ -56,14 +54,12 @@ List<dynamic>? _$visitEqualityExpression(
                       .equivalent(lhsElement as Object);
                 }
               } else if (lhsElement is num || rhsElement is num) {
-                final List<String>? sigDigsLhs =
-                    num.tryParse(lhsElement.toString())
-                        ?.toStringAsExponential()
-                        .split('e');
-                final List<String>? sigDigsRhs =
-                    num.tryParse(rhsElement.toString())
-                        ?.toStringAsExponential()
-                        .split('e');
+                final sigDigsLhs = num.tryParse(lhsElement.toString())
+                    ?.toStringAsExponential()
+                    .split('e');
+                final sigDigsRhs = num.tryParse(rhsElement.toString())
+                    ?.toStringAsExponential()
+                    .split('e');
                 if (sigDigsLhs == null || sigDigsRhs == null) {
                   return false;
                 } else {
@@ -93,13 +89,13 @@ List<dynamic>? _$visitEqualityExpression(
         /// for each entry in lhs and rhs (we checked above to ensure they
         /// were the same length)
         for (var i = 0; i < lhs.length; i++) {
-          /// we check to see if any of the values are FhirDateTimes
+          /// we check to see if any of the values are DateTimes
           if (lhs[i] is FhirDateTime ||
               lhs[i] is FhirDate ||
               rhs[i] is FhirDateTime ||
               rhs[i] is FhirDate) {
             /// As long as one is, we convert them both to strings then back
-            /// to FhirDateTimes
+            /// to DateTimes
             final lhsDateTime = FhirDateTime(lhs[i].toString());
             final rhsDateTime = FhirDateTime(rhs[i].toString());
 
@@ -139,7 +135,7 @@ List<dynamic>? _$visitEqualityExpression(
             }
           }
 
-          /// If they aren't FhirDateTimes we can just compare them as usual
+          /// If they aren't dateTimes we can just compare them as usual
           else {
             if (lhs[i] is FhirPathQuantity || rhs[i] is FhirPathQuantity) {
               if (lhs[i] is FhirPathQuantity) {
@@ -189,13 +185,13 @@ List<dynamic>? _$visitEqualityExpression(
   return visitor.context;
 }
 
-const List<Type> _allowedTypes = <Type>[
+const _allowedTypes = [
   String,
   num,
   int,
   double,
   FhirDate,
-  FhirDateTime,
+  DateTime,
   FhirDateTime,
   FhirTime,
   FhirPathQuantity,
@@ -213,9 +209,9 @@ List? _$visitInequalityExpression(
   }
 
   /// calculate the two arguments and the comparator
-  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
-  final String? operator = ctx.getChild(1)?.text;
+  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
+  final operator = ctx.getChild(1)?.text;
 
   /// if either of them is empty, return an empty list
   if ((lhs?.isEmpty ?? true) || (rhs?.isEmpty ?? true)) {
@@ -271,11 +267,11 @@ List? _$visitInequalityExpression(
 }
 
 // This is going to assume that if a String is being compared
-// with a FhirDate, FhirDateTime, or FhirTime, and the String is a valid format of a FhirTime
-// or FhirDateTime, then they should still be compared
+// with a Date, DateTime, or Time, and the String is a valid format of a Time
+// or DateTime, then they should still be compared
 // another type, for instance:
 // Patient.birthDate = "1981-09-18"
-// today() = FhirDate("2022-04-15")
+// today() = Date("2022-04-15")
 // this will throw an error, despite the fact that they should be comparable
 // could consider testing it, e.g.
 bool? compare(Comparator comparator, dynamic lhs, dynamic rhs) {
@@ -312,10 +308,10 @@ bool? compare(Comparator comparator, dynamic lhs, dynamic rhs) {
           : rhs is String && FhirDateTime(rhs).isValid
               ? makeComparison(comparator, lhs, rhs)
               : throw cannotCompareException(comparator, lhs, rhs);
-    case FhirDateTime:
+    case DateTime:
       return (rhs is FhirDateTimeBase && rhs.isValid)
           ? makeComparison(comparator, FhirDateTime(lhs), rhs)
-          : rhs is FhirDateTime
+          : rhs is DateTime
               ? makeComparison(comparator, FhirDateTime(lhs), FhirDateTime(rhs))
               : rhs is String && FhirDateTime(rhs).isValid
                   ? makeComparison(
