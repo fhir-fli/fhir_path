@@ -11,10 +11,15 @@ abstract class BaseDateTimeParser<T> extends ValueParser<T> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => [value];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      <dynamic>[value];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
   @override
   String toString() => value.toString();
-  int get length => (value as List).length;
+  int get length => (value as List<dynamic>).length;
   bool isComparable(Object o) => o is BaseDateTimeParser;
 }
 

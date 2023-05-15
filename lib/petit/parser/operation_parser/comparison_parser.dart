@@ -8,8 +8,8 @@ import '../../petit_fhir_path.dart';
 
 class GreaterParser extends OperatorParser {
   GreaterParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  ParserList before = ParserList(<FhirPathParser>[]);
+  ParserList after = ParserList(<FhirPathParser>[]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -41,8 +41,8 @@ class GreaterParser extends OperatorParser {
 
 class LessParser extends OperatorParser {
   LessParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  ParserList before = ParserList(<FhirPathParser>[]);
+  ParserList after = ParserList(<FhirPathParser>[]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -74,8 +74,8 @@ class LessParser extends OperatorParser {
 
 class GreaterEqualParser extends OperatorParser {
   GreaterEqualParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  ParserList before = ParserList(<FhirPathParser>[]);
+  ParserList after = ParserList(<FhirPathParser>[]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -108,8 +108,8 @@ class GreaterEqualParser extends OperatorParser {
 
 class LessEqualParser extends OperatorParser {
   LessEqualParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  ParserList before = ParserList(<FhirPathParser>[]);
+  ParserList after = ParserList(<FhirPathParser>[]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -143,8 +143,13 @@ enum Comparator { gt, gte, lt, lte }
 
 // TODO(Dokotela): review if appropriately comparing different types
 @override
+<<<<<<< HEAD
 List executeComparisons(List results, ParserList before, ParserList after,
     Map<String, dynamic> passed, Comparator comparator,
+=======
+List<dynamic> executeComparisons(List<dynamic> results, ParserList before,
+    ParserList after, Map<String, dynamic> passed, Comparator comparator,
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
     {bool where = false}) {
   // TODO(Dokotela): Currently, this is going to assume that if a String is being compared
   // with a Date, DateTime, or Time, and the String is a valid format of a Time
@@ -158,12 +163,12 @@ List executeComparisons(List results, ParserList before, ParserList after,
   //    if(param)}
 
   bool stringGt(String param1, String param2) {
-    final runes1 = param1.runes.toList();
-    final runes2 = param2.runes.toList();
+    final List<int> runes1 = param1.runes.toList();
+    final List<int> runes2 = param2.runes.toList();
     if (runes1.length < runes2.length) {
       return false;
     }
-    for (var i = 0; i < runes1.length; i++) {
+    for (int i = 0; i < runes1.length; i++) {
       if (runes2[i] > runes1[i]) {
         return false;
       } else if (runes2[i] < runes1[i]) {
@@ -299,35 +304,35 @@ List executeComparisons(List results, ParserList before, ParserList after,
           throw FhirPathEvaluationException(
             'Can only compare Strings to other Strings',
             operation: '$comparator',
-            arguments: [lhs, rhs],
+            arguments: <dynamic>[lhs, rhs],
           );
         }
     }
   }
 
-  final lhs = SingletonEvaluation.toSingleton(
+  final List<dynamic> lhs = SingletonEvaluation.toSingleton(
       before.execute(results.toList(), passed),
       name: 'left-hand side',
       operation: comparator.toString(),
       collection: results);
-  final rhs = SingletonEvaluation.toSingleton(
+  final List<dynamic> rhs = SingletonEvaluation.toSingleton(
       after.execute(results.toList(), passed),
       name: 'right-hand side',
       operation: comparator.toString(),
       collection: results);
 
   if (lhs.isEmpty || rhs.isEmpty) {
-    return [];
+    return <dynamic>[];
   } else if (lhs.length != 1 || rhs.length != 1) {
     throw _wrongArgLength(
       comparator.toString(),
-      ['Left-hand side: $lhs', 'Right-hand side: $rhs'],
+      <dynamic>['Left-hand side: $lhs', 'Right-hand side: $rhs'],
     );
   }
   {
     if (!_allowedTypes.contains(lhs.first.runtimeType) ||
         !_allowedTypes.contains(rhs.first.runtimeType)) {
-      final functionName = comparator == Comparator.gt
+      final String functionName = comparator == Comparator.gt
           ? '>'
           : comparator == Comparator.gte
               ? '>='
@@ -340,19 +345,19 @@ List executeComparisons(List results, ParserList before, ParserList after,
           'LHS: $lhs\n'
           'RHS: $rhs',
           operation: functionName,
-          arguments: [before, after]);
+          arguments: <dynamic>[before, after]);
     } else if (where) {
-      results.retainWhere((element) =>
+      results.retainWhere((dynamic element) =>
           compare(comparator, element[lhs.first], rhs.first) ?? false);
       return results;
     } else {
-      final newResult = compare(comparator, lhs.first, rhs.first);
-      return newResult == null ? [] : [newResult];
+      final bool? newResult = compare(comparator, lhs.first, rhs.first);
+      return newResult == null ? <dynamic>[] : <dynamic>[newResult];
     }
   }
 }
 
-const _allowedTypes = [
+const List<Type> _allowedTypes = <Type>[
   String,
   num,
   int,
@@ -363,7 +368,7 @@ const _allowedTypes = [
   FhirPathQuantity,
 ];
 
-Exception _wrongArgLength(String functionName, List value) =>
+Exception _wrongArgLength(String functionName, List<dynamic> value) =>
     FhirPathEvaluationException(
         'The function $functionName must have an argument that '
         'evaluates to 0 or 1 item.',

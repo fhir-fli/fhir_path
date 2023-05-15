@@ -88,34 +88,45 @@ List? _$visitEqualityExpression(
       } else {
         /// for each entry in lhs and rhs (we checked above to ensure they
         /// were the same length)
+<<<<<<< HEAD
         for (var i = 0; i < lhs.length; i++) {
           /// we check to see if any of the values are DateTimes
+=======
+        for (int i = 0; i < lhs.length; i++) {
+          /// we check to see if any of the values are FhirDateTimes
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
           if (lhs[i] is FhirDateTime ||
               lhs[i] is FhirDate ||
               rhs[i] is FhirDateTime ||
               rhs[i] is FhirDate) {
             /// As long as one is, we convert them both to strings then back
+<<<<<<< HEAD
             /// to DateTimes
             final lhsDateTime = FhirDateTime(lhs[i].toString());
             final rhsDateTime = FhirDateTime(rhs[i].toString());
+=======
+            /// to FhirDateTimes
+            final FhirDateTime lhsDateTime = FhirDateTime(lhs[i].toString());
+            final FhirDateTime rhsDateTime = FhirDateTime(rhs[i].toString());
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
             /// As long as they are both valid we try and compare them
             if (lhsDateTime.isValid && rhsDateTime.isValid) {
               try {
                 if (lhsDateTime != rhsDateTime) {
-                  var lhsDatePrecision =
+                  int lhsDatePrecision =
                       '-'.allMatches(lhsDateTime.toString()).length;
                   lhsDatePrecision =
                       lhsDatePrecision > 2 ? 2 : lhsDatePrecision;
-                  var rhsDatePrecision =
+                  int rhsDatePrecision =
                       '-'.allMatches(rhsDateTime.toString()).length;
                   rhsDatePrecision =
                       rhsDatePrecision > 2 ? 2 : rhsDatePrecision;
-                  var lhsTimePrecision =
+                  int lhsTimePrecision =
                       ':'.allMatches(lhsDateTime.toString()).length;
                   lhsTimePrecision =
                       lhsTimePrecision > 2 ? 2 : lhsTimePrecision;
-                  var rhsTimePrecision =
+                  int rhsTimePrecision =
                       ':'.allMatches(rhsDateTime.toString()).length;
                   rhsTimePrecision =
                       rhsTimePrecision > 2 ? 2 : rhsTimePrecision;
@@ -199,13 +210,13 @@ const _allowedTypes = [
 
 enum Comparator { gt, gte, lt, lte }
 
-List? _$visitInequalityExpression(
+List<dynamic>? _$visitInequalityExpression(
   InequalityExpressionContext ctx,
   FhirPathDartVisitor visitor,
 ) {
   /// must be 3 children or nodes
   if (ctx.childCount != 3) {
-    throw _wrongArgLength(ctx.text, ctx.children ?? []);
+    throw _wrongArgLength(ctx.text, ctx.children ?? <dynamic>[]);
   }
 
   /// calculate the two arguments and the comparator
@@ -222,7 +233,7 @@ List? _$visitInequalityExpression(
   if (lhs!.length != 1 || rhs!.length != 1) {
     throw _wrongArgLength(
       operator ?? ctx.text,
-      ['Left-hand side: $lhs', 'Right-hand side: $rhs'],
+      <dynamic>['Left-hand side: $lhs', 'Right-hand side: $rhs'],
     );
   } else
 
@@ -235,7 +246,7 @@ List? _$visitInequalityExpression(
         'LHS: $lhs\n'
         'RHS: $rhs',
         operation: operator,
-        arguments: [lhs, rhs]);
+        arguments: <dynamic>[lhs, rhs]);
   } else {
     Comparator comparator;
     switch (operator) {
@@ -258,9 +269,9 @@ List? _$visitInequalityExpression(
             'LHS: $lhs\n'
             'RHS: $rhs',
             operation: operator,
-            arguments: [lhs, rhs]);
+            arguments: <dynamic>[lhs, rhs]);
     }
-    final newResult = compare(comparator, lhs.first, rhs.first);
+    final bool? newResult = compare(comparator, lhs.first, rhs.first);
     visitor.context = newResult == null ? <dynamic>[] : <dynamic>[newResult];
   }
   return visitor.context;
@@ -317,14 +328,14 @@ bool? compare(Comparator comparator, dynamic lhs, dynamic rhs) {
                   ? makeComparison(
                       comparator, FhirDateTime(lhs), FhirDateTime(rhs))
                   : throw cannotCompareException(comparator, lhs, rhs);
-    case FhirDateTime:
-      return rhs is FhirDateTimeBase
-          ? (lhs as FhirDateTime).isValid && rhs.isValid
-              ? makeComparison(comparator, lhs, rhs)
-              : throw invalidException(comparator, lhs, rhs)
-          : rhs is String && FhirDateTime(rhs).isValid
-              ? makeComparison(comparator, lhs, FhirDateTime(rhs))
-              : throw cannotCompareException(comparator, lhs, rhs);
+    // case FhirDateTime:
+    //   return rhs is FhirDateTimeBase
+    //       ? (lhs as FhirDateTime).isValid && rhs.isValid
+    //           ? makeComparison(comparator, lhs, rhs)
+    //           : throw invalidException(comparator, lhs, rhs)
+    //       : rhs is String && FhirDateTime(rhs).isValid
+    //           ? makeComparison(comparator, lhs, FhirDateTime(rhs))
+    //           : throw cannotCompareException(comparator, lhs, rhs);
     case FhirTime:
       return rhs is FhirTime
           ? (lhs as FhirTime).isValid && rhs.isValid
@@ -365,7 +376,7 @@ bool? compare(Comparator comparator, dynamic lhs, dynamic rhs) {
         throw FhirPathEvaluationException(
           'Can only compare Strings to other Strings',
           operation: '$comparator',
-          arguments: [lhs, rhs],
+          arguments: <dynamic>[lhs, rhs],
         );
       }
   }
@@ -393,12 +404,12 @@ bool? makeComparison(Comparator comparator, dynamic param1, dynamic param2) {
 }
 
 bool stringGt(String lhs, String rhs) {
-  final runes1 = lhs.runes.toList();
-  final runes2 = rhs.runes.toList();
+  final List<int> runes1 = lhs.runes.toList();
+  final List<int> runes2 = rhs.runes.toList();
   if (runes1.length < runes2.length) {
     return false;
   }
-  for (var i = 0; i < runes1.length; i++) {
+  for (int i = 0; i < runes1.length; i++) {
     if (runes2[i] > runes1[i]) {
       return false;
     } else if (runes2[i] < runes1[i]) {

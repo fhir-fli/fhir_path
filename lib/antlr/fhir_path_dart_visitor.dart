@@ -1,5 +1,5 @@
 // Generated from FhirPath.g4 by ANTLR 4.11.1
-// ignore_for_file: unused_import, unused_local_variable, prefer_single_quotes, argument_type_not_assignable, unnecessary_getters_setters
+// ignore_for_file: unused_import, unused_local_variable, prefer_single_quotes, argument_type_not_assignable, unnecessary_getters_setters, always_specify_types, sort_unnamed_constructors_first
 
 // Dart imports:
 import 'dart:convert';
@@ -110,266 +110,272 @@ class FhirPathDartVisitor extends ParseTreeVisitor<List>
   }
 
   /// This is the beginning of how you evaluate an expression
+<<<<<<< HEAD
   List execute(ExpressionContext ctx) => visit(ctx) ?? [];
+=======
+  List<dynamic> execute(ExpressionContext ctx) => visit(ctx) ?? <dynamic>[];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   @override
-  List? visitIndexerExpression(IndexerExpressionContext ctx) =>
+  List<dynamic>? visitIndexerExpression(IndexerExpressionContext ctx) =>
       _$visitIndexerExpression(ctx, this);
 
   @override
-  List? visitPolarityExpression(PolarityExpressionContext ctx) {
+  List<dynamic>? visitPolarityExpression(PolarityExpressionContext ctx) {
     printContextType(ctx);
     return _$visitPolarityExpression(ctx, this);
   }
 
   @override
-  List? visitAdditiveExpression(AdditiveExpressionContext ctx) {
+  List<dynamic>? visitAdditiveExpression(AdditiveExpressionContext ctx) {
     printContextType(ctx);
     return _$visitAdditiveExpression(ctx, this);
   }
 
   @override
-  List? visitMultiplicativeExpression(MultiplicativeExpressionContext ctx) {
+  List<dynamic>? visitMultiplicativeExpression(
+      MultiplicativeExpressionContext ctx) {
     printContextType(ctx);
     return _$visitMultiplicativeExpression(ctx, this);
   }
 
   @override
-  List? visitUnionExpression(UnionExpressionContext ctx) {
+  List<dynamic>? visitUnionExpression(UnionExpressionContext ctx) {
     printContextType(ctx);
     return _$visitUnionExpression(ctx, this);
   }
 
   @override
-  List? visitOrExpression(OrExpressionContext ctx) {
+  List<dynamic>? visitOrExpression(OrExpressionContext ctx) {
     printContextType(ctx);
     return _$visitOrExpression(ctx, this);
   }
 
   @override
-  List? visitAndExpression(AndExpressionContext ctx) {
+  List<dynamic>? visitAndExpression(AndExpressionContext ctx) {
     printContextType(ctx);
     return _$visitAndExpression(ctx, this);
   }
 
   @override
-  List? visitEndOfFile(EndOfFileContext ctx) => visitChildren(ctx);
+  List<dynamic>? visitEndOfFile(EndOfFileContext ctx) => visitChildren(ctx);
 
   @override
-  List? visitMembershipExpression(MembershipExpressionContext ctx) {
+  List<dynamic>? visitMembershipExpression(MembershipExpressionContext ctx) {
     printContextType(ctx);
     return _$visitMembershipExpression(ctx, this);
   }
 
   @override
-  List? visitInequalityExpression(InequalityExpressionContext ctx) {
+  List<dynamic>? visitInequalityExpression(InequalityExpressionContext ctx) {
     printContextType(ctx);
     return _$visitInequalityExpression(ctx, this);
   }
 
   @override
-  List? visitInvocationExpression(InvocationExpressionContext ctx) {
+  List<dynamic>? visitInvocationExpression(InvocationExpressionContext ctx) {
     printContextType(ctx);
 
     return _$visitInvocationExpression(ctx, this);
   }
 
   @override
-  List? visitEqualityExpression(EqualityExpressionContext ctx) {
+  List<dynamic>? visitEqualityExpression(EqualityExpressionContext ctx) {
     printContextType(ctx);
     return _$visitEqualityExpression(ctx, this);
   }
 
   @override
-  List? visitImpliesExpression(ImpliesExpressionContext ctx) {
+  List<dynamic>? visitImpliesExpression(ImpliesExpressionContext ctx) {
     printContextType(ctx);
     return _$visitImpliesExpression(ctx, this);
   }
 
   @override
-  List? visitTermExpression(TermExpressionContext ctx) {
+  List<dynamic>? visitTermExpression(TermExpressionContext ctx) {
     printContextType(ctx);
 
     return visitChildren(ctx);
   }
 
   @override
-  List? visitTypeExpression(TypeExpressionContext ctx) {
+  List<dynamic>? visitTypeExpression(TypeExpressionContext ctx) {
     printContextType(ctx);
     return _$visitTypeExpression(ctx, this);
   }
 
   @override
-  List? visitInvocationTerm(InvocationTermContext ctx) {
+  List<dynamic>? visitInvocationTerm(InvocationTermContext ctx) {
     printContextType(ctx);
 
     return visitChildren(ctx);
   }
 
   @override
-  List? visitLiteralTerm(LiteralTermContext ctx) {
+  List<dynamic>? visitLiteralTerm(LiteralTermContext ctx) {
     printContextType(ctx);
     return _$visitLiteralTerm(ctx, this);
   }
 
   @override
-  List? visitExternalConstantTerm(ExternalConstantTermContext ctx) {
+  List<dynamic>? visitExternalConstantTerm(ExternalConstantTermContext ctx) {
     printContextType(ctx);
     return visitChildren(ctx);
   }
 
   @override
-  List? visitParenthesizedTerm(ParenthesizedTermContext ctx) {
+  List<dynamic>? visitParenthesizedTerm(ParenthesizedTermContext ctx) {
     printContextType(ctx);
     return _$visitParenthesizedTerm(ctx, this);
   }
 
   @override
-  List? visitNullLiteral(NullLiteralContext ctx) {
+  List<dynamic>? visitNullLiteral(NullLiteralContext ctx) {
     printContextType(ctx);
 
     return _$visitNullLiteral(ctx, this);
   }
 
   @override
-  List? visitBooleanLiteral(BooleanLiteralContext ctx) {
+  List<dynamic>? visitBooleanLiteral(BooleanLiteralContext ctx) {
     printContextType(ctx);
 
     return _$visitBooleanLiteral(ctx, this);
   }
 
   @override
-  List? visitStringLiteral(StringLiteralContext ctx) {
+  List<dynamic>? visitStringLiteral(StringLiteralContext ctx) {
     printContextType(ctx);
 
     return _$visitStringLiteral(ctx, this);
   }
 
   @override
-  List? visitNumberLiteral(NumberLiteralContext ctx) {
+  List<dynamic>? visitNumberLiteral(NumberLiteralContext ctx) {
     printContextType(ctx);
 
     return _$visitNumberLiteral(ctx, this);
   }
 
   @override
-  List? visitDateLiteral(DateLiteralContext ctx) {
+  List<dynamic>? visitDateLiteral(DateLiteralContext ctx) {
     printContextType(ctx);
 
     return _$visitDateLiteral(ctx, this);
   }
 
   @override
-  List? visitDateTimeLiteral(DateTimeLiteralContext ctx) {
+  List<dynamic>? visitDateTimeLiteral(DateTimeLiteralContext ctx) {
     printContextType(ctx);
 
     return _$visitDateTimeLiteral(ctx, this);
   }
 
   @override
-  List? visitTimeLiteral(TimeLiteralContext ctx) {
+  List<dynamic>? visitTimeLiteral(TimeLiteralContext ctx) {
     printContextType(ctx);
 
     return _$visitTimeLiteral(ctx, this);
   }
 
   @override
-  List? visitQuantityLiteral(QuantityLiteralContext ctx) {
+  List<dynamic>? visitQuantityLiteral(QuantityLiteralContext ctx) {
     printContextType(ctx);
 
     return _$visitQuantityLiteral(ctx, this);
   }
 
   @override
-  List? visitExternalConstant(ExternalConstantContext ctx) {
+  List<dynamic>? visitExternalConstant(ExternalConstantContext ctx) {
     printContextType(ctx);
     return _$visitExternalConstant(ctx, this);
   }
 
   @override
-  List? visitMemberInvocation(MemberInvocationContext ctx) {
+  List<dynamic>? visitMemberInvocation(MemberInvocationContext ctx) {
     printContextType(ctx);
     return visitChildren(ctx);
   }
 
   @override
-  List? visitFunctionInvocation(FunctionInvocationContext ctx) {
+  List<dynamic>? visitFunctionInvocation(FunctionInvocationContext ctx) {
     printContextType(ctx);
 
     return visitChildren(ctx);
   }
 
   @override
-  List? visitThisInvocation(ThisInvocationContext ctx) {
+  List<dynamic>? visitThisInvocation(ThisInvocationContext ctx) {
     printContextType(ctx);
     return _$visitThisInvocation(ctx, this);
   }
 
   @override
-  List? visitIndexInvocation(IndexInvocationContext ctx) {
+  List<dynamic>? visitIndexInvocation(IndexInvocationContext ctx) {
     printContextType(ctx);
     return visitChildren(ctx);
   }
 
   @override
-  List? visitTotalInvocation(TotalInvocationContext ctx) {
+  List<dynamic>? visitTotalInvocation(TotalInvocationContext ctx) {
     printContextType(ctx);
 
     return _$visitTotalInvocation(ctx, this);
   }
 
   @override
-  List? visitFunction(FunctionContext ctx) {
+  List<dynamic>? visitFunction(FunctionContext ctx) {
     printContextType(ctx);
 
     return _$visitFunction(ctx, this);
   }
 
   @override
-  List? visitParamList(ParamListContext ctx) {
+  List<dynamic>? visitParamList(ParamListContext ctx) {
     printContextType(ctx);
     return _$visitParamList(ctx, this);
   }
 
   @override
-  List? visitQuantity(QuantityContext ctx) {
+  List<dynamic>? visitQuantity(QuantityContext ctx) {
     printContextType(ctx);
 
     return _$visitQuantity(ctx, this);
   }
 
   @override
-  List? visitUnit(UnitContext ctx) {
+  List<dynamic>? visitUnit(UnitContext ctx) {
     printContextType(ctx);
     return _$visitUnit(ctx, this);
   }
 
   @override
-  List? visitDateTimePrecision(DateTimePrecisionContext ctx) {
+  List<dynamic>? visitDateTimePrecision(DateTimePrecisionContext ctx) {
     printContextType(ctx);
     return visitChildren(ctx);
   }
 
   @override
-  List? visitPluralDateTimePrecision(PluralDateTimePrecisionContext ctx) {
+  List<dynamic>? visitPluralDateTimePrecision(
+      PluralDateTimePrecisionContext ctx) {
     printContextType(ctx);
     return visitChildren(ctx);
   }
 
   @override
-  List? visitTypeSpecifier(TypeSpecifierContext ctx) {
+  List<dynamic>? visitTypeSpecifier(TypeSpecifierContext ctx) {
     printContextType(ctx);
     return visitChildren(ctx);
   }
 
   @override
-  List? visitQualifiedIdentifier(QualifiedIdentifierContext ctx) {
+  List<dynamic>? visitQualifiedIdentifier(QualifiedIdentifierContext ctx) {
     printContextType(ctx);
     return visitChildren(ctx);
   }
 
   @override
-  List? visitIdentifier(IdentifierContext ctx) {
+  List<dynamic>? visitIdentifier(IdentifierContext ctx) {
     printContextType(ctx);
     return _$visitIdentifier(ctx, this);
   }

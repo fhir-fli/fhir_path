@@ -2,15 +2,15 @@
 
 part of '../fhir_path_dart_visitor.dart';
 
-List? _$visitTypeExpression(
+List<dynamic>? _$visitTypeExpression(
   TypeExpressionContext ctx,
   FhirPathDartVisitor visitor,
 ) {
   if (ctx.childCount != 3) {
-    throw _wrongArgLength(ctx.text, ctx.children ?? []);
+    throw _wrongArgLength(ctx.text, ctx.children ?? <dynamic>[]);
   }
-  final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final rhsText = ctx.getChild(2)!.text;
+  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
+  final String? rhsText = ctx.getChild(2)!.text;
 
   List<dynamic>? rhs = (visitor.environment.isVersion(FhirVersion.r4)
               ? r4.resourceTypeFromStringMap.keys.contains(rhsText)
@@ -20,7 +20,7 @@ List? _$visitTypeExpression(
                       ? dstu2.resourceTypeFromStringMap.keys.contains(rhsText)
                       : stu3.resourceTypeFromStringMap.keys
                           .contains(rhsText)) ||
-          [
+          <dynamic>[
             'string',
             'boolean',
             'integer',
@@ -30,7 +30,7 @@ List? _$visitTypeExpression(
             'time',
             'quantity',
           ].contains(rhsText?.toLowerCase())
-      ? [ctx.getChild(2)!.text]
+      ? <dynamic>[ctx.getChild(2)!.text]
       : visitor.copyWith().visit(ctx.getChild(2)!);
 
   if (rhs?.isEmpty ?? true) {
@@ -62,38 +62,38 @@ List? _$visitTypeExpression(
                         : stu3.resourceTypeFromStringMap.keys
                             .contains(rhs.first)) &&
             lhs.first is Map &&
-            (lhs.first as Map)['resourceType'] == rhs.first
-        ? [true]
+            (lhs.first as Map<String, dynamic>)['resourceType'] == rhs.first
+        ? <dynamic>[true]
         : rhs.first == 'String'
-            ? [lhs.first is String]
+            ? <dynamic>[lhs.first is String]
             : rhs.first == 'Boolean'
-                ? [lhs.first is bool || lhs.first is FhirBoolean]
+                ? <dynamic>[lhs.first is bool || lhs.first is FhirBoolean]
                 : rhs.first == 'Integer'
-                    ? [
+                    ? <dynamic>[
                         (lhs.first is int || lhs.first is FhirInteger) &&
 
                             /// This is because of transpilation to javascript
                             !lhs.first.toString().contains('.')
                       ]
                     : rhs.first == 'Decimal'
-                        ? [
+                        ? <dynamic>[
                             (lhs.first is double || lhs.first is FhirDecimal) &&
 
                                 /// This is because of transpilation to javascript
                                 lhs.first.toString().contains('.')
                           ]
                         : rhs.first == 'Date'
-                            ? [lhs.first is FhirDate]
+                            ? <dynamic>[lhs.first is FhirDate]
                             : rhs.first == 'DateTime'
-                                ? [
+                                ? <dynamic>[
                                     lhs.first is DateTime ||
                                         lhs.first is FhirDateTime
                                   ]
                                 : rhs.first == 'Time'
-                                    ? [lhs.first is FhirTime]
+                                    ? <dynamic>[lhs.first is FhirTime]
                                     : rhs.first == 'Quantity'
-                                        ? [isQuantity(lhs.first)]
-                                        : [false];
+                                        ? <dynamic>[isQuantity(lhs.first)]
+                                        : <dynamic>[false];
   } else if (((visitor.environment.isVersion(FhirVersion.r4)
               ? r4.resourceTypeFromStringMap.keys.contains(rhs.first)
               : visitor.environment.isVersion(FhirVersion.r5)
@@ -103,7 +103,7 @@ List? _$visitTypeExpression(
                       : stu3.resourceTypeFromStringMap.keys
                           .contains(rhs.first)) &&
           lhs.first is Map &&
-          (lhs.first as Map)['resourceType'] == rhs.first) ||
+          (lhs.first as Map<String, dynamic>)['resourceType'] == rhs.first) ||
       (rhs.first.toLowerCase() == 'string' && (lhs.first is String)) ||
       (rhs.first.toLowerCase() == 'boolean' &&
           (lhs.first is bool || lhs.first is FhirBoolean)) ||
@@ -119,9 +119,9 @@ List? _$visitTypeExpression(
     visitor.context = lhs;
   } else if (FhirDatatypes.contains(rhs.first)) {
     // TODO(Dokotela): this seems cumbersome
-    final polymorphicString = 'value${rhs.first}';
-    final newContext = visitor.newContext(polymorphicString);
-    visitor.context = visitor.copyWith().visit(newContext) ?? [];
+    final String polymorphicString = 'value${rhs.first}';
+    final ExpressionContext newContext = visitor.newContext(polymorphicString);
+    visitor.context = visitor.copyWith().visit(newContext) ?? <dynamic>[];
   } else {
     visitor.context = <dynamic>[];
   }
@@ -129,7 +129,7 @@ List? _$visitTypeExpression(
   return visitor.context;
 }
 
-List? _$visitInvocationExpression(
+List<dynamic>? _$visitInvocationExpression(
   InvocationExpressionContext ctx,
   FhirPathDartVisitor visitor,
 ) {
@@ -138,10 +138,11 @@ List? _$visitInvocationExpression(
       ctx.getChild(2) is FunctionInvocationContext &&
       (ctx.getChild(2)!.text?.startsWith('extension') ?? false)) {
     visitor.identifierOnly = true;
-    final identifier = visitor.copyWith().visit(ctx.getChild(0)!);
+    final List<dynamic>? identifier =
+        visitor.copyWith().visit(ctx.getChild(0)!);
     visitor.identifierOnly = false;
-    final identifierExtension = '_${identifier?.first}';
-    final newString =
+    final String identifierExtension = '_${identifier?.first}';
+    final String newString =
         '${ctx.getChild(0)!.text!.replaceAll('${identifier!.first}', identifierExtension)}'
         '${ctx.getChild(1)!.text}${ctx.getChild(2)!.text}';
     return visitor.visitChildren(visitor.newContext(newString));

@@ -1,4 +1,4 @@
-// ignore_for_file: noop_primitive_operations, avoid_equals_and_hash_code_on_mutable_classes, library_private_types_in_public_api, avoid_bool_literals_in_conditional_expressions
+// ignore_for_file: noop_primitive_operations, avoid_equals_and_hash_code_on_mutable_classes, library_private_types_in_public_api, avoid_bool_literals_in_conditional_expressions, sort_unnamed_constructors_first
 
 // Package imports:
 import 'package:fhir/dstu2.dart' as dstu2;
@@ -19,15 +19,15 @@ class FhirPathQuantity {
   factory FhirPathQuantity.fromString(String quantityString) {
     if (FhirPathQuantity.fhirPathQuantityRegex
         .hasMatch(quantityString.replaceAll(r"\'", "'"))) {
-      final match = FhirPathQuantity.fhirPathQuantityRegex
+      final RegExpMatch? match = FhirPathQuantity.fhirPathQuantityRegex
           .firstMatch(quantityString.replaceAll(r"\'", "'"));
-      final value = match?.namedGroup('value');
+      final String? value = match?.namedGroup('value');
       if (value == null) {
         throw FhirPathEvaluationException(
             'Malformed quantity: $quantityString');
       }
-      final unit = match?.namedGroup('unit');
-      final time = match?.namedGroup('time');
+      final String? unit = match?.namedGroup('unit');
+      final String? time = match?.namedGroup('time');
       String unitString = '';
 
       if (unit == null && time == null) {
@@ -82,15 +82,17 @@ class FhirPathQuantity {
     } else if (o is! FhirPathQuantity) {
       return false;
     } else {
-      final fromUnit = stringUnitToProperty[unit];
-      final toUnit = stringUnitToProperty[o.unit];
+      final Enum? fromUnit = stringUnitToProperty[unit];
+      final Enum? toUnit = stringUnitToProperty[o.unit];
       if (fromUnit == null || toUnit == null) {
         if (fromUnit == null && toUnit == null) {
           if ((num.tryParse(unit.toString()) == 1) &&
               (num.tryParse(o.unit.toString()) == 1)) {
             if (equivalent) {
-              final sigDigsLhs = amount.toStringAsExponential().split('e');
-              final sigDigsRhs = o.amount.toStringAsExponential().split('e');
+              final List<String> sigDigsLhs =
+                  amount.toStringAsExponential().split('e');
+              final List<String> sigDigsRhs =
+                  o.amount.toStringAsExponential().split('e');
               if (sigDigsLhs.first.length < sigDigsRhs.first.length) {
                 o.amount = num.parse(
                     '${sigDigsRhs.first.toString().substring(0, sigDigsLhs.first.length)}'
@@ -116,8 +118,10 @@ class FhirPathQuantity {
           return false;
         } else if (fromUnit is Ratio) {
           if (equivalent) {
-            final sigDigsLhs = amount.toStringAsExponential().split('e');
-            final sigDigsRhs = o.amount.toStringAsExponential().split('e');
+            final List<String> sigDigsLhs =
+                amount.toStringAsExponential().split('e');
+            final List<String> sigDigsRhs =
+                o.amount.toStringAsExponential().split('e');
             if (sigDigsLhs.first.length < sigDigsRhs.first.length) {
               o.amount = num.parse(
                   '${sigDigsRhs.first.toString().substring(0, sigDigsLhs.first.length)}'
@@ -132,8 +136,10 @@ class FhirPathQuantity {
               o.amount;
         } else {
           if (equivalent) {
-            final sigDigsLhs = amount.toStringAsExponential().split('e');
-            final sigDigsRhs = o.amount.toStringAsExponential().split('e');
+            final List<String> sigDigsLhs =
+                amount.toStringAsExponential().split('e');
+            final List<String> sigDigsRhs =
+                o.amount.toStringAsExponential().split('e');
             if (sigDigsLhs.first.length < sigDigsRhs.first.length) {
               o.amount = num.parse(
                   '${sigDigsRhs.first.toString().substring(0, sigDigsLhs.first.length)}'
@@ -164,8 +170,8 @@ class FhirPathQuantity {
     } else if (o is! FhirPathQuantity) {
       return false;
     } else {
-      final fromUnit = stringUnitToProperty[unit];
-      final toUnit = stringUnitToProperty[o.unit];
+      final Enum? fromUnit = stringUnitToProperty[unit];
+      final Enum? toUnit = stringUnitToProperty[o.unit];
       if ((fromUnit is Ratio && toUnit is! Ratio) ||
           (fromUnit is! Ratio && toUnit is Ratio)) {
         return false;
@@ -173,7 +179,8 @@ class FhirPathQuantity {
         if (toUnit is! Ratio) {
           return false;
         } else {
-          final convertedAmount = amount.convertRatioFromTo(fromUnit, toUnit);
+          final double? convertedAmount =
+              amount.convertRatioFromTo(fromUnit, toUnit);
           if (convertedAmount != null) {
             switch (comparator) {
               case _Comparator.gt:
@@ -190,7 +197,7 @@ class FhirPathQuantity {
           }
         }
       } else {
-        final convertedAmount = amount.convertFromTo(fromUnit, toUnit);
+        final double? convertedAmount = amount.convertFromTo(fromUnit, toUnit);
         if (convertedAmount != null) {
           switch (comparator) {
             case _Comparator.gt:
@@ -220,12 +227,12 @@ class FhirPathQuantity {
           'A + operator was attemped with an object that was not a FhirPathQuantity: '
           'instead this was passed $o which is a type ${o.runtimeType}');
     } else if (unit == o.unit) {
-      final value = amount + o.amount;
+      final num value = amount + o.amount;
       return FhirPathQuantity(value, unit);
     } else {
-      final fromUnit = stringUnitToProperty[o.unit];
-      final toUnit = stringUnitToProperty[unit];
-      final convertedAmount = o.amount.convertFromTo(fromUnit, toUnit);
+      final Enum? fromUnit = stringUnitToProperty[o.unit];
+      final Enum? toUnit = stringUnitToProperty[unit];
+      final double? convertedAmount = o.amount.convertFromTo(fromUnit, toUnit);
       if (convertedAmount == null) {
         throw primitives.InvalidTypes<FhirPathQuantity>(
             'A + operator was attemped with two units types that are not '
@@ -243,12 +250,12 @@ class FhirPathQuantity {
           'A + operator was attemped with an object that was not a FhirPathQuantity: '
           'instead this was passed $o which is a type ${o.runtimeType}');
     } else if (unit == o.unit) {
-      final value = amount - o.amount;
+      final num value = amount - o.amount;
       return FhirPathQuantity(value, unit);
     } else {
-      final fromUnit = stringUnitToProperty[o.unit];
-      final toUnit = stringUnitToProperty[unit];
-      final convertedAmount = o.amount.convertFromTo(fromUnit, toUnit);
+      final Enum? fromUnit = stringUnitToProperty[o.unit];
+      final Enum? toUnit = stringUnitToProperty[unit];
+      final double? convertedAmount = o.amount.convertFromTo(fromUnit, toUnit);
       if (convertedAmount == null) {
         throw primitives.InvalidTypes<FhirPathQuantity>(
             'A + operator was attemped with two units types that are not '
@@ -266,7 +273,7 @@ class FhirPathQuantity {
           'A * operator was attemped with an object that was not a FhirPathQuantity: '
           'instead this was passed $o which is a type ${o.runtimeType}');
     } else if (unit == o.unit) {
-      final value = amount * o.amount;
+      final num value = amount * o.amount;
       return FhirPathQuantity(value, unit);
     } else {
       // TODO(Dokotela): Should work on being able to multiply these values
@@ -282,7 +289,7 @@ class FhirPathQuantity {
           'A / operator was attemped with an object that was not a FhirPathQuantity: '
           'instead this was passed $o which is a type ${o.runtimeType}');
     } else if (unit == o.unit) {
-      final value = amount / o.amount;
+      final double value = amount / o.amount;
       return FhirPathQuantity(value, unit);
     } else {
       // TODO(Dokotela): Should work on being able to divide these values
@@ -294,7 +301,7 @@ class FhirPathQuantity {
 
   dynamic subtract(dynamic lhs) {
     amount = amount * -1;
-    final returnValue = add(lhs);
+    final dynamic returnValue = add(lhs);
     amount = amount * -1;
     return returnValue;
   }
@@ -313,26 +320,27 @@ class FhirPathQuantity {
         '$lhs + $amount $unit was attempted, this is invalid',
         cause: lhs,
         operation: '+',
-        arguments: [lhs, this],
+        arguments: <dynamic>[lhs, this],
       );
     }
-    final yearAmount = (unit == 'year'
+    final int yearAmount = (unit == 'year'
             ? amount
             : unit == 'month'
                 ? (amount / 12).truncate()
                 : 0)
         .toInt();
-    final monthAmount = (unit == 'month' ? amount.remainder(12) : 0).toInt();
-    final dayAmount = (unit == 'week'
+    final int monthAmount =
+        (unit == 'month' ? amount.remainder(12) : 0).toInt();
+    final int dayAmount = (unit == 'week'
             ? amount * 7
             : unit == 'day'
                 ? amount
                 : 0)
         .toInt();
-    final hourAmount = (unit == 'hour' ? amount : 0).toInt();
-    final minuteAmount = (unit == 'minute' ? amount : 0).toInt();
-    final secondAmount = (unit == 'second' ? amount : 0).toInt();
-    final millisecondAmount = (unit == 'millisecond' ? amount : 0).toInt();
+    final int hourAmount = (unit == 'hour' ? amount : 0).toInt();
+    final int minuteAmount = (unit == 'minute' ? amount : 0).toInt();
+    final int secondAmount = (unit == 'second' ? amount : 0).toInt();
+    final int millisecondAmount = (unit == 'millisecond' ? amount : 0).toInt();
     if ((lhs is primitives.FhirDate &&
             (hourAmount != 0 ||
                 minuteAmount != 0 ||
@@ -345,11 +353,11 @@ class FhirPathQuantity {
         '$lhs + $amount $unit was attempted, this is invalid',
         cause: lhs,
         operation: '+',
-        arguments: [lhs, this],
+        arguments: <dynamic>[lhs, this],
       );
     }
     if (lhs is primitives.FhirDate && lhs.isValid && lhs.value != null) {
-      final newDate = DateTime.utc(lhs.value!.year + yearAmount,
+      final DateTime newDate = DateTime.utc(lhs.value!.year + yearAmount,
           lhs.value!.month + monthAmount, lhs.value!.day + dayAmount);
       if (lhs.precision == primitives.DatePrecision.YYYY) {
         return primitives.FhirDate(newDate.toString().substring(0, 4));
@@ -359,8 +367,8 @@ class FhirPathQuantity {
         return primitives.FhirDate(newDate.toString().substring(0, 10));
       }
     } else if (lhs is primitives.FhirTime && lhs.isValid && lhs.value != null) {
-      final timeList = lhs.value!.split(':');
-      final duration = Duration(
+      final List<String> timeList = lhs.value!.split(':');
+      final Duration duration = Duration(
         hours: int.tryParse(timeList.first) ?? 0 + hourAmount,
         minutes: (timeList.length > 1 ? int.tryParse(timeList[1]) ?? 0 : 0) +
             minuteAmount,
@@ -373,15 +381,15 @@ class FhirPathQuantity {
                 : 0) +
             millisecondAmount,
       );
-      final durationList = duration.toString().split(':');
+      final List<String> durationList = duration.toString().split(':');
       durationList.first =
           int.parse(durationList.first).remainder(24).toString();
       return primitives.FhirTime(durationList.join(':'));
     } else if (lhs is primitives.FhirDateTime &&
         lhs.isValid &&
         lhs.value != null) {
-      final oldDateTime = lhs.value!;
-      final newDateTime = DateTime.utc(
+      final DateTime oldDateTime = lhs.value!;
+      final DateTime newDateTime = DateTime.utc(
         oldDateTime.year + yearAmount,
         oldDateTime.month + monthAmount,
         oldDateTime.day + dayAmount,
@@ -413,7 +421,7 @@ enum _Comparator { gt, gte, lt, lte }
 /// that contains both a numerical value, as well as a unit as defined by the [UCUM]
 /// specification (https://hl7.org/fhirpath/#UCUM), as long as it meets these requirements
 /// it is considered a valid Quantity for FHIRPath (https://hl7.org/fhirpath/#quantity)
-bool isQuantity(value) => value is FhirPathQuantity ||
+bool isQuantity(dynamic value) => value is FhirPathQuantity ||
         value is r4.Quantity ||
         value is r5.Quantity ||
         value is dstu2.Quantity ||

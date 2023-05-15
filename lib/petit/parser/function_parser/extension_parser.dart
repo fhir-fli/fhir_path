@@ -12,9 +12,14 @@ class SumParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => [
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      <dynamic>[
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
         results
-            .map((e) => e is num
+            .map((dynamic e) => e is num
                 ? e
                 : throw FhirPathEvaluationException(
                     'sum() can only add numbers.',
@@ -48,9 +53,14 @@ class MinParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => [
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      <dynamic>[
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
         results
-            .map((e) => e is num
+            .map((dynamic e) => e is num
                 ? e
                 : throw FhirPathEvaluationException(
                     'min() can only operate on numbers.',
@@ -84,9 +94,14 @@ class MaxParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => [
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      <dynamic>[
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
         results
-            .map((e) => e is num
+            .map((dynamic e) => e is num
                 ? e
                 : throw FhirPathEvaluationException(
                     'max() can only operate on numbers.',
@@ -120,9 +135,14 @@ class AvgParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => [
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      <dynamic>[
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
         results
-            .map((e) => e is num
+            .map((dynamic e) => e is num
                 ? e
                 : throw FhirPathEvaluationException(
                     'avg() can only operate on numbers.',
@@ -156,13 +176,21 @@ class AnswersParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final descendants = DescendantsParser().execute(results, passed);
     final answerMaps = descendants.where((element) =>
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
+    final List<dynamic> descendants =
+        DescendantsParser().execute(results, passed);
+    final Iterable<dynamic> answerMaps = descendants.where((dynamic element) =>
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
         (element is Map<String, dynamic>) && element.containsKey('answer'));
-    final answers = <dynamic>[];
-    answerMaps.forEach((element) {
-      answers.addAll((element as Map<String, dynamic>)['answer'] as Iterable);
+    final List<dynamic> answers = <dynamic>[];
+    answerMaps.forEach((dynamic element) {
+      answers.addAll(
+          (element as Map<String, dynamic>)['answer'] as Iterable<dynamic>);
     });
     return answers;
   }
@@ -191,25 +219,30 @@ class OrdinalParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final newResults = [];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
+    final List<dynamic> newResults = <dynamic>[];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
-    List checkForOrdinalValues(List list) {
-      final tempResults = [];
+    List<dynamic> checkForOrdinalValues(List<dynamic> list) {
+      final List<dynamic> tempResults = <dynamic>[];
 
       /// check each result
-      for (final val in list) {
+      for (final dynamic val in list) {
         /// if it's a Map (if it's not, then we can't use it with Ordinal)
         if (val is Map) {
           /// First we check the element for extensions
           if (val.keys.contains('extension')) {
             /// get those extensions
-            final extension = val['extension'];
+            final dynamic extension = val['extension'];
 
             /// generally we expect the extension to be a list
             if (extension is List) {
               /// for each extension in the list
-              for (final ext in extension) {
+              for (final dynamic ext in extension) {
                 /// if it is defined as an ordinalValue
                 if (ext['url'] ==
                     'http://hl7.org/fhir/StructureDefinition/ordinalValue') {
@@ -242,18 +275,19 @@ class OrdinalParser extends FhirPathParser {
 
     newResults.addAll(checkForOrdinalValues(results));
 
-    for (final result in results) {
+    for (final dynamic result in results) {
       if (result is! Map) {
         break;
       }
 
-      polymorphicPrefixes.forEach((element) {
+      polymorphicPrefixes.forEach((String element) {
         if (result['${element}Coding'] != null) {
-          newResults
-              .addAll(checkForOrdinalValues([result['${element}Coding']]));
+          newResults.addAll(
+              checkForOrdinalValues(<dynamic>[result['${element}Coding']]));
         }
         if (result['${element}Code'] != null) {
-          newResults.addAll(checkForOrdinalValues([result['${element}Code']]));
+          newResults.addAll(
+              checkForOrdinalValues(<dynamic>[result['${element}Code']]));
         }
       });
     }

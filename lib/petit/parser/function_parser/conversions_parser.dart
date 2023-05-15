@@ -1,4 +1,4 @@
-// ignore_for_file: annotate_overrides, overridden_fields, prefer_if_elements_to_conditional_expressions
+// ignore_for_file: annotate_overrides, overridden_fields, prefer_if_elements_to_conditional_expressions, sort_constructors_first
 
 // Package imports:
 import 'package:fhir/primitive_types/primitive_types.dart';
@@ -34,41 +34,44 @@ class IifParser extends FunctionParser {
       );
     }
 
-    final criterionResultParser = value.first as CommaParser;
-    final List<dynamic> criterionCollection = [];
+    final CommaParser criterionResultParser = value.first as CommaParser;
+    final List<dynamic> criterionCollection = <dynamic>[];
     if (criterionResultParser.before.first is CommaParser) {
       criterionCollection.addAll(
           (criterionResultParser.before.first as CommaParser)
               .before
-              .execute([], passed));
+              .execute(<dynamic>[], passed));
     } else {
       criterionCollection
-          .addAll(criterionResultParser.before.execute([], passed));
+          .addAll(criterionResultParser.before.execute(<dynamic>[], passed));
     }
 
-    final criterion = SingletonEvaluation.toBool(criterionCollection,
+    final bool? criterion = SingletonEvaluation.toBool(criterionCollection,
         name: 'criterion expression', operation: 'iif', collection: results);
 
     // Short-circuit: Only evaluate what matches the criterion.
-    if (criterion == true) {
-      final trueResultParser = criterionResultParser.before.first is CommaParser
-          ? (criterionResultParser.before.first as CommaParser).after
-          : (criterionResultParser.after.first is CommaParser)
-              ? (criterionResultParser.after.first as CommaParser).before
-              : criterionResultParser.after.first;
+    if (criterion ?? false) {
+      final FhirPathParser trueResultParser =
+          criterionResultParser.before.first is CommaParser
+              ? (criterionResultParser.before.first as CommaParser).after
+              : (criterionResultParser.after.first is CommaParser)
+                  ? (criterionResultParser.after.first as CommaParser).before
+                  : criterionResultParser.after.first;
 
-      final trueResult = trueResultParser.execute([], passed);
+      final List<dynamic> trueResult =
+          trueResultParser.execute(<dynamic>[], passed);
 
       return trueResult;
     } else {
-      final otherwiseResultParser =
+      final FhirPathParser otherwiseResultParser =
           (criterionResultParser.after.first is CommaParser)
               ? (criterionResultParser.after.first as CommaParser).after
               : criterionResultParser.before.first is CommaParser
                   ? criterionResultParser.after
                   : EmptySetParser();
 
-      final otherwiseResult = otherwiseResultParser.execute([], passed);
+      final List<dynamic> otherwiseResult =
+          otherwiseResultParser.execute(<dynamic>[], passed);
 
       return otherwiseResult;
     }
@@ -111,6 +114,7 @@ class ToBooleanParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.isEmpty
       ? []
       : results.length > 1
@@ -134,6 +138,38 @@ class ToBooleanParser extends FhirPathParser {
                               -1
                       ? [false]
                       : [];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.isEmpty
+          ? <dynamic>[]
+          : results.length > 1
+              ? throw _conversionException('.toBoolean()', results)
+              : _isNotAcceptedType(results)
+                  ? <dynamic>[]
+                  : results.first == true ||
+                          results.first == 1 ||
+                          <dynamic>['true', 't', 'yes', 'y', '1', '1.0']
+                                  .indexWhere((dynamic element) =>
+                                      element ==
+                                      results.first.toString().toLowerCase()) !=
+                              -1
+                      ? <dynamic>[true]
+                      : results.first == false ||
+                              results.first == 0 ||
+                              <dynamic>[
+                                    'false',
+                                    'f',
+                                    'no',
+                                    'n',
+                                    '0',
+                                    '0.0'
+                                  ].indexWhere((dynamic element) =>
+                                      element ==
+                                      results.first.toString().toLowerCase()) !=
+                                  -1
+                          ? <dynamic>[false]
+                          : <dynamic>[];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -165,6 +201,7 @@ class ConvertsToBooleanParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.isEmpty
       ? []
       : results.length > 1
@@ -193,6 +230,37 @@ class ConvertsToBooleanParser extends FhirPathParser {
                           -1
                   ? [true]
                   : [false];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.isEmpty
+          ? <dynamic>[]
+          : results.length > 1
+              ? throw _conversionException('.convertsToBoolean()', results)
+              : _isNotAcceptedType(results)
+                  ? <dynamic>[false]
+                  : results.first is bool ||
+                          results.first == 1 ||
+                          results.first == 0 ||
+                          <dynamic>[
+                                'true',
+                                't',
+                                'yes',
+                                'y',
+                                '1',
+                                '1.0',
+                                'false',
+                                'f',
+                                'no',
+                                'n',
+                                '0',
+                                '0.0'
+                              ].indexWhere((dynamic element) =>
+                                  element ==
+                                  results.first.toString().toLowerCase()) !=
+                              -1
+                      ? <dynamic>[true]
+                      : <dynamic>[false];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -219,6 +287,7 @@ class ToIntegerParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.isEmpty
       ? []
       : results.length > 1
@@ -232,6 +301,22 @@ class ToIntegerParser extends FhirPathParser {
                       : int.tryParse(results.first as String) != null
                           ? [int.parse(results.first as String)]
                           : [];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.isEmpty
+          ? <dynamic>[]
+          : results.length > 1
+              ? throw _conversionException('.toInteger()', results)
+              : _isNotAcceptedType(results)
+                  ? <dynamic>[false]
+                  : results.first is bool
+                      ? <dynamic>[results.first == true ? 1 : 0]
+                      : results.first is num
+                          ? <dynamic>[(results.first as num).toInt()]
+                          : int.tryParse(results.first as String) != null
+                              ? <dynamic>[int.parse(results.first as String)]
+                              : <dynamic>[];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -258,6 +343,7 @@ class ConvertsToIntegerParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.isEmpty
       ? []
       : results.length > 1
@@ -271,6 +357,22 @@ class ConvertsToIntegerParser extends FhirPathParser {
                       : int.tryParse(results.first as String) != null
                           ? [true]
                           : [false];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.isEmpty
+          ? <dynamic>[]
+          : results.length > 1
+              ? throw _conversionException('.convertsToInteger()', results)
+              : _isNotAcceptedType(results)
+                  ? <dynamic>[]
+                  : results.first is bool
+                      ? <dynamic>[true]
+                      : results.first is num
+                          ? <dynamic>[true]
+                          : int.tryParse(results.first as String) != null
+                              ? <dynamic>[true]
+                              : <dynamic>[false];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -297,6 +399,7 @@ class ToDateParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.isEmpty
       ? []
       : results.length > 1
@@ -304,6 +407,16 @@ class ToDateParser extends FhirPathParser {
           : FhirDate(results.first.toString()).isValid
               ? [FhirDate(results.first.toString())]
               : [];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.isEmpty
+          ? <dynamic>[]
+          : results.length > 1
+              ? throw _conversionException('.toDate()', results)
+              : FhirDate(results.first.toString()).isValid
+                  ? <dynamic>[FhirDate(results.first.toString())]
+                  : <dynamic>[];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -330,11 +443,20 @@ class ConvertsToDateParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.isEmpty
       ? []
       : results.length > 1
           ? throw _conversionException('.convertsToDate()', results)
           : [FhirDate(results.first.toString()).isValid];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.isEmpty
+          ? <dynamic>[]
+          : results.length > 1
+              ? throw _conversionException('.convertsToDate()', results)
+              : <dynamic>[FhirDate(results.first.toString()).isValid];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -361,6 +483,7 @@ class ToDateTimeParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.isEmpty
       ? []
       : results.length > 1
@@ -368,6 +491,16 @@ class ToDateTimeParser extends FhirPathParser {
           : FhirDateTime(results.first.toString()).isValid
               ? [FhirDateTime(results.first.toString())]
               : [];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.isEmpty
+          ? <dynamic>[]
+          : results.length > 1
+              ? throw _conversionException('.toDateTime()', results)
+              : FhirDateTime(results.first.toString()).isValid
+                  ? <dynamic>[FhirDateTime(results.first.toString())]
+                  : <dynamic>[];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -394,6 +527,7 @@ class ConvertsToDateTimeParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.isEmpty
       ? []
       : results.length > 1
@@ -401,6 +535,16 @@ class ConvertsToDateTimeParser extends FhirPathParser {
           : FhirDateTime(results.first.toString()).isValid
               ? [FhirDateTime(results.first.toString()).isValid]
               : [];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.isEmpty
+          ? <dynamic>[]
+          : results.length > 1
+              ? throw _conversionException('.convertsToDateTime()', results)
+              : FhirDateTime(results.first.toString()).isValid
+                  ? <dynamic>[FhirDateTime(results.first.toString()).isValid]
+                  : <dynamic>[];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -427,6 +571,7 @@ class ToDecimalParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.isEmpty
       ? []
       : results.length > 1
@@ -440,6 +585,22 @@ class ToDecimalParser extends FhirPathParser {
                       : double.tryParse(results.first as String) != null
                           ? [double.parse(results.first as String)]
                           : [];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.isEmpty
+          ? <dynamic>[]
+          : results.length > 1
+              ? throw _conversionException('.toDecimal()', results)
+              : _isNotAcceptedType(results)
+                  ? <dynamic>[false]
+                  : results.first is bool
+                      ? <dynamic>[results.first == true ? 1 : 0]
+                      : results.first is num
+                          ? <dynamic>[(results.first as num).toDouble()]
+                          : double.tryParse(results.first as String) != null
+                              ? <dynamic>[double.parse(results.first as String)]
+                              : <dynamic>[];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -466,6 +627,7 @@ class ConvertsToDecimalParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.isEmpty
       ? []
       : results.length > 1
@@ -479,6 +641,22 @@ class ConvertsToDecimalParser extends FhirPathParser {
                       : double.tryParse(results.first as String) != null
                           ? [true]
                           : [false];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.isEmpty
+          ? <dynamic>[]
+          : results.length > 1
+              ? throw _conversionException('.convertsToDecimal()', results)
+              : _isNotAcceptedType(results)
+                  ? <dynamic>[]
+                  : results.first is bool
+                      ? <dynamic>[true]
+                      : results.first is num
+                          ? <dynamic>[true]
+                          : double.tryParse(results.first as String) != null
+                              ? <dynamic>[true]
+                              : <dynamic>[false];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -507,12 +685,12 @@ class ToStringParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     return results.isEmpty
-        ? []
+        ? <dynamic>[]
         : results.length > 1
             ? throw _conversionException('.toString()', results)
             : _isAllTypes(results)
-                ? [false]
-                : [results.first.toString()];
+                ? <dynamic>[false]
+                : <dynamic>[results.first.toString()];
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -540,6 +718,7 @@ class ConvertsToStringParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.isEmpty
       ? []
       : results.length > 1
@@ -547,6 +726,16 @@ class ConvertsToStringParser extends FhirPathParser {
           : _isAllTypes(results)
               ? [false]
               : [true];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.isEmpty
+          ? <dynamic>[]
+          : results.length > 1
+              ? throw _conversionException('.convertsToString()', results)
+              : _isAllTypes(results)
+                  ? <dynamic>[false]
+                  : <dynamic>[true];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -573,6 +762,7 @@ class ToTimeParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.isEmpty
       ? []
       : results.length > 1
@@ -582,6 +772,18 @@ class ToTimeParser extends FhirPathParser {
               : results.first is String && FhirTime(results.first).isValid
                   ? [FhirTime(results.first)]
                   : [];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.isEmpty
+          ? <dynamic>[]
+          : results.length > 1
+              ? throw _conversionException('.toTime()', results)
+              : results.first is FhirTime
+                  ? <dynamic>[results.first]
+                  : results.first is String && FhirTime(results.first).isValid
+                      ? <dynamic>[FhirTime(results.first)]
+                      : <dynamic>[];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -608,6 +810,7 @@ class ConvertsToTimeParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.isEmpty
       ? []
       : results.length > 1
@@ -616,6 +819,18 @@ class ConvertsToTimeParser extends FhirPathParser {
                   (results.first is String && FhirTime(results.first).isValid)
               ? [true]
               : [false];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.isEmpty
+          ? <dynamic>[]
+          : results.length > 1
+              ? throw _conversionException('.convertsToTime()', results)
+              : results.first is FhirTime ||
+                      (results.first is String &&
+                          FhirTime(results.first).isValid)
+                  ? <dynamic>[true]
+                  : <dynamic>[false];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -644,6 +859,7 @@ class ToQuantityParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
+<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.isEmpty
       ? []
       : results.length > 1
@@ -655,6 +871,23 @@ class ToQuantityParser extends FhirPathParser {
                   : results.first is String
                       ? [FhirPathQuantity.fromString(results.first as String)]
                       : [];
+=======
+  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
+      results.isEmpty
+          ? <dynamic>[]
+          : results.length > 1
+              ? throw _conversionException('.toQuantity()', results)
+              : results.first is FhirPathQuantity
+                  ? <dynamic>[results.first]
+                  : results.first is num
+                      ? <dynamic>[FhirPathQuantity(results.first as num, '1')]
+                      : results.first is String
+                          ? <dynamic>[
+                              FhirPathQuantity.fromString(
+                                  results.first as String)
+                            ]
+                          : <dynamic>[];
+>>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -685,7 +918,7 @@ class ConvertsToQuantityParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     if (results.isEmpty) {
-      return [];
+      return <dynamic>[];
     } else {
       /// if there's more than 1 item in context, throw exception
       if (results.length > 1) {
@@ -697,19 +930,19 @@ class ConvertsToQuantityParser extends FhirPathParser {
       else if (results.first is FhirPathQuantity ||
           results.first is num ||
           results.first is bool) {
-        return [true];
+        return <dynamic>[true];
       }
 
       /// If it's a string & convertible to a Quantity using the Regex
       else if (results.first is String &&
           FhirPathQuantity.fhirPathQuantityRegex
               .hasMatch((results.first as String).replaceAll(r"\'", "'"))) {
-        return [true];
+        return <dynamic>[true];
       }
 
       /// Otherwise it's definitely false
       else {
-        return [false];
+        return <dynamic>[false];
       }
     }
   }
@@ -732,10 +965,10 @@ class ConvertsToQuantityParser extends FhirPathParser {
   String prettyPrint([int indent = 2]) => '.convertsToQuantity()';
 }
 
-bool _isNotAcceptedType(List results) =>
+bool _isNotAcceptedType(List<dynamic> results) =>
     results.first is! bool && results.first is! num && results.first is! String;
 
-bool _isAllTypes(List results) =>
+bool _isAllTypes(List<dynamic> results) =>
     results.first is! bool &&
     results.first is! num &&
     results.first is! String &&
@@ -745,7 +978,7 @@ bool _isAllTypes(List results) =>
     results.first is! DateTime &&
     results.first is! FhirPathQuantity;
 
-Exception _conversionException(String function, List results) =>
+Exception _conversionException(String function, List<dynamic> results) =>
     FhirPathEvaluationException(
         'The function $function only accepts lists with 0 or 1 items.',
         operation: function,
