@@ -5,7 +5,7 @@ import 'package:petitparser/petitparser.dart';
 import '../petit_fhir_path.dart';
 
 /// Lexers for identifying special items
-final ChoiceParser<dynamic> specialLexer = bracketsIndexLexer |
+final specialLexer = bracketsIndexLexer |
     indexLexer |
     thisLexer |
     totalLexer |
@@ -13,7 +13,7 @@ final ChoiceParser<dynamic> specialLexer = bracketsIndexLexer |
     dotLexer;
 
 /// Lexers for identifying key words
-final ChoiceParser<dynamic> wordOperationLexer = impliesLexer |
+final wordOperationLexer = impliesLexer |
     orStringLexer |
     xorLexer |
     andStringLexer |
@@ -25,7 +25,7 @@ final ChoiceParser<dynamic> wordOperationLexer = impliesLexer |
     divStringLexer;
 
 /// Lexers for identifying key symbols
-final ChoiceParser<dynamic> symbolOperationLexer = notEquivalentLexer |
+final symbolOperationLexer = notEquivalentLexer |
     notEqualsLexer |
     equivalentLexer |
     equalsLexer |
@@ -42,7 +42,7 @@ final ChoiceParser<dynamic> symbolOperationLexer = notEquivalentLexer |
     commaLexer;
 
 /// All lexers for functions that accept arguments
-final ChoiceParser<dynamic> functionLexer = unionFunctionLexer |
+final functionLexer = unionFunctionLexer |
     combineLexer |
     toQuantityLexer |
     convertsToQuantityLexer |
@@ -76,11 +76,10 @@ final ChoiceParser<dynamic> functionLexer = unionFunctionLexer |
     deprecatedLexer;
 
 /// Lexer for all types of white space
-final ChoiceParser<dynamic> wsLexer =
-    whiteSpaceLexer | lineCommentLexer | multiLineCommentLexer;
+final wsLexer = whiteSpaceLexer | lineCommentLexer | multiLineCommentLexer;
 
 /// Lexers identifying special formatting of certain types of data
-final ChoiceParser<dynamic> literalLexer = stringLexer |
+final literalLexer = stringLexer |
     envVariableLexer |
     delimitedIdentifierLexer |
     booleanLexer |
@@ -92,7 +91,7 @@ final ChoiceParser<dynamic> literalLexer = stringLexer |
     timeLexer;
 
 /// All lexers for functions that don't accept arguments
-final ChoiceParser<dynamic> simpleLexer = toBooleanLexer |
+final simpleLexer = toBooleanLexer |
     convertsToBooleanLexer |
     toIntegerLexer |
     convertsToIntegerLexer |
@@ -145,4 +144,4 @@ final ChoiceParser<dynamic> simpleLexer = toBooleanLexer |
 
 /// Deprecated - these Lexers will throw errors, but this allows us
 /// to provide more useful error messages
-final ChoiceParser<dynamic> deprecatedLexer = asFunctionLexer | isFunctionLexer;
+final deprecatedLexer = asFunctionLexer | isFunctionLexer;

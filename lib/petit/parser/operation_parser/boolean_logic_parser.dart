@@ -5,8 +5,8 @@ import '../../petit_fhir_path.dart';
 
 class AndStringParser extends OperatorParser {
   AndStringParser();
-  ParserList before = ParserList(<FhirPathParser>[]);
-  ParserList after = ParserList(<FhirPathParser>[]);
+  ParserList before = ParserList([]);
+  ParserList after = ParserList([]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -15,20 +15,20 @@ class AndStringParser extends OperatorParser {
     final executedBefore = before.execute(results.toList(), passed);
     final executedAfter = after.execute(results.toList(), passed);
 
-    final bool? beforeBool = SingletonEvaluation.toBool(executedBefore,
+    final beforeBool = SingletonEvaluation.toBool(executedBefore,
         name: "parameter before 'and'", operation: 'and', collection: results);
-    final bool? afterBool = SingletonEvaluation.toBool(executedAfter,
+    final afterBool = SingletonEvaluation.toBool(executedAfter,
         name: "parameter after 'and'", operation: 'and', collection: results);
 
-    if ((beforeBool ?? false) && (afterBool ?? false)) {
-      return <dynamic>[true];
+    if (beforeBool == true && afterBool == true) {
+      return [true];
     }
 
     if (beforeBool == false || afterBool == false) {
-      return <dynamic>[false];
+      return [false];
     }
 
-    return <dynamic>[];
+    return [];
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -55,8 +55,8 @@ class AndStringParser extends OperatorParser {
 
 class XorParser extends OperatorParser {
   XorParser();
-  ParserList before = ParserList(<FhirPathParser>[]);
-  ParserList after = ParserList(<FhirPathParser>[]);
+  ParserList before = ParserList([]);
+  ParserList after = ParserList([]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -65,24 +65,24 @@ class XorParser extends OperatorParser {
     final executedBefore = before.execute(results.toList(), passed);
     final executedAfter = after.execute(results.toList(), passed);
 
-    final bool? beforeBool = SingletonEvaluation.toBool(executedBefore,
+    final beforeBool = SingletonEvaluation.toBool(executedBefore,
         name: "parameter before 'xor'", operation: 'xor', collection: results);
-    final bool? afterBool = SingletonEvaluation.toBool(executedAfter,
+    final afterBool = SingletonEvaluation.toBool(executedAfter,
         name: "parameter after 'xor'", operation: 'xor', collection: results);
 
     if (beforeBool == null || afterBool == null) {
-      return <dynamic>[];
+      return [];
     }
 
     if (beforeBool == false && afterBool == false) {
-      return <dynamic>[false];
+      return [false];
     }
 
     if (beforeBool == true && afterBool == true) {
-      return <dynamic>[false];
+      return [false];
     }
 
-    return <dynamic>[true];
+    return [true];
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -109,8 +109,8 @@ class XorParser extends OperatorParser {
 
 class OrStringParser extends OperatorParser {
   OrStringParser();
-  ParserList before = ParserList(<FhirPathParser>[]);
-  ParserList after = ParserList(<FhirPathParser>[]);
+  ParserList before = ParserList([]);
+  ParserList after = ParserList([]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -119,20 +119,20 @@ class OrStringParser extends OperatorParser {
     final executedBefore = before.execute(results.toList(), passed);
     final executedAfter = after.execute(results.toList(), passed);
 
-    final bool? beforeBool = SingletonEvaluation.toBool(executedBefore,
+    final beforeBool = SingletonEvaluation.toBool(executedBefore,
         name: "parameter before 'or'", operation: 'or', collection: results);
-    final bool? afterBool = SingletonEvaluation.toBool(executedAfter,
+    final afterBool = SingletonEvaluation.toBool(executedAfter,
         name: "parameter after 'or'", operation: 'or', collection: results);
 
-    if ((beforeBool ?? false) || (afterBool ?? false)) {
-      return <dynamic>[true];
+    if (beforeBool == true || afterBool == true) {
+      return [true];
     }
 
     if (beforeBool == null || afterBool == null) {
-      return <dynamic>[];
+      return [];
     }
 
-    return <dynamic>[false];
+    return [false];
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -159,8 +159,8 @@ class OrStringParser extends OperatorParser {
 
 class ImpliesParser extends OperatorParser {
   ImpliesParser();
-  ParserList before = ParserList(<FhirPathParser>[]);
-  ParserList after = ParserList(<FhirPathParser>[]);
+  ParserList before = ParserList([]);
+  ParserList after = ParserList([]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

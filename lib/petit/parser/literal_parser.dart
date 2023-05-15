@@ -51,12 +51,7 @@ class BooleanParser extends ValueParser<bool> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => [value];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      <dynamic>[value];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -86,37 +81,32 @@ class EnvVariableParser extends ValueParser<String> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final variableName = value.replaceAll('`', '');
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final String variableName = value.replaceAll('`', '');
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
     if (variableName == '%sct') {
-      return <dynamic>['http://snomed.info/sct'];
+      return ['http://snomed.info/sct'];
     }
 
     if (variableName == '%loinc') {
-      return <dynamic>['http://loinc.org'];
+      return ['http://loinc.org'];
     }
 
     if (variableName == '%ucum') {
-      return <dynamic>['http://unitsofmeasure.org'];
+      return ['http://unitsofmeasure.org'];
     }
 
     if (variableName.startsWith('%vs-')) {
-      final String valueSet = variableName.substring(4);
-      return <dynamic>['http://hl7.org/fhir/ValueSet/$valueSet'];
+      final valueSet = variableName.substring(4);
+      return ['http://hl7.org/fhir/ValueSet/$valueSet'];
     }
 
     if (variableName.startsWith('%ext-')) {
-      final String extension = variableName.substring(5);
-      return <dynamic>['http://hl7.org/fhir/StructureDefinition/$extension'];
+      final extension = variableName.substring(5);
+      return ['http://hl7.org/fhir/StructureDefinition/$extension'];
     }
 
-    final dynamic passedValue = passed[variableName];
+    final passedValue = passed[variableName];
     if (passedValue == null) {
       throw FhirPathEvaluationException(
           'Variable $variableName does not exist.',
@@ -124,12 +114,12 @@ class EnvVariableParser extends ValueParser<String> {
     }
 
     if (passedValue is! Function()) {
-      return passedValue is List ? passedValue : <dynamic>[passedValue];
+      return passedValue is List ? passedValue : [passedValue];
     } else {
       try {
-        final dynamic result = passedValue();
+        final result = passedValue();
 
-        return result is List ? result : <dynamic>[result];
+        return result is List ? result : [result];
       } catch (ex) {
         throw FhirPathEvaluationException(
             'Variable $value could not be lazily evaluated.',
@@ -171,12 +161,7 @@ class QuantityParser extends ValueParser<FhirPathQuantity> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => [value];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      <dynamic>[value];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   @override
   String toString() {
@@ -210,12 +195,7 @@ class IntegerParser extends ValueParser<int> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => [value];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      <dynamic>[value];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   @override
   String toString() {
@@ -257,12 +237,7 @@ class DecimalParser extends ValueParser<double> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => [value];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      <dynamic>[value];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   @override
   String toString() {
@@ -299,19 +274,14 @@ class IdentifierParser extends ValueParser<String> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final identifierName = value;
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final String identifierName = value;
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
-    final List<dynamic> finalResults = <dynamic>[];
-    final List<dynamic> finalPrimitiveExtensions =
-        List<dynamic>.filled(results.length, null);
+    final finalResults = [];
+    final finalPrimitiveExtensions =
+        List<dynamic>.filled(results.length, null, growable: false);
 
-    final dynamic passedExtensions = passed[ExtensionParser.extensionKey];
+    final passedExtensions = passed[ExtensionParser.extensionKey];
     passed[ExtensionParser.extensionKey] = null;
 
     if (passed.isVersion(FhirVersion.r4)
@@ -327,7 +297,7 @@ class IdentifierParser extends ValueParser<String> {
         finalResults.add(passed.context);
       }
     } else {
-      results.forEachIndexed((int i, dynamic r) {
+      results.forEachIndexed((i, r) {
         if (r is Map) {
           String jsonIdentifierName = identifierName;
           dynamic rValue = r[identifierName];
@@ -336,7 +306,7 @@ class IdentifierParser extends ValueParser<String> {
             // If the key cannot be found in the r-map, then find
             // a key that starts with the same word, e.g. 'value' identifier will
             // match 'valueDateTime' key.
-            r.forEach((dynamic k, dynamic v) {
+            r.forEach((k, v) {
               if (k.toString().startsWith(identifierName) &&
                   polymorphicPrefixes.contains(identifierName) &&
                   startsWithAPolymorphicPrefix(k.toString())) {
@@ -346,14 +316,14 @@ class IdentifierParser extends ValueParser<String> {
             });
           }
 
-          final Map<String, dynamic>? jsonPrimitiveExtension =
+          final jsonPrimitiveExtension =
               r['_$jsonIdentifierName'] as Map<String, dynamic>?;
           if (jsonPrimitiveExtension != null) {
             finalPrimitiveExtensions[i] = jsonPrimitiveExtension['extension'];
           }
 
           if (rValue is List) {
-            finalResults.addAll(rValue as Iterable<dynamic>);
+            finalResults.addAll(rValue as Iterable);
           } else if (rValue != null) {
             finalResults.add(rValue);
           } else if (r['resourceType'] == identifierName) {
@@ -363,9 +333,9 @@ class IdentifierParser extends ValueParser<String> {
           if (identifierName == 'extension') {
             // Special processing for extensions on primitives
             if (passedExtensions != null) {
-              final dynamic extensionOnPrimitive = passedExtensions[i];
+              final extensionOnPrimitive = passedExtensions[i];
               if (extensionOnPrimitive != null) {
-                finalResults.addAll(extensionOnPrimitive as Iterable<dynamic>);
+                finalResults.addAll(extensionOnPrimitive as Iterable);
               }
             } else {
               // This primitive does not have an extension
@@ -418,19 +388,14 @@ class DelimitedIdentifierParser extends ValueParser<String> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final identifierName = value;
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final String identifierName = value;
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
-    final List<dynamic> finalResults = <dynamic>[];
-    final List<dynamic> finalPrimitiveExtensions =
-        List<dynamic>.filled(results.length, null);
+    final finalResults = [];
+    final finalPrimitiveExtensions =
+        List<dynamic>.filled(results.length, null, growable: false);
 
-    final dynamic passedExtensions = passed[ExtensionParser.extensionKey];
+    final passedExtensions = passed[ExtensionParser.extensionKey];
     passed[ExtensionParser.extensionKey] = null;
 
     if (passed.isVersion(FhirVersion.r4)
@@ -446,7 +411,7 @@ class DelimitedIdentifierParser extends ValueParser<String> {
                         : passed.context?['resourceType'] == identifierName)) {
       finalResults.add(passed.context);
     } else {
-      results.forEachIndexed((int i, dynamic r) {
+      results.forEachIndexed((i, r) {
         if (r is Map) {
           String jsonIdentifierName = identifierName;
           dynamic rValue = r[identifierName];
@@ -455,7 +420,7 @@ class DelimitedIdentifierParser extends ValueParser<String> {
             // If the key cannot be found in the r-map, then find
             // a key that starts with the same word, e.g. 'value' identifier will
             // match 'valueDateTime' key.
-            r.forEach((dynamic k, dynamic v) {
+            r.forEach((k, v) {
               if (k.toString().startsWith(identifierName) &&
                   polymorphicPrefixes.contains(identifierName) &&
                   startsWithAPolymorphicPrefix(k.toString())) {
@@ -465,14 +430,14 @@ class DelimitedIdentifierParser extends ValueParser<String> {
             });
           }
 
-          final Map<String, dynamic>? jsonPrimitiveExtension =
+          final jsonPrimitiveExtension =
               r['_$jsonIdentifierName'] as Map<String, dynamic>?;
           if (jsonPrimitiveExtension != null) {
             finalPrimitiveExtensions[i] = jsonPrimitiveExtension['extension'];
           }
 
           if (rValue is List) {
-            finalResults.addAll(rValue as Iterable<dynamic>);
+            finalResults.addAll(rValue as Iterable);
           } else if (rValue != null) {
             finalResults.add(rValue);
           } else if (r['resourceType'] == identifierName) {
@@ -482,9 +447,9 @@ class DelimitedIdentifierParser extends ValueParser<String> {
           if (identifierName == 'extension') {
             // Special processing for extensions on primitives
             if (passedExtensions != null) {
-              final dynamic extensionOnPrimitive = passedExtensions[i];
+              final extensionOnPrimitive = passedExtensions[i];
               if (extensionOnPrimitive != null) {
-                finalResults.addAll(extensionOnPrimitive as Iterable<dynamic>);
+                finalResults.addAll(extensionOnPrimitive as Iterable);
               }
             } else {
               // This primitive does not have an extension
@@ -532,12 +497,7 @@ class StringParser extends ValueParser<String> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => [value];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      <dynamic>[value];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -563,19 +523,19 @@ class StringParser extends ValueParser<String> {
 /// implementations and is based on the most useful lowest common denominator.
 /// Implementations can provide support for larger ranges and higher precision,
 /// but must provide at least the range and precision defined here.
-class DateTimeParser extends BaseDateTimeParser<List<dynamic>> {
+class DateTimeParser extends BaseDateTimeParser<List> {
   DateTimeParser(String stringValue) {
-    final String removeAt = stringValue.replaceFirst('@', '');
-    final List<String> split = removeAt.split('T');
+    final removeAt = stringValue.replaceFirst('@', '');
+    final split = removeAt.split('T');
 
     if (split.length == 2 && split.last != '') {
-      final DateTime? formattedDateTime = FhirDateTime(removeAt).value;
+      final formattedDateTime = FhirDateTime(removeAt).value;
       if (formattedDateTime == null) {
         throw FormatException(
             'The DateTime provided was not properly formatted', stringValue);
       }
       String? timeString;
-      final int timeLength = removeAt.split('T').last.split(':').length;
+      final timeLength = removeAt.split('T').last.split(':').length;
       timeString = formattedDateTime
           .toIso8601String()
           .split('T')
@@ -585,32 +545,31 @@ class DateTimeParser extends BaseDateTimeParser<List<dynamic>> {
           .sublist(0, timeLength <= 3 ? timeLength : 3)
           .join(':');
 
-      value = <dynamic>[
+      value = [
         DateParser(formattedDateTime.toIso8601String().split('T').first),
         TimeParser(timeString),
       ];
     } else {
-      final DateTime? formattedDateTime =
-          FhirDateTime(removeAt.split('T').first).value;
+      final formattedDateTime = FhirDateTime(removeAt.split('T').first).value;
       if (formattedDateTime == null) {
         throw FormatException(
             'The DateTime provided was not properly formatted', stringValue);
       }
-      value = <dynamic>[FhirDate(removeAt.split('T').first)];
+      value = [FhirDate(removeAt.split('T').first)];
     }
   }
-  late List<dynamic> value;
+  late List value;
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) {
     if (value.isEmpty) {
-      return <dynamic>[];
+      return [];
     } else if (value.length == 1) {
-      return <dynamic>[FhirDateTime(value.first.toString())];
+      return [FhirDateTime(value.first.toString())];
     } else {
-      return <dynamic>[FhirDateTime('${value.first}T${value.last}')];
+      return [FhirDateTime('${value.first}T${value.last}')];
     }
   }
 
@@ -652,12 +611,7 @@ class DateParser extends BaseDateTimeParser<FhirDate> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => [value];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      <dynamic>[value];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   @override
   String toString() => value.toString();
@@ -689,7 +643,7 @@ class DateParser extends BaseDateTimeParser<FhirDate> {
 /// or timezone offset.
 class TimeParser extends BaseDateTimeParser<FhirTime> {
   TimeParser(String stringValue) {
-    final String removeAt = stringValue.replaceFirst('@', '');
+    final removeAt = stringValue.replaceFirst('@', '');
     value = FhirTime(removeAt.replaceFirst('T', ''));
   }
   late FhirTime value;
@@ -697,12 +651,7 @@ class TimeParser extends BaseDateTimeParser<FhirTime> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => [value];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      <dynamic>[value];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   @override
   String toString() => value.toString();

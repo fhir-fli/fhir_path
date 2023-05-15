@@ -73,7 +73,7 @@ List<dynamic> walkFhirPath({
   Map<String, dynamic>? environment,
   FhirVersion version = FhirVersion.r4,
 }) {
-  final ExpressionContext ast = parseFhirPath(pathExpression);
+  final ast = parseFhirPath(pathExpression);
   return executeFhirPath(
     context: context,
     parsedFhirPath: ast,
@@ -88,12 +88,12 @@ List<dynamic> walkFhirPath({
 /// Parse a FHIRPath for repeated use with different inputs later.
 ExpressionContext parseFhirPath(String pathExpression) {
   try {
-    final InputStream input = InputStream.fromString(pathExpression);
-    final FhirPathLexer lexer = FhirPathLexer(input);
-    final CommonTokenStream tokens = CommonTokenStream(lexer);
-    final FhirPathParser parser = FhirPathParser(tokens);
+    final input = InputStream.fromString(pathExpression);
+    final lexer = FhirPathLexer(input);
+    final tokens = CommonTokenStream(lexer);
+    final parser = FhirPathParser(tokens);
     parser.buildParseTree = true;
-    final ExpressionContext tree = parser.expression();
+    final tree = parser.expression();
     return tree;
   } catch (error) {
     // print(error.runtimeType);
@@ -128,8 +128,7 @@ List<dynamic> executeFhirPath({
 }) {
   // Use passed-in environment as the starting point.
   // It will later be amended/overridden by explicitly passed resources.
-  final Map<String, dynamic> passedEnvironment =
-      Map<String, dynamic>.from(environment ?? <String, dynamic>{});
+  final passedEnvironment = Map<String, dynamic>.from(environment ?? {});
 
   // Explicitly passed context overrides context that might have been passed
   // through environment.
@@ -151,7 +150,7 @@ List<dynamic> executeFhirPath({
 
   try {
     if (parsedFhirPath.childCount == 0) {
-      return <dynamic>[];
+      return [];
     } else {
       return FhirPathDartVisitor(context, passedEnvironment)
           .execute(parsedFhirPath);
@@ -176,11 +175,12 @@ List<dynamic> r4WalkFhirPath(
   String pathExpression, [
   Map<String, dynamic>? environment,
 ]) {
-  final Map<String, dynamic>? resourceJson = resource?.toJson();
+  final resourceJson = resource?.toJson();
   return walkFhirPath(
     context: resourceJson,
     pathExpression: pathExpression,
     environment: environment,
+    version: FhirVersion.r4,
   );
 }
 
@@ -189,7 +189,7 @@ List<dynamic> r5WalkFhirPath(
   String pathExpression, [
   Map<String, dynamic>? environment,
 ]) {
-  final Map<String, dynamic>? resourceJson = resource?.toJson();
+  final resourceJson = resource?.toJson();
   return walkFhirPath(
     context: resourceJson,
     pathExpression: pathExpression,
@@ -203,7 +203,7 @@ List<dynamic> dstu2WalkFhirPath(
   String pathExpression, [
   Map<String, dynamic>? environment,
 ]) {
-  final Map<String, dynamic>? resourceJson = resource?.toJson();
+  final resourceJson = resource?.toJson();
   return walkFhirPath(
     context: resourceJson,
     pathExpression: pathExpression,
@@ -217,7 +217,7 @@ List<dynamic> stu3WalkFhirPath(
   String pathExpression, [
   Map<String, dynamic>? environment,
 ]) {
-  final Map<String, dynamic>? resourceJson = resource?.toJson();
+  final resourceJson = resource?.toJson();
   return walkFhirPath(
     context: resourceJson,
     pathExpression: pathExpression,
@@ -227,9 +227,9 @@ List<dynamic> stu3WalkFhirPath(
 }
 
 extension FhirPathResourceExtension on Map<String, dynamic> {
-  static const String contextKey = '%context';
-  static const String resourceKey = '%resource';
-  static const String rootResourceKey = '%rootResource';
+  static const contextKey = '%context';
+  static const resourceKey = '%resource';
+  static const rootResourceKey = '%rootResource';
 
   Map<String, dynamic>? get context =>
       this[contextKey] as Map<String, dynamic>?;

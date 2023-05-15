@@ -491,7 +491,7 @@ extension UnitsFromRatio on Ratio {
 }
 
 extension RatioConversions on num {
-  Property<dynamic, dynamic>? _type(dynamic checkType) {
+  Property? _type(dynamic checkType) {
     switch (checkType.runtimeType) {
       case ANGLE:
         return Angle();
@@ -547,11 +547,10 @@ extension RatioConversions on num {
         'fromNumberator and toNumerator must be of the same type, e.g. LENGTH');
 
     /// Get the type of unit for the input ratio numerator
-    final Property<dynamic, dynamic>? numeratorProperty = _type(fromNumerator);
+    final numeratorProperty = _type(fromNumerator);
 
     /// Get the type of unit for the input ratio denominator
-    final Property<dynamic, dynamic>? denominatorProperty =
-        _type(fromDenominator);
+    final denominatorProperty = _type(fromDenominator);
 
     /// Get the conversion ready for the Numerator. The passed numerical value
     /// is included in this just as it is for the above function
@@ -592,8 +591,7 @@ extension RatioConversions on num {
 
 extension ConvertUnitString on String {
   String? convertFromTo(NUMERAL_SYSTEMS from, NUMERAL_SYSTEMS to) {
-    final Property<dynamic, dynamic> property = NumeralSystems()
-      ..convert(from, this);
+    final Property property = NumeralSystems()..convert(from, this);
     return property.getUnit(to).stringValue;
   }
 }

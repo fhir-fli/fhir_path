@@ -1,4 +1,4 @@
-const List<String> unitCode = <String>[
+const unitCode = [
   'millisecond',
   'second',
   'seconds',

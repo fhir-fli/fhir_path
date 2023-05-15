@@ -1,26 +1,24 @@
+// ignore_for_file: annotate_overrides, overridden_fields
+
 // Project imports:
 import '../../petit_fhir_path.dart';
 
-class ChildrenParser extends FhirPathParser {
-  ChildrenParser();
+/// DEPRECATED
+/// The as() function is defined for backwards compatibility with previous implementations
+/// of FHIRPath. However, we have chosen not to support it.
+/// DEPRECATED
+class AsFunctionParser extends ValueParser<ParserList> {
+  AsFunctionParser();
+  late ParserList value;
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) {
-    final finalResults = [];
-    for (final r in results) {
-      if (r is Map) {
-        r.forEach((key, value) {
-          if (value is List) {
-            finalResults.addAll(value);
-          } else {
-            finalResults.add(value);
-          }
-        });
-      }
-    }
-    return finalResults;
+    throw FhirPathDeprecatedExpressionException(
+        'The FHIRPath expression that was supplied includes "as(type : type specifier)" '
+        ' which has been deprecated. Please instead use the "as type specifer". '
+        'Official explanation can be read here: https://hl7.org/fhirpath/#as-type-specifier');
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -31,27 +29,35 @@ class ChildrenParser extends FhirPathParser {
   /// at all as objects in the official spec. I'm generally going to recommend
   /// that you use [prettyPrint] instead
   @override
-  String verbosePrint(int indent) => '${"  " * indent}ChildrenParser';
+  String verbosePrint(int indent) =>
+      '${"  " * indent}AsFunctionParser (Deprecated)\n${value.verbosePrint(indent + 1)}';
 
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.children()';
+  String prettyPrint([int indent = 2]) =>
+      '.as(Deprecated)(\n${"  " * indent}${value.prettyPrint(indent + 1)}\n'
+      '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
-class DescendantsParser extends FhirPathParser {
-  DescendantsParser();
+/// DEPRECATED
+/// The as() function is defined for backwards compatibility with previous implementations
+/// of FHIRPath. However, we have chosen not to support it.
+/// DEPRECATED
+class IsFunctionParser extends ValueParser<ParserList> {
+  IsFunctionParser();
+  late ParserList value;
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) {
-    // According to spec, `descendants()` is shorthand for `repeat(children())`
-    final repeatParser = RepeatParser();
-    repeatParser.value = ParserList([ChildrenParser()]);
-    return repeatParser.execute(results, passed);
+    throw FhirPathDeprecatedExpressionException(
+        'The FHIRPath expression that was supplied includes "is(type : type specifier)" '
+        ' which has been deprecated. Please instead use the "is type specifer". '
+        'Official explanation can be read here: https://hl7.org/fhirpath/#as-type-specifier');
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -62,12 +68,15 @@ class DescendantsParser extends FhirPathParser {
   /// at all as objects in the official spec. I'm generally going to recommend
   /// that you use [prettyPrint] instead
   @override
-  String verbosePrint(int indent) => '${"  " * indent}DescendantsParser';
+  String verbosePrint(int indent) =>
+      '${"  " * indent}IsFunctionParser (Deprecated)\n${value.verbosePrint(indent + 1)}';
 
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.descendants()';
+  String prettyPrint([int indent = 2]) =>
+      '.is(Deprecated)(\n${"  " * indent}${value.prettyPrint(indent + 1)}\n'
+      '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }

@@ -5,24 +5,16 @@ import '../../petit_fhir_path.dart';
 
 class UnionOperatorParser extends OperatorParser {
   UnionOperatorParser();
-  ParserList before = ParserList(<FhirPathParser>[]);
-  ParserList after = ParserList(<FhirPathParser>[]);
+  ParserList before = ParserList([]);
+  ParserList after = ParserList([]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final executedBefore = before.execute(results.toList(), passed);
     final executedAfter = after.execute(results.toList(), passed);
     executedBefore.forEach((e) {
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> executedBefore =
-        before.execute(results.toList(), passed);
-    final List<dynamic> executedAfter = after.execute(results.toList(), passed);
-    executedBefore.forEach((dynamic e) {
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
       if (notFoundInList(executedAfter, e)) {
         executedAfter.add(e);
       }
@@ -56,28 +48,22 @@ class UnionOperatorParser extends OperatorParser {
 // http://hl7.org/fhirpath/#contains-containership
 class ContainsOperatorParser extends OperatorParser {
   ContainsOperatorParser();
-  ParserList before = ParserList(<FhirPathParser>[]);
-  ParserList after = ParserList(<FhirPathParser>[]);
+  ParserList before = ParserList([]);
+  ParserList after = ParserList([]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final leftOperand = before.execute(results.toList(), passed);
     final rightOperand = after.execute(results.toList(), passed);
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> leftOperand = before.execute(results.toList(), passed);
-    final List<dynamic> rightOperand = after.execute(results.toList(), passed);
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
     if (leftOperand.isEmpty) {
-      return <dynamic>[false];
+      return [false];
     }
 
     if (rightOperand.isEmpty) {
-      return <dynamic>[];
+      return [];
     }
 
     if (rightOperand.length > 1) {
@@ -87,11 +73,10 @@ class ContainsOperatorParser extends OperatorParser {
           collection: results);
     }
 
-    final String rightItem = rightOperand.first.toString();
+    final rightItem = rightOperand.first.toString();
 
-    return <dynamic>[
-      leftOperand.firstWhere(
-              (dynamic leftItem) => leftItem.toString() == rightItem,
+    return [
+      leftOperand.firstWhere((leftItem) => leftItem.toString() == rightItem,
               orElse: () => null) !=
           null
     ];
@@ -123,8 +108,8 @@ class ContainsOperatorParser extends OperatorParser {
 /// http://hl7.org/fhirpath/N1/#in-membership
 class InParser extends OperatorParser {
   InParser();
-  ParserList before = ParserList(<FhirPathParser>[]);
-  ParserList after = ParserList(<FhirPathParser>[]);
+  ParserList before = ParserList([]);
+  ParserList after = ParserList([]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -134,7 +119,7 @@ class InParser extends OperatorParser {
     final executedAfter = after.execute(results.toList(), passed);
 
     if (executedBefore.isEmpty) {
-      return (executedAfter.isEmpty) ? <dynamic>[] : <dynamic>[false];
+      return (executedAfter.isEmpty) ? [] : [false];
     }
 
     if (executedBefore.length > 1) {
@@ -144,10 +129,9 @@ class InParser extends OperatorParser {
           collection: results);
     }
 
-    final String leftItem = executedBefore.first.toString();
-    return <dynamic>[
-      executedAfter.firstWhere(
-              (dynamic rightItem) => rightItem.toString() == leftItem,
+    final leftItem = executedBefore.first.toString();
+    return [
+      executedAfter.firstWhere((rightItem) => rightItem.toString() == leftItem,
               orElse: () => null) !=
           null
     ];
@@ -178,35 +162,27 @@ class InParser extends OperatorParser {
 
 class CommaParser extends OperatorParser {
   CommaParser();
-  ParserList before = ParserList(<FhirPathParser>[]);
-  ParserList after = ParserList(<FhirPathParser>[]);
+  ParserList before = ParserList([]);
+  ParserList after = ParserList([]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final beforeResults = results.toList();
     final afterResults = results.toList();
     final beforeList = before.execute(beforeResults, passed);
     final afterList = after.execute(afterResults, passed);
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> beforeResults = results.toList();
-    final List<dynamic> afterResults = results.toList();
-    final List<dynamic> beforeList = before.execute(beforeResults, passed);
-    final List<dynamic> afterList = after.execute(afterResults, passed);
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
-    final List<dynamic> outcome = <dynamic>[];
+    final outcome = [];
     if (beforeList.isEmpty) {
-      outcome.add(<dynamic>[]);
+      outcome.add([]);
     } else {
       outcome.addAll(beforeList);
     }
 
     if (afterList.isEmpty) {
-      outcome.add(<dynamic>[]);
+      outcome.add([]);
     } else {
       outcome.addAll(afterList);
     }

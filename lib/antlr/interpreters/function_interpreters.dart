@@ -15,7 +15,7 @@ List? _$visitFunction(
           ctx.getChild(3) is! TerminalNodeImpl)) {
     throw _wrongTypes(ctx.text, visitor.context, ctx.children);
   } else {
-    final String? function = ctx.childCount == 4
+    final function = ctx.childCount == 4
         ? ctx.getChild(0)!.text
         : ctx.text.replaceAll('()', '');
     switch (function) {
@@ -27,28 +27,28 @@ List? _$visitFunction(
       case 'allTrue':
         {
           visitor.context = <dynamic>[
-            !visitor.context.any((dynamic element) => element == false)
+            !visitor.context.any((element) => element == false)
           ];
         }
         break;
       case 'anyTrue':
         {
           visitor.context = <dynamic>[
-            visitor.context.any((dynamic element) => element == true)
+            visitor.context.any((element) => element == true)
           ];
         }
         break;
       case 'allFalse':
         {
           visitor.context = <dynamic>[
-            !visitor.context.any((dynamic element) => element == true)
+            !visitor.context.any((element) => element == true)
           ];
         }
         break;
       case 'anyFalse':
         {
           visitor.context = <dynamic>[
-            visitor.context.any((dynamic element) => element == false)
+            visitor.context.any((element) => element == false)
           ];
         }
         break;
@@ -59,8 +59,8 @@ List? _$visitFunction(
         break;
       case 'distinct':
         {
-          final List<dynamic> resultsList = <dynamic>[];
-          for (final dynamic results in visitor.context) {
+          final resultsList = <dynamic>[];
+          for (final results in visitor.context) {
             if (notFoundInList(resultsList, results)) {
               resultsList.add(results);
             }
@@ -70,8 +70,8 @@ List? _$visitFunction(
         break;
       case 'isDistinct':
         {
-          final List<dynamic> resultsList = <dynamic>[];
-          for (final dynamic results in visitor.context) {
+          final resultsList = <dynamic>[];
+          for (final results in visitor.context) {
             if (notFoundInList(resultsList, results)) {
               resultsList.add(results);
             }
@@ -127,8 +127,8 @@ List? _$visitFunction(
                       ? <dynamic>[]
                       : visitor.context.first == true ||
                               visitor.context.first == 1 ||
-                              <String>['true', 't', 'yes', 'y', '1', '1.0']
-                                      .indexWhere((String element) =>
+                              ['true', 't', 'yes', 'y', '1', '1.0'].indexWhere(
+                                      (element) =>
                                           element ==
                                           visitor.context.first
                                               .toString()
@@ -137,8 +137,8 @@ List? _$visitFunction(
                           ? <dynamic>[true]
                           : visitor.context.first == false ||
                                   visitor.context.first == 0 ||
-                                  <String>['false', 'f', 'no', 'n', '0', '0.0']
-                                          .indexWhere((String element) =>
+                                  ['false', 'f', 'no', 'n', '0', '0.0']
+                                          .indexWhere((element) =>
                                               element ==
                                               visitor.context.first
                                                   .toString()
@@ -160,7 +160,7 @@ List? _$visitFunction(
                       : visitor.context.first is bool ||
                               visitor.context.first == 1 ||
                               visitor.context.first == 0 ||
-                              <String>[
+                              [
                                     'true',
                                     't',
                                     'yes',
@@ -173,7 +173,7 @@ List? _$visitFunction(
                                     'n',
                                     '0',
                                     '0.0'
-                                  ].indexWhere((String element) =>
+                                  ].indexWhere((element) =>
                                       element ==
                                       visitor.context.first
                                           .toString()
@@ -384,14 +384,14 @@ List? _$visitFunction(
               : visitor.context.length > 1
                   ? throw _conversionException('.toQuantity()', visitor.context)
                   : visitor.context.first is FhirPathQuantity
-                      ? <dynamic>[visitor.context.first]
+                      ? [visitor.context.first]
                       : visitor.context.first is num
-                          ? <dynamic>[
+                          ? [
                               FhirPathQuantity(
                                   visitor.context.first as num, '1')
                             ]
                           : visitor.context.first is String
-                              ? <dynamic>[
+                              ? [
                                   FhirPathQuantity.fromString(
                                       visitor.context.first as String)
                                 ]
@@ -413,19 +413,19 @@ List? _$visitFunction(
             else if (visitor.context.first is FhirPathQuantity ||
                 visitor.context.first is num ||
                 visitor.context.first is bool) {
-              visitor.context = <dynamic>[true];
+              visitor.context = [true];
             }
 
             /// If it's a string & convertible to a Quantity using the Regex
             else if (visitor.context.first is String &&
                 FhirPathQuantity.fhirPathQuantityRegex.hasMatch(
                     (visitor.context.first as String).replaceAll(r"\'", "'"))) {
-              visitor.context = <dynamic>[true];
+              visitor.context = [true];
             }
 
             /// Otherwise it's definitely false
             else {
-              visitor.context = <dynamic>[false];
+              visitor.context = [false];
             }
           }
         }
@@ -481,7 +481,7 @@ List? _$visitFunction(
                           ? <dynamic>[]
                           : <dynamic>[(visitor.context.first as num).abs()]
                       : visitor.context.first is FhirPathQuantity
-                          ? <dynamic>[
+                          ? [
                               FhirPathQuantity(
                                 (visitor.context.first as FhirPathQuantity)
                                     .amount
@@ -541,25 +541,24 @@ List? _$visitFunction(
         break;
       case 'power':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!);
+          final args = visitor.copyWith().visit(ctx.getChild(2)!);
           if (visitor.context.isEmpty || (args?.isEmpty ?? true)) {
-            visitor.context = <dynamic>[];
+            visitor.context = [];
           } else if (visitor.context.length > 1) {
             throw _wrongLength('.power()', visitor.context);
           } else if (args!.length > 1) {
             throw _wrongArgLength('.power()', args);
           } else {
-            final dynamic base = visitor.context.first is num
+            final base = visitor.context.first is num
                 ? visitor.context.first
                 : throw _wrongTypes(
                     '.power()', visitor.context, visitor.context);
-            final dynamic exponent = args.first is num
+            final exponent = args.first is num
                 ? args.first
                 : throw _wrongTypes('.power()', visitor.context, args);
             visitor.context = pow(base as num, exponent as num).isNaN
-                ? <dynamic>[]
-                : <dynamic>[pow(base, exponent)];
+                ? []
+                : [pow(base, exponent)];
           }
         }
         break;
@@ -590,10 +589,10 @@ List? _$visitFunction(
         break;
       case 'children':
         {
-          final List<dynamic> finalResults = <dynamic>[];
-          for (final dynamic context in visitor.context) {
+          final finalResults = <dynamic>[];
+          for (final context in visitor.context) {
             if (context is Map) {
-              context.forEach((dynamic key, dynamic value) {
+              context.forEach((key, value) {
                 if (value is List) {
                   finalResults.addAll(value);
                 } else {
@@ -608,9 +607,9 @@ List? _$visitFunction(
       case 'exists':
         {
           if (ctx.childCount == 4) {
-            visitor.context.retainWhere((dynamic element) {
-              final List<dynamic>? result = visitor.copyWith(
-                  context: <dynamic>[element]).visit(ctx.getChild(2)!);
+            visitor.context.retainWhere((element) {
+              final result =
+                  visitor.copyWith(context: [element]).visit(ctx.getChild(2)!);
               return result != null &&
                   result.isNotEmpty &&
                   result.length == 1 &&
@@ -618,16 +617,16 @@ List? _$visitFunction(
                       (result.first is bool && result.first as bool));
             });
           }
-          visitor.context = <dynamic>[visitor.context.isNotEmpty];
+          visitor.context = [visitor.context.isNotEmpty];
         }
         break;
       case 'all':
         {
           if (ctx.childCount == 4) {
-            final int oldCount = visitor.context.length;
-            visitor.context.retainWhere((dynamic element) {
-              final List<dynamic>? result = visitor.copyWith(
-                  context: <dynamic>[element]).visit(ctx.getChild(2)!);
+            final oldCount = visitor.context.length;
+            visitor.context.retainWhere((element) {
+              final result =
+                  visitor.copyWith(context: [element]).visit(ctx.getChild(2)!);
               return result != null &&
                   result.isNotEmpty &&
                   result.length == 1 &&
@@ -642,8 +641,7 @@ List? _$visitFunction(
         break;
       case 'subsetOf':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!);
+          final args = visitor.copyWith().visit(ctx.getChild(2)!);
           if (visitor.context.isEmpty) {
             visitor.context = <dynamic>[true];
           } else if (args?.isEmpty ?? true) {
@@ -657,8 +655,7 @@ List? _$visitFunction(
         break;
       case 'supersetOf':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!);
+          final args = visitor.copyWith().visit(ctx.getChild(2)!);
           if (visitor.context.isEmpty) {
             visitor.context = <dynamic>[false];
           } else if (args?.isEmpty ?? true) {
@@ -672,8 +669,7 @@ List? _$visitFunction(
         break;
       case 'log':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!);
+          final args = visitor.copyWith().visit(ctx.getChild(2)!);
           if (visitor.context.isEmpty || (args?.isEmpty ?? true)) {
             visitor.context = <dynamic>[];
           } else if (visitor.context.first is! num &&
@@ -701,18 +697,18 @@ List? _$visitFunction(
         break;
       case 'round':
         {
-          final List<dynamic>? args = ctx.childCount == 3
-              ? <dynamic>[0]
+          final args = ctx.childCount == 3
+              ? [0]
               : visitor.copyWith().visit(ctx.getChild(2)!);
           visitor.context = visitor.context.isEmpty
-              ? <dynamic>[]
+              ? []
               : visitor.context.length > 1
                   ? throw _wrongLength('.round()', visitor.context)
                   : args == null ||
                           args.isEmpty ||
                           args.length != 1 ||
                           args.first is! num
-                      ? throw _requiresList('round()', args ?? <dynamic>[])
+                      ? throw _requiresList('round()', args ?? [])
                       : visitor.context.first is! num
                           ? throw _wrongTypes('.round()', visitor.context, args)
                           : args.first is! int
@@ -726,10 +722,9 @@ List? _$visitFunction(
         break;
       case 'where':
         {
-          visitor.context.retainWhere((dynamic element) {
-            final List<dynamic>? result = visitor.copyWith(context: <dynamic>[
-              element
-            ]).visit(ctx.getChild(ctx.childCount == 3 ? 1 : 2)!);
+          visitor.context.retainWhere((element) {
+            final result = visitor.copyWith(context: [element]).visit(
+                ctx.getChild(ctx.childCount == 3 ? 1 : 2)!);
             return result != null &&
                 result.isNotEmpty &&
                 result.length == 1 &&
@@ -741,32 +736,31 @@ List? _$visitFunction(
       case 'select':
         {
           visitor.context = visitor.context
-              .map((dynamic e) => visitor.copyWith(context: <dynamic>[e]).visit(
+              .map((e) => visitor.copyWith(context: [e]).visit(
                   ctx.getChild(ctx.childCount == 3 ? 1 : 2)!))
-              .expand((List<dynamic>? element) => element ?? <dynamic>[])
+              .expand((element) => element ?? [])
               .toList();
         }
         break;
       case 'repeat':
         {
           visitor.context = visitor.context
-              .map((dynamic e) => visitor.copyWith(context: <dynamic>[e]).visit(
+              .map((e) => visitor.copyWith(context: [e]).visit(
                   ctx.getChild(ctx.childCount == 3 ? 1 : 2)!))
-              .expand((List<dynamic>? element) => element ?? <dynamic>[])
+              .expand((element) => element ?? [])
               .toList();
 
-          final List<dynamic> newContext = visitor.context.toList();
-          bool cont = true;
+          final newContext = visitor.context.toList();
+          var cont = true;
 
           while (cont) {
-            final List<dynamic> newerContext = newContext
-                .map((dynamic e) => visitor.copyWith(context: <dynamic>[
-                      e
-                    ]).visit(ctx.getChild(ctx.childCount == 3 ? 1 : 2)!))
-                .expand((List<dynamic>? element) => element ?? <dynamic>[])
+            final newerContext = newContext
+                .map((e) => visitor.copyWith(context: [e]).visit(
+                    ctx.getChild(ctx.childCount == 3 ? 1 : 2)!))
+                .expand((element) => element ?? [])
                 .toList();
-            newerContext.removeWhere(
-                (dynamic element) => foundInList(newContext, element));
+            newerContext
+                .removeWhere((element) => foundInList(newContext, element));
             if (newerContext.isNotEmpty) {
               newContext.addAll(newerContext);
             } else {
@@ -788,19 +782,12 @@ List? _$visitFunction(
                 : visitor.environment.isVersion(FhirVersion.r5)
                     ? r5.resourceTypeFromStringMap.keys.contains(_type)
                     : visitor.environment.isVersion(FhirVersion.dstu2)
-<<<<<<< HEAD
                         ? dstu2.resourceTypeFromStringMap.keys.contains(_type)
                         : stu3.resourceTypeFromStringMap.keys.contains(_type)) {
               visitor.context.retainWhere((element) =>
                   element is Map && element['resourceType'] == _type);
-=======
-                        ? dstu2.resourceTypeFromStringMap.keys.contains(type)
-                        : stu3.resourceTypeFromStringMap.keys.contains(type)) {
-              visitor.context.retainWhere((dynamic element) =>
-                  element is Map && element['resourceType'] == type);
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
               return true;
-            } else if (<String>[
+            } else if ([
               'string',
               'boolean',
               'integer',
@@ -835,16 +822,10 @@ List? _$visitFunction(
             }
           }
 
-<<<<<<< HEAD
           final _type = ctx.getChild(2)?.text;
           final success = checkOfType(_type);
-=======
-          final String? type = ctx.getChild(2)?.text;
-          final bool success = checkOfType(type);
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
           if (!success) {
-            final List<dynamic>? result =
-                visitor.copyWith().visit(ctx.getChild(2)!);
+            final result = visitor.copyWith().visit(ctx.getChild(2)!);
             if (result != null && result.isNotEmpty && result.first is String) {
               checkOfType(result.first as String);
             }
@@ -853,8 +834,7 @@ List? _$visitFunction(
         break;
       case 'skip':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!);
+          final args = visitor.copyWith().visit(ctx.getChild(2)!);
           if (args == null ||
               args.isEmpty ||
               args.length != 1 ||
@@ -872,8 +852,7 @@ List? _$visitFunction(
         break;
       case 'take':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!);
+          final args = visitor.copyWith().visit(ctx.getChild(2)!);
           if (args == null ||
               args.isEmpty ||
               args.length != 1 ||
@@ -884,19 +863,18 @@ List? _$visitFunction(
               visitor.context = visitor.context.sublist(0, args.first as int);
             }
           } else {
-            visitor.context = <dynamic>[];
+            visitor.context = [];
           }
         }
         break;
       case 'intersect':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!);
-          final Set<dynamic> initialContext = visitor.context.toSet();
+          final args = visitor.copyWith().visit(ctx.getChild(2)!);
+          final initialContext = visitor.context.toSet();
           visitor.context = <dynamic>[];
-          for (final dynamic value in initialContext) {
+          for (final value in initialContext) {
             if (notFoundInList(visitor.context, value) &&
-                foundInList(args ?? <dynamic>[], value)) {
+                foundInList(args ?? [], value)) {
               visitor.context.add(value);
             }
           }
@@ -904,21 +882,19 @@ List? _$visitFunction(
         break;
       case 'exclude':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!);
-          visitor.context.retainWhere((dynamic element) =>
-              notFoundInList(args ?? <dynamic>[], element));
+          final args = visitor.copyWith().visit(ctx.getChild(2)!);
+          visitor.context
+              .retainWhere((element) => notFoundInList(args ?? [], element));
         }
         break;
       case 'union':
         {
-          final List<dynamic> args = <dynamic>[
+          final args = [
             ...visitor.context,
-            ...visitor.copyWith().visit(ctx.getChild(2)!)?.toList() ??
-                <dynamic>[]
+            ...visitor.copyWith().visit(ctx.getChild(2)!)?.toList() ?? []
           ];
           visitor.context = <dynamic>[];
-          for (final dynamic value in args) {
+          for (final value in args) {
             if (notFoundInList(visitor.context, value)) {
               visitor.context.add(value);
             }
@@ -928,16 +904,14 @@ List? _$visitFunction(
       case 'combine':
         {
           visitor.context.addAll(
-              visitor.copyWith().visit(ctx.getChild(2)!)?.toList() ??
-                  <dynamic>[]);
+              visitor.copyWith().visit(ctx.getChild(2)!)?.toList() ?? []);
         }
         break;
       case 'indexOf':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
+          final args = visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
           visitor.context = visitor.context.isEmpty
-              ? <dynamic>[]
+              ? []
               : visitor.context.length > 1
                   ? throw _requiresList('.indexOf()', visitor.context)
                   : args == null ||
@@ -946,8 +920,8 @@ List? _$visitFunction(
                           args.first is! String
                       ? throw _requiresString('.indexOf()', visitor.context)
                       : args.first == ''
-                          ? <dynamic>[]
-                          : <dynamic>[
+                          ? []
+                          : [
                               visitor.context.first
                                   .toString()
                                   .indexOf(args.first as String)
@@ -956,12 +930,11 @@ List? _$visitFunction(
         break;
       case 'substring':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
+          final args = visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
           visitor.context = visitor.context.isEmpty ||
                   args == null ||
                   args.isEmpty
-              ? <dynamic>[]
+              ? []
               : visitor.context.length > 1
                   ? throw _requiresList('.substring()', visitor.context)
                   : visitor.context.first is! String
@@ -971,9 +944,9 @@ List? _$visitFunction(
                                       (visitor.context.first as String)
                                           .length ||
                                   (args.first as int) < 0)
-                          ? <dynamic>[]
+                          ? []
                           : args.length == 1 && args.first is int
-                              ? <dynamic>[
+                              ? [
                                   visitor.context.first
                                       .toString()
                                       .substring(args.first as int)
@@ -981,7 +954,7 @@ List? _$visitFunction(
                               : args.length == 2 &&
                                       args.first is int &&
                                       args.last is int
-                                  ? <dynamic>[
+                                  ? [
                                       visitor.context.first
                                           .toString()
                                           .substring(
@@ -1006,20 +979,19 @@ List? _$visitFunction(
         break;
       case 'startsWith':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
+          final args = visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
           visitor.context = visitor.context.isEmpty
-              ? <dynamic>[]
+              ? []
               : visitor.context.length > 1
                   ? throw _requiresList('.startsWith()', visitor.context)
                   : args == null || args.isEmpty
-                      ? <dynamic>[true]
+                      ? [true]
                       : args.length != 1 || args.first is! String
                           ? throw _requiresString(
                               '.startsWith()', visitor.context)
                           : visitor.context.first.toString() == ''
-                              ? <dynamic>[true]
-                              : <dynamic>[
+                              ? [true]
+                              : [
                                   visitor.context.first
                                       .toString()
                                       .startsWith(args.first as String)
@@ -1028,20 +1000,19 @@ List? _$visitFunction(
         break;
       case 'endsWith':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
+          final args = visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
           visitor.context = visitor.context.isEmpty
-              ? <dynamic>[]
+              ? []
               : visitor.context.length > 1
                   ? throw _requiresList('.endsWith()', visitor.context)
                   : args == null || args.isEmpty
-                      ? <dynamic>[true]
+                      ? [true]
                       : args.length != 1 || args.first is! String
                           ? throw _requiresString(
                               '.startsWith()', visitor.context)
                           : args.first.toString() == ''
-                              ? <dynamic>[true]
-                              : <dynamic>[
+                              ? [true]
+                              : [
                                   visitor.context.first
                                       .toString()
                                       .endsWith(args.first as String)
@@ -1050,18 +1021,17 @@ List? _$visitFunction(
         break;
       case 'contains':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
+          final args = visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
           visitor.context = visitor.context.isEmpty
-              ? <dynamic>[]
+              ? []
               : args == null || args.isEmpty
-                  ? <dynamic>[true]
+                  ? [true]
                   : args.length != 1 || args.first is! String
                       ? throw _requiresString('.startsWith()', visitor.context)
                       : args.first == ''
-                          ? <dynamic>[true]
+                          ? [true]
                           : visitor.context
-                              .map((dynamic e) =>
+                              .map((e) =>
                                   e is String &&
                                   e.contains(args.first as String))
                               .toList();
@@ -1069,17 +1039,16 @@ List? _$visitFunction(
         break;
       case 'replace':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
+          final args = visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
           visitor.context = visitor.context.isEmpty
-              ? <dynamic>[]
+              ? []
               : visitor.context.length > 1 || args == null || args.isEmpty
                   ? throw _requiresList('.replace()', visitor.context)
                   : args.length > 2 ||
                           args.first is! String ||
                           args.last is! String
                       ? throw _requiresString('.replace()', visitor.context)
-                      : <dynamic>[
+                      : [
                           visitor.context.first.toString().replaceAll(
                               args.first as String, args.last as String)
                         ];
@@ -1087,15 +1056,14 @@ List? _$visitFunction(
         break;
       case 'matches':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
+          final args = visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
           visitor.context = visitor.context.isEmpty
-              ? <dynamic>[]
+              ? []
               : visitor.context.length > 1 || args == null || args.isEmpty
                   ? throw _requiresList('.matches()', visitor.context)
                   : args.first is! String
                       ? throw _requiresString('.matches()', visitor.context)
-                      : <dynamic>[
+                      : [
                           RegExp(args.first as String)
                               .hasMatch(visitor.context.first.toString())
                         ];
@@ -1103,10 +1071,9 @@ List? _$visitFunction(
         break;
       case 'replaceMatchs':
         {
-          final List<dynamic>? args =
-              visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
+          final args = visitor.copyWith().visit(ctx.getChild(2)!)?.toList();
           visitor.context = visitor.context.isEmpty
-              ? <dynamic>[]
+              ? []
               : visitor.context.length > 1 || args == null || args.isEmpty
                   ? throw _requiresList('.replace()', visitor.context)
                   : args.first is! String ||
@@ -1118,7 +1085,7 @@ List? _$visitFunction(
                           operation: '.replace()',
                           collection: visitor.context,
                           arguments: args)
-                      : <dynamic>[
+                      : [
                           visitor.context.first.toString().replaceAll(
                               RegExp('${args.first}'), args.last as String)
                         ];
@@ -1126,11 +1093,11 @@ List? _$visitFunction(
         break;
       case 'iif':
         {
-          final ParseTree conditionStatement = ctx.getChild(2)!;
+          final conditionStatement = ctx.getChild(2)!;
           if (conditionStatement.childCount < 3 ||
               conditionStatement.childCount > 5) {
-            final List<dynamic> children = <dynamic>[];
-            for (int i = 0; i < conditionStatement.childCount; i++) {
+            final children = [];
+            for (var i = 0; i < conditionStatement.childCount; i++) {
               children.add(conditionStatement.getChild(i));
             }
             throw FhirPathInvalidExpressionException(
@@ -1139,10 +1106,9 @@ List? _$visitFunction(
               'Instead it has: $children',
             );
           } else {
-            final List<dynamic>? condition =
-                conditionStatement.getChild(0) == null
-                    ? <dynamic>[]
-                    : visitor.copyWith().visit(conditionStatement.getChild(0)!);
+            final condition = conditionStatement.getChild(0) == null
+                ? []
+                : visitor.copyWith().visit(conditionStatement.getChild(0)!);
 
             /// If criterion is an empty collection
             if (condition?.isEmpty ?? true) {
@@ -1150,13 +1116,13 @@ List? _$visitFunction(
               if (conditionStatement.childCount == 5) {
                 visitor.context =
                     visitor.copyWith().visit(conditionStatement.getChild(4)!) ??
-                        <dynamic>[];
+                        [];
               }
 
               /// unless the optional otherwise-result is not given, in which
               /// case the function returns an empty collection.
               else {
-                visitor.context = <dynamic>[];
+                visitor.context = [];
               }
             }
 
@@ -1185,7 +1151,7 @@ List? _$visitFunction(
               if (conditionBool) {
                 visitor.context =
                     visitor.copyWith().visit(conditionStatement.getChild(2)!) ??
-                        <dynamic>[];
+                        [];
               }
 
               /// If criterion is false and the optional otherwise-result is given
@@ -1195,7 +1161,7 @@ List? _$visitFunction(
                 /// return otherwise-result
                 visitor.context =
                     visitor.copyWith().visit(conditionStatement.getChild(4)!) ??
-                        <dynamic>[];
+                        [];
 
                 visitor.identifierOnly = false;
               }
@@ -1203,7 +1169,7 @@ List? _$visitFunction(
               /// UInless the optional otherwise-result is not given, in which
               /// case the function returns an empty collection.
               else {
-                visitor.context = <dynamic>[];
+                visitor.context = [];
               }
             }
           }
@@ -1211,38 +1177,34 @@ List? _$visitFunction(
         break;
       case 'extension':
         if (visitor.context.isNotEmpty) {
-          final List<dynamic>? extensionUrl =
-              visitor.copyWith().visit(ctx.getChild(2)!);
+          final extensionUrl = visitor.copyWith().visit(ctx.getChild(2)!);
           if (extensionUrl == null) {
-            visitor.context = <dynamic>[];
+            visitor.context = [];
           } else {
             // .extension(exturl) is short-hand for .extension.where(url='exturl')
-            final String newExtension =
-                "extension.where(url='${extensionUrl.first}')";
-            final ExpressionContext newContext =
-                visitor.newContext(newExtension);
-            visitor.context =
-                visitor.copyWith().visit(newContext) ?? <String>[];
+            final newExtension = "extension.where(url='${extensionUrl.first}')";
+            final newContext = visitor.newContext(newExtension);
+            visitor.context = visitor.copyWith().visit(newContext) ?? [];
           }
         }
         break;
       case 'aggregate':
         {
-          final ParseTree aggregator = ctx.getChild(2)!;
-          final ParseTree aggregatorExpression = aggregator.getChild(0)!;
-          List<dynamic>? total = aggregator.childCount == 3
+          final aggregator = ctx.getChild(2)!;
+          final aggregatorExpression = aggregator.getChild(0)!;
+          var total = aggregator.childCount == 3
               ? visitor.copyWith().visit(aggregator.getChild(2)!)
-              : <dynamic>[];
+              : [];
 
-          for (final dynamic context in visitor.context) {
-            final Map<String, dynamic> newEnvironment = visitor.environment;
+          for (final context in visitor.context) {
+            final newEnvironment = visitor.environment;
             newEnvironment[r'%$total'] = total;
             total = visitor.copyWith(
-                context: <dynamic>[context],
+                context: [context],
                 environment: newEnvironment).visit(aggregatorExpression);
           }
 
-          visitor.context = total ?? <dynamic>[];
+          visitor.context = total ?? [];
         }
         break;
       case 'today':
@@ -1272,7 +1234,7 @@ List? _$visitFunction(
         {
           if (visitor.context.isEmpty ||
               visitor.context.length != 1 ||
-              <String>[
+              [
                     'true',
                     't',
                     'yes',
@@ -1285,7 +1247,7 @@ List? _$visitFunction(
                     'n',
                     '0',
                     '0.0'
-                  ].indexWhere((String element) =>
+                  ].indexWhere((element) =>
                       element ==
                       visitor.context.first.toString().toLowerCase()) ==
                   -1) {
@@ -1296,24 +1258,23 @@ List? _$visitFunction(
           } else {
             if (visitor.context.first == true ||
                 visitor.context.first == 1 ||
-                <String>[
+                [
                       'true',
                       't',
                       'yes',
                       'y',
                       '1',
                       '1.0',
-                    ].indexWhere((String element) =>
+                    ].indexWhere((element) =>
                         element ==
                         visitor.context.first.toString().toLowerCase()) !=
                     -1) {
               visitor.context = <dynamic>[true];
             } else if (visitor.context.first == false ||
                 visitor.context.first == 0 ||
-                <String>['false', 'f', 'no', 'n', '0', '0.0'].indexWhere(
-                        (String element) =>
-                            element ==
-                            visitor.context.first.toString().toLowerCase()) !=
+                ['false', 'f', 'no', 'n', '0', '0.0'].indexWhere((element) =>
+                        element ==
+                        visitor.context.first.toString().toLowerCase()) !=
                     -1) {
               visitor.context = <dynamic>[false];
             } else {
@@ -1323,16 +1284,15 @@ List? _$visitFunction(
               );
             }
             if (visitor.context.isNotEmpty) {
-              visitor.context = <dynamic>[!(visitor.context.first as bool)];
+              visitor.context = [!(visitor.context.first as bool)];
             }
           }
         }
         break;
       case 'descendants':
         {
-          final ExpressionContext newContext =
-              visitor.newContext('repeat(children())');
-          visitor.context = visitor.copyWith().visit(newContext) ?? <dynamic>[];
+          final newContext = visitor.newContext('repeat(children())');
+          visitor.context = visitor.copyWith().visit(newContext) ?? [];
         }
         break;
       default:
@@ -1342,35 +1302,34 @@ List? _$visitFunction(
   }
 }
 
-Exception _wrongLength(String functionName, List<dynamic> results) =>
+Exception _wrongLength(String functionName, List results) =>
     FhirPathEvaluationException(
         'The function $functionName can only work on a collection'
         ' with 0 or 1 item.',
         collection: results);
 
-Exception _wrongArgLength(String functionName, List<dynamic> value) =>
+Exception _wrongArgLength(String functionName, List value) =>
     FhirPathEvaluationException(
         'The function $functionName must have an argument that '
         'evaluates to 0 or 1 item.',
         operation: functionName,
         arguments: value);
 
-Exception _wrongTypes(
-        String functionName, List<dynamic> results, dynamic value) =>
+Exception _wrongTypes(String functionName, List results, dynamic value) =>
     FhirPathEvaluationException(
         'The function $functionName cannot work with the types '
         'passed.',
         collection: results,
         arguments: value);
 
-Exception _requiresString(String function, List<dynamic> results) =>
+Exception _requiresString(String function, List results) =>
     FhirPathEvaluationException(
       'The function $function was not applied to a string.',
       operation: function,
       collection: results,
     );
 
-Exception _requiresList(String function, List<dynamic> results) =>
+Exception _requiresList(String function, List results) =>
     FhirPathEvaluationException(
       'The function $function only accepts lists'
       ' with 0 or 1 item, this was the list passed: $results',
@@ -1378,7 +1337,7 @@ Exception _requiresList(String function, List<dynamic> results) =>
       collection: results,
     );
 
-bool _isAllTypes(List<dynamic> results) =>
+bool _isAllTypes(List results) =>
     results.first is! bool &&
     results.first is! num &&
     results.first is! String &&
@@ -1388,11 +1347,11 @@ bool _isAllTypes(List<dynamic> results) =>
     results.first is! DateTime &&
     results.first is! FhirPathQuantity;
 
-Exception _conversionException(String function, List<dynamic> results) =>
+Exception _conversionException(String function, List results) =>
     FhirPathEvaluationException(
         'The function $function only accepts lists with 0 or 1 items.',
         operation: function,
         collection: results);
 
-bool _isNotAcceptedType(List<dynamic> results) =>
+bool _isNotAcceptedType(List results) =>
     results.first is! bool && results.first is! num && results.first is! String;

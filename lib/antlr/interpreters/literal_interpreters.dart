@@ -2,15 +2,14 @@
 
 part of '../fhir_path_dart_visitor.dart';
 
-List<dynamic>? _$visitNullLiteral(
+List? _$visitNullLiteral(
   NullLiteralContext ctx,
   FhirPathDartVisitor visitor,
 ) {
   if (ctx.text == '{}') {
     visitor.context = <dynamic>[];
   } else if (ctx.childCount > 0) {
-    final FhirPathDartVisitor newVisitor =
-        visitor.copyWith(context: <dynamic>[]);
+    final newVisitor = visitor.copyWith(context: []);
     return newVisitor.visitChildren(ctx);
   } else {
     visitor.context = <dynamic>[];
@@ -18,7 +17,7 @@ List<dynamic>? _$visitNullLiteral(
   return visitor.context;
 }
 
-List<dynamic>? _$visitBooleanLiteral(
+List? _$visitBooleanLiteral(
   BooleanLiteralContext ctx,
   FhirPathDartVisitor visitor,
 ) {
@@ -26,20 +25,20 @@ List<dynamic>? _$visitBooleanLiteral(
   return visitor.context;
 }
 
-List<dynamic>? _$visitNumberLiteral(
+List? _$visitNumberLiteral(
   NumberLiteralContext ctx,
   FhirPathDartVisitor visitor,
 ) {
-  final num? value = num.tryParse(ctx.text);
+  final value = num.tryParse(ctx.text);
   visitor.context = value == null ? <dynamic>[] : <dynamic>[value];
   return visitor.context;
 }
 
-List<dynamic>? _$visitStringLiteral(
+List? _$visitStringLiteral(
   StringLiteralContext ctx,
   FhirPathDartVisitor visitor,
 ) {
-  final String newString = ctx.text.substring(1, ctx.text.length - 1);
+  final newString = ctx.text.substring(1, ctx.text.length - 1);
   if (newString != '' &&
       newString[0] == r'\' &&
       !escapeSequences.contains(newString)) {
@@ -54,15 +53,15 @@ List<dynamic>? _$visitStringLiteral(
       return '';
     } else {
       final int hexCode = int.parse(unicodeMatch.group(1)!, radix: 16);
-      final String unicode = String.fromCharCode(hexCode);
+      final unicode = String.fromCharCode(hexCode);
       return unicode;
     }
   }) as String;
-  visitor.context = <dynamic>[newStr];
+  visitor.context = [newStr];
   return visitor.context;
 }
 
-List<dynamic>? _$visitDateLiteral(
+List? _$visitDateLiteral(
   DateLiteralContext ctx,
   FhirPathDartVisitor visitor,
 ) {
@@ -72,17 +71,17 @@ List<dynamic>? _$visitDateLiteral(
   return visitor.context;
 }
 
-List<dynamic>? _$visitDateTimeLiteral(
+List? _$visitDateTimeLiteral(
   DateTimeLiteralContext ctx,
   FhirPathDartVisitor visitor,
 ) {
-  String dateText = ctx.text.startsWith('@') ? ctx.text.substring(1) : ctx.text;
+  var dateText = ctx.text.startsWith('@') ? ctx.text.substring(1) : ctx.text;
   dateText = dateText.endsWith('T') ? dateText.replaceAll('T', '') : dateText;
   visitor.context = <dynamic>[FhirDateTime(dateText)];
   return visitor.context;
 }
 
-List<dynamic>? _$visitTimeLiteral(
+List? _$visitTimeLiteral(
   TimeLiteralContext ctx,
   FhirPathDartVisitor visitor,
 ) {
@@ -92,14 +91,14 @@ List<dynamic>? _$visitTimeLiteral(
   return visitor.context;
 }
 
-List<dynamic>? _$visitLiteralTerm(
+List? _$visitLiteralTerm(
   LiteralTermContext ctx,
   FhirPathDartVisitor visitor,
 ) {
   return visitor.visitChildren(ctx);
 }
 
-const List<String> escapeSequences = <String>[
+const escapeSequences = [
   r"\'",
   r'\"',
   r'\`',
@@ -111,14 +110,14 @@ const List<String> escapeSequences = <String>[
   r'\uXXXX',
 ];
 
-List<dynamic>? _$visitExternalConstant(
+List? _$visitExternalConstant(
   ExternalConstantContext ctx,
   FhirPathDartVisitor visitor,
 ) {
   visitor.identifierOnly = true;
-  final dynamic name = visitor.copyWith().visit(ctx.getChild(1)!)?.first;
+  final name = visitor.copyWith().visit(ctx.getChild(1)!)?.first;
   visitor.identifierOnly = false;
-  final String variableName = '%$name';
+  final variableName = '%$name';
 
   if (variableName == '%sct') {
     visitor.context = <dynamic>['http://snomed.info/sct'];
@@ -127,15 +126,15 @@ List<dynamic>? _$visitExternalConstant(
   } else if (variableName == '%ucum') {
     visitor.context = <dynamic>['http://unitsofmeasure.org'];
   } else if (variableName.startsWith('%vs-')) {
-    final String valueSet = variableName.substring(4);
+    final valueSet = variableName.substring(4);
     visitor.context = <dynamic>['http://hl7.org/fhir/ValueSet/$valueSet'];
   } else if (variableName.startsWith('%ext-')) {
-    final String extension = variableName.substring(5);
+    final extension = variableName.substring(5);
     visitor.context = <dynamic>[
       'http://hl7.org/fhir/StructureDefinition/$extension'
     ];
   } else {
-    final dynamic passedValue = visitor.environment[variableName];
+    final passedValue = visitor.environment[variableName];
     if (passedValue == null) {
       throw FhirPathEvaluationException(
           'Variable $variableName does not exist.',
@@ -146,7 +145,7 @@ List<dynamic>? _$visitExternalConstant(
           : <dynamic>[passedValue];
     } else {
       try {
-        final dynamic result = passedValue();
+        final result = passedValue();
         visitor.context =
             result is List ? List<dynamic>.from(result) : <dynamic>[result];
       } catch (ex) {

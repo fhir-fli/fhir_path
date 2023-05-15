@@ -1,6 +1,6 @@
 part of '../fhir_path_dart_visitor.dart';
 
-List<dynamic>? _$visitParenthesizedTerm(
+List? _$visitParenthesizedTerm(
   ParenthesizedTermContext ctx,
   FhirPathDartVisitor visitor,
 ) {
@@ -14,32 +14,32 @@ List<dynamic>? _$visitParenthesizedTerm(
   return visitor.context;
 }
 
-List<dynamic>? _$visitThisInvocation(
+List? _$visitThisInvocation(
   ThisInvocationContext ctx,
   FhirPathDartVisitor visitor,
 ) {
   return visitor.context;
 }
 
-List<dynamic>? _$visitTotalInvocation(
+List? _$visitTotalInvocation(
   TotalInvocationContext ctx,
   FhirPathDartVisitor visitor,
 ) {
-  visitor.context = visitor.environment[r'%$total'] as List<dynamic>;
-  return visitor.environment[r'%$total'] as List<dynamic>;
+  visitor.context = visitor.environment[r'%$total'] as List;
+  return visitor.environment[r'%$total'] as List;
 }
 
-List<dynamic>? _$visitParamList(
+List? _$visitParamList(
   ParamListContext ctx,
   FhirPathDartVisitor visitor,
 ) {
-  final int? commaIndex = ctx.children?.indexWhere((ParseTree element) =>
-      element is TerminalNodeImpl && element.text == ',');
+  final commaIndex = ctx.children?.indexWhere(
+      (element) => element is TerminalNodeImpl && element.text == ',');
   if (commaIndex != null && commaIndex != -1) {
-    final List<dynamic> tempContext = <dynamic>[];
-    ctx.children?.forEach((ParseTree element) {
+    final tempContext = [];
+    ctx.children?.forEach((element) {
       if (element is! TerminalNodeImpl && element.text != ',') {
-        tempContext.addAll(visitor.copyWith().visit(element) ?? <dynamic>[]);
+        tempContext.addAll(visitor.copyWith().visit(element) ?? []);
       }
     });
     visitor.context = tempContext;
@@ -49,15 +49,15 @@ List<dynamic>? _$visitParamList(
   }
 }
 
-List<dynamic>? _$visitIndexerExpression(
+List? _$visitIndexerExpression(
   IndexerExpressionContext ctx,
   FhirPathDartVisitor visitor,
 ) {
   if (ctx.expressions().length != 2 && ctx.children?.length != 4) {
     throw FhirPathException('IndexerExpression passed incorrect context');
   }
-  final List<dynamic>? results = visitor.copyWith().visit(ctx.getChild(0)!);
-  final List<dynamic>? value = visitor.copyWith().visit(ctx.getChild(2)!);
+  final List? results = visitor.copyWith().visit(ctx.getChild(0)!);
+  final List? value = visitor.copyWith().visit(ctx.getChild(2)!);
 
   visitor.context = results == null ||
           results.isEmpty ||
@@ -67,17 +67,17 @@ List<dynamic>? _$visitIndexerExpression(
           (value.first is int &&
               ((value.first as int < 0) ||
                   (value.first as int > results.length - 1)))
-      ? <dynamic>[]
-      : <dynamic>[results[value.first as int]];
+      ? []
+      : [results[value.first as int]];
   return visitor.context;
 }
 
-List<dynamic>? _$visitAndExpression(
+List? _$visitAndExpression(
   AndExpressionContext ctx,
   FhirPathDartVisitor visitor,
 ) {
   if (ctx.childCount != 3) {
-    throw _wrongArgLength('and', ctx.children ?? <dynamic>[]);
+    throw _wrongArgLength('and', ctx.children ?? []);
   }
   final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
   final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
@@ -92,7 +92,7 @@ List<dynamic>? _$visitAndExpression(
               ? true
               : value == 0
                   ? false
-                  : <String>[
+                  : [
                       'true',
                       't',
                       'yes',
@@ -101,50 +101,42 @@ List<dynamic>? _$visitAndExpression(
                       '1.0',
                     ].contains(lhs.toString().toLowerCase())
                       ? true
-                      : <String>['false', 'f', 'no', 'n', '0', '0.0']
+                      : ['false', 'f', 'no', 'n', '0', '0.0']
                               .contains(lhs.toString().toLowerCase())
                           ? false
                           : null;
 
-  final bool? lhsValue =
-      lhs == null || lhs.isEmpty ? null : convertValue(lhs.first);
-  final bool? rhsValue =
-      rhs == null || rhs.isEmpty ? null : convertValue(rhs.first);
+  final lhsValue = lhs == null || lhs.isEmpty ? null : convertValue(lhs.first);
+  final rhsValue = rhs == null || rhs.isEmpty ? null : convertValue(rhs.first);
   if (lhsValue == null) {
     if (rhsValue == null || rhsValue) {
-      visitor.context = <dynamic>[];
+      visitor.context = [];
     } else {
-      visitor.context = <dynamic>[false];
+      visitor.context = [false];
     }
   } else if (lhsValue) {
     if (rhsValue == null) {
-      visitor.context = <dynamic>[];
+      visitor.context = [];
     } else {
-      visitor.context = <dynamic>[rhsValue];
+      visitor.context = [rhsValue];
     }
   } else {
-    visitor.context = <dynamic>[false];
+    visitor.context = [false];
   }
 
   return visitor.context;
 }
 
-List<dynamic>? _$visitOrExpression(
+List? _$visitOrExpression(
   OrExpressionContext ctx,
   FhirPathDartVisitor visitor,
 ) {
   if (ctx.childCount != 3) {
-    throw _wrongArgLength(ctx.text, ctx.children ?? <dynamic>[]);
+    throw _wrongArgLength(ctx.text, ctx.children ?? []);
   }
-<<<<<<< HEAD
   final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
   final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
   final operator = ctx.getChild(1)!.text;
-=======
-  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
-  final String? operator = ctx.getChild(1)!.text;
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   bool? convertValue(dynamic value) => value is bool
       ? value
@@ -156,7 +148,7 @@ List<dynamic>? _$visitOrExpression(
               ? true
               : value == 0
                   ? false
-                  : <String>[
+                  : [
                       'true',
                       't',
                       'yes',
@@ -165,50 +157,48 @@ List<dynamic>? _$visitOrExpression(
                       '1.0',
                     ].contains(lhs.toString().toLowerCase())
                       ? true
-                      : <String>['false', 'f', 'no', 'n', '0', '0.0']
+                      : ['false', 'f', 'no', 'n', '0', '0.0']
                               .contains(lhs.toString().toLowerCase())
                           ? false
                           : null;
 
-  final bool? lhsValue =
-      lhs == null || lhs.isEmpty ? null : convertValue(lhs.first);
-  final bool? rhsValue =
-      rhs == null || rhs.isEmpty ? null : convertValue(rhs.first);
+  final lhsValue = lhs == null || lhs.isEmpty ? null : convertValue(lhs.first);
+  final rhsValue = rhs == null || rhs.isEmpty ? null : convertValue(rhs.first);
   if (operator == 'or') {
     if (lhsValue == null) {
       if (rhsValue == null || !rhsValue) {
-        visitor.context = <dynamic>[];
+        visitor.context = [];
       } else {
-        visitor.context = <dynamic>[true];
+        visitor.context = [true];
       }
     } else if (lhsValue) {
-      visitor.context = <dynamic>[true];
+      visitor.context = [true];
     } else {
       if (rhsValue == null) {
-        visitor.context = <dynamic>[];
+        visitor.context = [];
       } else {
-        visitor.context = <dynamic>[rhsValue];
+        visitor.context = [rhsValue];
       }
     }
   } else if (operator == 'xor') {
     if (lhsValue == null || rhsValue == null) {
-      visitor.context = <dynamic>[];
+      visitor.context = [];
     } else if ((lhsValue && !rhsValue) || (!lhsValue && rhsValue)) {
-      visitor.context = <dynamic>[true];
+      visitor.context = [true];
     } else {
-      visitor.context = <dynamic>[false];
+      visitor.context = [false];
     }
   }
 
   return visitor.context;
 }
 
-List<dynamic>? _$visitImpliesExpression(
+List? _$visitImpliesExpression(
   ImpliesExpressionContext ctx,
   FhirPathDartVisitor visitor,
 ) {
   if (ctx.childCount != 3) {
-    throw _wrongArgLength(ctx.text, ctx.children ?? <dynamic>[]);
+    throw _wrongArgLength(ctx.text, ctx.children ?? []);
   }
   final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
   final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
@@ -223,7 +213,7 @@ List<dynamic>? _$visitImpliesExpression(
               ? true
               : value == 0
                   ? false
-                  : <String>[
+                  : [
                       'true',
                       't',
                       'yes',
@@ -232,41 +222,39 @@ List<dynamic>? _$visitImpliesExpression(
                       '1.0',
                     ].contains(lhs.toString().toLowerCase())
                       ? true
-                      : <String>['false', 'f', 'no', 'n', '0', '0.0']
+                      : ['false', 'f', 'no', 'n', '0', '0.0']
                               .contains(lhs.toString().toLowerCase())
                           ? false
                           : null;
 
-  final bool? lhsValue =
-      lhs == null || lhs.isEmpty ? null : convertValue(lhs.first);
-  final bool? rhsValue =
-      rhs == null || rhs.isEmpty ? null : convertValue(rhs.first);
+  final lhsValue = lhs == null || lhs.isEmpty ? null : convertValue(lhs.first);
+  final rhsValue = rhs == null || rhs.isEmpty ? null : convertValue(rhs.first);
 
   if (lhsValue == null) {
     if (rhsValue == null || !rhsValue) {
-      visitor.context = <dynamic>[];
+      visitor.context = [];
     } else {
-      visitor.context = <dynamic>[true];
+      visitor.context = [true];
     }
   } else if (lhsValue) {
-    visitor.context = rhsValue == null ? <dynamic>[] : <dynamic>[rhsValue];
+    visitor.context = rhsValue == null ? [] : [rhsValue];
   } else {
-    visitor.context = <dynamic>[true];
+    visitor.context = [true];
   }
 
   return visitor.context;
 }
 
-List<dynamic>? _$visitUnionExpression(
+List? _$visitUnionExpression(
   UnionExpressionContext ctx,
   FhirPathDartVisitor visitor,
 ) {
-  final List<dynamic> args = <dynamic>[
-    ...visitor.copyWith().visit(ctx.getChild(0)!)?.toList() ?? <dynamic>[],
-    ...visitor.copyWith().visit(ctx.getChild(2)!)?.toList() ?? <dynamic>[]
+  final args = [
+    ...visitor.copyWith().visit(ctx.getChild(0)!)?.toList() ?? [],
+    ...visitor.copyWith().visit(ctx.getChild(2)!)?.toList() ?? []
   ];
   visitor.context = <dynamic>[];
-  for (final dynamic value in args) {
+  for (final value in args) {
     if (notFoundInList(visitor.context, value)) {
       visitor.context.add(value);
     }
@@ -274,48 +262,39 @@ List<dynamic>? _$visitUnionExpression(
   return visitor.context;
 }
 
-List<dynamic>? _$visitMembershipExpression(
+List? _$visitMembershipExpression(
   MembershipExpressionContext ctx,
   FhirPathDartVisitor visitor,
 ) {
   if (ctx.childCount != 3) {
-    throw _wrongArgLength(ctx.text, ctx.children ?? <dynamic>[]);
+    throw _wrongArgLength(ctx.text, ctx.children ?? []);
   }
-<<<<<<< HEAD
   final lhs = visitor.copyWith().visit(ctx.getChild(0)!);
   final rhs = visitor.copyWith().visit(ctx.getChild(2)!);
   final operator = ctx.getChild(1)!.text;
   final objectList = operator == 'in' ? lhs : rhs;
-=======
-  final List<dynamic>? lhs = visitor.copyWith().visit(ctx.getChild(0)!);
-  final List<dynamic>? rhs = visitor.copyWith().visit(ctx.getChild(2)!);
-  final String? operator = ctx.getChild(1)!.text;
-  final List<dynamic>? objectList = operator == 'in' ? lhs : rhs;
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
   if (objectList?.isEmpty ?? true) {
-    visitor.context = <dynamic>[];
+    visitor.context = [];
   } else {
     if (objectList!.length != 1) {
       throw FhirPathException(
           'IndexerExpression passed a list with more than one member');
     }
-    final dynamic object = objectList.first;
-    final List<dynamic>? collection = operator == 'in' ? rhs : lhs;
+    final object = objectList.first;
+    final collection = operator == 'in' ? rhs : lhs;
     if (collection?.isEmpty ?? true) {
-      visitor.context = <dynamic>[false];
+      visitor.context = [false];
     } else {
-      visitor.context = <dynamic>[
-        collection!.indexWhere((dynamic element) {
+      visitor.context = [
+        collection!.indexWhere((element) {
               if (object is FhirDateTime ||
                   object is FhirDate ||
                   element is FhirDateTime ||
                   element is FhirDate) {
                 /// As long as one is, we convert them both to strings then back
                 /// to DateTimes
-                final FhirDateTime lhsDateTime =
-                    FhirDateTime(object.toString());
-                final FhirDateTime rhsDateTime =
-                    FhirDateTime(element.toString());
+                final lhsDateTime = FhirDateTime(object.toString());
+                final rhsDateTime = FhirDateTime(element.toString());
 
                 /// As long as they are both valid we try and compare them
                 if (lhsDateTime.isValid && rhsDateTime.isValid) {

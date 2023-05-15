@@ -12,7 +12,6 @@ class SingleParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => results.length == 1
       ? results
       : results.isEmpty
@@ -22,18 +21,6 @@ class SingleParser extends FhirPathParser {
               'item if evaluated using the .single() function',
               operation: '.single()',
               collection: results);
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      results.length == 1
-          ? results
-          : results.isEmpty
-              ? <dynamic>[]
-              : throw FhirPathEvaluationException(
-                  'The List $results is only allowed to contain one '
-                  'item if evaluated using the .single() function',
-                  operation: '.single()',
-                  collection: results);
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -59,13 +46,8 @@ class FirstParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) =>
       results.isEmpty ? [] : [results.first];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      results.isEmpty ? <dynamic>[] : <dynamic>[results.first];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -91,13 +73,8 @@ class LastParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) =>
       results.isEmpty ? [] : [results.last];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      results.isEmpty ? <dynamic>[] : <dynamic>[results.last];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -125,7 +102,7 @@ class TailParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     if (results.length < 2) {
-      return <dynamic>[];
+      return [];
     } else {
       results.removeAt(0);
       return results;
@@ -157,13 +134,8 @@ class FpSkipParser extends FunctionParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final executedValue = value.execute(results.toList(), passed);
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> executedValue = value.execute(results.toList(), passed);
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
     return executedValue.length != 1 || executedValue.first is! int
         ? throw FhirPathEvaluationException(
             'The argument passed to the .skip() function was not valid.',
@@ -178,7 +150,7 @@ class FpSkipParser extends FunctionParser {
                 ? results
                 : results.isEmpty ||
                         (executedValue.first as int) >= results.length
-                    ? <dynamic>[]
+                    ? []
                     : results.sublist(executedValue.first as int);
   }
 
@@ -210,7 +182,6 @@ class TakeParser extends FunctionParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final executedValue = value.execute(results.toList(), passed);
     final newResults = value.length != 1 || value.first is! IntegerParser
@@ -219,26 +190,15 @@ class TakeParser extends FunctionParser {
             operation: '.take()',
             arguments: value)
         : executedValue.first is! int
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> executedValue = value.execute(results.toList(), passed);
-    final List<dynamic> newResults =
-        value.length != 1 || value.first is! IntegerParser
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
             ? throw FhirPathEvaluationException(
-                'The argument passed to the .take() function was not valid:',
+                'The value for .take() was not a number: $value',
                 operation: '.take()',
                 arguments: value)
-            : executedValue.first is! int
-                ? throw FhirPathEvaluationException(
-                    'The value for .take() was not a number: $value',
-                    operation: '.take()',
-                    arguments: value)
-                : (executedValue.first as int) <= 0 || results.isEmpty
-                    ? <dynamic>[]
-                    : (executedValue.first as int) >= results.length
-                        ? results
-                        : results.sublist(0, executedValue.first as int);
+            : (executedValue.first as int) <= 0 || results.isEmpty
+                ? []
+                : (executedValue.first as int) >= results.length
+                    ? results
+                    : results.sublist(0, executedValue.first as int);
     return newResults;
   }
 
@@ -270,20 +230,14 @@ class IntersectParser extends ValueParser<ParserList> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final other = value.execute(results.toList(), passed);
     final inBag = [...results];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> other = value.execute(results.toList(), passed);
-    final List<dynamic> inBag = <dynamic>[...results];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
     // Eliminate duplicates in input
-    final List<dynamic> outBag = <dynamic>[];
-    for (final dynamic item in inBag) {
-      if (outBag.indexWhere((dynamic otherItem) =>
+    final outBag = [];
+    for (final item in inBag) {
+      if (outBag.indexWhere((otherItem) =>
               const DeepCollectionEquality().equals(item, otherItem)) ==
           -1) {
         outBag.add(item);
@@ -291,9 +245,9 @@ class IntersectParser extends ValueParser<ParserList> {
     }
 
     // Intersect
-    outBag.removeWhere((dynamic e) =>
-        other.indexWhere((dynamic element) =>
-            const DeepCollectionEquality().equals(e, element)) ==
+    outBag.removeWhere((e) =>
+        other.indexWhere(
+            (element) => const DeepCollectionEquality().equals(e, element)) ==
         -1);
 
     return outBag;
@@ -327,19 +281,11 @@ class ExcludeParser extends ValueParser<ParserList> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final executedValue = value.execute(results.toList(), passed);
     results.removeWhere((e) =>
         executedValue.indexWhere(
             (element) => const DeepCollectionEquality().equals(e, element)) !=
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> executedValue = value.execute(results.toList(), passed);
-    results.removeWhere((dynamic e) =>
-        executedValue.indexWhere((dynamic element) =>
-            const DeepCollectionEquality().equals(e, element)) !=
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
         -1);
     return results;
   }

@@ -14,15 +14,8 @@ class BracketsIndexParser extends ValueParser<int> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) =>
       results.isEmpty || value > results.length - 1 ? [] : [results[value]];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      results.isEmpty || value > results.length - 1
-          ? <dynamic>[]
-          : <dynamic>[results[value]];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -58,13 +51,8 @@ class IndexParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) =>
       [IterationContext.current(passed).indexValue];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      <dynamic>[IterationContext.current(passed).indexValue];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -86,20 +74,20 @@ class IndexParser extends FhirPathParser {
 
 class IterationContext {
   dynamic thisValue;
-  List<dynamic> totalValue = <dynamic>[];
+  List<dynamic> totalValue = [];
 
   int indexValue = -1;
 
-  static const String _iterationKey = r'$iteration';
+  static const _iterationKey = r'$iteration';
 
   static List<dynamic> withIterationContext(
       List<dynamic> Function(IterationContext) iteratedFunction,
       Map<String, dynamic> passed) {
-    final dynamic topIterationContext = passed[_iterationKey];
-    final IterationContext thisIterationContext = IterationContext();
+    final topIterationContext = passed[_iterationKey];
+    final thisIterationContext = IterationContext();
     passed[_iterationKey] = thisIterationContext;
 
-    final List<dynamic> result = iteratedFunction(thisIterationContext);
+    final result = iteratedFunction(thisIterationContext);
 
     passed[_iterationKey] = topIterationContext;
 
@@ -107,7 +95,7 @@ class IterationContext {
   }
 
   static IterationContext current(Map<String, dynamic> passed) {
-    final dynamic topRepeatContext = passed[_iterationKey];
+    final topRepeatContext = passed[_iterationKey];
     if (topRepeatContext == null) {
       throw FhirPathEvaluationException(
           r'No context for $this, $total, or $index is available.');
@@ -132,13 +120,8 @@ class ThisParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) =>
       [IterationContext.current(passed).thisValue];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      <dynamic>[IterationContext.current(passed).thisValue];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -205,17 +188,10 @@ class AggregateParser extends ValueParser<ParserList> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final finalTotal =
         IterationContext.withIterationContext((iterationContext) {
       List<dynamic> currentTotal = [];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> finalTotal = IterationContext.withIterationContext(
-        (IterationContext iterationContext) {
-      List<dynamic> currentTotal = <dynamic>[];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
       late FhirPathParser expression;
       late dynamic initialValue;
@@ -225,15 +201,15 @@ class AggregateParser extends ValueParser<ParserList> {
             .execute(results.toList(), passed);
         expression = (value.value.first as CommaParser).before;
       } else {
-        initialValue = <dynamic>[];
+        initialValue = [];
         expression = value;
       }
 
-      iterationContext.totalValue = initialValue as List<dynamic>;
-      results.forEachIndexed((int i, dynamic r) {
+      iterationContext.totalValue = initialValue as List;
+      results.forEachIndexed((i, r) {
         iterationContext.indexValue = i;
         iterationContext.thisValue = r;
-        iterationContext.totalValue = expression.execute(<dynamic>[r], passed);
+        iterationContext.totalValue = expression.execute([r], passed);
         currentTotal = iterationContext.totalValue;
       });
 
@@ -276,12 +252,7 @@ class EmptySetParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => [];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      <dynamic>[];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in

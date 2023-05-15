@@ -1,4 +1,4 @@
-const Set<String> FhirDatatypes = <String>{
+const FhirDatatypes = {
   'Base64Binary',
   'Boolean',
   'Code',

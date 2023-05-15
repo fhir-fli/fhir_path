@@ -1,4 +1,4 @@
-// ignore_for_file: unnecessary_this, avoid_dynamic_calls, sort_constructors_first
+// ignore_for_file: unnecessary_this, avoid_dynamic_calls
 
 /// Something went wrong while parsing or executing a FHIRPath expression.
 class FhirPathException implements Exception {
@@ -30,7 +30,7 @@ class FhirPathException implements Exception {
   final Object? context;
 
   /// Environment which was present
-  final Map<dynamic, dynamic>? environment;
+  final Map? environment;
 
   FhirPathException(this.message,
       {this.pathExpression,
@@ -45,7 +45,7 @@ class FhirPathException implements Exception {
 
   FhirPathException copyWith({
     Object? context,
-    Map<dynamic, dynamic>? variables,
+    Map? variables,
   }) {
     return FhirPathException(
       message,
@@ -120,23 +120,35 @@ class FhirPathException implements Exception {
 /// The overall syntax of the expression is incorrect.
 class FhirPathInvalidExpressionException extends FhirPathException {
   FhirPathInvalidExpressionException(
-    super.message, {
-    super.pathExpression,
-    super.offset,
-    super.token,
-    super.cause,
-  });
+    String message, {
+    String? pathExpression,
+    int? offset,
+    String? token,
+    Object? cause,
+  }) : super(
+          message,
+          pathExpression: pathExpression,
+          offset: offset,
+          token: token,
+          cause: cause,
+        );
 }
 
 /// The FHIRPath expression is using elements that have been deprecated.
 class FhirPathDeprecatedExpressionException extends FhirPathException {
   FhirPathDeprecatedExpressionException(
-    super.message, {
-    super.pathExpression,
-    super.offset,
-    super.token,
-    super.cause,
-  });
+    String message, {
+    String? pathExpression,
+    int? offset,
+    String? token,
+    Object? cause,
+  }) : super(
+          message,
+          pathExpression: pathExpression,
+          offset: offset,
+          token: token,
+          cause: cause,
+        );
 }
 
 /// The evaluation of the expression failed with the given parameters.

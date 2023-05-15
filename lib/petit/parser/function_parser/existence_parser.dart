@@ -13,13 +13,8 @@ class EmptyParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) =>
       results.isEmpty ? [true] : [false];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      results.isEmpty ? <dynamic>[true] : <dynamic>[false];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -49,13 +44,13 @@ class HasValueParser extends FhirPathParser {
   List execute(List results, Map<String, dynamic> passed) {
     // Returns true if the input collection contains a single value which is a FHIR primitive,...
     if (results.length != 1) {
-      return <dynamic>[false];
+      return [false];
     }
 
-    final dynamic element = results.first;
+    final element = results.first;
 
     if (element == null) {
-      return <dynamic>[false];
+      return [false];
     }
 
     // ...and it has a primitive value
@@ -63,13 +58,13 @@ class HasValueParser extends FhirPathParser {
 
     if (element is Map<String, dynamic>) {
       // element is a Map, most likely an answer. Introspect further...
-      return <dynamic>[
-        element.entries.any((MapEntry<String, dynamic> mapEntry) =>
+      return [
+        element.entries.any((mapEntry) =>
             mapEntry.key.startsWith('value') && mapEntry.value != null)
       ];
     } else {
       // element is a Dart primitive
-      return <dynamic>[true];
+      return [true];
     }
   }
 
@@ -108,23 +103,14 @@ class ExistsParser extends FunctionParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final returnList =
         IterationContext.withIterationContext((iterationContext) {
       final iterationResult = [];
       results.forEachIndexed((i, element) {
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> returnList = IterationContext.withIterationContext(
-        (IterationContext iterationContext) {
-      final List<dynamic> iterationResult = <dynamic>[];
-      results.forEachIndexed((int i, dynamic element) {
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
         iterationContext.indexValue = i;
         iterationContext.thisValue = element;
-        final List<dynamic> newResult =
-            value.execute(<dynamic>[element], passed);
+        final newResult = value.execute([element], passed);
         if (newResult.isNotEmpty) {
           if (!(newResult.length == 1 && newResult.first == false)) {
             iterationResult.add(element);
@@ -134,7 +120,7 @@ class ExistsParser extends FunctionParser {
       return iterationResult;
     }, passed);
 
-    return <dynamic>[returnList.isNotEmpty];
+    return [returnList.isNotEmpty];
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -167,15 +153,14 @@ class AllParser extends ValueParser<ParserList> {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     if (results.isEmpty) {
-      return <dynamic>[true];
+      return [true];
     }
-    return IterationContext.withIterationContext(
-        (IterationContext iterationContext) {
+    return IterationContext.withIterationContext((iterationContext) {
       bool allResult = true;
-      results.forEachIndexed((int i, dynamic r) {
+      results.forEachIndexed((i, r) {
         iterationContext.thisValue = r;
         iterationContext.indexValue = i;
-        final List<dynamic> executedValue = value.execute(<dynamic>[r], passed);
+        final executedValue = value.execute([r], passed);
         if (SingletonEvaluation.toBool(executedValue,
                 name: 'expression in all()', operation: 'all') !=
             true) {
@@ -183,7 +168,7 @@ class AllParser extends ValueParser<ParserList> {
           return;
         }
       });
-      return <dynamic>[allResult];
+      return [allResult];
     }, passed);
   }
 
@@ -222,10 +207,10 @@ class AllTrueParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     if (results.isEmpty) {
-      return <dynamic>[true];
+      return [true];
     }
-    results.removeWhere((dynamic element) => element == true);
-    return <dynamic>[results.isEmpty];
+    results.removeWhere((element) => element == true);
+    return [results.isEmpty];
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -256,10 +241,10 @@ class AnyTrueParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     if (results.isEmpty) {
-      return <dynamic>[false];
+      return [false];
     }
-    results.retainWhere((dynamic element) => element == true);
-    return <dynamic>[results.isNotEmpty];
+    results.retainWhere((element) => element == true);
+    return [results.isNotEmpty];
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -290,10 +275,10 @@ class AllFalseParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     if (results.isEmpty) {
-      return <dynamic>[true];
+      return [true];
     }
-    results.removeWhere((dynamic element) => element == false);
-    return <dynamic>[results.isEmpty];
+    results.removeWhere((element) => element == false);
+    return [results.isEmpty];
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -324,10 +309,10 @@ class AnyFalseParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     if (results.isEmpty) {
-      return <dynamic>[false];
+      return [false];
     }
-    results.retainWhere((dynamic element) => element == false);
-    return <dynamic>[results.isNotEmpty];
+    results.retainWhere((element) => element == false);
+    return [results.isNotEmpty];
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -357,16 +342,15 @@ class SubsetOfParser extends ValueParser<ParserList> {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     if (results.isEmpty) {
-      return <dynamic>[true];
+      return [true];
     } else {
-      final List<dynamic> executedValue =
-          value.execute(results.toList(), passed);
-      for (final dynamic r in results) {
+      final executedValue = value.execute(results.toList(), passed);
+      for (final r in results) {
         if (notFoundInList(executedValue, r)) {
-          return <dynamic>[false];
+          return [false];
         }
       }
-      return <dynamic>[true];
+      return [true];
     }
   }
 
@@ -400,16 +384,15 @@ class SupersetOfParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     if (results.isEmpty) {
-      return <dynamic>[false];
+      return [false];
     } else {
-      final List<dynamic> executedValue =
-          value.execute(results.toList(), passed);
-      for (final dynamic v in executedValue) {
+      final executedValue = value.execute(results.toList(), passed);
+      for (final v in executedValue) {
         if (notFoundInList(results, v)) {
-          return <dynamic>[false];
+          return [false];
         }
       }
-      return <dynamic>[true];
+      return [true];
     }
   }
 
@@ -440,12 +423,7 @@ class CountParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) => [results.length];
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) =>
-      <dynamic>[results.length];
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -471,15 +449,9 @@ class DistinctParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final resultsList = [];
     for (final r in results) {
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> resultsList = <dynamic>[];
-    for (final dynamic r in results) {
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
       if (notFoundInList(resultsList, r)) {
         resultsList.add(r);
       }
@@ -511,20 +483,14 @@ class IsDistinctParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-<<<<<<< HEAD
   List execute(List results, Map<String, dynamic> passed) {
     final resultsList = [];
     for (final r in results) {
-=======
-  List<dynamic> execute(List<dynamic> results, Map<String, dynamic> passed) {
-    final List<dynamic> resultsList = <dynamic>[];
-    for (final dynamic r in results) {
->>>>>>> 2004e1db77094e271c85a3f347db9f8dbf2ffeb7
       if (notFoundInList(resultsList, r)) {
         resultsList.add(r);
       }
     }
-    return <dynamic>[resultsList.length == results.length];
+    return [resultsList.length == results.length];
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL

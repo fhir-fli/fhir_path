@@ -27,9 +27,9 @@ final Parser<DivStringParser> divStringLexer =
 /// identifies divMods
 final Parser<ModParser> modLexer = string(' mod ').map((_) => ModParser());
 
-final Parser<PlusParser> plusLexer = char('+').map((_) => PlusParser());
+final plusLexer = char('+').map((_) => PlusParser());
 
-final Parser<MinusParser> minusLexer = char('-').map((_) => MinusParser());
+final minusLexer = char('-').map((_) => MinusParser());
 
 /// identifies string concatenation ampersand (&)
 final Parser<StringConcatenationParser> stringConcatenationLexer =

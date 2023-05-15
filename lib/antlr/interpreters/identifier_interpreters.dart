@@ -2,7 +2,7 @@
 
 part of '../fhir_path_dart_visitor.dart';
 
-List<dynamic>? _$visitIdentifier(
+List? _$visitIdentifier(
   IdentifierContext ctx,
   FhirPathDartVisitor visitor,
 ) {
@@ -14,19 +14,19 @@ List<dynamic>? _$visitIdentifier(
   }
 
   if (visitor.identifierOnly) {
-    visitor.context = <dynamic>[identifierName];
+    visitor.context = [identifierName];
   } else {
-    final List<dynamic> results = (ctx.childCount == 0 ||
+    final results = (ctx.childCount == 0 ||
             (ctx.childCount == 1 &&
                 (ctx.getChild(0).runtimeType == TerminalNodeImpl ||
                     ctx.getChild(0).runtimeType == ErrorNodeImpl)))
         ? visitor.context
         : visitor.copyWith().visitChildren(ctx) ?? <dynamic>[];
-    final List<dynamic> finalResults = <dynamic>[];
-    final List<dynamic> finalPrimitiveExtensions =
-        List<dynamic>.filled(results.length, null);
+    final finalResults = [];
+    final finalPrimitiveExtensions =
+        List<dynamic>.filled(results.length, null, growable: false);
 
-    final dynamic passedExtensions = visitor.environment['__extension'];
+    final passedExtensions = visitor.environment['__extension'];
     visitor.environment['__extension'] = null;
 
     if (visitor.environment.isVersion(FhirVersion.r4)
@@ -42,7 +42,7 @@ List<dynamic>? _$visitIdentifier(
         finalResults.add(visitor.environment.context);
       }
     } else if (results.isNotEmpty) {
-      results.forEachIndexed((int i, dynamic r) {
+      results.forEachIndexed((i, r) {
         if (r is Map) {
           String jsonIdentifierName = identifierName;
           dynamic rValue = r[identifierName];
@@ -51,7 +51,7 @@ List<dynamic>? _$visitIdentifier(
             // If the key cannot be found in the r-map, then find
             // a key that starts with the same word, e.g. 'value' identifier will
             // match 'valueDateTime' key.
-            r.forEach((dynamic k, dynamic v) {
+            r.forEach((k, v) {
               if (k.toString().startsWith(identifierName) &&
                   polymorphicPrefixes.contains(identifierName) &&
                   startsWithAPolymorphicPrefix(k.toString())) {
@@ -61,14 +61,14 @@ List<dynamic>? _$visitIdentifier(
             });
           }
 
-          final Map<String, dynamic>? jsonPrimitiveExtension =
+          final jsonPrimitiveExtension =
               r['_$jsonIdentifierName'] as Map<String, dynamic>?;
           if (jsonPrimitiveExtension != null) {
             finalPrimitiveExtensions[i] = jsonPrimitiveExtension['extension'];
           }
 
           if (rValue is List) {
-            finalResults.addAll(rValue as List<dynamic>);
+            finalResults.addAll(rValue as List);
           } else if (rValue != null) {
             finalResults.add(rValue);
           } else if (r['resourceType'] == identifierName) {
@@ -78,9 +78,9 @@ List<dynamic>? _$visitIdentifier(
           if (identifierName == 'extension') {
             // Special processing for extensions on primitives
             if (passedExtensions != null) {
-              final dynamic extensionOnPrimitive = passedExtensions[i];
+              final extensionOnPrimitive = passedExtensions[i];
               if (extensionOnPrimitive != null) {
-                finalResults.addAll(extensionOnPrimitive as Iterable<dynamic>);
+                finalResults.addAll(extensionOnPrimitive as Iterable);
               }
             } else {
               // This primitive does not have an extension

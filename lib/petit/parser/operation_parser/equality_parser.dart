@@ -8,8 +8,8 @@ import '../../petit_fhir_path.dart';
 
 class EqualsParser extends OperatorParser {
   EqualsParser();
-  ParserList before = ParserList(<FhirPathParser>[]);
-  ParserList after = ParserList(<FhirPathParser>[]);
+  ParserList before = ParserList([]);
+  ParserList after = ParserList([]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
