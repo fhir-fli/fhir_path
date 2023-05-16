@@ -1,5 +1,11 @@
 # fhir_path
 
+## [0.10.0]
+
+* Updated dependencies
+* Made NullParser -> FpNullParser, and SortParser -> FpSortParser to distinguish between the parsers that petite_parser has built in
+* Removed antlr4 because I don't want to maintain it, I doubt anyone used it, and it doesn't run on web anyway
+
 ## [0.9.6]
 
 * Updated dependencies
