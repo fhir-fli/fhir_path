@@ -1,0 +1,21 @@
+name: fhir_path_test
+publish_to: 'none' 
+version: 1.0.0+1
+environment:
+  sdk: '>=2.19.0 <3.0.0'
+
+dependencies:
+  fhir: ^0.10.0
+  # fhir:
+  #   path: ../../fhir
+  fhir_path:
+    path: ../../fhir_path
+  flutter:
+    sdk: flutter
+
+dev_dependencies:
+  test: ^1.22.0
+
+
+  
+  

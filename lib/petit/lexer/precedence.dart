@@ -1,6 +1,3 @@
-// Package imports:
-import 'package:petitparser/petitparser.dart';
-
 // Project imports:
 import '../petit_fhir_path.dart';
 
