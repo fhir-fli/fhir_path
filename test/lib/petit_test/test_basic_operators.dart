@@ -931,7 +931,7 @@ final resource = Patient(
         rank: FhirPositiveInt(3)),
   ],
   address: [
-    Address(
+    const Address(
       period: Period(
         extension_: [
           FhirExtension(
@@ -943,7 +943,7 @@ final resource = Patient(
         ],
       ),
     ),
-    Address(
+    const Address(
       period: Period(
         extension_: [
           FhirExtension(
@@ -979,7 +979,7 @@ final resource = Patient(
         ],
       ),
     ),
-    Address(
+    const Address(
       period: Period(
         extension_: [
           FhirExtension(
@@ -993,7 +993,7 @@ final resource = Patient(
     ),
   ],
   deceasedBoolean: FhirBoolean(false),
-  name: [
+  name: const [
     HumanName(
       use: HumanNameUse.official,
       family: 'Faulkenberry',

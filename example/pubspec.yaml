@@ -3,12 +3,12 @@ description: Interactively evaluate FHIRPath expressions
 publish_to: "none"
 
 environment:
-  sdk: ">=2.19.0 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  fhir: ^0.10.0
+  fhir: ^0.11.0
   # fhir:
   #   path: ../../fhir
   fhir_path:

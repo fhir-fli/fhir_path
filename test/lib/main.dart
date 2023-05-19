@@ -13,11 +13,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => MaterialApp(
         theme: ThemeData.light(),
-        home: SafeArea(
+        home: const SafeArea(
           child: Scaffold(
             body: Center(
                 child: Column(
-              children: const <Widget>[
+              children: <Widget>[
                 SizedBox(height: 8),
                 RunTests('Petit Tests', petitFhirPathTest),
                 SizedBox(height: 8),

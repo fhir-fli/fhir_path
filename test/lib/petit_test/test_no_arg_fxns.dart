@@ -2,8 +2,10 @@
 
 // Package imports:
 import 'package:fhir/r4.dart';
-import 'package:fhir_path/petit/petit_fhir_path.dart';
 import 'package:test/test.dart';
+
+// Project imports:
+import 'package:fhir_path/petit/petit_fhir_path.dart';
 
 void testNoArgFxns() {
   group('Functions w/o Arguments: ', () {
@@ -1273,7 +1275,7 @@ final resource = Patient(
         use: ContactPointUse.mobile,
         rank: FhirPositiveInt(3)),
   ],
-  address: [
+  address: const [
     Address(
       period: Period(
         extension_: [
@@ -1336,7 +1338,7 @@ final resource = Patient(
     ),
   ],
   deceasedBoolean: FhirBoolean(false),
-  name: [
+  name: const [
     HumanName(
       use: HumanNameUse.official,
       family: 'Faulkenberry',

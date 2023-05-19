@@ -4,8 +4,10 @@
 import 'dart:convert';
 
 // Package imports:
-import 'package:fhir_path/petit/petit_fhir_path.dart';
 import 'package:test/test.dart';
+
+// Project imports:
+import 'package:fhir_path/petit/petit_fhir_path.dart';
 
 /// FHIRPath Test Suite - reference="http://hl7.org/fhirpath|2.0.0"
 void testFhirPathTestSuite() {
