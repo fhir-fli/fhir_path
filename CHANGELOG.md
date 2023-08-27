@@ -1,5 +1,10 @@
 # fhir_path
 
+## [0.11.2]
+
+* updated dependencies
+* I will eventually finish all of the tests
+
 ## [0.11.1]
 
 * updated dependencies
