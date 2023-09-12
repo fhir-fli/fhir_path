@@ -381,8 +381,7 @@ class IdentifierParser extends ValueParser<String> {
 /// reference models that have property or type names that are not valid
 /// simple identifiers.
 class DelimitedIdentifierParser extends ValueParser<String> {
-  DelimitedIdentifierParser(String newValue)
-      : value = newValue.substring(1, newValue.length - 1);
+  DelimitedIdentifierParser(this.value);
   String value;
 
   /// The iterable, nested function that evaluates the entire FHIRPath
