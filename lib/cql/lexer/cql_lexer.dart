@@ -7,7 +7,7 @@ import '../../fhir_path.dart';
 import 'lexer.dart';
 
 /// Primary lexing function for this library
-Parser<FhirPathParser> lexer() {
+Parser<FhirPathParser> cqlLexer() {
   final definitionLexer = undefined();
 
   /// The order of lexing is important, and if/when updated, needs

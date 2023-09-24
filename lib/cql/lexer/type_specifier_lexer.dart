@@ -3,11 +3,18 @@ import 'package:petitparser/petitparser.dart';
 
 import 'lexer.dart';
 
-final typeSpecifierLexer = namedTypeSpecifierLexer |
-    listTypeSpecifierLexer |
-    intervalTypeSpecifierLexer |
-    tupleTypeSpecifierLexer |
-    choiceTypeSpecifierLexer;
+/// Primary lexing function for this library
+Parser typeSpecifierLexer() {
+  final typeSpecifierLexer = undefined();
+  final typeSpecifierLexerPart = namedTypeSpecifierLexer |
+      listTypeSpecifierLexer |
+      intervalTypeSpecifierLexer |
+      tupleTypeSpecifierLexer |
+      choiceTypeSpecifierLexer;
+
+  typeSpecifierLexer.set(typeSpecifierLexerPart);
+  return typeSpecifierLexer;
+}
 
 final namedTypeSpecifierLexer = (qualifierLexer & char('.')).optional() &
     referentialOrTypeNameIdentifierLexer;
@@ -15,10 +22,13 @@ final namedTypeSpecifierLexer = (qualifierLexer & char('.')).optional() &
 final modelIdentifierLexer = cqlIdentifierLexer;
 
 final listTypeSpecifierLexer =
-    string('list') & char('<') & typeSpecifierLexer & char('>');
+    string('list') & char('<') & typeSpecifierLexer() & char('>');
 
 final intervalTypeSpecifierLexer =
-    string('Interval') & char('<') & typeSpecifierLexer & char('>');
+    string('Interval') & char('<') & typeSpecifierLexer() & char('>');
+
+final tupleElementDefintionLexer =
+    referentialIdentifierLexer & typeSpecifierLexer();
 
 final tupleTypeSpecifierLexer = string('Tuple') &
     char('{') &
@@ -26,11 +36,8 @@ final tupleTypeSpecifierLexer = string('Tuple') &
     (char(',') & tupleElementDefintionLexer).star() &
     char('}');
 
-final tupleElementDefintionLexer =
-    referentialIdentifierLexer & typeSpecifierLexer;
-
 final choiceTypeSpecifierLexer = string('Choice') &
     char('<') &
-    typeSpecifierLexer &
-    (char(',') & typeSpecifierLexer).star() &
+    typeSpecifierLexer() &
+    (char(',') & typeSpecifierLexer()).star() &
     char('>');

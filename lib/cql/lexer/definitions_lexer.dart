@@ -43,8 +43,8 @@ final Parser<ParameterDefinitionParser> parameterDefinitionLexer =
     (accessModifierLexer.optional() &
             string('parameter') &
             cqlIdentifierLexer &
-            typeSpecifierLexer.optional() &
-            (string('default') & expressionLexer).optional())
+            typeSpecifierLexer().optional() &
+            (string('default') & cqlExpressionLexer()).optional())
         .map((value) => ParameterDefinitionParser(
               value[0].toString(),
               value[2].toString(),

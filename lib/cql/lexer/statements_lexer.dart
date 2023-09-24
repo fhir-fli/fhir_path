@@ -1,5 +1,6 @@
-import 'package:fhir_path/cql/lexer/lexer.dart';
 import 'package:petitparser/petitparser.dart';
+
+import 'lexer.dart';
 
 final statementLexer = expressionDefinitionLexer |
     contextDefinitionLexer |
@@ -9,10 +10,10 @@ final expressionDefinitionLexer = string('define') &
     accessModifierLexer.optional() &
     cqlIdentifierLexer &
     char(':') &
-    expressionLexer;
+    cqlExpressionLexer();
 
 final contextDefinitionLexer = string('context') &
-    (modelIdentifierLexer & char('.')).optional() &
+    (typeSpecifierLexer() & char('.')).optional() &
     cqlIdentifierLexer;
 
 final functionDefinitionLexer = string('define') &
@@ -24,10 +25,11 @@ final functionDefinitionLexer = string('define') &
     (operandDefinitionLexer & (char(',') & operandDefinitionLexer).star())
         .optional() &
     char(')') &
-    (string('returns') & typeSpecifierLexer).optional() &
+    (string('returns') & typeSpecifierLexer()).optional() &
     char(':') &
     (functionBodyLexer | string('external'));
 
-final operandDefinitionLexer = referentialIdentifierLexer & typeSpecifierLexer;
+final operandDefinitionLexer =
+    referentialIdentifierLexer & typeSpecifierLexer();
 
-final functionBodyLexer = expressionLexer;
+final functionBodyLexer = cqlExpressionLexer();
