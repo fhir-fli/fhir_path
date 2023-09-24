@@ -6,48 +6,17 @@ import 'package:petitparser/petitparser.dart';
 import '../../fhir_path.dart';
 import '../parser/parser.dart';
 
-final Parser<IncludeDefinitionParser> includeDefinitionLexer =
-    (string('include') &
-            qualifiedIdentifierLexer &
-            (string('version') & versionLexer).optional() &
-            (string('called') & localIdentifierLexer).optional())
-        .map((value) => IncludeDefinitionParser(
-            value[1].toString(),
-            value.length > 2 && value[2].toString() == 'version'
-                ? value[3].toString()
-                : null,
-            value.length > 2 && value[2].toString() == 'called'
-                ? value[3].toString()
-                : value.length > 4 && value[4].toString() == 'called'
-                    ? value[5].toString()
-                    : null));
+final Parser<TypeNameIdentifierParser> typeNameIdentifierLexer =
+    (string('Code') | string('Concept') | string('date') | string('time'))
+        .map((value) => TypeNameIdentifierParser(value));
 
-final localIdentifierLexer = cqlIdentifierLexer;
+final referentialIdentifierLexer = cqlIdentifierLexer
+//  TODO(Dokotela) | keywordIdentifierLexer
+    ;
 
-final Parser<UsingDefinitionParser> usingDefinitionLexer = (string('using') &
-        modelIdentifierLexer &
-        (string('version') & versionLexer).optional())
-    .map((value) => UsingDefinitionParser(
-        value[1].toString(), value.length > 2 ? value[3].toString() : null));
-
-final modelIdentifierLexer = cqlIdentifierLexer;
-
-final Parser<LibraryDefinitionParser> libraryDefinitionLexer =
-    (string('library') &
-            qualifiedIdentifierLexer &
-            (string('version') & versionLexer).optional())
-        .map((value) => LibraryDefinitionParser(value[1].toString(),
-            value.length > 2 ? value[3].toString() : null));
-
-final versionLexer = stringLexer;
-
-final Parser<QualifiedIdentifierParser> qualifiedIdentifierLexer =
-    ((qualifierLexer & char('.')).star() & cqlIdentifierLexer).map((value) =>
-        QualifiedIdentifierParser(
-            value.length == 1 ? null : value[0].toString(),
-            value.last.toString()));
-
-final qualifierLexer = cqlIdentifierLexer;
+final referentialOrTypeNameIdentifierLexer = referentialIdentifierLexer
+//  TODO(Dokotela) | typeNameIdentifierLexer
+    ;
 
 final identifierOrFunctionIdentifierLexer = cqlIdentifierLexer
 // TODO(Dokotela)  | functionIdentifierLexer
