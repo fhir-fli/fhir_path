@@ -1,8 +1,7 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
-// Project imports:
-import 'petit_test/petit_fhir_path_test.dart';
+import 'fhir_path_test/fhir_path_test.dart';
 
 void main() => runApp(const MyApp());
 
@@ -19,7 +18,7 @@ class MyApp extends StatelessWidget {
                 child: Column(
               children: <Widget>[
                 SizedBox(height: 8),
-                RunTests('Petit Tests', petitFhirPathTest),
+                RunTests('FHIRPath Tests', fhirPathTest),
                 SizedBox(height: 8),
               ],
             )),
