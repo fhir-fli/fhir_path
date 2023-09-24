@@ -80,7 +80,7 @@ final wsLexer = whiteSpaceLexer | lineCommentLexer | multiLineCommentLexer;
 
 /// Lexers identifying special formatting of certain types of data
 final literalLexer = stringLexer |
-    envVariableLexer |
+    externalConstantLexer |
     delimitedIdentifierLexer |
     booleanLexer |
     quantityLexer |

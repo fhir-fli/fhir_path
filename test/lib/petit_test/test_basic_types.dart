@@ -6,7 +6,7 @@ import 'package:test/test.dart';
 // Project imports:
 import 'package:fhir_path/petit/petit_fhir_path.dart';
 
-FhirPathParser parseResult(String arg) => lexer().parse(arg).value;
+FhirPathParser parseResult(String arg) => fhirPathLexer().parse(arg).value;
 
 void testBasicTypes() {
   group('Basic Types', () {

@@ -96,7 +96,7 @@ const operatorOrderMap = {
   EmptyParser: 1,
   EmptySetParser: 1,
   EndsWithParser: 1,
-  EnvVariableParser: 1,
+  ExternalConstantParser: 1,
   ExcludeParser: 1,
   ExistsParser: 1,
   ExpParser: 1,

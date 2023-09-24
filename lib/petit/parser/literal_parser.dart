@@ -73,8 +73,8 @@ class BooleanParser extends ValueParser<bool> {
 
 /// This allows the passing of a variable from the environment into the
 /// evaluation.
-class EnvVariableParser extends ValueParser<String> {
-  EnvVariableParser(this.value);
+class ExternalConstantParser extends ValueParser<String> {
+  ExternalConstantParser(this.value);
 
   String value;
 
@@ -137,7 +137,7 @@ class EnvVariableParser extends ValueParser<String> {
   /// that you use [prettyPrint] instead
   @override
   String verbosePrint(int indent) =>
-      '${"  " * indent}EnvVariableParser: "$value"';
+      '${"  " * indent}ExternalConstantParser: "$value"';
 
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than

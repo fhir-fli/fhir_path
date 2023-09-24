@@ -38,10 +38,10 @@ final Parser<BooleanParser> booleanLexer = (string('true') | string('false'))
     .map((value) => BooleanParser(value));
 
 /// Allows environmental variables to be passed to FHIRPath
-final Parser<EnvVariableParser> envVariableLexer =
+final Parser<ExternalConstantParser> externalConstantLexer =
     (char('%') & (identifierLexer | delimitedIdentifierLexer))
         .flatten()
-        .map((value) => EnvVariableParser(value));
+        .map((value) => ExternalConstantParser(value));
 
 final Parser<QuantityParser> quantityLexer =
     (numberLexer & char(' ') & (durationLexer | stringLexer))

@@ -8,7 +8,7 @@ import 'package:petitparser/petitparser.dart';
 import '../petit_fhir_path.dart';
 
 /// Primary lexing function for this library
-Parser<FhirPathParser> lexer() {
+Parser<FhirPathParser> fhirPathLexer() {
   final lexerFunctions = undefined();
   final lexerParentheses = undefined();
 

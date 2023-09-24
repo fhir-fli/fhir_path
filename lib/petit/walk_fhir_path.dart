@@ -86,7 +86,7 @@ List<dynamic> walkFhirPath({
 /// Parse a FHIRPath for repeated use with different inputs later.
 ParserList parseFhirPath(String pathExpression) {
   try {
-    final ast = lexer().parse(pathExpression).value;
+    final ast = fhirPathLexer().parse(pathExpression).value;
     if (ast is ParserList) {
       if (ast.isEmpty) {
         return ast;
