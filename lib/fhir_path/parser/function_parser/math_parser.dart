@@ -173,8 +173,8 @@ class LnParser extends FhirPathParser {
 }
 
 class LogParser extends ValueParser<ParserList> {
-  LogParser();
-  late ParserList value;
+  const LogParser(super.value);
+  LogParser copyWith(ParserList value) => LogParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -217,8 +217,8 @@ class LogParser extends ValueParser<ParserList> {
 }
 
 class PowerParser extends ValueParser<ParserList> {
-  PowerParser();
-  late ParserList value;
+  const PowerParser(super.value);
+  PowerParser copyWith(ParserList value) => PowerParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -265,8 +265,8 @@ class PowerParser extends ValueParser<ParserList> {
 }
 
 class RoundParser extends ValueParser<ParserList> {
-  RoundParser();
-  late ParserList value;
+  const RoundParser(super.value);
+  RoundParser copyWith(ParserList value) => RoundParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -347,9 +347,8 @@ class SqrtParser extends FhirPathParser {
   String prettyPrint([int indent = 2]) => '.sqrt()';
 }
 
-class TruncateParser extends ValueParser {
-  TruncateParser();
-  dynamic value;
+class TruncateParser extends FhirPathParser {
+  const TruncateParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -370,22 +369,14 @@ class TruncateParser extends ValueParser {
   /// at all as objects in the official spec. I'm generally going to recommend
   /// that you use [prettyPrint] instead
   @override
-  String verbosePrint(int indent) =>
-      '${"  " * indent}TruncateParser\n${value?.verbosePrint(indent + 1)}';
+  String verbosePrint(int indent) => '${"  " * indent}TruncateParser\n';
 
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) {
-    if (value == null) {
-      return '.truncate()';
-    } else {
-      return '.truncate(\n${value?.prettyPrint(indent + 1)}\n'
-          '${indent <= 0 ? "" : "  " * (indent - 1)})';
-    }
-  }
+  String prettyPrint([int indent = 2]) => '.truncate()';
 }
 
 Exception _wrongLength(String functionName, List results) =>

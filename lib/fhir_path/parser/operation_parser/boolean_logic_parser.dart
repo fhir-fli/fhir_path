@@ -4,9 +4,9 @@
 import '../../fhir_path.dart';
 
 class AndStringParser extends OperatorParser {
-  AndStringParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const AndStringParser(super.before, super.after);
+  AndStringParser copyWith(ParserList before, ParserList after) =>
+      AndStringParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -54,9 +54,9 @@ class AndStringParser extends OperatorParser {
 }
 
 class XorParser extends OperatorParser {
-  XorParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const XorParser(super.before, super.after);
+  XorParser copyWith(ParserList before, ParserList after) =>
+      XorParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -108,9 +108,9 @@ class XorParser extends OperatorParser {
 }
 
 class OrStringParser extends OperatorParser {
-  OrStringParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const OrStringParser(super.before, super.after);
+  OrStringParser copyWith(ParserList before, ParserList after) =>
+      OrStringParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -158,9 +158,9 @@ class OrStringParser extends OperatorParser {
 }
 
 class ImpliesParser extends OperatorParser {
-  ImpliesParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const ImpliesParser(super.before, super.after);
+  ImpliesParser copyWith(ParserList before, ParserList after) =>
+      ImpliesParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

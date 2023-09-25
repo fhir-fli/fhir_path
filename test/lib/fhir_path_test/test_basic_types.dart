@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, unnecessary_statements, leading_newlines_in_multiline_strings, directives_ordering, always_specify_types, unnecessary_parenthesis, avoid_dynamic_calls
 
 // Package imports:
+import 'package:fhir/primitive_types/primitive_types.dart';
 import 'package:test/test.dart';
 
 // Project imports:
@@ -12,22 +13,23 @@ void testBasicTypes() {
   group('Basic Types', () {
     test('Boolean', () {
       expect((((parseResult('true') as ParserList)).first as ValueParser).value,
-          (ParserList([BooleanParser('true')]).first as ValueParser).value);
+          (const ParserList([BooleanParser(true)]).first as ValueParser).value);
       expect(
           (((parseResult('false') as ParserList)).first as ValueParser).value,
-          (ParserList([BooleanParser('false')]).first as ValueParser).value);
+          (const ParserList([BooleanParser(false)]).first as ValueParser)
+              .value);
     });
     test('String', () {
       expect(
           (((parseResult("'test string'") as ParserList)).first as ValueParser)
               .value,
-          (ParserList([StringParser("'test string'")]).first as ValueParser)
+          (ParserList([StringParser('test string')]).first as ValueParser)
               .value);
       expect(
           (((parseResult("'urn:oid:3.4.5.6.7.8'") as ParserList)).first
                   as ValueParser)
               .value,
-          (ParserList([StringParser("'urn:oid:3.4.5.6.7.8'")]).first
+          (ParserList([StringParser('urn:oid:3.4.5.6.7.8')]).first
                   as ValueParser)
               .value);
     });
@@ -35,58 +37,68 @@ void testBasicTypes() {
       expect(
           ((parseResult("`test string`") as ParserList).first as ValueParser)
               .value,
-          (ParserList([DelimitedIdentifierParser('test string')]).first
+          (const ParserList([DelimitedIdentifierParser('test string')]).first
                   as ValueParser)
               .value);
       expect(
           ((parseResult("`urn:oid:3.4.5.6.7.8`") as ParserList).first
                   as ValueParser)
               .value,
-          (ParserList([DelimitedIdentifierParser('`urn:oid:3.4.5.6.7.8`')])
+          (const ParserList([DelimitedIdentifierParser('urn:oid:3.4.5.6.7.8')])
                   .first as ValueParser)
               .value);
     });
     test('Integer', () {
       expect((((parseResult('0') as ParserList)).first as ValueParser).value,
-          (ParserList([IntegerParser('0')]).first as ValueParser).value);
+          (const ParserList([IntegerParser(0)]).first as ValueParser).value);
       expect((((parseResult('45') as ParserList)).first as ValueParser).value,
-          (ParserList([IntegerParser('45')]).first as ValueParser).value);
-      // expect((((parseResult('-5') as ParserList)).first as ValueParser).value,
-      //     (ParserList([IntegerParser('-5')]).first as ValueParser).value);
+          (const ParserList([IntegerParser(45)]).first as ValueParser).value);
+      // expect((((parseResult(-5) as ParserList)).first as ValueParser).value,
+      //     (ParserList([IntegerParser(-5)]).first as ValueParser).value);
     });
     test('Decimal', () {
       expect((((parseResult('0.0') as ParserList)).first as ValueParser).value,
-          (ParserList([DecimalParser('0.0')]).first as ValueParser).value);
+          (const ParserList([DecimalParser(0.0)]).first as ValueParser).value);
       expect(
           (((parseResult('3.1415927') as ParserList)).first as ValueParser)
               .value,
-          (ParserList([DecimalParser('3.1415927')]).first as ValueParser)
+          (const ParserList([DecimalParser(3.1415927)]).first as ValueParser)
               .value);
     });
     test('Date', () {
       expect(
           (((parseResult('@2015-02-04') as ParserList)).first as ValueParser)
               .value,
-          (ParserList([DateParser('@2015-02-04')]).first as ValueParser).value);
+          (ParserList([DateParser(FhirDate('2015-02-04'))]).first
+                  as ValueParser)
+              .value);
       expect(
           (((parseResult('@2018-06-12') as ParserList)).first as ValueParser)
               .value,
-          (ParserList([DateParser('@2018-06-12')]).first as ValueParser).value);
+          (ParserList([DateParser(FhirDate('2018-06-12'))]).first
+                  as ValueParser)
+              .value);
       expect(
           (((parseResult('@2018-06-12') as ParserList)).first as ValueParser)
               .value,
-          (ParserList([DateParser('@2018-06-12')]).first as ValueParser).value);
+          (ParserList([DateParser(FhirDate('2018-06-12'))]).first
+                  as ValueParser)
+              .value);
       expect(
           (((parseResult('@2018-06-12') as ParserList)).first as ValueParser)
               .value,
-          (ParserList([DateParser('@2018-06-12')]).first as ValueParser).value);
+          (ParserList([DateParser(FhirDate('2018-06-12'))]).first
+                  as ValueParser)
+              .value);
       expect(
           (((parseResult('@2018-06') as ParserList)).first as ValueParser)
               .value,
-          (ParserList([DateParser(('@2018-06'))]).first as ValueParser).value);
+          (ParserList([DateParser((FhirDate('2018-06')))]).first as ValueParser)
+              .value);
       expect(
           (((parseResult('@2018') as ParserList)).first as ValueParser).value,
-          (ParserList([DateParser('@2018')]).first as ValueParser).value);
+          (ParserList([DateParser(FhirDate('2018'))]).first as ValueParser)
+              .value);
     });
     test('DateTime', () {
       expect(
@@ -95,30 +107,29 @@ void testBasicTypes() {
               .value
               .first
               .value,
-          (ParserList([DateTimeParser('@2015-02-04T05:34:28')]).first
-                  as ValueParser)
-              .value
-              .first
-              .value);
+          DateTimeParser([
+            DateParser(FhirDate('2015-02-04')),
+            TimeParser(FhirTime('05:34:28'))
+          ]).value.first.value);
       expect(
           (((parseResult('@2018-02-04T14:38:28+09:00') as ParserList)).first
                   as ValueParser)
               .value
               .last
               .value,
-          (ParserList([DateTimeParser('@2018-02-04T14:38:28+09:00')]).first
-                  as ValueParser)
-              .value
-              .last
-              .value);
+          DateTimeParser([
+            DateParser(FhirDate('2015-02-04')),
+            TimeParser(FhirTime('05:34:28'))
+          ]).value.last.value);
       expect(
           (((parseResult('@2014-01-25T14:30:14.559') as ParserList)).first
                   as ValueParser)
               .value
               .first
               .value,
-          (ParserList([DateTimeParser('@2014-01-25T14:30:14.559')]).first
-                  as ValueParser)
+          (ParserList([
+            DateTimeParser([FhirDateTime('2014-01-25T14:30:14.559')])
+          ]).first as ValueParser)
               .value
               .first
               .value);
@@ -129,8 +140,9 @@ void testBasicTypes() {
               .value
               .last
               .value,
-          (ParserList([DateTimeParser('@2014-01-25T14:30:14.559Z')]).first
-                  as ValueParser)
+          (ParserList([
+            DateTimeParser([FhirDateTime('2014-01-25T14:30:14.559Z')])
+          ]).first as ValueParser)
               .value
               .last
               .value);
@@ -141,8 +153,9 @@ void testBasicTypes() {
               .value
               .first
               .value,
-          (ParserList([DateTimeParser('@2014-01-25T14:30')]).first
-                  as ValueParser)
+          (ParserList([
+            DateTimeParser([FhirDateTime('2014-01-25T14:30')])
+          ]).first as ValueParser)
               .value
               .first
               .value);
@@ -151,53 +164,67 @@ void testBasicTypes() {
                       as ParserList)
                   .first as ValueParser)
               .value,
-          (ParserList([DateTimeParser('@2014-03-25')]).first as ValueParser)
+          (ParserList([
+            DateTimeParser([FhirDateTime('2014-03-25')])
+          ]).first as ValueParser)
               .value);
       expect(
           ((parseResult('@2014-01T // A partial DateTime with year and month')
                       as ParserList)
                   .first as ValueParser)
               .value,
-          (ParserList([DateTimeParser('@2014-01T')]).first as ValueParser)
+          (ParserList([
+            DateTimeParser([FhirDateTime('2014-01T')])
+          ]).first as ValueParser)
               .value);
       expect(
           ((parseResult('@2014T // A partial DateTime with only the year')
                       as ParserList)
                   .first as ValueParser)
               .value,
-          (ParserList([DateTimeParser('@2014T')]).first as ValueParser).value);
+          (ParserList([
+            DateTimeParser([FhirDateTime('2014T')])
+          ]).first as ValueParser)
+              .value);
     });
     test('Time', () {
       expect(
           (((parseResult('@T14:34:28') as ParserList)).first as ValueParser)
               .value,
-          (ParserList([TimeParser('@14:34:28')]).first as ValueParser).value);
+          (ParserList([TimeParser(FhirTime('14:34:28'))]).first as ValueParser)
+              .value);
       expect(
           (((parseResult('@T06:55:28') as ParserList)).first as ValueParser)
               .value,
-          (ParserList([TimeParser('@06:55:28')]).first as ValueParser).value);
+          (ParserList([TimeParser(FhirTime('06:55:28'))]).first as ValueParser)
+              .value);
       expect(
           (((parseResult('@T06:55:28.559') as ParserList)).first as ValueParser)
               .value,
-          (ParserList([TimeParser('@06:55:28.559')]).first as ValueParser)
+          (ParserList([TimeParser(FhirTime('06:55:28.559'))]).first
+                  as ValueParser)
               .value);
       expect(
           (((parseResult('@T06:55') as ParserList)).first as ValueParser).value,
-          (ParserList([TimeParser('@06:55')]).first as ValueParser).value);
+          (ParserList([TimeParser(FhirTime('06:55'))]).first as ValueParser)
+              .value);
       expect(
           (((parseResult('@T06:54') as ParserList)).first as ValueParser).value,
-          (ParserList([TimeParser('@06:54')]).first as ValueParser).value);
+          (ParserList([TimeParser(FhirTime('06:54'))]).first as ValueParser)
+              .value);
     });
     test('Quantity', () {
       expect(
           (((parseResult("4.5 'mg'") as ParserList)).first as ValueParser)
               .value,
-          (ParserList([QuantityParser("4.5 'mg'")]).first as ValueParser)
+          (ParserList([QuantityParser(FhirPathQuantity(4.5, 'mg'))]).first
+                  as ValueParser)
               .value);
       expect(
         ((parseResult("100 '[degF]'") as ParserList).first as ValueParser)
             .value,
-        (ParserList([QuantityParser("100 '[degF]'")]).first as ValueParser)
+        (ParserList([QuantityParser(FhirPathQuantity(100, '[degF]'))]).first
+                as ValueParser)
             .value,
       );
     });

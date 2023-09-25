@@ -7,9 +7,9 @@ import 'package:fhir/primitive_types/primitive_types.dart';
 import '../../fhir_path.dart';
 
 class EqualsParser extends OperatorParser {
-  EqualsParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const EqualsParser(super.before, super.after);
+  EqualsParser copyWith(ParserList before, ParserList after) =>
+      EqualsParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -115,9 +115,9 @@ class EqualsParser extends OperatorParser {
 
 // TODO(Dokotela): write test
 class EquivalentParser extends OperatorParser {
-  EquivalentParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const EquivalentParser(super.before, super.after);
+  EquivalentParser copyWith(ParserList before, ParserList after) =>
+      EquivalentParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -219,15 +219,15 @@ class EquivalentParser extends OperatorParser {
 ///
 /// A != B is short-hand for (A = B).not()
 class NotEqualsParser extends OperatorParser {
-  NotEqualsParser();
+  const NotEqualsParser(super.before, super.after);
+  NotEqualsParser copyWith(ParserList before, ParserList after) =>
+      NotEqualsParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) {
-    final equalsParser = EqualsParser();
-    equalsParser.before = this.before;
-    equalsParser.after = this.after;
+    final equalsParser = EqualsParser(this.before, this.after);
     final equality = equalsParser.execute(results, passed);
     return FpNotParser().execute(equality, passed);
   }
@@ -255,15 +255,15 @@ class NotEqualsParser extends OperatorParser {
 }
 
 class NotEquivalentParser extends OperatorParser {
-  NotEquivalentParser();
+  const NotEquivalentParser(super.before, super.after);
+  NotEquivalentParser copyWith(ParserList before, ParserList after) =>
+      NotEquivalentParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) {
-    final equivalentParser = EquivalentParser();
-    equivalentParser.before = this.before;
-    equivalentParser.after = this.after;
+    final equivalentParser = EquivalentParser(this.before, this.after);
     final equality = equivalentParser.execute(results, passed);
     return FpNotParser().execute(equality, passed);
   }

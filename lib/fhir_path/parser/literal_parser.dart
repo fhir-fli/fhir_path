@@ -14,8 +14,7 @@ import '../fhir_path.dart';
 /// This includes all input that should be ignored, this includes pure white
 /// space, along with comments, it simply returns whatever has been passed to it
 class WhiteSpaceParser extends ValueParser<String> {
-  WhiteSpaceParser(this.value);
-  String value;
+  const WhiteSpaceParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -23,60 +22,22 @@ class WhiteSpaceParser extends ValueParser<String> {
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) => results;
-
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead.
-  @override
-  String verbosePrint(int indent) =>
-      '${"  " * indent}WhiteSpaceParser: "$value"';
-
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
-  @override
-  String prettyPrint([int indent = 2]) => value;
 }
 
 /// Boolean Parser, it returns a FHIR Boolean value
 class BooleanParser extends ValueParser<bool> {
-  BooleanParser(String newValue) : value = newValue == 'true';
-  bool value;
+  const BooleanParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) => [value];
-
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}BooleanParser: "$value"';
-
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
-  @override
-  String prettyPrint([int indent = 2]) => '$value';
 }
 
 /// This allows the passing of a variable from the environment into the
 /// evaluation.
 class ExternalConstantParser extends ValueParser<String> {
-  ExternalConstantParser(this.value);
-
-  String value;
+  const ExternalConstantParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -127,24 +88,6 @@ class ExternalConstantParser extends ValueParser<String> {
       }
     }
   }
-
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) =>
-      '${"  " * indent}ExternalConstantParser: "$value"';
-
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
-  @override
-  String prettyPrint([int indent = 2]) => value;
 }
 
 /// The Quantity type represents quantities with a specified unit, where
@@ -153,10 +96,7 @@ class ExternalConstantParser extends ValueParser<String> {
 /// Code for Units of Measure (UCUM) unit or one of the calendar duration
 /// keywords, singular or plural.
 class QuantityParser extends ValueParser<FhirPathQuantity> {
-  QuantityParser(String stringValue) {
-    value = FhirPathQuantity.fromString(stringValue);
-  }
-  late FhirPathQuantity value;
+  const QuantityParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -167,30 +107,12 @@ class QuantityParser extends ValueParser<FhirPathQuantity> {
   String toString() {
     return 'Quantity: $value';
   }
-
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}QuantityParser: "$value"';
-
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
-  @override
-  String prettyPrint([int indent = 2]) => '$value';
 }
 
 /// The Integer type represents whole numbers in the range -2^31 to 2^31-1 in
 /// the FHIRPath spec, although we follow Dart's [int] which is +/- 2^53
 class IntegerParser extends ValueParser<int> {
-  IntegerParser(String newValue) : value = int.parse(newValue);
-  int value;
+  const IntegerParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -201,23 +123,6 @@ class IntegerParser extends ValueParser<int> {
   String toString() {
     return 'Integer: $value';
   }
-
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}IntegerParser: "$value"';
-
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
-  @override
-  String prettyPrint([int indent = 2]) => '$value';
 }
 
 /// The Decimal type represents real values in the range (-10^28+1)/10^8 to
@@ -231,8 +136,7 @@ class IntegerParser extends ValueParser<int> {
 /// fixed-precision decimal formats to ensure that decimal values are
 /// accurately represented
 class DecimalParser extends ValueParser<double> {
-  DecimalParser(String newValue) : value = double.parse(newValue);
-  double value;
+  const DecimalParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -243,23 +147,6 @@ class DecimalParser extends ValueParser<double> {
   String toString() {
     return 'Decimal: $value';
   }
-
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}DecimalParser: "$value"';
-
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
-  @override
-  String prettyPrint([int indent = 2]) => '$value';
 }
 
 /// Identifiers are used as labels to allow expressions to reference elements
@@ -268,8 +155,7 @@ class DecimalParser extends ValueParser<double> {
 /// A simple identifier is any alphabetical character or an underscore,
 /// followed by any number of alpha-numeric characters or underscores
 class IdentifierParser extends ValueParser<String> {
-  IdentifierParser(this.value);
-  String value;
+  const IdentifierParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -350,24 +236,6 @@ class IdentifierParser extends ValueParser<String> {
 
     return finalResults;
   }
-
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) =>
-      '${"  " * indent}IdentifierParser: "$value"';
-
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
-  @override
-  String prettyPrint([int indent = 2]) => value;
 }
 
 /// Identifiers are used as labels to allow expressions to reference elements
@@ -381,8 +249,7 @@ class IdentifierParser extends ValueParser<String> {
 /// reference models that have property or type names that are not valid
 /// simple identifiers.
 class DelimitedIdentifierParser extends ValueParser<String> {
-  DelimitedIdentifierParser(this.value);
-  String value;
+  const DelimitedIdentifierParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -464,17 +331,6 @@ class DelimitedIdentifierParser extends ValueParser<String> {
     return finalResults;
   }
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) =>
-      '${"  " * indent}DelimitedIdentifierParser: "$value"';
-
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
@@ -487,26 +343,12 @@ class DelimitedIdentifierParser extends ValueParser<String> {
 /// String literals are surrounded by single-quotes and may use \-escapes to
 /// escape quotes and represent Unicode characters.
 class StringParser extends ValueParser<String> {
-  StringParser(String newValue)
-      : value = newValue.length == 2
-            ? ''
-            : newValue.substring(1, newValue.length - 1);
-  String value;
+  StringParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) => [value];
-
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => "${'  ' * indent}StringParser: '$value'";
 
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
@@ -523,41 +365,7 @@ class StringParser extends ValueParser<String> {
 /// Implementations can provide support for larger ranges and higher precision,
 /// but must provide at least the range and precision defined here.
 class DateTimeParser extends BaseDateTimeParser<List> {
-  DateTimeParser(String stringValue) {
-    final removeAt = stringValue.replaceFirst('@', '');
-    final split = removeAt.split('T');
-
-    if (split.length == 2 && split.last != '') {
-      final formattedDateTime = FhirDateTime(removeAt).value;
-      if (formattedDateTime == null) {
-        throw FormatException(
-            'The DateTime provided was not properly formatted', stringValue);
-      }
-      String? timeString;
-      final timeLength = removeAt.split('T').last.split(':').length;
-      timeString = formattedDateTime
-          .toIso8601String()
-          .split('T')
-          .last
-          .replaceFirst('Z', '')
-          .split(':')
-          .sublist(0, timeLength <= 3 ? timeLength : 3)
-          .join(':');
-
-      value = [
-        DateParser(formattedDateTime.toIso8601String().split('T').first),
-        TimeParser(timeString),
-      ];
-    } else {
-      final formattedDateTime = FhirDateTime(removeAt.split('T').first).value;
-      if (formattedDateTime == null) {
-        throw FormatException(
-            'The DateTime provided was not properly formatted', stringValue);
-      }
-      value = [FhirDate(removeAt.split('T').first)];
-    }
-  }
-  late List value;
+  const DateTimeParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -581,16 +389,6 @@ class DateTimeParser extends BaseDateTimeParser<List> {
     }
   }
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}DateTimeParser: "$value"';
-
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
@@ -602,10 +400,7 @@ class DateTimeParser extends BaseDateTimeParser<List> {
 /// The Date type represents date and partial date values in the range
 /// @0001-01-01 to @9999-12-31 with a 1 day step size.
 class DateParser extends BaseDateTimeParser<FhirDate> {
-  DateParser(String valueString) {
-    value = FhirDate(valueString.replaceFirst('@', ''));
-  }
-  late FhirDate value;
+  DateParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -614,16 +409,6 @@ class DateParser extends BaseDateTimeParser<FhirDate> {
 
   @override
   String toString() => value.toString();
-
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}DateParser: "$value"';
 
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
@@ -641,11 +426,7 @@ class DateParser extends BaseDateTimeParser<FhirDate> {
 /// and precision defined here. Time values in FHIRPath do not have a timezone
 /// or timezone offset.
 class TimeParser extends BaseDateTimeParser<FhirTime> {
-  TimeParser(String stringValue) {
-    final removeAt = stringValue.replaceFirst('@', '');
-    value = FhirTime(removeAt.replaceFirst('T', ''));
-  }
-  late FhirTime value;
+  const TimeParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -654,16 +435,6 @@ class TimeParser extends BaseDateTimeParser<FhirTime> {
 
   @override
   String toString() => value.toString();
-
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}TimeParser: "$value"';
 
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than

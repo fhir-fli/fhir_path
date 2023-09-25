@@ -16,8 +16,8 @@ import '../../fhir_path.dart';
 /// If criterion is false or an empty collection, the function returns otherwise-result, unless the optional otherwise-result is not given, in which case the function returns an empty collection.
 /// Note that short-circuit behavior is expected in this function. In other words, true-result should only be evaluated if the criterion evaluates to true, and otherwise-result should only be evaluated otherwise. For implementations, this means delaying evaluation of the arguments.
 class IifParser extends FunctionParser {
-  IifParser();
-  late ParserList value;
+  const IifParser(super.value);
+  IifParser copyWith(ParserList value) => IifParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

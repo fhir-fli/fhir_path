@@ -12,8 +12,8 @@ import 'package:fhir/stu3.dart' as stu3;
 import '../../fhir_path.dart';
 
 class FpWhereParser extends FunctionParser {
-  FpWhereParser();
-  late ParserList value;
+  const FpWhereParser(super.value);
+  FpWhereParser copyWith(ParserList valueList) => FpWhereParser(valueList);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -61,8 +61,8 @@ class FpWhereParser extends FunctionParser {
 }
 
 class SelectParser extends ValueParser<ParserList> {
-  SelectParser();
-  late ParserList value;
+  const SelectParser(super.value);
+  SelectParser copyWith(ParserList valueList) => SelectParser(valueList);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -100,8 +100,8 @@ class SelectParser extends ValueParser<ParserList> {
 }
 
 class RepeatParser extends ValueParser<ParserList> {
-  RepeatParser();
-  late ParserList value;
+  const RepeatParser(super.value);
+  RepeatParser copyWith(ParserList valueList) => RepeatParser(valueList);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -152,8 +152,8 @@ class RepeatParser extends ValueParser<ParserList> {
 }
 
 class OfTypeParser extends ValueParser<ParserList> {
-  OfTypeParser();
-  late ParserList value;
+  const OfTypeParser(super.value);
+  OfTypeParser copyWith(ParserList valueList) => OfTypeParser(valueList);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -236,7 +236,7 @@ class OfTypeParser extends ValueParser<ParserList> {
 class ExtensionParser extends ValueParser<ParserList> {
   static const extensionKey = '__extension';
 
-  ExtensionParser();
+  const ExtensionParser(super.value);
 
   @override
 
@@ -254,14 +254,12 @@ class ExtensionParser extends ValueParser<ParserList> {
     }
 
     // .extension(exturl) is short-hand for .extension.where(url='exturl')
-    final urlEquals = EqualsParser();
-    urlEquals.before = ParserList([IdentifierParser('url')]);
-    urlEquals.after = ParserList([StringParser("'$extensionUrl'")]);
+    final urlEquals = EqualsParser(ParserList([IdentifierParser('url')]),
+        ParserList([StringParser("'$extensionUrl'")]));
     final extensionUrlPredicate = ParserList([
       urlEquals,
     ]);
-    final whereParser = FpWhereParser();
-    whereParser.value = extensionUrlPredicate;
+    final whereParser = FpWhereParser(extensionUrlPredicate);
     final extensionParsers =
         ParserList([IdentifierParser('extension'), whereParser]);
 

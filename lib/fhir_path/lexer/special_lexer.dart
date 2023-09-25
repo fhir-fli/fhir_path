@@ -12,9 +12,10 @@ import '../fhir_path.dart';
 
 /// identifies bracketsIndexs
 final Parser<BracketsIndexParser> bracketsIndexLexer =
-    (char('[') & digit().plus() & char(']'))
-        .flatten()
-        .map((value) => BracketsIndexParser(value));
+    (char('[') & digit().plus() & char(']')).flatten().map((value) {
+  final newValue = int.parse(value.substring(1, value.length - 1));
+  return BracketsIndexParser(newValue);
+});
 
 /// identifies indexs
 final Parser<IndexParser> indexLexer =

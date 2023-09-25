@@ -7,9 +7,9 @@ import 'package:fhir/primitive_types/primitive_types.dart';
 import '../../fhir_path.dart';
 
 class GreaterParser extends OperatorParser {
-  GreaterParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const GreaterParser(super.before, super.after);
+  GreaterParser copyWith(ParserList before, ParserList after) =>
+      GreaterParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -40,9 +40,9 @@ class GreaterParser extends OperatorParser {
 }
 
 class LessParser extends OperatorParser {
-  LessParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const LessParser(super.before, super.after);
+  LessParser copyWith(ParserList before, ParserList after) =>
+      LessParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -73,9 +73,9 @@ class LessParser extends OperatorParser {
 }
 
 class GreaterEqualParser extends OperatorParser {
-  GreaterEqualParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const GreaterEqualParser(super.before, super.after);
+  GreaterEqualParser copyWith(ParserList before, ParserList after) =>
+      GreaterEqualParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -107,9 +107,9 @@ class GreaterEqualParser extends OperatorParser {
 }
 
 class LessEqualParser extends OperatorParser {
-  LessEqualParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const LessEqualParser(super.before, super.after);
+  LessEqualParser copyWith(ParserList before, ParserList after) =>
+      LessEqualParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

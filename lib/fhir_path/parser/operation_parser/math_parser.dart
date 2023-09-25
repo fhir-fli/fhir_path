@@ -7,10 +7,9 @@ import 'package:fhir/primitive_types/primitive_types.dart';
 import '../../fhir_path.dart';
 
 class UnaryNegateParser extends OperatorParser {
-  UnaryNegateParser();
-
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const UnaryNegateParser(super.before, super.after);
+  UnaryNegateParser copyWith(ParserList before, ParserList after) =>
+      UnaryNegateParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -61,10 +60,9 @@ class UnaryNegateParser extends OperatorParser {
 }
 
 class UnaryPlusParser extends OperatorParser {
-  UnaryPlusParser();
-
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const UnaryPlusParser(super.before, super.after);
+  UnaryPlusParser copyWith(ParserList before, ParserList after) =>
+      UnaryPlusParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -97,9 +95,9 @@ class UnaryPlusParser extends OperatorParser {
 }
 
 class StarParser extends OperatorParser {
-  StarParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const StarParser(super.before, super.after);
+  StarParser copyWith(ParserList before, ParserList after) =>
+      StarParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -163,9 +161,9 @@ class StarParser extends OperatorParser {
 
 /// If an attempt is made to divide by zero, the result is empty.
 class DivSignParser extends OperatorParser {
-  DivSignParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const DivSignParser(super.before, super.after);
+  DivSignParser copyWith(ParserList before, ParserList after) =>
+      DivSignParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -229,9 +227,9 @@ class DivSignParser extends OperatorParser {
 }
 
 class DivStringParser extends OperatorParser {
-  DivStringParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const DivStringParser(super.before, super.after);
+  DivStringParser copyWith(ParserList before, ParserList after) =>
+      DivStringParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -287,9 +285,9 @@ class DivStringParser extends OperatorParser {
 }
 
 class ModParser extends OperatorParser {
-  ModParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const ModParser(super.before, super.after);
+  ModParser copyWith(ParserList before, ParserList after) =>
+      ModParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -351,9 +349,9 @@ class ModParser extends OperatorParser {
 }
 
 class PlusParser extends OperatorParser {
-  PlusParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const PlusParser(super.before, super.after);
+  PlusParser copyWith(ParserList before, ParserList after) =>
+      PlusParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -487,9 +485,9 @@ class PlusParser extends OperatorParser {
 }
 
 class MinusParser extends OperatorParser {
-  MinusParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const MinusParser(super.before, super.after);
+  MinusParser copyWith(ParserList before, ParserList after) =>
+      MinusParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -632,9 +630,9 @@ class MinusParser extends OperatorParser {
 }
 
 class StringConcatenationParser extends OperatorParser {
-  StringConcatenationParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const StringConcatenationParser(super.before, super.after);
+  StringConcatenationParser copyWith(ParserList before, ParserList after) =>
+      StringConcatenationParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

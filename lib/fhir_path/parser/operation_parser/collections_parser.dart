@@ -4,9 +4,9 @@
 import '../../fhir_path.dart';
 
 class UnionOperatorParser extends OperatorParser {
-  UnionOperatorParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const UnionOperatorParser(super.before, super.after);
+  UnionOperatorParser copyWith(ParserList before, ParserList after) =>
+      UnionOperatorParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -47,9 +47,9 @@ class UnionOperatorParser extends OperatorParser {
 
 // http://hl7.org/fhirpath/#contains-containership
 class ContainsOperatorParser extends OperatorParser {
-  ContainsOperatorParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const ContainsOperatorParser(super.before, super.after);
+  ContainsOperatorParser copyWith(ParserList before, ParserList after) =>
+      ContainsOperatorParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -107,9 +107,9 @@ class ContainsOperatorParser extends OperatorParser {
 
 /// http://hl7.org/fhirpath/N1/#in-membership
 class InParser extends OperatorParser {
-  InParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const InParser(super.before, super.after);
+  InParser copyWith(ParserList before, ParserList after) =>
+      InParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -161,9 +161,9 @@ class InParser extends OperatorParser {
 }
 
 class CommaParser extends OperatorParser {
-  CommaParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const CommaParser(super.before, super.after);
+  CommaParser copyWith(ParserList before, ParserList after) =>
+      CommaParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

@@ -5,8 +5,7 @@ import 'fhir_path_parser.dart';
 
 /// BaseDateTimeParser: either a DateParser or DateTimeParser
 abstract class BaseDateTimeParser<T> extends ValueParser<T> {
-  BaseDateTimeParser();
-  late T value;
+  const BaseDateTimeParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -20,8 +19,7 @@ abstract class BaseDateTimeParser<T> extends ValueParser<T> {
 
 /// ParenthesesParser: ()
 class ParenthesesParser extends ValueParser<ParserList> {
-  ParenthesesParser(this.value);
-  ParserList value;
+  const ParenthesesParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -37,7 +35,7 @@ class ParenthesesParser extends ValueParser<ParserList> {
   /// at all as objects in the official spec. I'm generally going to recommend
   /// that you use [prettyPrint] instead
   @override
-  String verbosePrint(int indent) => '${"  " * indent}(\n'
+  String verbosePrint(int indent) => '${"  " * indent}$runtimeType: (\n'
       '${value.verbosePrint(indent + 1)}\n'
       '${"  " * indent})';
 
@@ -53,6 +51,6 @@ class ParenthesesParser extends ValueParser<ParserList> {
 
 /// FunctionParser: functions
 abstract class FunctionParser extends ValueParser<ParserList> {
-  FunctionParser();
-  late ParserList value;
+  const FunctionParser(super.value);
+  FunctionParser copyWith(ParserList valueList);
 }

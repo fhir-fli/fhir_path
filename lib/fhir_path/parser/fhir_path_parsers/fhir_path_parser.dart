@@ -2,6 +2,8 @@
 
 /// FhirPathParser: base parser
 abstract class FhirPathParser {
+  const FhirPathParser();
+
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   List execute(List results, Map<String, dynamic> passed) => [];
@@ -13,7 +15,7 @@ abstract class FhirPathParser {
   /// classes that were created for ease of evaluation but are not included
   /// at all as objects in the official spec. I'm generally going to recommend
   /// that you use [prettyPrint] instead
-  String verbosePrint(int indent);
+  String verbosePrint(int indent) => '${"  " * indent}$runtimeType';
 
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
@@ -24,8 +26,8 @@ abstract class FhirPathParser {
 
 /// ValueParser: basic parser that holds a value
 abstract class ValueParser<T> extends FhirPathParser {
-  ValueParser();
-  late T value;
+  const ValueParser(this.value);
+  final T value;
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -54,9 +56,11 @@ abstract class ValueParser<T> extends FhirPathParser {
 
 /// OperatorParser: operators
 abstract class OperatorParser extends FhirPathParser {
-  OperatorParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const OperatorParser(this.before, this.after);
+  final ParserList before;
+  final ParserList after;
+
+  OperatorParser copyWith(ParserList before, ParserList after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -75,8 +79,8 @@ abstract class OperatorParser extends FhirPathParser {
 
 /// ParserList: anything that is a List of FhirPathParsers
 class ParserList extends FhirPathParser {
-  ParserList(this.value);
-  List<FhirPathParser> value;
+  const ParserList(this.value);
+  final List<FhirPathParser> value;
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

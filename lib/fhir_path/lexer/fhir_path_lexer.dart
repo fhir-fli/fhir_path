@@ -27,7 +27,7 @@ Parser<FhirPathParser> fhirPathLexer() {
   /// Calls the operatorValues function to check if any arguments need
   /// to be passed to the current Parser
   lexerFunctions.set((functionLexer & tokenizer.star() & char(')'))
-      .map((val) => val[0]..value = operatorValues(val[1] as List)));
+      .map((val) => val[0] = val[0].copyWith(operatorValues(val[1] as List))));
 
   /// Calls the operatorValues function to check if any arguments need
   /// to be passed to the current ParenthesesParser
@@ -61,8 +61,8 @@ ParserList operatorValues(List fullList) {
             if (i == 0 || fullList[i - 1] is OperatorParser)
               {
                 fullList[i] = entry is MinusParser
-                    ? UnaryNegateParser()
-                    : UnaryPlusParser()
+                    ? UnaryNegateParser(ParserList([]), ParserList([]))
+                    : UnaryPlusParser(ParserList([]), ParserList([]))
               }
           }
       },

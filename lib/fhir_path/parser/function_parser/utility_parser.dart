@@ -120,8 +120,8 @@ class TodayParser extends FhirPathParser {
 }
 
 class TraceParser extends ValueParser {
-  TraceParser();
-  dynamic value;
+  const TraceParser(super.value);
+  TraceParser copyWith(ValueParser value) => TraceParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

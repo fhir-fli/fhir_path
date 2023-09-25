@@ -11,9 +11,9 @@ import 'package:fhir/stu3.dart' as stu3;
 import '../../fhir_path.dart';
 
 class IsParser extends OperatorParser {
-  IsParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const IsParser(super.before, super.after);
+  IsParser copyWith(ParserList before, ParserList after) =>
+      IsParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -111,9 +111,9 @@ class IsParser extends OperatorParser {
 }
 
 class AsParser extends OperatorParser {
-  AsParser();
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
+  const AsParser(super.before, super.after);
+  AsParser copyWith(ParserList before, ParserList after) =>
+      AsParser(before, after);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
