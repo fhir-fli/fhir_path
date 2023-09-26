@@ -23,13 +23,13 @@ void testBasicTypes() {
       expect(
           (((parseResult("'test string'") as ParserList)).first as ValueParser)
               .value,
-          (ParserList([StringParser('test string')]).first as ValueParser)
+          (const ParserList([StringParser('test string')]).first as ValueParser)
               .value);
       expect(
           (((parseResult("'urn:oid:3.4.5.6.7.8'") as ParserList)).first
                   as ValueParser)
               .value,
-          (ParserList([StringParser('urn:oid:3.4.5.6.7.8')]).first
+          (const ParserList([StringParser('urn:oid:3.4.5.6.7.8')]).first
                   as ValueParser)
               .value);
     });
@@ -53,8 +53,12 @@ void testBasicTypes() {
           (const ParserList([IntegerParser(0)]).first as ValueParser).value);
       expect((((parseResult('45') as ParserList)).first as ValueParser).value,
           (const ParserList([IntegerParser(45)]).first as ValueParser).value);
-      // expect((((parseResult(-5) as ParserList)).first as ValueParser).value,
-      //     (ParserList([IntegerParser(-5)]).first as ValueParser).value);
+      expect(
+          ((((parseResult('-5') as ParserList)).first as OperatorParser)
+                  .after
+                  .first as ValueParser)
+              .value,
+          ((const ParserList([IntegerParser(5)])).first as ValueParser).value);
     });
     test('Decimal', () {
       expect((((parseResult('0.0') as ParserList)).first as ValueParser).value,
@@ -111,54 +115,27 @@ void testBasicTypes() {
             DateParser(FhirDate('2015-02-04')),
             TimeParser(FhirTime('05:34:28'))
           ]).value.first.value);
-      // expect(
-      //     (((parseResult('@2018-02-04T14:38:28+09:00') as ParserList)).first
-      //             as ValueParser)
-      //         .value
-      //         .last
-      //         .value,
-      //     DateTimeParser([
-      //       DateParser(FhirDate('2015-02-04')),
-      //       TimeParser(FhirTime('05:34:28'))
-      //     ]).value.last.value);
-      // expect(
-      //     (((parseResult('@2014-01-25T14:30:14.559') as ParserList)).first
-      //             as ValueParser)
-      //         .value
-      //         .first
-      //         .value,
-      //     (ParserList([
-      //       DateTimeParser([FhirDateTime('2014-01-25T14:30:14.559')])
-      //     ]).first as ValueParser)
-      //         .value
-      //         .first
-      //         .value);
-      // expect(
-      //     ((parseResult('@2014-01-25T14:30:14.559Z // A date time with UTC timezone offset')
-      //                 as ParserList)
-      //             .first as ValueParser)
-      //         .value
-      //         .last
-      //         .value,
-      //     (ParserList([
-      //       DateTimeParser([FhirDateTime('2014-01-25T14:30:14.559Z')])
-      //     ]).first as ValueParser)
-      //         .value
-      //         .last
-      //         .value);
-      // expect(
-      //     ((parseResult('@2014-01-25T14:30 // A partial DateTime with year, month, day, hour, and minute')
-      //                 as ParserList)
-      //             .first as ValueParser)
-      //         .value
-      //         .first
-      //         .value,
-      //     (ParserList([
-      //       DateTimeParser([FhirDateTime('2014-01-25T14:30')])
-      //     ]).first as ValueParser)
-      //         .value
-      //         .first
-      //         .value);
+      expect(
+          (((parseResult('@2018-02-04T14:34:28+09:00') as ParserList)).first
+                  as ValueParser)
+              .value
+              .last
+              .value,
+          DateTimeParser([
+            DateParser(FhirDate('2015-02-04')),
+            TimeParser(FhirTime('05:34:28'))
+          ]).value.last.value);
+      expect(
+          (((parseResult('@2014-01-25T14:30:14.559') as ParserList)).first
+                  as ValueParser)
+              .value
+              .first
+              .value,
+          (ParserList([
+            DateTimeParser([FhirDate('2014-01-25'), FhirTime('14:30:14.559')])
+          ]).first as ValueParser)
+              .value
+              .first);
       expect(
           ((parseResult('@2014-03-25T // A partial DateTime with year, month, and day')
                       as ParserList)
@@ -166,24 +143,6 @@ void testBasicTypes() {
               .value,
           (ParserList([
             DateTimeParser([FhirDateTime('2014-03-25')])
-          ]).first as ValueParser)
-              .value);
-      // expect(
-      //     ((parseResult('@2014-01T // A partial DateTime with year and month')
-      //                 as ParserList)
-      //             .first as ValueParser)
-      //         .value,
-      //     (ParserList([
-      //       DateTimeParser([FhirDateTime('2014-01T')])
-      //     ]).first as ValueParser)
-      //         .value);
-      expect(
-          ((parseResult('@2014T // A partial DateTime with only the year')
-                      as ParserList)
-                  .first as ValueParser)
-              .value,
-          (ParserList([
-            DateTimeParser([FhirDateTime('2014T')])
           ]).first as ValueParser)
               .value);
     });
@@ -240,31 +199,26 @@ void testBasicTypes() {
           [true]);
     });
     test('Non-Escape Sequences', () {
-      // TODO(Dokotela):  figure out escape sequences
+      expect(
+          ((parseResult("'p' // 'p'") as ParserList).first as StringParser)
+              .value,
+          'p');
+      expect(
+          ((parseResult("'\\p' // 'p'") as ParserList).first as StringParser)
+              .value,
+          'p');
+      expect(
+          ((parseResult("'3' // '3'") as ParserList).first as StringParser)
+              .value,
+          '3');
+      expect(
+          ((parseResult(r"'\u005' // 'u005'") as ParserList).first
+                  as StringParser)
+              .value,
+          'u005');
+      // TODO(Dokotela): empty escape sequence
       // expect(
-      //     ((parseResult("'\p' // 'p'") as ParserList).first as StringParser)
-      //         .value
-      //         .value,
-      //     'p');
-      // expect(
-      //     ((parseResult("'\\p' // '\p'") as ParserList).first as StringParser)
-      //         .value
-      //         .value,
-      //     '\p');
-      // expect(
-      //     ((parseResult("'\3' // '3'") as ParserList).first as StringParser)
-      //         .value
-      //         .value,
-      //     '3');
-      // expect(
-      //     ((parseResult("'\u005' // 'u005'") as ParserList).first
-      //             as StringParser)
-      //         .value
-      //         .value,
-      //     'u005');
-      // expect(
-      //     ((parseResult(""' // '"") as ParserList).first as StringParser)
-      //         .value
+      //     ((parseResult(r"" ' // ' "") as ParserList).first as StringParser)
       //         .value,
       //     '');
     });

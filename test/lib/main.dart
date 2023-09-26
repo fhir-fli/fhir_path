@@ -14,14 +14,18 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.light(),
         home: const SafeArea(
           child: Scaffold(
-            body: Center(
-                child: Column(
-              children: <Widget>[
-                SizedBox(height: 8),
-                RunTests('FHIRPath Tests', fhirPathTest),
-                SizedBox(height: 8),
-              ],
-            )),
+            body: SizedBox(
+              height: 200,
+              width: 200,
+              child: Center(
+                  child: Column(
+                children: <Widget>[
+                  SizedBox(height: 8),
+                  RunTests('FHIRPath Tests', fhirPathTest),
+                  SizedBox(height: 8),
+                ],
+              )),
+            ),
           ),
         ),
       );

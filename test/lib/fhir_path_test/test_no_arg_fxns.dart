@@ -778,7 +778,7 @@ void testNoArgFxns() {
       // expect(
       //     walkFhirPath(
       //         context: resource.toJson(),
-      //         pathExpression: ""10 \'mg[Hg]'".toQuantity()"),
+      //         pathExpression: "10 'mg[Hg]'.toQuantity()"),
       //     ['true']);
     });
 
@@ -1232,7 +1232,115 @@ void testNoArgFxns() {
           ]);
     });
 
-    // TODO(Dokotela): descendants
+    test('descendants', () {
+      expect(
+          walkFhirPath(
+              context: resource.toJson(),
+              pathExpression: "Patient.address[1].descendants()"),
+          [
+            {
+              "extension": [
+                {
+                  "extension": [
+                    {
+                      "extension": [
+                        {
+                          "extension": [
+                            {
+                              "valueCount": {"unit": "Kg"}
+                            },
+                            {
+                              "valueCount": {"unit": "Km"}
+                            }
+                          ],
+                          "valueCount": {"unit": "Kg"}
+                        },
+                        {
+                          "valueCount": {"unit": "Km"}
+                        }
+                      ],
+                      "valueCount": {"unit": "Kg"}
+                    },
+                    {
+                      "valueCount": {"unit": "Km"}
+                    }
+                  ],
+                  "valueCount": {"unit": "Kg"}
+                },
+                {
+                  "valueCount": {"unit": "Km"}
+                }
+              ]
+            },
+            {
+              "extension": [
+                {
+                  "extension": [
+                    {
+                      "extension": [
+                        {
+                          "valueCount": {"unit": "Kg"}
+                        },
+                        {
+                          "valueCount": {"unit": "Km"}
+                        }
+                      ],
+                      "valueCount": {"unit": "Kg"}
+                    },
+                    {
+                      "valueCount": {"unit": "Km"}
+                    }
+                  ],
+                  "valueCount": {"unit": "Kg"}
+                },
+                {
+                  "valueCount": {"unit": "Km"}
+                }
+              ],
+              "valueCount": {"unit": "Kg"}
+            },
+            {
+              "valueCount": {"unit": "Km"}
+            },
+            {
+              "extension": [
+                {
+                  "extension": [
+                    {
+                      "valueCount": {"unit": "Kg"}
+                    },
+                    {
+                      "valueCount": {"unit": "Km"}
+                    }
+                  ],
+                  "valueCount": {"unit": "Kg"}
+                },
+                {
+                  "valueCount": {"unit": "Km"}
+                }
+              ],
+              "valueCount": {"unit": "Kg"}
+            },
+            {"unit": "Kg"},
+            {"unit": "Km"},
+            {
+              "extension": [
+                {
+                  "valueCount": {"unit": "Kg"}
+                },
+                {
+                  "valueCount": {"unit": "Km"}
+                }
+              ],
+              "valueCount": {"unit": "Kg"}
+            },
+            "Kg",
+            "Km",
+            {
+              "valueCount": {"unit": "Kg"}
+            }
+          ]);
+    });
 
     test('DateTimeFunctions', () {
       final startNow = DateTime.now();
