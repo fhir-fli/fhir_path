@@ -1,6 +1,6 @@
 import '../../fhir_path.dart';
 
-class QualifiedIdentifierParser extends ValueParser<String> {
+class QualifiedIdentifierParser extends FhirPathParser {
   QualifiedIdentifierParser(String? newQualifier, String newIdentifier) {
     String? formatValue(String? value) {
       if (value == null) {
@@ -39,12 +39,12 @@ class QualifiedIdentifierParser extends ValueParser<String> {
   /// that you use [prettyPrint] instead
   @override
   String verbosePrint(int indent) =>
-      '${"  " * indent}QualifiedIdentifierParser: "$value"';
+      '${"  " * indent}QualifiedIdentifierParser: ';
 
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '`$value`';
+  String prettyPrint([int indent = 2]) => '';
 }

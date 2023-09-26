@@ -17,26 +17,13 @@ class GreaterParser extends OperatorParser {
   List execute(List results, Map<String, dynamic> passed) =>
       executeComparisons(results, before, after, passed, Comparator.gt);
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}GreaterParser'
-      '\n${before.verbosePrint(indent + 1)}'
-      '\n${after.verbosePrint(indent + 1)}';
-
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '>'
-      '\n${"  " * indent}${before.prettyPrint(indent + 1)}'
-      '\n${"  " * indent}${after.prettyPrint(indent + 1)}';
+  String prettyPrint([int indent = 2]) =>
+      '${"  " * indent}>${super.prettyPrint(indent)}';
 }
 
 class LessParser extends OperatorParser {
@@ -50,26 +37,13 @@ class LessParser extends OperatorParser {
   List execute(List results, Map<String, dynamic> passed) =>
       executeComparisons(results, before, after, passed, Comparator.lt);
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}LessParser'
-      '\n${before.verbosePrint(indent + 1)}'
-      '\n${after.verbosePrint(indent + 1)}';
-
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '<'
-      '\n${"  " * indent}${before.prettyPrint(indent + 1)}'
-      '\n${"  " * indent}${after.prettyPrint(indent + 1)}';
+  String prettyPrint([int indent = 2]) =>
+      '${"  " * indent}<${super.prettyPrint(indent)}';
 }
 
 class GreaterEqualParser extends OperatorParser {
@@ -84,26 +58,13 @@ class GreaterEqualParser extends OperatorParser {
     return executeComparisons(results, before, after, passed, Comparator.gte);
   }
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}GreaterEqualParser'
-      '\n${before.verbosePrint(indent + 1)}'
-      '\n${after.verbosePrint(indent + 1)}';
-
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '>='
-      '\n${"  " * indent}${before.prettyPrint(indent + 1)}'
-      '\n${"  " * indent}${after.prettyPrint(indent + 1)}';
+  String prettyPrint([int indent = 2]) =>
+      '${"  " * indent}>=${super.prettyPrint(indent)}';
 }
 
 class LessEqualParser extends OperatorParser {
@@ -117,26 +78,13 @@ class LessEqualParser extends OperatorParser {
   List execute(List results, Map<String, dynamic> passed) =>
       executeComparisons(results, before, after, passed, Comparator.lte);
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}LessEqualParser'
-      '\n${before.verbosePrint(indent + 1)}'
-      '\n${after.verbosePrint(indent + 1)}';
-
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '<='
-      '\n${"  " * indent}${before.prettyPrint(indent + 1)}'
-      '\n${"  " * indent}${after.prettyPrint(indent + 1)}';
+  String prettyPrint([int indent = 2]) =>
+      '${"  " * indent}<=${super.prettyPrint(indent)}';
 }
 
 enum Comparator { gt, gte, lt, lte }

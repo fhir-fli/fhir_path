@@ -7,7 +7,7 @@ import 'package:collection/collection.dart';
 import '../../fhir_path.dart';
 
 class SingleParser extends FhirPathParser {
-  SingleParser();
+  const SingleParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -41,7 +41,7 @@ class SingleParser extends FhirPathParser {
 }
 
 class FirstParser extends FhirPathParser {
-  FirstParser();
+  const FirstParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -95,7 +95,7 @@ class LastParser extends FhirPathParser {
 }
 
 class TailParser extends FhirPathParser {
-  TailParser();
+  const TailParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

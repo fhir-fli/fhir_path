@@ -234,9 +234,10 @@ class OfTypeParser extends ValueParser<ParserList> {
 }
 
 class ExtensionParser extends ValueParser<ParserList> {
-  static const extensionKey = '__extension';
-
   const ExtensionParser(super.value);
+  ExtensionParser copyWith(ParserList value) => ExtensionParser(value);
+
+  static const extensionKey = '__extension';
 
   @override
 

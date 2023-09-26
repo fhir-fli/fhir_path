@@ -2,7 +2,7 @@
 import '../../fhir_path.dart';
 
 class ChildrenParser extends FhirPathParser {
-  ChildrenParser();
+  const ChildrenParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -42,7 +42,7 @@ class ChildrenParser extends FhirPathParser {
 }
 
 class DescendantsParser extends FhirPathParser {
-  DescendantsParser();
+  const DescendantsParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

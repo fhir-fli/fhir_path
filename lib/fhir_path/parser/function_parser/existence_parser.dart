@@ -8,7 +8,7 @@ import '../../fhir_path.dart';
 
 /// Returns true if the input collection is empty ({ }) and false otherwise.
 class EmptyParser extends FhirPathParser {
-  EmptyParser();
+  const EmptyParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -35,8 +35,9 @@ class EmptyParser extends FhirPathParser {
 }
 
 class HasValueParser extends FhirPathParser {
-  HasValueParser();
-  late ParserList value;
+  const HasValueParser(this.value);
+  final ParserList value;
+  HasValueParser copyWith(ParserList value) => HasValueParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -200,7 +201,7 @@ class AllParser extends ValueParser<ParserList> {
 /// Takes a collection of Boolean values and returns true if all the items are true.
 /// If any items are false, the result is false. If the input is empty ({ }), the result is true.
 class AllTrueParser extends FhirPathParser {
-  AllTrueParser();
+  const AllTrueParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -234,7 +235,7 @@ class AllTrueParser extends FhirPathParser {
 /// Takes a collection of Boolean values and returns true if any of the items are true.
 /// If all the items are false, or if the input is empty ({ }), the result is false.
 class AnyTrueParser extends FhirPathParser {
-  AnyTrueParser();
+  const AnyTrueParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -268,7 +269,7 @@ class AnyTrueParser extends FhirPathParser {
 /// Takes a collection of Boolean values and returns true if all the items are false.
 /// If any items are true, the result is false. If the input is empty ({ }), the result is true.
 class AllFalseParser extends FhirPathParser {
-  AllFalseParser();
+  const AllFalseParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -302,7 +303,7 @@ class AllFalseParser extends FhirPathParser {
 /// Takes a collection of Boolean values and returns true if any of the items are false.
 /// If all the items are true, or if the input is empty ({ }), the result is false.
 class AnyFalseParser extends FhirPathParser {
-  AnyFalseParser();
+  const AnyFalseParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -376,8 +377,9 @@ class SubsetOfParser extends ValueParser<ParserList> {
 }
 
 class SupersetOfParser extends FhirPathParser {
-  SupersetOfParser();
-  dynamic value;
+  const SupersetOfParser(this.value);
+  final dynamic value;
+  SupersetOfParser copyWith(dynamic value) => SupersetOfParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -418,7 +420,7 @@ class SupersetOfParser extends FhirPathParser {
 }
 
 class CountParser extends FhirPathParser {
-  CountParser();
+  const CountParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -478,7 +480,7 @@ class DistinctParser extends FhirPathParser {
 }
 
 class IsDistinctParser extends FhirPathParser {
-  IsDistinctParser();
+  const IsDistinctParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

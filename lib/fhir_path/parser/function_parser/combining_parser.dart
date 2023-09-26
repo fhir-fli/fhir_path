@@ -23,25 +23,14 @@ class UnionFunctionParser extends FunctionParser {
     return finalResults;
   }
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) =>
-      '${"  " * indent}UnionParser\n${value.verbosePrint(indent + 1)}';
-
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
   String prettyPrint([int indent = 2]) => value.isEmpty
-      ? '.union()'
-      : '.union(\n${"  " * indent}${value.prettyPrint(indent + 1)}\n'
+      ? '${"  " * indent}.union()'
+      : '${"  " * indent}.union(\n${"  " * indent}${value.prettyPrint(indent + 1)}\n'
           '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
@@ -66,24 +55,13 @@ class CombineParser extends FunctionParser {
     }
   }
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) =>
-      '${"  " * indent}CombineParser\n${value.verbosePrint(indent + 1)}';
-
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
   String prettyPrint([int indent = 2]) => value.isEmpty
-      ? '.combine()'
-      : '.combine(\n${"  " * indent}${value.prettyPrint(indent + 1)}\n'
+      ? '${"  " * indent}.combine()'
+      : '${"  " * indent}.combine(\n${"  " * indent}${value.prettyPrint(indent + 1)}\n'
           '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }

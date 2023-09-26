@@ -53,4 +53,15 @@ class ParenthesesParser extends ValueParser<ParserList> {
 abstract class FunctionParser extends ValueParser<ParserList> {
   const FunctionParser(super.value);
   FunctionParser copyWith(ParserList valueList);
+
+  /// To print the entire parsed FHIRPath expression, this includes ALL
+  /// of the Parsers that are used in this package by the names used in
+  /// this package. These are not always synonymous with the FHIRPath
+  /// specification (although they usually are), and include some parser
+  /// classes that were created for ease of evaluation but are not included
+  /// at all as objects in the official spec. I'm generally going to recommend
+  /// that you use [prettyPrint] instead
+  @override
+  String verbosePrint(int indent) =>
+      '${"  " * indent}$runtimeType\n${value.verbosePrint(indent + 1)}';
 }

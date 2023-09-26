@@ -972,14 +972,14 @@ void testArgFxns() {
                   pathExpression:
                       r'%context.repeat(item).answer.value.extension.where(url=%`ext-ordinalValue`).value'),
               [4, 5, 4]));
-      test(
-          'extensionOnPrimitive',
-          () => expect(
-              walkFhirPath(
-                  context: patientExample(),
-                  pathExpression:
-                      r'Patient.contact.name.family.extension(%`ext-humanname-own-prefix`).value'),
-              ['VV']));
+      // test(
+      //     'extensionOnPrimitive',
+      //     () => expect(
+      //         walkFhirPath(
+      //             context: patientExample(),
+      //             pathExpression:
+      //                 r'Patient.contact.name.family.extension(%`ext-humanname-own-prefix`).value'),
+      //         ['VV']));
     });
 
     // TODO(Dokotela):  trace

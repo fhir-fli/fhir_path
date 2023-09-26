@@ -23,12 +23,12 @@ final Parser<CombineParser> combineLexer =
 /// identifies toQuantitys
 final Parser<ToQuantityParser> toQuantityLexer =
     (string('toQuantity(') | string('.toQuantity('))
-        .map((_) => ToQuantityParser());
+        .map((_) => ToQuantityParser(null));
 
 /// identifies convertsToQuantitys
 final Parser<ConvertsToQuantityParser> convertsToQuantityLexer =
     (string('convertsToQuantity(') | string('.convertsToQuantity('))
-        .map((_) => ConvertsToQuantityParser());
+        .map((_) => ConvertsToQuantityParser(null));
 
 /// identifies existss
 final Parser<ExistsParser> existsLexer =
@@ -47,7 +47,7 @@ final Parser<SubsetOfParser> subsetOfLexer =
 /// identifies supersetOfs
 final Parser<SupersetOfParser> supersetOfLexer =
     (string('supersetOf(') | string('.supersetOf('))
-        .map((_) => SupersetOfParser());
+        .map((_) => SupersetOfParser(null));
 
 /// identifies wheres
 final Parser<FpWhereParser> whereLexer = (string('where(') | string('.where('))

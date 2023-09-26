@@ -7,7 +7,7 @@ import 'package:fhir/primitive_types/primitive_types.dart';
 import '../../fhir_path.dart';
 
 class FpNotParser extends FhirPathParser {
-  FpNotParser();
+  const FpNotParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -37,7 +37,7 @@ class FpNotParser extends FhirPathParser {
 }
 
 class NowParser extends FhirPathParser {
-  NowParser();
+  const NowParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -64,7 +64,7 @@ class NowParser extends FhirPathParser {
 }
 
 class TimeOfDayParser extends FhirPathParser {
-  TimeOfDayParser();
+  const TimeOfDayParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -93,7 +93,7 @@ class TimeOfDayParser extends FhirPathParser {
 }
 
 class TodayParser extends FhirPathParser {
-  TodayParser();
+  const TodayParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -119,9 +119,9 @@ class TodayParser extends FhirPathParser {
   String prettyPrint([int indent = 2]) => '.today()';
 }
 
-class TraceParser extends ValueParser {
+class TraceParser extends ValueParser<ParserList> {
   const TraceParser(super.value);
-  TraceParser copyWith(ValueParser value) => TraceParser(value);
+  TraceParser copyWith(ParserList value) => TraceParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

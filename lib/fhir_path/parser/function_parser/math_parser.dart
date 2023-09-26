@@ -7,7 +7,7 @@ import 'dart:math';
 import '../../fhir_path.dart';
 
 class AbsParser extends FhirPathParser {
-  AbsParser();
+  const AbsParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -45,7 +45,7 @@ class AbsParser extends FhirPathParser {
 }
 
 class CeilingParser extends FhirPathParser {
-  CeilingParser();
+  const CeilingParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -77,7 +77,7 @@ class CeilingParser extends FhirPathParser {
 }
 
 class ExpParser extends FhirPathParser {
-  ExpParser();
+  const ExpParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -109,7 +109,7 @@ class ExpParser extends FhirPathParser {
 }
 
 class FloorParser extends FhirPathParser {
-  FloorParser();
+  const FloorParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -141,7 +141,7 @@ class FloorParser extends FhirPathParser {
 }
 
 class LnParser extends FhirPathParser {
-  LnParser();
+  const LnParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -314,7 +314,7 @@ class RoundParser extends ValueParser<ParserList> {
 }
 
 class SqrtParser extends FhirPathParser {
-  SqrtParser();
+  const SqrtParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

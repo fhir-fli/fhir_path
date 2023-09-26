@@ -8,8 +8,7 @@ import 'package:fhir/stu3.dart' as stu3;
 import '../../fhir_path.dart';
 
 class TypeNameIdentifierParser extends ValueParser<String> {
-  TypeNameIdentifierParser(this.value);
-  String value;
+  const TypeNameIdentifierParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -20,8 +19,7 @@ class TypeNameIdentifierParser extends ValueParser<String> {
 }
 
 class QuotedIdentifierParser extends ValueParser<String> {
-  QuotedIdentifierParser(this.value);
-  String value;
+  const QuotedIdentifierParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -104,8 +102,8 @@ class QuotedIdentifierParser extends ValueParser<String> {
   }
 }
 
-class CqlDateTimeParser extends BaseDateTimeParser<List> {
-  CqlDateTimeParser(String stringValue) {
+class CqlDateTimeParser extends FhirPathParser {
+  CqlDateTimeParser(stringValue) {
     final removeAt = stringValue.replaceFirst('@', '');
     final split = removeAt.split('T');
 
@@ -127,8 +125,9 @@ class CqlDateTimeParser extends BaseDateTimeParser<List> {
           .join(':');
 
       value = [
-        DateParser(formattedDateTime.toIso8601String().split('T').first),
-        TimeParser(timeString),
+        DateParser(
+            FhirDate(formattedDateTime.toIso8601String().split('T').first)),
+        TimeParser(FhirTime(timeString)),
       ];
     } else {
       final formattedDateTime = FhirDateTime(removeAt.split('T').first).value;
@@ -167,7 +166,7 @@ class CqlDateTimeParser extends BaseDateTimeParser<List> {
   String prettyPrint([int indent = 2]) => '@${toString()}';
 }
 
-class LongNumberParser extends ValueParser<num> {
+class LongNumberParser extends FhirPathParser {
   LongNumberParser(String newValue)
       : value = num.parse(newValue.replaceAll('L', ''));
   num value;
@@ -176,4 +175,10 @@ class LongNumberParser extends ValueParser<num> {
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) => [value];
+
+  @override
+  String prettyPrint([int indent = 2]) {
+    // TODO: implement prettyPrint
+    throw UnimplementedError();
+  }
 }

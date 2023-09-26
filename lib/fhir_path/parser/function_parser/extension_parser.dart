@@ -7,7 +7,7 @@ import 'package:collection/collection.dart';
 import '../../fhir_path.dart';
 
 class SumParser extends FhirPathParser {
-  SumParser();
+  const SumParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -43,7 +43,7 @@ class SumParser extends FhirPathParser {
 }
 
 class MinParser extends FhirPathParser {
-  MinParser();
+  const MinParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -79,7 +79,7 @@ class MinParser extends FhirPathParser {
 }
 
 class MaxParser extends FhirPathParser {
-  MaxParser();
+  const MaxParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -115,7 +115,7 @@ class MaxParser extends FhirPathParser {
 }
 
 class AvgParser extends FhirPathParser {
-  AvgParser();
+  const AvgParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -151,7 +151,7 @@ class AvgParser extends FhirPathParser {
 }
 
 class AnswersParser extends FhirPathParser {
-  AnswersParser();
+  const AnswersParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -186,7 +186,7 @@ class AnswersParser extends FhirPathParser {
 }
 
 class OrdinalParser extends FhirPathParser {
-  OrdinalParser();
+  const OrdinalParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

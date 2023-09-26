@@ -77,7 +77,8 @@ final Parser<ConvertsToTimeParser> convertsToTimeLexer =
 
 /// identifies hasValues
 final Parser<HasValueParser> hasValueLexer =
-    (string('hasValue()') | string('.hasValue()')).map((_) => HasValueParser());
+    (string('hasValue()') | string('.hasValue()'))
+        .map((_) => HasValueParser(ParserList([])));
 
 /// identifies emptys
 final Parser<EmptyParser> emptyLexer =

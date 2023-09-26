@@ -250,7 +250,7 @@ class ContainsFunctionParser extends ValueParser<ParserList> {
 }
 
 class UpperParser extends FhirPathParser {
-  UpperParser();
+  const UpperParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -280,7 +280,7 @@ class UpperParser extends FhirPathParser {
 }
 
 class LowerParser extends FhirPathParser {
-  LowerParser();
+  const LowerParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -446,7 +446,7 @@ class ReplaceMatchesParser extends ValueParser<ParserList> {
 }
 
 class LengthParser extends FhirPathParser {
-  LengthParser();
+  const LengthParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -478,7 +478,7 @@ class LengthParser extends FhirPathParser {
 }
 
 class ToCharsParser extends FhirPathParser {
-  ToCharsParser();
+  const ToCharsParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

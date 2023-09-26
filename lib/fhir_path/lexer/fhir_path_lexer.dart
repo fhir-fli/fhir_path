@@ -79,10 +79,9 @@ ParserList operatorValues(List fullList) {
     final splitIndex = fullList
         .lastIndexWhere((e) => operatorOrderMap[e.runtimeType] == highest);
 
-    fullList[splitIndex].before =
-        operatorValues(fullList.sublist(0, splitIndex));
-    fullList[splitIndex].after =
-        operatorValues(fullList.sublist(splitIndex + 1, fullList.length));
+    fullList[splitIndex] = fullList[splitIndex].copyWith(
+        operatorValues(fullList.sublist(0, splitIndex)),
+        operatorValues(fullList.sublist(splitIndex + 1, fullList.length)));
     return ParserList(<FhirPathParser>[fullList[splitIndex] as FhirPathParser]);
   }
 }

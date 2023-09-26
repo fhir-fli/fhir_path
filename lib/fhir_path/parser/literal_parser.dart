@@ -104,9 +104,7 @@ class QuantityParser extends ValueParser<FhirPathQuantity> {
   List execute(List results, Map<String, dynamic> passed) => [value];
 
   @override
-  String toString() {
-    return 'Quantity: $value';
-  }
+  String toString() => 'Quantity: $value';
 }
 
 /// The Integer type represents whole numbers in the range -2^31 to 2^31-1 in
@@ -120,9 +118,7 @@ class IntegerParser extends ValueParser<int> {
   List execute(List results, Map<String, dynamic> passed) => [value];
 
   @override
-  String toString() {
-    return 'Integer: $value';
-  }
+  String toString() => 'Integer: $value';
 }
 
 /// The Decimal type represents real values in the range (-10^28+1)/10^8 to
@@ -144,9 +140,7 @@ class DecimalParser extends ValueParser<double> {
   List execute(List results, Map<String, dynamic> passed) => [value];
 
   @override
-  String toString() {
-    return 'Decimal: $value';
-  }
+  String toString() => 'Decimal: $value';
 }
 
 /// Identifiers are used as labels to allow expressions to reference elements
@@ -343,7 +337,7 @@ class DelimitedIdentifierParser extends ValueParser<String> {
 /// String literals are surrounded by single-quotes and may use \-escapes to
 /// escape quotes and represent Unicode characters.
 class StringParser extends ValueParser<String> {
-  StringParser(super.value);
+  const StringParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -400,7 +394,7 @@ class DateTimeParser extends BaseDateTimeParser<List> {
 /// The Date type represents date and partial date values in the range
 /// @0001-01-01 to @9999-12-31 with a 1 day step size.
 class DateParser extends BaseDateTimeParser<FhirDate> {
-  DateParser(super.value);
+  const DateParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

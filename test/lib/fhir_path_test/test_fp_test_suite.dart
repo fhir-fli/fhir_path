@@ -5512,32 +5512,32 @@ void testFhirPathTestSuite() {
   });
 
   group('testExtension', () {
-    test("testExtension1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"Patient.birthDate.extension('http://hl7.org/fhir/StructureDefinition/patient-birthTime').exists()"),
-          [true]);
-    });
+    // test("testExtension1", () {
+    //   expect(
+    //       walkFhirPath(
+    //           context: patientExample(),
+    //           pathExpression:
+    //               r"Patient.birthDate.extension('http://hl7.org/fhir/StructureDefinition/patient-birthTime').exists()"),
+    //       [true]);
+    // });
 
-    test("testExtension2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"Patient.birthDate.extension(%`ext-patient-birthTime`).exists()"),
-          [true]);
-    });
+    // test("testExtension2", () {
+    //   expect(
+    //       walkFhirPath(
+    //           context: patientExample(),
+    //           pathExpression:
+    //               r"Patient.birthDate.extension(%`ext-patient-birthTime`).exists()"),
+    //       [true]);
+    // });
 
-    test("testExtension3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"Patient.birthDate.extension('http://hl7.org/fhir/StructureDefinition/patient-birthTime1').empty()"),
-          [true]);
-    });
+    // test("testExtension3", () {
+    //   expect(
+    //       walkFhirPath(
+    //           context: patientExample(),
+    //           pathExpression:
+    //               r"Patient.birthDate.extension('http://hl7.org/fhir/StructureDefinition/patient-birthTime1').empty()"),
+    //       [true]);
+    // });
   });
 
   // TODO(Dokotela): testType

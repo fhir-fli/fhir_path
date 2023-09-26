@@ -51,7 +51,7 @@ abstract class ValueParser<T> extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '`$value`';
+  String prettyPrint([int indent = 2]) => '$value';
 }
 
 /// OperatorParser: operators
@@ -75,6 +75,27 @@ abstract class OperatorParser extends FhirPathParser {
 
   @override
   int get hashCode => toString().hashCode;
+
+  /// To print the entire parsed FHIRPath expression, this includes ALL
+  /// of the Parsers that are used in this package by the names used in
+  /// this package. These are not always synonymous with the FHIRPath
+  /// specification (although they usually are), and include some parser
+  /// classes that were created for ease of evaluation but are not included
+  /// at all as objects in the official spec. I'm generally going to recommend
+  /// that you use [prettyPrint] instead
+  @override
+  String verbosePrint(int indent) => '${"  " * indent}$runtimeType'
+      '\n${before.verbosePrint(indent + 1)}'
+      '\n${after.verbosePrint(indent + 1)}';
+
+  /// Uses a rough approximation of reverse polish notation to render the
+  /// parsed value of a FHIRPath in a more human readable way than
+  /// [verbosePrint], while still demonstrating how the expression was parsed
+  /// and nested according to this package
+  @override
+  String prettyPrint([int indent = 2]) =>
+      '\n${"  " * indent}${before.prettyPrint(indent + 1)}'
+      '\n${"  " * indent}${after.prettyPrint(indent + 1)}';
 }
 
 /// ParserList: anything that is a List of FhirPathParsers

@@ -15,17 +15,6 @@ class BracketsIndexParser extends ValueParser<int> {
   List execute(List results, Map<String, dynamic> passed) =>
       results.isEmpty || value > results.length - 1 ? [] : [results[value]];
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) =>
-      '${"  " * indent}BracketsIndexParser: "$value"';
-
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
@@ -44,7 +33,7 @@ class BracketsIndexParser extends ValueParser<int> {
 /// collection (elements named given) and $this will be set to each item when
 /// the expression passed to where() is evaluated.
 class IndexParser extends FhirPathParser {
-  IndexParser();
+  const IndexParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -113,7 +102,7 @@ class IterationContext {
 /// collection (elements named given) and $this will be set to each item when
 /// the expression passed to where() is evaluated.
 class ThisParser extends FhirPathParser {
-  ThisParser();
+  const ThisParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

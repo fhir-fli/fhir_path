@@ -62,8 +62,7 @@ class IncludeDefinitionParser extends FhirPathParser {
 }
 
 class AccessModifierParser extends ValueParser<String> {
-  AccessModifierParser(this.value);
-  String value;
+  const AccessModifierParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -73,7 +72,7 @@ class AccessModifierParser extends ValueParser<String> {
   }
 }
 
-class ParameterDefinitionParser extends ValueParser<String> {
+class ParameterDefinitionParser extends FhirPathParser {
   ParameterDefinitionParser(
     this.accessModifier,
     this.identifier,
@@ -90,5 +89,11 @@ class ParameterDefinitionParser extends ValueParser<String> {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     return results;
+  }
+
+  @override
+  String prettyPrint([int indent = 2]) {
+    // TODO: implement prettyPrint
+    throw UnimplementedError();
   }
 }

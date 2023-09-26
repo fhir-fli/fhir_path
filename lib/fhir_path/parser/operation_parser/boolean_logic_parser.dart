@@ -31,26 +31,13 @@ class AndStringParser extends OperatorParser {
     return [];
   }
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}AndStringParser'
-      '\n${before.verbosePrint(indent + 1)}'
-      '\n${after.verbosePrint(indent + 1)}';
-
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => 'and'
-      '\n${"  " * indent}${before.prettyPrint(indent + 1)}'
-      '\n${"  " * indent}${after.prettyPrint(indent + 1)}';
+  String prettyPrint([int indent = 2]) =>
+      '${"  " * indent}and${super.prettyPrint(indent)}';
 }
 
 class XorParser extends OperatorParser {
@@ -85,26 +72,13 @@ class XorParser extends OperatorParser {
     return [true];
   }
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}XorParser'
-      '\n${before.verbosePrint(indent + 1)}'
-      '\n${after.verbosePrint(indent + 1)}';
-
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => 'xor'
-      '\n${"  " * indent}${before.prettyPrint(indent + 1)}'
-      '\n${"  " * indent}${after.prettyPrint(indent + 1)}';
+  String prettyPrint([int indent = 2]) =>
+      '${"  " * indent}xor${super.prettyPrint(indent)}';
 }
 
 class OrStringParser extends OperatorParser {
@@ -135,26 +109,13 @@ class OrStringParser extends OperatorParser {
     return [false];
   }
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}OrStringParser'
-      '\n${before.verbosePrint(indent + 1)}'
-      '\n${after.verbosePrint(indent + 1)}';
-
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => 'or'
-      '\n${"  " * indent}${before.prettyPrint(indent + 1)}'
-      '\n${"  " * indent}${after.prettyPrint(indent + 1)}';
+  String prettyPrint([int indent = 2]) =>
+      '${"  " * indent}or${super.prettyPrint(indent)}';
 }
 
 class ImpliesParser extends OperatorParser {
@@ -193,24 +154,12 @@ class ImpliesParser extends OperatorParser {
     return [];
   }
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}ImpliesParser'
-      '\n${before.verbosePrint(indent + 1)}'
-      '\n${after.verbosePrint(indent + 1)}';
-
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => 'implies('
+  String prettyPrint([int indent = 2]) => '${"  " * indent}implies('
       '\n${"  " * indent}${before.prettyPrint(indent + 1)}'
       '\n${"  " * indent}${after.prettyPrint(indent + 1)}\n'
       '${indent <= 0 ? "" : "  " * (indent - 1)})';

@@ -77,24 +77,13 @@ class IifParser extends FunctionParser {
   @override
   String toString() => 'IifParser: $value';
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
-  @override
-  String verbosePrint(int indent) =>
-      '${"  " * indent}IifParser\n${value.verbosePrint(indent + 1)}';
-
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
   String prettyPrint([int indent = 2]) =>
-      '.iif(\n${"  " * indent}${value.prettyPrint(indent + 1)}\n'
+      '${"  " * indent}.iif(\n${"  " * indent}${value.prettyPrint(indent + 1)}\n'
       '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
@@ -106,7 +95,7 @@ class IifParser extends FunctionParser {
 /// the item is a String that is equal to one of the possible string representations of Boolean values
 /// If the item is not one the above types, or the item is a String, Integer, or Decimal, but is not equal to one of the possible values convertible to a Boolean, the result is empty.
 class ToBooleanParser extends FhirPathParser {
-  ToBooleanParser();
+  const ToBooleanParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -150,7 +139,7 @@ class ToBooleanParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.toBoolean()';
+  String prettyPrint([int indent = 2]) => '${"  " * indent}.toBoolean()';
 }
 
 /// http://hl7.org/fhirpath/#convertstoboolean-boolean
@@ -160,7 +149,7 @@ class ToBooleanParser extends FhirPathParser {
 /// the item is a Decimal that is equal to one of the possible decimal representations of Boolean values
 /// the item is a String that is equal to one of the possible string representations of Boolean values
 class ConvertsToBooleanParser extends FhirPathParser {
-  ConvertsToBooleanParser();
+  const ConvertsToBooleanParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -209,12 +198,13 @@ class ConvertsToBooleanParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.convertsToBoolean()';
+  String prettyPrint([int indent = 2]) =>
+      '${"  " * indent}.convertsToBoolean()';
 }
 
 /// Converts input to an [Integer] if possible
 class ToIntegerParser extends FhirPathParser {
-  ToIntegerParser();
+  const ToIntegerParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -248,7 +238,7 @@ class ToIntegerParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.toInteger()';
+  String prettyPrint([int indent = 2]) => '${"  " * indent}.toInteger()';
 }
 
 /// Checks if input can be converted to an [Integer]
@@ -287,12 +277,13 @@ class ConvertsToIntegerParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.convertsToInteger()';
+  String prettyPrint([int indent = 2]) =>
+      '${"  " * indent}.convertsToInteger()';
 }
 
 /// Converts input to an [Date] if possible
 class ToDateParser extends FhirPathParser {
-  ToDateParser();
+  const ToDateParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -320,12 +311,12 @@ class ToDateParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.toDate()';
+  String prettyPrint([int indent = 2]) => '${"  " * indent}.toDate()';
 }
 
 /// Checks if input can be converted to a [Date]
 class ConvertsToDateParser extends FhirPathParser {
-  ConvertsToDateParser();
+  const ConvertsToDateParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -351,7 +342,7 @@ class ConvertsToDateParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.convertsToDate()';
+  String prettyPrint([int indent = 2]) => '${"  " * indent}.convertsToDate()';
 }
 
 /// Converts input to [FhirDateTime] if possible
@@ -384,12 +375,12 @@ class ToDateTimeParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.toDateTime()';
+  String prettyPrint([int indent = 2]) => '${"  " * indent}.toDateTime()';
 }
 
 /// Checks if input can be converted to a [FhirDateTime]
 class ConvertsToDateTimeParser extends FhirPathParser {
-  ConvertsToDateTimeParser();
+  const ConvertsToDateTimeParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -417,7 +408,8 @@ class ConvertsToDateTimeParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.convertsToDateTime()';
+  String prettyPrint([int indent = 2]) =>
+      '${"  " * indent}.convertsToDateTime()';
 }
 
 /// Converts input to a [Decimal] if possible
@@ -456,12 +448,12 @@ class ToDecimalParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.toDecimal()';
+  String prettyPrint([int indent = 2]) => '${"  " * indent}.toDecimal()';
 }
 
 /// Checks if input can be converted into a [Decimal]
 class ConvertsToDecimalParser extends FhirPathParser {
-  ConvertsToDecimalParser();
+  const ConvertsToDecimalParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -495,12 +487,13 @@ class ConvertsToDecimalParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.convertsToDecimal()';
+  String prettyPrint([int indent = 2]) =>
+      '${"  " * indent}.convertsToDecimal()';
 }
 
 /// Converts input to a [String] if possible
 class ToStringParser extends FhirPathParser {
-  ToStringParser();
+  const ToStringParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -530,12 +523,12 @@ class ToStringParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.toString()';
+  String prettyPrint([int indent = 2]) => '${"  " * indent}.toString()';
 }
 
 /// Checks if input can be converted to a [String]
 class ConvertsToStringParser extends FhirPathParser {
-  ConvertsToStringParser();
+  const ConvertsToStringParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -563,12 +556,12 @@ class ConvertsToStringParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.convertsToString()';
+  String prettyPrint([int indent = 2]) => '${"  " * indent}.convertsToString()';
 }
 
 /// Converts input to a [Time] if possible
 class ToTimeParser extends FhirPathParser {
-  ToTimeParser();
+  const ToTimeParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -598,12 +591,12 @@ class ToTimeParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.toTime()';
+  String prettyPrint([int indent = 2]) => '${"  " * indent}.toTime()';
 }
 
 /// Checks if input can be converted to a [Time]
 class ConvertsToTimeParser extends FhirPathParser {
-  ConvertsToTimeParser();
+  const ConvertsToTimeParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -632,14 +625,14 @@ class ConvertsToTimeParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.convertsToTime()';
+  String prettyPrint([int indent = 2]) => '${"  " * indent}.convertsToTime()';
 }
 
 /// Converts input to a [Quantity] if possible
 class ToQuantityParser extends FhirPathParser {
-  dynamic value;
-
-  ToQuantityParser();
+  const ToQuantityParser(this.value);
+  final dynamic value;
+  ToQuantityParser copyWith(ParserList value) => ToQuantityParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -671,14 +664,15 @@ class ToQuantityParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.toQuantity()';
+  String prettyPrint([int indent = 2]) => '${"  " * indent}.toQuantity()';
 }
 
 /// Checks if input can be converted to a [Quantity]
 class ConvertsToQuantityParser extends FhirPathParser {
-  dynamic value;
-
-  ConvertsToQuantityParser();
+  const ConvertsToQuantityParser(this.value);
+  final dynamic value;
+  ConvertsToQuantityParser copyWith(ParserList value) =>
+      ConvertsToQuantityParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -729,7 +723,8 @@ class ConvertsToQuantityParser extends FhirPathParser {
   /// [verbosePrint], while still demonstrating how the expression was parsed
   /// and nested according to this package
   @override
-  String prettyPrint([int indent = 2]) => '.convertsToQuantity()';
+  String prettyPrint([int indent = 2]) =>
+      '${"  " * indent}.convertsToQuantity()';
 }
 
 bool _isNotAcceptedType(List results) =>
