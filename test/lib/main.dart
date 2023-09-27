@@ -1,6 +1,8 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
 
+// Project imports:
+import 'antlr_test/antlr_fhir_path_test.dart';
 import 'fhir_path_test/fhir_path_test.dart';
 
 void main() => runApp(const MyApp());
@@ -14,18 +16,15 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.light(),
         home: const SafeArea(
           child: Scaffold(
-            body: SizedBox(
-              height: 200,
-              width: 200,
-              child: Center(
-                  child: Column(
-                children: <Widget>[
-                  SizedBox(height: 8),
-                  RunTests('FHIRPath Tests', fhirPathTest),
-                  SizedBox(height: 8),
-                ],
-              )),
-            ),
+            body: Center(
+                child: Column(
+              children: <Widget>[
+                RunTests('Antlr Tests', antlrFhirPathTest),
+                SizedBox(height: 8),
+                RunTests('Petit Tests', fhirPathTest),
+                SizedBox(height: 8),
+              ],
+            )),
           ),
         ),
       );
