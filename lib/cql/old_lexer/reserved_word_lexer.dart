@@ -70,4 +70,7 @@ final reservedWordLexer = string('aggregate') |
     string('within') |
     string('without') |
     string('year') |
-    string('years');
+    string('years').map((value) {
+      print(value);
+      return value;
+    });

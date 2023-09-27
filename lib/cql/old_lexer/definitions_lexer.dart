@@ -1,4 +1,4 @@
-import 'package:fhir_path/cql/lexer/lexer.dart';
+import 'package:fhir_path/cql/old_lexer/lexer.dart';
 import 'package:petitparser/petitparser.dart';
 
 import '../../fhir_path.dart';
@@ -14,8 +14,11 @@ final Parser<LibraryDefinitionParser> libraryDefinitionLexer =
 final Parser<UsingDefinitionParser> usingDefinitionLexer = (string('library') &
         qualifiedIdentifierLexer &
         (string('version') & versionSpecifierLexer).optional())
-    .map((value) => UsingDefinitionParser(
-        value[1].toString(), value.length > 2 ? value[3].toString() : null));
+    .map((value) {
+  print('UsingDefinitionParser: $value');
+  return UsingDefinitionParser(
+      value[1].toString(), value.length > 2 ? value[3].toString() : null);
+});
 
 final Parser<IncludeDefinitionParser> includeDefinitionLexer =
     (string('include') &
@@ -35,29 +38,27 @@ final Parser<IncludeDefinitionParser> includeDefinitionLexer =
 
 final localIdentifierLexer = cqlIdentifierLexer;
 
+final Parser<QualifiedIdentifierParser> qualifiedIdentifierLexer =
+    ((qualifierLexer & char('.')).star() & cqlIdentifierLexer).map((value) =>
+        QualifiedIdentifierParser(
+            value.length == 1 ? null : value[0].toString(),
+            value.last.toString()));
+
+final qualifierLexer = cqlIdentifierLexer;
+
 final Parser<AccessModifierParser> accessModifierLexer =
     (string('private') | string('public'))
         .map((value) => AccessModifierParser(value.toString()));
-
-final Parser<ParameterDefinitionParser> parameterDefinitionLexer =
-    (accessModifierLexer.optional() &
-            string('parameter') &
-            cqlIdentifierLexer &
-            typeSpecifierLexer().optional() &
-            (string('default') & cqlExpressionLexer()).optional())
-        .map((value) => ParameterDefinitionParser(
-              value[0].toString(),
-              value[2].toString(),
-              value[3].toString(),
-              value[4].toString(),
-            ));
 
 final codesystemDefinitionLexer = accessModifierLexer.optional() &
     string('codesystem') &
     cqlIdentifierLexer &
     char(':') &
     codesystemIdLexer &
-    (string('version') & versionSpecifierLexer).optional();
+    (string('version') & versionSpecifierLexer).optional().map((value) {
+      print(value);
+      return value;
+    });
 
 final valuesetDefinitionLexer = accessModifierLexer.optional() &
     string('valueset') &
@@ -65,19 +66,32 @@ final valuesetDefinitionLexer = accessModifierLexer.optional() &
     char(':') &
     valuesetIdLexer &
     (string('version') & versionSpecifierLexer).optional() &
-    codesystemsLexer.optional();
+    codesystemsLexer.optional().map((value) {
+      print(value);
+      return value;
+    });
 
 final codesystemsLexer = string('codesystems') &
     char('{') &
     codesystemIdentifierLexer &
     (char(',') & codesystemIdentifierLexer).star() &
-    char('}');
+    char('}').map((value) {
+      print(value);
+      return value;
+    });
 
 final codesystemIdentifierLexer =
     ((libraryIdentifierLexer & char('.')).optional() & cqlIdentifierLexer)
-        .map((value) => null);
+        .map((value) => null)
+        .map((value) {
+  print(value);
+  return value;
+});
 
-final libraryIdentifierLexer = cqlIdentifierLexer;
+final libraryIdentifierLexer = cqlIdentifierLexer.map((value) {
+  print(value);
+  return value;
+});
 
 final codeDefinitionLexer = accessModifierLexer.optional() &
     string('code') &
@@ -86,7 +100,10 @@ final codeDefinitionLexer = accessModifierLexer.optional() &
     codeIdLexer &
     string('from') &
     codesystemIdentifierLexer &
-    displayClauseLexer.optional();
+    displayClauseLexer.optional().map((value) {
+      print(value);
+      return value;
+    });
 
 final conceptDefinitionLexer = accessModifierLexer.optional() &
     string('concept') &
@@ -96,16 +113,35 @@ final conceptDefinitionLexer = accessModifierLexer.optional() &
     codeIdentifierLexer &
     (char(',') & codeIdentifierLexer).star() &
     char('}') &
-    displayClauseLexer.optional();
+    displayClauseLexer.optional().map((value) {
+      print(value);
+      return value;
+    });
 
 final codeIdentifierLexer =
     ((libraryIdentifierLexer & char('.')).optional() & cqlIdentifierLexer)
-        .map((value) => null);
+        .map((value) => null)
+        .map((value) {
+  print(value);
+  return value;
+});
 
-final codesystemIdLexer = stringLexer;
+final codesystemIdLexer = stringLexer.map((value) {
+  print(value);
+  return value;
+});
 
-final valuesetIdLexer = stringLexer;
+final valuesetIdLexer = stringLexer.map((value) {
+  print(value);
+  return value;
+});
 
-final versionSpecifierLexer = stringLexer;
+final versionSpecifierLexer = stringLexer.map((value) {
+  print(value);
+  return value;
+});
 
-final codeIdLexer = stringLexer;
+final codeIdLexer = stringLexer.map((value) {
+  print(value);
+  return value;
+});
