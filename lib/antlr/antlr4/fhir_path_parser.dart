@@ -1,6 +1,5 @@
-// ignore_for_file: argument_type_not_assignable, invalid_assignment, return_of_invalid_type, unused_import, unused_local_variable, prefer_single_quotes, prefer_function_declarations_over_variables, use_raw_strings, prefer_final_locals, always_put_control_body_on_new_line, unnecessary_new, unnecessary_parenthesis, avoid_dynamic_calls, avoid_renaming_method_parameters, unnecessary_overrides
-
-// Generated from FhirPath.g4 by ANTLR 4.11.1
+// Generated from FhirPath.g4 by ANTLR 4.13.1
+// ignore_for_file: unused_import, unused_local_variable, prefer_single_quotes
 
 // Package imports:
 import 'package:antlr4/antlr4.dart';
@@ -26,7 +25,7 @@ const int RULE_expression = 0,
 
 class FhirPathParser extends Parser {
   static final checkVersion =
-      () => RuntimeMetaData.checkVersion('4.11.1', RuntimeMetaData.VERSION);
+      () => RuntimeMetaData.checkVersion('4.13.1', RuntimeMetaData.VERSION);
   static const int TOKEN_EOF = IntStream.EOF;
 
   static final List<DFA> _decisionToDFA = List.generate(
@@ -354,7 +353,7 @@ class FhirPathParser extends Parser {
               }
               state = 36;
               _la = tokenStream.LA(1)!;
-              if (!(((_la) & ~0x3f) == 0 && ((1 << _la) & 960) != 0)) {
+              if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 960) != 0))) {
                 errorHandler.recoverInline(this);
               } else {
                 if (tokenStream.LA(1)! == IntStream.EOF) matchedEOF = true;
@@ -374,7 +373,7 @@ class FhirPathParser extends Parser {
               }
               state = 39;
               _la = tokenStream.LA(1)!;
-              if (!(((_la) & ~0x3f) == 0 && ((1 << _la) & 1072) != 0)) {
+              if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 1072) != 0))) {
                 errorHandler.recoverInline(this);
               } else {
                 if (tokenStream.LA(1)! == IntStream.EOF) matchedEOF = true;
@@ -407,7 +406,7 @@ class FhirPathParser extends Parser {
               }
               state = 45;
               _la = tokenStream.LA(1)!;
-              if (!(((_la) & ~0x3f) == 0 && ((1 << _la) & 245760) != 0)) {
+              if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 245760) != 0))) {
                 errorHandler.recoverInline(this);
               } else {
                 if (tokenStream.LA(1)! == IntStream.EOF) matchedEOF = true;
@@ -427,7 +426,7 @@ class FhirPathParser extends Parser {
               }
               state = 48;
               _la = tokenStream.LA(1)!;
-              if (!(((_la) & ~0x3f) == 0 && ((1 << _la) & 3932160) != 0)) {
+              if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 3932160) != 0))) {
                 errorHandler.recoverInline(this);
               } else {
                 if (tokenStream.LA(1)! == IntStream.EOF) matchedEOF = true;
@@ -807,9 +806,9 @@ class FhirPathParser extends Parser {
       state = 113;
       errorHandler.sync(this);
       _la = tokenStream.LA(1)!;
-      if ((((_la - -1)) & ~0x3f) == 0 &&
+      if (((((_la - -1)) & ~0x3f) == 0 &&
           ((1 << (_la - -1)) & BigInt.parse('9151314986692261473').toInt()) !=
-              0) {
+              0)) {
         state = 112;
         paramList();
       }
@@ -938,7 +937,7 @@ class FhirPathParser extends Parser {
       enterOuterAlt(_localctx, 1);
       state = 134;
       _la = tokenStream.LA(1)!;
-      if (!(((_la) & ~0x3f) == 0 && ((1 << _la) & 140187732541440) != 0)) {
+      if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 140187732541440) != 0))) {
         errorHandler.recoverInline(this);
       } else {
         if (tokenStream.LA(1)! == IntStream.EOF) matchedEOF = true;
@@ -963,7 +962,7 @@ class FhirPathParser extends Parser {
       enterOuterAlt(_localctx, 1);
       state = 136;
       _la = tokenStream.LA(1)!;
-      if (!(((_la) & ~0x3f) == 0 && ((1 << _la) & 35888059530608640) != 0)) {
+      if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 35888059530608640) != 0))) {
         errorHandler.recoverInline(this);
       } else {
         if (tokenStream.LA(1)! == IntStream.EOF) matchedEOF = true;
@@ -1037,7 +1036,7 @@ class FhirPathParser extends Parser {
       enterOuterAlt(_localctx, 1);
       state = 148;
       _la = tokenStream.LA(1)!;
-      if (!(((_la) & ~0x3f) == 0 && ((1 << _la) & 864691128467725056) != 0)) {
+      if (!((((_la) & ~0x3f) == 0 && ((1 << _la) & 864691128467725056) != 0))) {
         errorHandler.recoverInline(this);
       } else {
         if (tokenStream.LA(1)! == IntStream.EOF) matchedEOF = true;

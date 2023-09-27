@@ -1,4 +1,4 @@
-// Generated from FhirPath.g4 by ANTLR 4.11.1
+// Generated from FhirPath.g4 by ANTLR 4.13.1
 // ignore_for_file: unused_import, unused_local_variable, prefer_single_quotes, prefer_function_declarations_over_variables, use_raw_strings
 
 // Package imports:
@@ -6,7 +6,7 @@ import 'package:antlr4/antlr4.dart';
 
 class FhirPathLexer extends Lexer {
   static final checkVersion =
-      () => RuntimeMetaData.checkVersion('4.11.1', RuntimeMetaData.VERSION);
+      () => RuntimeMetaData.checkVersion('4.13.1', RuntimeMetaData.VERSION);
 
   static final List<DFA> _decisionToDFA = List.generate(
       _ATN.numberOfDecisions, (i) => DFA(_ATN.getDecisionState(i), i));
