@@ -5,7 +5,6 @@ import 'package:petitparser/petitparser.dart';
 
 import '../../fhir_path.dart';
 import '../parser/parser.dart';
-import 'lexer.dart';
 
 final Parser<TypeNameIdentifierParser> typeNameIdentifierLexer =
     (string('Code') | string('Concept') | string('date') | string('time'))

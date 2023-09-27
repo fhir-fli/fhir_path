@@ -5,6 +5,7 @@ import 'lexer.dart';
 
 /// Primary lexing function for this library
 Parser typeSpecifierLexer() {
+  print('TYPESPECIFIERLEXER');
   final typeSpecifierLexer = undefined();
   final listTypeSpecifierLexer = undefined();
   final intervalTypeSpecifierLexer = undefined();
@@ -50,12 +51,4 @@ Parser typeSpecifierLexer() {
 }
 
 final namedTypeSpecifierLexer = (cqlIdentifierLexer & char('.')).optional() &
-    referentialOrTypeNameIdentifierLexer.map((value) {
-      print(value);
-      return value;
-    });
-
-final modelIdentifierLexer = cqlIdentifierLexer.map((value) {
-  print(value);
-  return value;
-});
+    referentialOrTypeNameIdentifierLexer;

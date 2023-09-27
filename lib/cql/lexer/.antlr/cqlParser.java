@@ -1,4 +1,4 @@
-// Generated from /home/grey/dev/fhir/fhir_path/cql.g4 by ANTLR 4.9.2
+// Generated from /home/grey/dev/fhir/fhir_path/lib/cql/lexer/cql.g4 by ANTLR 4.9.2
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -43,7 +43,7 @@ public class cqlParser extends Parser {
 		TIME=161, IDENTIFIER=162, DELIMITEDIDENTIFIER=163, STRING=164, NUMBER=165, 
 		WS=166, COMMENT=167, LINE_COMMENT=168;
 	public static final int
-		RULE_definition = 0, RULE_library = 1, RULE_libraryDefinition = 2, RULE_usingDefinition = 3, 
+		RULE_library = 0, RULE_definition = 1, RULE_libraryDefinition = 2, RULE_usingDefinition = 3, 
 		RULE_includeDefinition = 4, RULE_localIdentifier = 5, RULE_accessModifier = 6, 
 		RULE_parameterDefinition = 7, RULE_codesystemDefinition = 8, RULE_valuesetDefinition = 9, 
 		RULE_codesystems = 10, RULE_codesystemIdentifier = 11, RULE_libraryIdentifier = 12, 
@@ -79,7 +79,7 @@ public class cqlParser extends Parser {
 		RULE_paramList = 102, RULE_quantity = 103, RULE_unit = 104;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"definition", "library", "libraryDefinition", "usingDefinition", "includeDefinition", 
+			"library", "definition", "libraryDefinition", "usingDefinition", "includeDefinition", 
 			"localIdentifier", "accessModifier", "parameterDefinition", "codesystemDefinition", 
 			"valuesetDefinition", "codesystems", "codesystemIdentifier", "libraryIdentifier", 
 			"codeDefinition", "conceptDefinition", "codeIdentifier", "codesystemId", 
@@ -206,6 +206,89 @@ public class cqlParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
+	public static class LibraryContext extends ParserRuleContext {
+		public TerminalNode EOF() { return getToken(cqlParser.EOF, 0); }
+		public LibraryDefinitionContext libraryDefinition() {
+			return getRuleContext(LibraryDefinitionContext.class,0);
+		}
+		public List<DefinitionContext> definition() {
+			return getRuleContexts(DefinitionContext.class);
+		}
+		public DefinitionContext definition(int i) {
+			return getRuleContext(DefinitionContext.class,i);
+		}
+		public List<StatementContext> statement() {
+			return getRuleContexts(StatementContext.class);
+		}
+		public StatementContext statement(int i) {
+			return getRuleContext(StatementContext.class,i);
+		}
+		public LibraryContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_library; }
+	}
+
+	public final LibraryContext library() throws RecognitionException {
+		LibraryContext _localctx = new LibraryContext(_ctx, getState());
+		enterRule(_localctx, 0, RULE_library);
+		int _la;
+		try {
+			enterOuterAlt(_localctx, 1);
+			{
+			setState(211);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			if (_la==T__0) {
+				{
+				setState(210);
+				libraryDefinition();
+				}
+			}
+
+			setState(216);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__3) | (1L << T__5) | (1L << T__6) | (1L << T__7) | (1L << T__9) | (1L << T__11) | (1L << T__17) | (1L << T__19))) != 0)) {
+				{
+				{
+				setState(213);
+				definition();
+				}
+				}
+				setState(218);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(222);
+			_errHandler.sync(this);
+			_la = _input.LA(1);
+			while (_la==T__26 || _la==T__27) {
+				{
+				{
+				setState(219);
+				statement();
+				}
+				}
+				setState(224);
+				_errHandler.sync(this);
+				_la = _input.LA(1);
+			}
+			setState(225);
+			match(EOF);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
 	public static class DefinitionContext extends ParserRuleContext {
 		public UsingDefinitionContext usingDefinition() {
 			return getRuleContext(UsingDefinitionContext.class,0);
@@ -236,143 +319,60 @@ public class cqlParser extends Parser {
 
 	public final DefinitionContext definition() throws RecognitionException {
 		DefinitionContext _localctx = new DefinitionContext(_ctx, getState());
-		enterRule(_localctx, 0, RULE_definition);
+		enterRule(_localctx, 2, RULE_definition);
 		try {
-			setState(217);
+			setState(234);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,0,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(210);
+				setState(227);
 				usingDefinition();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(211);
+				setState(228);
 				includeDefinition();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(212);
+				setState(229);
 				codesystemDefinition();
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(213);
+				setState(230);
 				valuesetDefinition();
 				}
 				break;
 			case 5:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(214);
+				setState(231);
 				codeDefinition();
 				}
 				break;
 			case 6:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(215);
+				setState(232);
 				conceptDefinition();
 				}
 				break;
 			case 7:
 				enterOuterAlt(_localctx, 7);
 				{
-				setState(216);
+				setState(233);
 				parameterDefinition();
 				}
 				break;
-			}
-		}
-		catch (RecognitionException re) {
-			_localctx.exception = re;
-			_errHandler.reportError(this, re);
-			_errHandler.recover(this, re);
-		}
-		finally {
-			exitRule();
-		}
-		return _localctx;
-	}
-
-	public static class LibraryContext extends ParserRuleContext {
-		public TerminalNode EOF() { return getToken(cqlParser.EOF, 0); }
-		public LibraryDefinitionContext libraryDefinition() {
-			return getRuleContext(LibraryDefinitionContext.class,0);
-		}
-		public List<DefinitionContext> definition() {
-			return getRuleContexts(DefinitionContext.class);
-		}
-		public DefinitionContext definition(int i) {
-			return getRuleContext(DefinitionContext.class,i);
-		}
-		public List<StatementContext> statement() {
-			return getRuleContexts(StatementContext.class);
-		}
-		public StatementContext statement(int i) {
-			return getRuleContext(StatementContext.class,i);
-		}
-		public LibraryContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_library; }
-	}
-
-	public final LibraryContext library() throws RecognitionException {
-		LibraryContext _localctx = new LibraryContext(_ctx, getState());
-		enterRule(_localctx, 2, RULE_library);
-		int _la;
-		try {
-			enterOuterAlt(_localctx, 1);
-			{
-			setState(220);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			if (_la==T__0) {
-				{
-				setState(219);
-				libraryDefinition();
-				}
-			}
-
-			setState(225);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while ((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << T__2) | (1L << T__3) | (1L << T__5) | (1L << T__6) | (1L << T__7) | (1L << T__9) | (1L << T__11) | (1L << T__17) | (1L << T__19))) != 0)) {
-				{
-				{
-				setState(222);
-				definition();
-				}
-				}
-				setState(227);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(231);
-			_errHandler.sync(this);
-			_la = _input.LA(1);
-			while (_la==T__26 || _la==T__27) {
-				{
-				{
-				setState(228);
-				statement();
-				}
-				}
-				setState(233);
-				_errHandler.sync(this);
-				_la = _input.LA(1);
-			}
-			setState(234);
-			match(EOF);
 			}
 		}
 		catch (RecognitionException re) {
@@ -8183,9 +8183,9 @@ public class cqlParser extends Parser {
 		"\4>\t>\4?\t?\4@\t@\4A\tA\4B\tB\4C\tC\4D\tD\4E\tE\4F\tF\4G\tG\4H\tH\4I"+
 		"\tI\4J\tJ\4K\tK\4L\tL\4M\tM\4N\tN\4O\tO\4P\tP\4Q\tQ\4R\tR\4S\tS\4T\tT"+
 		"\4U\tU\4V\tV\4W\tW\4X\tX\4Y\tY\4Z\tZ\4[\t[\4\\\t\\\4]\t]\4^\t^\4_\t_\4"+
-		"`\t`\4a\ta\4b\tb\4c\tc\4d\td\4e\te\4f\tf\4g\tg\4h\th\4i\ti\4j\tj\3\2\3"+
-		"\2\3\2\3\2\3\2\3\2\3\2\5\2\u00dc\n\2\3\3\5\3\u00df\n\3\3\3\7\3\u00e2\n"+
-		"\3\f\3\16\3\u00e5\13\3\3\3\7\3\u00e8\n\3\f\3\16\3\u00eb\13\3\3\3\3\3\3"+
+		"`\t`\4a\ta\4b\tb\4c\tc\4d\td\4e\te\4f\tf\4g\tg\4h\th\4i\ti\4j\tj\3\2\5"+
+		"\2\u00d6\n\2\3\2\7\2\u00d9\n\2\f\2\16\2\u00dc\13\2\3\2\7\2\u00df\n\2\f"+
+		"\2\16\2\u00e2\13\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\3\3\3\5\3\u00ed\n\3\3"+
 		"\4\3\4\3\4\3\4\5\4\u00f3\n\4\3\5\3\5\3\5\3\5\5\5\u00f9\n\5\3\6\3\6\3\6"+
 		"\3\6\5\6\u00ff\n\6\3\6\3\6\5\6\u0103\n\6\3\7\3\7\3\b\3\b\3\t\5\t\u010a"+
 		"\n\t\3\t\3\t\3\t\5\t\u010f\n\t\3\t\3\t\5\t\u0113\n\t\3\n\5\n\u0116\n\n"+
@@ -8263,7 +8263,7 @@ public class cqlParser extends Parser {
 		"\u0097\u009b\u009b\r\2\4\4\24\24\26\26//\61\62<<BBLL\\^kl\u009b\u009d"+
 		"\22\2\3\f\16\17\24\27\32\33\35 %\'++.GLOQhktxy{\u0087\u008b\u008c\u008e"+
 		"\u0097\u009b\u009d\4\2\\]\u009c\u009d\4\2\u009f\u009f\u00a4\u00a5\2\u0502"+
-		"\2\u00db\3\2\2\2\4\u00de\3\2\2\2\6\u00ee\3\2\2\2\b\u00f4\3\2\2\2\n\u00fa"+
+		"\2\u00d5\3\2\2\2\4\u00ec\3\2\2\2\6\u00ee\3\2\2\2\b\u00f4\3\2\2\2\n\u00fa"+
 		"\3\2\2\2\f\u0104\3\2\2\2\16\u0106\3\2\2\2\20\u0109\3\2\2\2\22\u0115\3"+
 		"\2\2\2\24\u0120\3\2\2\2\26\u012d\3\2\2\2\30\u013c\3\2\2\2\32\u0140\3\2"+
 		"\2\2\34\u0143\3\2\2\2\36\u014f\3\2\2\2 \u0164\3\2\2\2\"\u0168\3\2\2\2"+
@@ -8289,16 +8289,16 @@ public class cqlParser extends Parser {
 		"\2\2\u00c0\u0474\3\2\2\2\u00c2\u0476\3\2\2\2\u00c4\u047a\3\2\2\2\u00c6"+
 		"\u047e\3\2\2\2\u00c8\u0482\3\2\2\2\u00ca\u0484\3\2\2\2\u00cc\u0486\3\2"+
 		"\2\2\u00ce\u048b\3\2\2\2\u00d0\u0493\3\2\2\2\u00d2\u049a\3\2\2\2\u00d4"+
-		"\u00dc\5\b\5\2\u00d5\u00dc\5\n\6\2\u00d6\u00dc\5\22\n\2\u00d7\u00dc\5"+
-		"\24\13\2\u00d8\u00dc\5\34\17\2\u00d9\u00dc\5\36\20\2\u00da\u00dc\5\20"+
-		"\t\2\u00db\u00d4\3\2\2\2\u00db\u00d5\3\2\2\2\u00db\u00d6\3\2\2\2\u00db"+
-		"\u00d7\3\2\2\2\u00db\u00d8\3\2\2\2\u00db\u00d9\3\2\2\2\u00db\u00da\3\2"+
-		"\2\2\u00dc\3\3\2\2\2\u00dd\u00df\5\6\4\2\u00de\u00dd\3\2\2\2\u00de\u00df"+
-		"\3\2\2\2\u00df\u00e3\3\2\2\2\u00e0\u00e2\5\2\2\2\u00e1\u00e0\3\2\2\2\u00e2"+
-		"\u00e5\3\2\2\2\u00e3\u00e1\3\2\2\2\u00e3\u00e4\3\2\2\2\u00e4\u00e9\3\2"+
-		"\2\2\u00e5\u00e3\3\2\2\2\u00e6\u00e8\5:\36\2\u00e7\u00e6\3\2\2\2\u00e8"+
-		"\u00eb\3\2\2\2\u00e9\u00e7\3\2\2\2\u00e9\u00ea\3\2\2\2\u00ea\u00ec\3\2"+
-		"\2\2\u00eb\u00e9\3\2\2\2\u00ec\u00ed\7\2\2\3\u00ed\5\3\2\2\2\u00ee\u00ef"+
+		"\u00d6\5\6\4\2\u00d5\u00d4\3\2\2\2\u00d5\u00d6\3\2\2\2\u00d6\u00da\3\2"+
+		"\2\2\u00d7\u00d9\5\4\3\2\u00d8\u00d7\3\2\2\2\u00d9\u00dc\3\2\2\2\u00da"+
+		"\u00d8\3\2\2\2\u00da\u00db\3\2\2\2\u00db\u00e0\3\2\2\2\u00dc\u00da\3\2"+
+		"\2\2\u00dd\u00df\5:\36\2\u00de\u00dd\3\2\2\2\u00df\u00e2\3\2\2\2\u00e0"+
+		"\u00de\3\2\2\2\u00e0\u00e1\3\2\2\2\u00e1\u00e3\3\2\2\2\u00e2\u00e0\3\2"+
+		"\2\2\u00e3\u00e4\7\2\2\3\u00e4\3\3\2\2\2\u00e5\u00ed\5\b\5\2\u00e6\u00ed"+
+		"\5\n\6\2\u00e7\u00ed\5\22\n\2\u00e8\u00ed\5\24\13\2\u00e9\u00ed\5\34\17"+
+		"\2\u00ea\u00ed\5\36\20\2\u00eb\u00ed\5\20\t\2\u00ec\u00e5\3\2\2\2\u00ec"+
+		"\u00e6\3\2\2\2\u00ec\u00e7\3\2\2\2\u00ec\u00e8\3\2\2\2\u00ec\u00e9\3\2"+
+		"\2\2\u00ec\u00ea\3\2\2\2\u00ec\u00eb\3\2\2\2\u00ed\5\3\2\2\2\u00ee\u00ef"+
 		"\7\3\2\2\u00ef\u00f2\5t;\2\u00f0\u00f1\7\4\2\2\u00f1\u00f3\5&\24\2\u00f2"+
 		"\u00f0\3\2\2\2\u00f2\u00f3\3\2\2\2\u00f3\7\3\2\2\2\u00f4\u00f5\7\5\2\2"+
 		"\u00f5\u00f8\5.\30\2\u00f6\u00f7\7\4\2\2\u00f7\u00f9\5&\24\2\u00f8\u00f6"+
@@ -8622,8 +8622,8 @@ public class cqlParser extends Parser {
 		"\u0490\3\2\2\2\u0493\u0495\7\u00a7\2\2\u0494\u0496\5\u00d2j\2\u0495\u0494"+
 		"\3\2\2\2\u0495\u0496\3\2\2\2\u0496\u00d1\3\2\2\2\u0497\u049b\5\u0080A"+
 		"\2\u0498\u049b\5\u0084C\2\u0499\u049b\7\u00a6\2\2\u049a\u0497\3\2\2\2"+
-		"\u049a\u0498\3\2\2\2\u049a\u0499\3\2\2\2\u049b\u00d3\3\2\2\2\u0087\u00db"+
-		"\u00de\u00e3\u00e9\u00f2\u00f8\u00fe\u0102\u0109\u010e\u0112\u0115\u011d"+
+		"\u049a\u0498\3\2\2\2\u049a\u0499\3\2\2\2\u049b\u00d3\3\2\2\2\u0087\u00d5"+
+		"\u00da\u00e0\u00ec\u00f2\u00f8\u00fe\u0102\u0109\u010e\u0112\u0115\u011d"+
 		"\u0120\u0128\u012b\u0134\u013c\u0143\u014c\u014f\u015a\u015f\u0164\u0175"+
 		"\u017c\u0194\u01a3\u01ab\u01af\u01b9\u01bf\u01c2\u01cc\u01cf\u01d4\u01d9"+
 		"\u01e6\u01ef\u01ff\u0206\u0209\u0215\u021b\u0220\u0224\u0228\u022b\u022e"+

@@ -1,4 +1,4 @@
-import 'package:fhir_path/cql/old_lexer/lexer.dart';
+import 'package:fhir_path/cql/lexer/lexer.dart';
 import 'package:petitparser/petitparser.dart';
 
 import '../../../fhir_path.dart';

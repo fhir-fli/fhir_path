@@ -1,4 +1,4 @@
-// Generated from /home/grey/dev/fhir/fhir_path/cql.g4 by ANTLR 4.9.2
+// Generated from /home/grey/dev/fhir/fhir_path/lib/cql/lexer/cql.g4 by ANTLR 4.9.2
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;

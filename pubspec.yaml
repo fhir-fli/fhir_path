@@ -16,7 +16,7 @@ dependencies:
   units_converter: ^2.1.1
   # units_converter:
   #   path: ../../units_converter
-  petitparser: ^5.4.0
+  petitparser: ^6.0.1
 
 dev_dependencies:
   # flutter pub run import_sorter:main

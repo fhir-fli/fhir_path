@@ -16,7 +16,4 @@ final obsoleteIdentifierLexer = string('all') |
     string('time') |
     string('timezoneoffset') |
     string('version') |
-    string('where').map((value) {
-      print(value);
-      return value;
-    });
+    string('where');

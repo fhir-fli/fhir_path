@@ -1,4 +1,4 @@
-// Generated from /home/grey/dev/fhir/fhir_path/fhirpath.g4 by ANTLR 4.9.2
+// Generated from /home/grey/dev/fhir/fhir_path/lib/cql/lexer/FhirPath.g4 by ANTLR 4.9.2
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.misc.*;
 
 @SuppressWarnings({"all", "warnings", "unchecked", "unused", "cast"})
-public class fhirpathLexer extends Lexer {
+public class FhirPathLexer extends Lexer {
 	static { RuntimeMetaData.checkVersion("4.9.2", RuntimeMetaData.VERSION); }
 
 	protected static final DFA[] _decisionToDFA;
@@ -107,13 +107,13 @@ public class fhirpathLexer extends Lexer {
 	}
 
 
-	public fhirpathLexer(CharStream input) {
+	public FhirPathLexer(CharStream input) {
 		super(input);
 		_interp = new LexerATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 
 	@Override
-	public String getGrammarFileName() { return "fhirpath.g4"; }
+	public String getGrammarFileName() { return "FhirPath.g4"; }
 
 	@Override
 	public String[] getRuleNames() { return ruleNames; }

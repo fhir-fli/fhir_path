@@ -121,7 +121,4 @@ final keywordLexer = string('after') |
     string('without') |
     string('xor') |
     string('year') |
-    string('years').map((value) {
-      print(value);
-      return value;
-    });
+    string('years');

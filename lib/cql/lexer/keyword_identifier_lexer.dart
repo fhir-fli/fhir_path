@@ -50,7 +50,4 @@ final keywordIdentifierLexer = string('asc') |
     string('version') |
     string('where') |
     string('width') |
-    string('xor').map((value) {
-      print(value);
-      return value;
-    });
+    string('xor');
