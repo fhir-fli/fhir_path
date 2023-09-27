@@ -9,7 +9,7 @@ import 'test_paths.dart';
 import 'test_questionnaire.dart';
 
 void fhirPathTest() {
-  // testBasicTypes();
+  testBasicTypes();
   testPaths();
   testNoArgFxns();
   testBasicOperators();
