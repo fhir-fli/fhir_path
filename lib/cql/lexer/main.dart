@@ -6,7 +6,7 @@ import 'cql_lexer.dart';
 
 Future<void> main() async {
   final pathExpression = await File('../examples/chlamydia.cql').readAsString();
-  print(pathExpression);
+  cqlLexer().parse(pathExpression).value;
   // progress(cqlLexer()).parse(pathExpression).value;
-  trace(cqlLexer()).parse(pathExpression).value;
+  // trace(cqlLexer()).parse(pathExpression).value;
 }

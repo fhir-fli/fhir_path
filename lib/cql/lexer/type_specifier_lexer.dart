@@ -9,7 +9,7 @@ Parser typeSpecifierLexer() {
   final typeSpecifierLexer = undefined();
   final listTypeSpecifierLexer = undefined();
   final intervalTypeSpecifierLexer = undefined();
-  final tupeElementDefintionLexer = undefined();
+  final tupleElementDefinitionLexer = undefined();
   final tupleTypeSpecifierLexer = undefined();
   final choiceTypeSpecifierLexer = undefined();
 
@@ -20,30 +20,30 @@ Parser typeSpecifierLexer() {
       choiceTypeSpecifierLexer;
 
   final listTypeSpecifierLexerPart =
-      string('list') & char('<') & typeSpecifierLexerPart & char('>');
+      string('list') & char('<') & typeSpecifierLexer & char('>');
 
   final intervalTypeSpecifierLexerPart =
-      string('Interval') & char('<') & typeSpecifierLexerPart & char('>');
+      string('Interval') & char('<') & typeSpecifierLexer & char('>');
 
   final tupleElementDefintionLexerPart =
-      referentialIdentifierLexer & typeSpecifierLexerPart;
+      referentialIdentifierLexer & typeSpecifierLexer;
 
   final tupleTypeSpecifierLexerPart = string('Tuple') &
       char('{') &
-      tupleElementDefintionLexerPart &
-      (char(',') & tupleElementDefintionLexerPart).star() &
+      tupleElementDefinitionLexer &
+      (char(',') & tupleElementDefinitionLexer).star() &
       char('}');
 
   final choiceTypeSpecifierLexerPart = string('Choice') &
       char('<') &
-      typeSpecifierLexerPart &
-      (char(',') & typeSpecifierLexerPart).star() &
+      typeSpecifierLexer &
+      (char(',') & typeSpecifierLexer).star() &
       char('>');
 
   typeSpecifierLexer.set(typeSpecifierLexerPart);
   listTypeSpecifierLexer.set(listTypeSpecifierLexerPart);
   intervalTypeSpecifierLexer.set(intervalTypeSpecifierLexerPart);
-  tupeElementDefintionLexer.set(tupleElementDefintionLexerPart);
+  tupleElementDefinitionLexer.set(tupleElementDefintionLexerPart);
   tupleTypeSpecifierLexer.set(tupleTypeSpecifierLexerPart);
   choiceTypeSpecifierLexer.set(choiceTypeSpecifierLexerPart);
 

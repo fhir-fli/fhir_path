@@ -13,19 +13,16 @@ final Parser<TypeNameIdentifierParser> typeNameIdentifierLexer =
 
 final referentialIdentifierLexer = cqlIdentifierLexer |
     keywordIdentifierLexer.map((value) {
-      print(value);
       return value;
     });
 
 final referentialOrTypeNameIdentifierLexer = referentialIdentifierLexer |
     typeNameIdentifierLexer.map((value) {
-      print(value);
       return value;
     });
 
 final identifierOrFunctionIdentifierLexer = cqlIdentifierLexer |
     functionIdentifierLexer.map((value) {
-      print(value);
       return value;
     });
 
