@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'antlr_test/antlr_fhir_path_test.dart';
 import 'fhir_path_test/fhir_path_test.dart';
 
 void main() => runApp(const MyApp());
@@ -19,8 +18,6 @@ class MyApp extends StatelessWidget {
             body: Center(
                 child: Column(
               children: <Widget>[
-                RunTests('Antlr Tests', antlrFhirPathTest),
-                SizedBox(height: 8),
                 RunTests('Petit Tests', fhirPathTest),
                 SizedBox(height: 8),
               ],
