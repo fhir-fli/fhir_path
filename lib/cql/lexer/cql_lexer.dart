@@ -9,9 +9,21 @@ import 'lexer.dart';
 Parser<FhirPathParser> cqlLexer() {
   return (libraryDefinitionLexer.optional() &
           (whiteSpaceLexer & ignoredLexer & definitionLexer).star() &
-          (whiteSpaceLexer & ignoredLexer & statementLexer).star())
-      .end()
-      .map((value) => ParserList([]));
+          (whiteSpaceLexer & ignoredLexer & statementLexer).star() &
+          whiteSpaceLexer.optional())
+      // .end()
+      .map((value) {
+    value.forEach((element) {
+      if (element is List) {
+        final lastElement = element.last;
+        if (lastElement is List) {
+          final lastElementSquared = lastElement.last;
+          print(lastElementSquared);
+        }
+      }
+    });
+    return ParserList([]);
+  });
 }
 
 final ignoredLexer =

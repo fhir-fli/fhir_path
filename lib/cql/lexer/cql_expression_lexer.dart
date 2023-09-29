@@ -5,26 +5,27 @@ import 'lexer.dart';
 
 Parser cqlExpressionLexer() {
   print('CQLEXPRESSIONLEXER');
-  final cqlExpression = undefined();
-  final expressionTerm = undefined();
-  final caseExpressionItem = undefined();
+
+  final querySource = undefined();
+  final aliasedQuerySource = undefined();
+  final queryInclusionClause = undefined();
+  final withClause = undefined();
+  final withoutClause = undefined();
   final retrieve = undefined();
   final terminology = undefined();
   final query = undefined();
   final sourceClause = undefined();
-  final querySource = undefined();
-  final aliasedQuerySource = undefined();
   final letClause = undefined();
   final letClauseItem = undefined();
-  final queryInclusionClause = undefined();
-  final withClause = undefined();
-  final withoutClause = undefined();
   final whereClause = undefined();
+  final returnClause = undefined();
   final aggregateClause = undefined();
   final startingClause = undefined();
-  final returnClause = undefined();
   final sortClause = undefined();
   final sortByItem = undefined();
+  final cqlExpression = undefined();
+  final expressionTerm = undefined();
+  final caseExpressionItem = undefined();
   final term = undefined();
   final intervalSelector = undefined();
   final tupleSelector = undefined();
@@ -33,356 +34,31 @@ Parser cqlExpressionLexer() {
   final instanceElementSelector = undefined();
   final listSelector = undefined();
 
-  final cqlExpressionPart =
+  final querySourcePart = retrieve |
+      qualifiedIdentifierExpressionLexer |
+      (char('(') &
+          whiteSpaceLexer.optional() &
+          cqlExpression &
+          whiteSpaceLexer.optional() &
+          char(')'));
 
-      ///  termExpression
-      expressionTerm
+  final aliasedQuerySourcePart = querySource & whiteSpaceLexer & aliasLexer;
 
-          ///  retrieveExpression
-          |
-          retrieve
+  final queryInclusionClausePart = withClause | withoutClause;
 
-          ///  queryExpression
-          |
-          query
-
-          ///  booleanExpression
-          |
-          (cqlExpression &
-              whiteSpaceLexer &
-              string('is') &
-              (whiteSpaceLexer & string('not')).optional() &
-              whiteSpaceLexer &
-              (string('null') | string('true') | string('false')))
-
-          ///  typeExpression
-          |
-          (cqlExpression &
-              whiteSpaceLexer &
-              (string('is') | string('as')) &
-              (whiteSpaceLexer & typeSpecifierLexer()).optional())
-
-          ///  castExpression
-          |
-          (string('cast') &
-              whiteSpaceLexer &
-              cqlExpression &
-              whiteSpaceLexer &
-              string('as') &
-              whiteSpaceLexer &
-              typeSpecifierLexer())
-
-          ///  notExpression
-          |
-          (string('not') & whiteSpaceLexer & cqlExpression)
-
-          ///  existenceExpression
-          |
-          (string('exists') & whiteSpaceLexer & cqlExpression)
-
-          ///  betweenExpression
-          |
-          (cqlExpression &
-              (whiteSpaceLexer & string('properly')).optional() &
-              whiteSpaceLexer &
-              string('between') &
-              whiteSpaceLexer &
-              expressionTerm &
-              whiteSpaceLexer &
-              string('and') &
-              whiteSpaceLexer &
-              expressionTerm)
-
-          /// durationBetweenExpression
-          |
-          (string('duration') &
-              whiteSpaceLexer &
-              string('in') &
-              whiteSpaceLexer &
-              pluralDateTimePrecisionLexer &
-              whiteSpaceLexer &
-              string('between') &
-              whiteSpaceLexer &
-              expressionTerm &
-              string('and') &
-              whiteSpaceLexer &
-              expressionTerm)
-
-          /// differenceBetweenExpression
-          |
-          (string('difference') &
-              whiteSpaceLexer &
-              string('in') &
-              whiteSpaceLexer &
-              pluralDateTimePrecisionLexer &
-              whiteSpaceLexer &
-              string('between') &
-              whiteSpaceLexer &
-              expressionTerm &
-              whiteSpaceLexer &
-              string('and') &
-              whiteSpaceLexer &
-              expressionTerm)
-
-          ///  inequalityExpression
-          |
-          (cqlExpression &
-              whiteSpaceLexer.optional() &
-              (string('<=') | char('<') | char('>') | string('>=')) &
-              whiteSpaceLexer.optional() &
-              cqlExpression)
-
-          ///  timingExpression
-          |
-          (cqlExpression &
-              whiteSpaceLexer &
-              intervalOperatorPhraseLexer &
-              whiteSpaceLexer &
-              cqlExpression)
-
-          ///  equalityExpression
-          |
-          (cqlExpression &
-              whiteSpaceLexer.optional() &
-              (char('=') | string('!=') | char('~') | string('!~')) &
-              whiteSpaceLexer &
-              cqlExpression)
-
-          ///  membershipExpression
-          |
-          (cqlExpression &
-              whiteSpaceLexer &
-              (string('in') | string('contains')) &
-              (whiteSpaceLexer & dateTimePrecisionSpecifierLexer).optional() &
-              whiteSpaceLexer &
-              cqlExpression)
-
-          ///  andExpression
-          |
-          (cqlExpression &
-              whiteSpaceLexer &
-              string('and') &
-              whiteSpaceLexer &
-              cqlExpression)
-
-          ///  orExpression
-          |
-          (cqlExpression &
-              whiteSpaceLexer &
-              (string('or') | string('xor')) &
-              whiteSpaceLexer &
-              cqlExpression)
-
-          ///  impliesExpression
-          |
-          (cqlExpression &
-              whiteSpaceLexer &
-              string('implies') &
-              whiteSpaceLexer &
-              cqlExpression)
-
-          ///  inFixSetExpression;
-          |
-          (cqlExpression &
-              whiteSpaceLexer &
-              (char('|') |
-                  string('union') |
-                  string('intersect') |
-                  string('except')) &
-              whiteSpaceLexer &
-              cqlExpression);
-
-  final expressionTermPart =
-
-      /// termExpressionTerm
-      term |
-
-          /// invocationExpressionTerm
-          (expressionTerm & char('.') & qualifiedInvocationLexer)
-
-          /// indexedExpressionTerm
-          |
-          (
-            expressionTerm,
-            whiteSpaceLexer.optional(),
-            char('['),
-            whiteSpaceLexer.optional(),
-            cqlExpression,
-            whiteSpaceLexer.optional(),
-            char(']')
-          ).toSequenceParser()
-
-          /// conversionExpressionTerm
-          |
-          (string('convert') &
-              whiteSpaceLexer &
-              cqlExpression &
-              whiteSpaceLexer &
-              string('to') &
-              whiteSpaceLexer &
-              (typeSpecifierLexer() | unitLexer))
-
-          /// polarityExpressionTerm
-          |
-          ((char('+') | char('-')) & expressionTerm)
-
-          /// timeBoundaryExpressionTerm
-          |
-          ((string('start') | string('end')) &
-              whiteSpaceLexer &
-              string('of') &
-              whiteSpaceLexer &
-              expressionTerm)
-
-          /// timeUnitExpressionTerm
-          |
-          (dateTimeComponentLexer &
-              whiteSpaceLexer &
-              string('from') &
-              whiteSpaceLexer &
-              expressionTerm)
-
-          /// durationExpressionTerm
-          |
-          (string('duration') &
-              whiteSpaceLexer &
-              string('in') &
-              whiteSpaceLexer &
-              pluralDateTimePrecisionLexer &
-              whiteSpaceLexer &
-              string('of') &
-              whiteSpaceLexer &
-              expressionTerm)
-
-          /// differenceExpressionTerm
-          |
-          (string('difference') &
-              whiteSpaceLexer &
-              string('in') &
-              whiteSpaceLexer &
-              pluralDateTimePrecisionLexer &
-              whiteSpaceLexer &
-              string('of') &
-              whiteSpaceLexer &
-              expressionTerm)
-
-          /// widthExpressionTerm
-          |
-          (string('width') &
-              whiteSpaceLexer &
-              string('of') &
-              whiteSpaceLexer &
-              expressionTerm)
-
-          /// successorExpressionTerm
-          |
-          (string('successor') &
-              whiteSpaceLexer &
-              string('of') &
-              whiteSpaceLexer &
-              expressionTerm)
-
-          /// predecessorExpressionTerm
-          |
-          (string('predecessor') &
-              whiteSpaceLexer &
-              string('of') &
-              whiteSpaceLexer &
-              expressionTerm)
-
-          /// elementExtractorExpressionTerm
-          |
-          (string('singleton') &
-              whiteSpaceLexer &
-              string('from') &
-              whiteSpaceLexer &
-              expressionTerm)
-
-          /// pointExtractorExpressionTerm
-          |
-          (string('point') &
-              whiteSpaceLexer &
-              string('from') &
-              whiteSpaceLexer &
-              expressionTerm)
-
-          /// typeExtentExpressionTerm
-          |
-          ((string('minimum') | string('maximum')) &
-              whiteSpaceLexer &
-              namedTypeSpecifierLexer)
-
-          /// powerExpressionTerm
-          |
-          (expressionTerm & char('^') & expressionTerm)
-
-          /// multiplicationExpressionTerm
-          |
-          (expressionTerm &
-              whiteSpaceLexer.optional() &
-              (char('*') |
-                  char('/') |
-                  (string('div') & whiteSpaceLexer.optional()) |
-                  (string('mod') & whiteSpaceLexer.optional())) &
-              expressionTerm)
-
-          /// additionExpressionTerm
-          |
-          (expressionTerm &
-              whiteSpaceLexer.optional() &
-              (char('+') | char('-') | char('&')) &
-              whiteSpaceLexer.optional() &
-              expressionTerm)
-
-          /// ifThenElseExpressionTerm
-          |
-          (string('if') &
-              whiteSpaceLexer &
-              cqlExpression &
-              whiteSpaceLexer &
-              string('then') &
-              whiteSpaceLexer &
-              cqlExpression &
-              whiteSpaceLexer &
-              string('else') &
-              whiteSpaceLexer &
-              cqlExpression)
-
-          /// caseExpressionTerm
-          |
-          (string('case') &
-              (whiteSpaceLexer & cqlExpression).optional() &
-              whiteSpaceLexer &
-              caseExpressionItem.plus() &
-              whiteSpaceLexer &
-              string('else') &
-              whiteSpaceLexer &
-              cqlExpression &
-              whiteSpaceLexer &
-              string('end'))
-
-          /// aggregateExpressionTerm
-          |
-          ((string('distinct') | string('flatten')) &
-              whiteSpaceLexer &
-              cqlExpression)
-
-          /// setAggregateExpressionTerm
-          |
-          ((string('expand') | string('collapse')) &
-              whiteSpaceLexer &
-              cqlExpression &
-              (whiteSpaceLexer &
-                      string('per') &
-                      whiteSpaceLexer &
-                      (dateTimePrecisionLexer | cqlExpression))
-                  .optional());
-
-  final caseExpressionItemPart = string('when') &
+  final withClausePart = string('with') &
       whiteSpaceLexer &
-      cqlExpression &
+      aliasedQuerySource &
       whiteSpaceLexer &
-      string('then') &
+      string('such that') &
+      whiteSpaceLexer &
+      cqlExpression;
+
+  final withoutClausePart = string('without') &
+      whiteSpaceLexer &
+      aliasedQuerySource &
+      whiteSpaceLexer &
+      string('such that') &
       whiteSpaceLexer &
       cqlExpression;
 
@@ -409,6 +85,437 @@ Parser cqlExpressionLexer() {
 
   final terminologyPart = qualifiedIdentifierExpressionLexer | cqlExpression;
 
+  final queryPart = sourceClause &
+      whiteSpaceLexer &
+      (letClause).optional() &
+      (whiteSpaceLexer & queryInclusionClause).star() &
+      (whiteSpaceLexer & whereClause).optional() &
+      (whiteSpaceLexer & (aggregateClause | returnClause)).optional() &
+      (whiteSpaceLexer & sortClause);
+
+  final sourceClausePart = (string('from') & whiteSpaceLexer).optional() &
+      aliasedQuerySource &
+      (whiteSpaceLexer.optional() &
+              char(',') &
+              whiteSpaceLexer.optional() &
+              aliasedQuerySource)
+          .star();
+
+  final letClausePart = string('let') &
+      whiteSpaceLexer &
+      letClauseItem &
+      (whiteSpaceLexer.optional() &
+              char(',') &
+              whiteSpaceLexer.optional() &
+              letClauseItem)
+          .star();
+
+  final letClauseItemPart = cqlIdentifierLexer &
+      whiteSpaceLexer.optional() &
+      char(':') &
+      whiteSpaceLexer.optional() &
+      cqlExpression;
+
+  final whereClausePart = string('where') & whiteSpaceLexer & cqlExpression;
+
+  final returnClausePart = string('return') &
+      (whiteSpaceLexer & (string('all') | string('distinct'))).optional() &
+      whiteSpaceLexer &
+      cqlExpression;
+
+  final aggregateClausePart = string('aggregate') &
+      (whiteSpaceLexer & (string('all') | string('distinct'))).optional() &
+      whiteSpaceLexer &
+      cqlIdentifierLexer &
+      (whiteSpaceLexer & startingClause).optional() &
+      whiteSpaceLexer.optional() &
+      char(':') &
+      whiteSpaceLexer.optional() &
+      cqlExpression;
+
+  final startingClausePart = string('starting') &
+      whiteSpaceLexer &
+      (simpleLiteralLexer |
+          quantityLexer |
+          (char('(') &
+              whiteSpaceLexer.optional() &
+              cqlExpression &
+              whiteSpaceLexer.optional() &
+              char(')')));
+
+  final sortClausePart = string('sort') &
+      whiteSpaceLexer &
+      (sortDirectionLexer |
+          (string('by') &
+              whiteSpaceLexer &
+              sortByItem &
+              (whiteSpaceLexer.optional() &
+                      char(',') &
+                      whiteSpaceLexer.optional() &
+                      sortByItem)
+                  .star()));
+
+  final sortByItemPart =
+      expressionTerm & (whiteSpaceLexer & sortDirectionLexer).optional();
+
+  final cqlExpressionPart =
+
+      ///  termExpression
+      expressionTerm
+
+          ///  retrieveExpression
+          // |
+          // retrieve
+
+          // ///  queryExpression
+          // |
+          // query
+
+          // ///  booleanExpression
+          // |
+          // (cqlExpression &
+          //     whiteSpaceLexer &
+          //     string('is') &
+          //     (whiteSpaceLexer & string('not')).optional() &
+          //     whiteSpaceLexer &
+          //     (string('null') | string('true') | string('false')))
+
+          // ///  typeExpression
+          // |
+          // (cqlExpression &
+          //     whiteSpaceLexer &
+          //     (string('is') | string('as')) &
+          //     (whiteSpaceLexer & typeSpecifierLexer()).optional())
+
+          // ///  castExpression
+          // |
+          // (string('cast') &
+          //     whiteSpaceLexer &
+          //     cqlExpression &
+          //     whiteSpaceLexer &
+          //     string('as') &
+          //     whiteSpaceLexer &
+          //     typeSpecifierLexer())
+
+          // ///  notExpression
+          // |
+          // (string('not') & whiteSpaceLexer & cqlExpression)
+
+          // ///  existenceExpression
+          // |
+          // (string('exists') & whiteSpaceLexer & cqlExpression)
+
+          // ///  betweenExpression
+          // |
+          // (cqlExpression &
+          //     (whiteSpaceLexer & string('properly')).optional() &
+          //     whiteSpaceLexer &
+          //     string('between') &
+          //     whiteSpaceLexer &
+          //     expressionTerm &
+          //     whiteSpaceLexer &
+          //     string('and') &
+          //     whiteSpaceLexer &
+          //     expressionTerm)
+
+          // /// durationBetweenExpression
+          // |
+          // (string('duration') &
+          //     whiteSpaceLexer &
+          //     string('in') &
+          //     whiteSpaceLexer &
+          //     pluralDateTimePrecisionLexer &
+          //     whiteSpaceLexer &
+          //     string('between') &
+          //     whiteSpaceLexer &
+          //     expressionTerm &
+          //     string('and') &
+          //     whiteSpaceLexer &
+          //     expressionTerm)
+
+          // /// differenceBetweenExpression
+          // |
+          // (string('difference') &
+          //     whiteSpaceLexer &
+          //     string('in') &
+          //     whiteSpaceLexer &
+          //     pluralDateTimePrecisionLexer &
+          //     whiteSpaceLexer &
+          //     string('between') &
+          //     whiteSpaceLexer &
+          //     expressionTerm &
+          //     whiteSpaceLexer &
+          //     string('and') &
+          //     whiteSpaceLexer &
+          //     expressionTerm)
+
+          ///  inequalityExpression
+          |
+          (cqlExpression &
+                  whiteSpaceLexer.optional() &
+                  (string('<=') | char('<') | char('>') | string('>=')) &
+                  whiteSpaceLexer.optional() &
+                  cqlExpression)
+              .flatten()
+              .map((value) => print(value))
+
+          // ///  timingExpression
+          // |
+          // (cqlExpression &
+          //     whiteSpaceLexer &
+          //     intervalOperatorPhraseLexer &
+          //     whiteSpaceLexer &
+          //     cqlExpression)
+
+          // ///  equalityExpression
+          // |
+          // (cqlExpression &
+          //     whiteSpaceLexer.optional() &
+          //     (char('=') | string('!=') | char('~') | string('!~')) &
+          //     whiteSpaceLexer &
+          //     cqlExpression)
+
+          // ///  membershipExpression
+          // |
+          // (cqlExpression &
+          //     whiteSpaceLexer &
+          //     (string('in') | string('contains')) &
+          //     (whiteSpaceLexer & dateTimePrecisionSpecifierLexer).optional() &
+          //     whiteSpaceLexer &
+          //     cqlExpression)
+
+          ///  andExpression
+          |
+          (cqlExpression &
+              whiteSpaceLexer &
+              string('and') &
+              whiteSpaceLexer &
+              cqlExpression)
+
+      // ///  orExpression
+      // |
+      // (cqlExpression &
+      //     whiteSpaceLexer &
+      //     (string('or') | string('xor')) &
+      //     whiteSpaceLexer &
+      //     cqlExpression)
+
+      // ///  impliesExpression
+      // |
+      // (cqlExpression &
+      //     whiteSpaceLexer &
+      //     string('implies') &
+      //     whiteSpaceLexer &
+      //     cqlExpression)
+
+      // ///  inFixSetExpression;
+      // |
+      // (cqlExpression &
+      //     whiteSpaceLexer &
+      //     (char('|') |
+      //         string('union') |
+      //         string('intersect') |
+      //         string('except')) &
+      //     whiteSpaceLexer &
+      //     cqlExpression)
+      ;
+
+  final expressionTermPart =
+
+      /// termExpressionTerm
+      term
+      // |
+
+      /// invocationExpressionTerm
+      // (expressionTerm & char('.') & qualifiedInvocationLexer)
+
+      // /// indexedExpressionTerm
+      // |
+      // (
+      //   expressionTerm,
+      //   whiteSpaceLexer.optional(),
+      //   char('['),
+      //   whiteSpaceLexer.optional(),
+      //   cqlExpression,
+      //   whiteSpaceLexer.optional(),
+      //   char(']')
+      // ).toSequenceParser()
+
+      // /// conversionExpressionTerm
+      // |
+      // (string('convert') &
+      //     whiteSpaceLexer &
+      //     cqlExpression &
+      //     whiteSpaceLexer &
+      //     string('to') &
+      //     whiteSpaceLexer &
+      //     (typeSpecifierLexer() | unitLexer))
+
+      // /// polarityExpressionTerm
+      // |
+      // ((char('+') | char('-')) & expressionTerm)
+
+      // /// timeBoundaryExpressionTerm
+      // |
+      // ((string('start') | string('end')) &
+      //     whiteSpaceLexer &
+      //     string('of') &
+      //     whiteSpaceLexer &
+      //     expressionTerm)
+
+      // /// timeUnitExpressionTerm
+      // |
+      // (dateTimeComponentLexer &
+      //     whiteSpaceLexer &
+      //     string('from') &
+      //     whiteSpaceLexer &
+      //     expressionTerm)
+
+      // /// durationExpressionTerm
+      // |
+      // (string('duration') &
+      //     whiteSpaceLexer &
+      //     string('in') &
+      //     whiteSpaceLexer &
+      //     pluralDateTimePrecisionLexer &
+      //     whiteSpaceLexer &
+      //     string('of') &
+      //     whiteSpaceLexer &
+      //     expressionTerm)
+
+      // /// differenceExpressionTerm
+      // |
+      // (string('difference') &
+      //     whiteSpaceLexer &
+      //     string('in') &
+      //     whiteSpaceLexer &
+      //     pluralDateTimePrecisionLexer &
+      //     whiteSpaceLexer &
+      //     string('of') &
+      //     whiteSpaceLexer &
+      //     expressionTerm)
+
+      // /// widthExpressionTerm
+      // |
+      // (string('width') &
+      //     whiteSpaceLexer &
+      //     string('of') &
+      //     whiteSpaceLexer &
+      //     expressionTerm)
+
+      // /// successorExpressionTerm
+      // |
+      // (string('successor') &
+      //     whiteSpaceLexer &
+      //     string('of') &
+      //     whiteSpaceLexer &
+      //     expressionTerm)
+
+      // /// predecessorExpressionTerm
+      // |
+      // (string('predecessor') &
+      //     whiteSpaceLexer &
+      //     string('of') &
+      //     whiteSpaceLexer &
+      //     expressionTerm)
+
+      // /// elementExtractorExpressionTerm
+      // |
+      // (string('singleton') &
+      //     whiteSpaceLexer &
+      //     string('from') &
+      //     whiteSpaceLexer &
+      //     expressionTerm)
+
+      // /// pointExtractorExpressionTerm
+      // |
+      // (string('point') &
+      //     whiteSpaceLexer &
+      //     string('from') &
+      //     whiteSpaceLexer &
+      //     expressionTerm)
+
+      // /// typeExtentExpressionTerm
+      // |
+      // ((string('minimum') | string('maximum')) &
+      //     whiteSpaceLexer &
+      //     namedTypeSpecifierLexer)
+
+      // /// powerExpressionTerm
+      // |
+      // (expressionTerm & char('^') & expressionTerm)
+
+      // /// multiplicationExpressionTerm
+      // |
+      // (expressionTerm &
+      //     whiteSpaceLexer.optional() &
+      //     (char('*') |
+      //         char('/') |
+      //         (string('div') & whiteSpaceLexer.optional()) |
+      //         (string('mod') & whiteSpaceLexer.optional())) &
+      //     expressionTerm)
+
+      // /// additionExpressionTerm
+      // |
+      // (expressionTerm &
+      //     whiteSpaceLexer.optional() &
+      //     (char('+') | char('-') | char('&')) &
+      //     whiteSpaceLexer.optional() &
+      //     expressionTerm)
+
+      // /// ifThenElseExpressionTerm
+      // |
+      // (string('if') &
+      //     whiteSpaceLexer &
+      //     cqlExpression &
+      //     whiteSpaceLexer &
+      //     string('then') &
+      //     whiteSpaceLexer &
+      //     cqlExpression &
+      //     whiteSpaceLexer &
+      //     string('else') &
+      //     whiteSpaceLexer &
+      //     cqlExpression)
+
+      // /// caseExpressionTerm
+      // |
+      // (string('case') &
+      //     (whiteSpaceLexer & cqlExpression).optional() &
+      //     whiteSpaceLexer &
+      //     caseExpressionItem.plus() &
+      //     whiteSpaceLexer &
+      //     string('else') &
+      //     whiteSpaceLexer &
+      //     cqlExpression &
+      //     whiteSpaceLexer &
+      //     string('end'))
+
+      // /// aggregateExpressionTerm
+      // |
+      // ((string('distinct') | string('flatten')) &
+      //     whiteSpaceLexer &
+      //     cqlExpression)
+
+      // /// setAggregateExpressionTerm
+      // |
+      // ((string('expand') | string('collapse')) &
+      //     whiteSpaceLexer &
+      //     cqlExpression &
+      //     (whiteSpaceLexer &
+      //             string('per') &
+      //             whiteSpaceLexer &
+      //             (dateTimePrecisionLexer | cqlExpression))
+      //         .optional())
+      ;
+
+  final caseExpressionItemPart = string('when') &
+      whiteSpaceLexer &
+      cqlExpression &
+      whiteSpaceLexer &
+      string('then') &
+      whiteSpaceLexer &
+      cqlExpression;
+
   final termPart =
 
       /// invocationTerm
@@ -418,38 +525,40 @@ Parser cqlExpressionLexer() {
           literalLexer |
 
           /// externalConstantTerm
-          externalConstantLexer |
+          externalConstantLexer
+      // |
 
-          /// intervalSelectorTerm
-          intervalSelector |
+      /// intervalSelectorTerm
+      // intervalSelector |
 
-          /// tupleSelectorTerm
+      // /// tupleSelectorTerm
 
-          tupleSelector |
+      // tupleSelector |
 
-          /// instanceSelectorTerm
+      // /// instanceSelectorTerm
 
-          instanceSelector |
+      // instanceSelector |
 
-          // /// listSelectorTerm
+      // /// listSelectorTerm
 
-          listSelector |
+      // listSelector |
 
-          // /// codeSelectorTerm
+      // /// codeSelectorTerm
 
-          codeSelectorLexer |
+      // codeSelectorLexer |
 
-          // /// conceptSelectorTerm
+      // /// conceptSelectorTerm
 
-          conceptSelectorLexer |
+      // conceptSelectorLexer |
 
-          /// parenthesizedTerm
+      // /// parenthesizedTerm
 
-          (char('(') &
-              whiteSpaceLexer.optional() &
-              cqlExpression &
-              whiteSpaceLexer.optional() &
-              char(')'));
+      // (char('(') &
+      //     whiteSpaceLexer.optional() &
+      //     cqlExpression &
+      //     whiteSpaceLexer.optional() &
+      //     char(')'))
+      ;
 
   final intervalSelectorPart =
 
@@ -507,47 +616,6 @@ Parser cqlExpressionLexer() {
       whiteSpaceLexer.optional() &
       cqlExpression;
 
-  final queryPart = sourceClause &
-      whiteSpaceLexer &
-      (letClause).optional() &
-      (whiteSpaceLexer & queryInclusionClause).star() &
-      (whiteSpaceLexer & whereClause).optional() &
-      (whiteSpaceLexer & (aggregateClause | returnClause)).optional() &
-      (whiteSpaceLexer & sortClause);
-
-  final sourceClausePart = (string('from') & whiteSpaceLexer).optional() &
-      aliasedQuerySource &
-      (whiteSpaceLexer.optional() &
-              char(',') &
-              whiteSpaceLexer.optional() &
-              aliasedQuerySource)
-          .star();
-
-  final querySourcePart = retrieve |
-      qualifiedIdentifierExpressionLexer |
-      (char('(') &
-          whiteSpaceLexer.optional() &
-          cqlExpression &
-          whiteSpaceLexer.optional() &
-          char(')'));
-
-  final aliasedQuerySourcePart = querySource & whiteSpaceLexer & aliasLexer;
-
-  final letClausePart = string('let') &
-      whiteSpaceLexer &
-      letClauseItem &
-      (whiteSpaceLexer.optional() &
-              char(',') &
-              whiteSpaceLexer.optional() &
-              letClauseItem)
-          .star();
-
-  final letClauseItemPart = cqlIdentifierLexer &
-      whiteSpaceLexer.optional() &
-      char(':') &
-      whiteSpaceLexer.optional() &
-      cqlExpression;
-
   final listSelectorPart = (string('List') &
               (char('<') & typeSpecifierLexer() & char('>')).optional())
           .optional() &
@@ -562,93 +630,33 @@ Parser cqlExpressionLexer() {
       whiteSpaceLexer.optional() &
       char('}');
 
-  final queryInclusionClausePart = withClause | withoutClause;
-
-  final withClausePart = string('with') &
-      whiteSpaceLexer &
-      aliasedQuerySource &
-      whiteSpaceLexer &
-      string('such that') &
-      whiteSpaceLexer &
-      cqlExpression;
-
-  final withoutClausePart = string('without') &
-      whiteSpaceLexer &
-      aliasedQuerySource &
-      whiteSpaceLexer &
-      string('such that') &
-      whiteSpaceLexer &
-      cqlExpression;
-
-  final whereClausePart = string('where') & whiteSpaceLexer & cqlExpression;
-
-  final aggregateClausePart = string('aggregate') &
-      (whiteSpaceLexer & (string('all') | string('distinct'))).optional() &
-      whiteSpaceLexer &
-      cqlIdentifierLexer &
-      (whiteSpaceLexer & startingClause).optional() &
-      whiteSpaceLexer.optional() &
-      char(':') &
-      whiteSpaceLexer.optional() &
-      cqlExpression;
-
-  final startingClausePart = string('starting') &
-      whiteSpaceLexer &
-      (simpleLiteralLexer |
-          quantityLexer |
-          (char('(') &
-              whiteSpaceLexer.optional() &
-              cqlExpression &
-              whiteSpaceLexer.optional() &
-              char(')')));
-
-  final returnClausePart = string('return') &
-      (whiteSpaceLexer & (string('all') | string('distinct'))).optional() &
-      whiteSpaceLexer &
-      cqlExpression;
-
-  final sortClausePart = string('sort') &
-      whiteSpaceLexer &
-      (sortDirectionLexer |
-          (string('by') &
-              whiteSpaceLexer &
-              sortByItem &
-              (whiteSpaceLexer.optional() &
-                      char(',') &
-                      whiteSpaceLexer.optional() &
-                      sortByItem)
-                  .star()));
-
-  final sortByItemPart =
-      expressionTerm & (whiteSpaceLexer & sortDirectionLexer).optional();
-
-  listSelector.set(listSelectorPart);
-  instanceElementSelector.set(instanceElementSelectorPart);
-  instanceSelector.set(instanceSelectorPart);
-  tupleElementSelector.set(tupleElementSelectorPart);
-  tupleSelector.set(tupleSelectorPart);
-  intervalSelector.set(intervalSelectorPart);
-  term.set(termPart);
-  sortByItem.set(sortByItemPart);
-  sortClause.set(sortClausePart);
-  returnClause.set(returnClausePart);
-  startingClause.set(startingClausePart);
-  aggregateClause.set(aggregateClausePart);
-  whereClause.set(whereClausePart);
-  withoutClause.set(withoutClausePart);
-  withClause.set(withClausePart);
-  queryInclusionClause.set(queryInclusionClausePart);
-  letClauseItem.set(letClauseItemPart);
-  letClause.set(letClausePart);
-  aliasedQuerySource.set(aliasedQuerySourcePart);
   querySource.set(querySourcePart);
-  sourceClause.set(sourceClausePart);
-  query.set(queryPart);
-  terminology.set(terminologyPart);
+  aliasedQuerySource.set(aliasedQuerySourcePart);
+  queryInclusionClause.set(queryInclusionClausePart);
+  withClause.set(withClausePart);
+  withoutClause.set(withoutClausePart);
   retrieve.set(retrievePart);
-  caseExpressionItem.set(caseExpressionItemPart);
-  expressionTerm.set(expressionTermPart);
+  terminology.set(terminologyPart);
+  query.set(queryPart);
+  sourceClause.set(sourceClausePart);
+  letClause.set(letClausePart);
+  letClauseItem.set(letClauseItemPart);
+  whereClause.set(whereClausePart);
+  returnClause.set(returnClausePart);
+  aggregateClause.set(aggregateClausePart);
+  startingClause.set(startingClausePart);
+  sortClause.set(sortClausePart);
+  sortByItem.set(sortByItemPart);
   cqlExpression.set(cqlExpressionPart);
+  expressionTerm.set(expressionTermPart);
+  caseExpressionItem.set(caseExpressionItemPart);
+  term.set(termPart);
+  intervalSelector.set(intervalSelectorPart);
+  tupleSelector.set(tupleSelectorPart);
+  tupleElementSelector.set(tupleElementSelectorPart);
+  instanceSelector.set(instanceSelectorPart);
+  instanceElementSelector.set(instanceElementSelectorPart);
+  listSelector.set(listSelectorPart);
 
   return cqlExpression;
 }
@@ -685,13 +693,14 @@ final invocationLexer =
         |
         string(r'$total');
 
-final cqlFunctionLexer = referentialIdentifierLexer &
-    whiteSpaceLexer.optional() &
-    char('(') &
-    whiteSpaceLexer.optional() &
-    paramListLexer.optional() &
-    whiteSpaceLexer.optional() &
-    char(')').map((value) => print(value));
+final cqlFunctionLexer = (referentialIdentifierLexer &
+        whiteSpaceLexer.optional() &
+        char('(') &
+        whiteSpaceLexer.optional() &
+        paramListLexer.optional() &
+        whiteSpaceLexer.optional() &
+        char(')'))
+    .map((value) => print(value));
 
 Parser simplePathLexer() {
   final simplePath = undefined();

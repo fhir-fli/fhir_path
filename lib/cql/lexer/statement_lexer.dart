@@ -7,14 +7,16 @@ final statementLexer = expressionDefinitionLexer |
     contextDefinitionLexer |
     functionDefinitionLexer;
 
-final expressionDefinitionLexer = string('define') &
-    (whiteSpaceLexer & accessModifierLexer).optional() &
-    whiteSpaceLexer &
-    cqlIdentifierLexer &
-    whiteSpaceLexer.optional() &
-    char(':') &
-    whiteSpaceLexer.optional() &
-    cqlExpressionLexer();
+final expressionDefinitionLexer = (string('define') &
+        (whiteSpaceLexer & accessModifierLexer).optional() &
+        whiteSpaceLexer &
+        cqlIdentifierLexer &
+        whiteSpaceLexer.optional() &
+        char(':') &
+        whiteSpaceLexer.optional() &
+        cqlExpressionLexer())
+    .flatten()
+    .map((value) => print(value));
 
 final contextDefinitionLexer = string('context') &
     whiteSpaceLexer &
