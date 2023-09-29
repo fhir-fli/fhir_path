@@ -43,31 +43,3 @@ Supplemental Data Elements
     "Patient Characteristic Sex: ONC Administrative Sex" using "ONC Administrative Sex Administrative Sex Value Set (2.16.840.1.113762.1.4.1)"
 
 */
-
-using QDM version '5.0'
-
-valueset "Inpatient": '2.16.840.1.113883.3.666.5.307'
-valueset "Emergency Department Visit": '2.16.840.1.113883.3.117.1.7.1.293'
-
-parameter "Measurement Period" Interval<DateTime>
-//parameter "Measurement Period" default Interval[@2014-01-01T00:00:00.0, @2015-01-01T00:00:00.0)
-
-context Patient
-
-define "Inpatient Encounters":
-	["Encounter, Performed": "Inpatient"] E
-		where E.lengthOfStay <= 120 days
-			and E.relevantPeriod ends during "Measurement Period"
-
-define "Emergency Department Encounters":
-	["Encounter, Performed": "Emergency Department Visit"] ED
-		with "Inpatient Encounters" E such that ED.relevantPeriod ends 1 hour or less before start of E.relevantPeriod
-
-define "Measure Observation":
-	"Emergency Department Encounters" E
-		where E.relevantPeriod is not null
-    return duration in minutes of E.locationPeriod
-
-context Population
-
-define "Measure Score": Median("Measure Observation")

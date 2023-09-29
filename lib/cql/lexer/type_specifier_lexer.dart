@@ -5,7 +5,6 @@ import 'lexer.dart';
 
 /// Primary lexing function for this library
 Parser typeSpecifierLexer() {
-  print('TYPESPECIFIERLEXER');
   final typeSpecifierLexer = undefined();
   final listTypeSpecifierLexer = undefined();
   final intervalTypeSpecifierLexer = undefined();
@@ -13,38 +12,37 @@ Parser typeSpecifierLexer() {
   final tupleTypeSpecifierLexer = undefined();
   final choiceTypeSpecifierLexer = undefined();
 
-  final typeSpecifierLexerPart = namedTypeSpecifierLexer |
-      listTypeSpecifierLexer |
+  final typeSpecifierLexerPart = listTypeSpecifierLexer |
       intervalTypeSpecifierLexer |
       tupleTypeSpecifierLexer |
-      choiceTypeSpecifierLexer;
+      choiceTypeSpecifierLexer |
+      namedTypeSpecifierLexer;
+  typeSpecifierLexer.set(typeSpecifierLexerPart);
 
   final listTypeSpecifierLexerPart =
       string('list') & char('<') & typeSpecifierLexer & char('>');
+  listTypeSpecifierLexer.set(listTypeSpecifierLexerPart);
 
   final intervalTypeSpecifierLexerPart =
       string('Interval') & char('<') & typeSpecifierLexer & char('>');
+  intervalTypeSpecifierLexer.set(intervalTypeSpecifierLexerPart);
 
   final tupleElementDefintionLexerPart =
       referentialIdentifierLexer & typeSpecifierLexer;
+  tupleElementDefinitionLexer.set(tupleElementDefintionLexerPart);
 
   final tupleTypeSpecifierLexerPart = string('Tuple') &
       char('{') &
       tupleElementDefinitionLexer &
       (char(',') & tupleElementDefinitionLexer).star() &
       char('}');
+  tupleTypeSpecifierLexer.set(tupleTypeSpecifierLexerPart);
 
   final choiceTypeSpecifierLexerPart = string('Choice') &
       char('<') &
       typeSpecifierLexer &
       (char(',') & typeSpecifierLexer).star() &
       char('>');
-
-  typeSpecifierLexer.set(typeSpecifierLexerPart);
-  listTypeSpecifierLexer.set(listTypeSpecifierLexerPart);
-  intervalTypeSpecifierLexer.set(intervalTypeSpecifierLexerPart);
-  tupleElementDefinitionLexer.set(tupleElementDefintionLexerPart);
-  tupleTypeSpecifierLexer.set(tupleTypeSpecifierLexerPart);
   choiceTypeSpecifierLexer.set(choiceTypeSpecifierLexerPart);
 
   return typeSpecifierLexer;

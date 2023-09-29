@@ -8,7 +8,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  fhir: ^0.11.0
+  fhir: ^0.11.3
   # fhir:
   #   path: ../../fhir
   fhir_path:

@@ -29,7 +29,7 @@ final Parser<WhiteSpaceParser> lineCommentLexer =
 
 /// Multiline Comment
 final Parser<WhiteSpaceParser> multiLineCommentLexer =
-    (string('/*') & any().star().and() & string('*/'))
+    (string('/*') & string('*/').neg().star() & string('*/'))
         .flatten()
         .map((value) => WhiteSpaceParser(value));
 

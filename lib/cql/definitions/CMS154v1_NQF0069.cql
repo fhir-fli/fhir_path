@@ -1,4 +1,3 @@
-library CMS154 version '1'
 
 /*
 	CMS154v1 - NQF0069
@@ -79,43 +78,6 @@ valueset "Preventive Care - Established Office Visit, 0 to 17": '2.16.840.1.1138
 valueset "Preventive Care- Initial Office Visit, 0 to 17": '2.16.840.1.113883.3.464.1003.101.12.1022'
 valueset "Antibiotic Medications": '2.16.840.1.113883.3.464.1003.196.12.1001'
 
-parameter MeasurementPeriod default Interval[DateTime(2013, 1, 1, 0, 0, 0, 0), DateTime(2014, 1, 1, 0, 0, 0, 0))
+parameter MeasurementPeriod default Interval[DateTime(2013, 1, 1, 0, 0, 0, 0), DateTime(2014, 1, 1, 0, 0, 0, 0) )
 
 context Patient
-
-define "InDemographic":
-    AgeInMonthsAt(start of MeasurementPeriod) >= 3
-        and AgeInYearsAt(start of MeasurementPeriod) <= 18
-
-define "ValidEncounters":
-	["Encounter": "Office Visit"]
-		union ["Encounter": "Emergency Department Visit"]
-		union ["Encounter": "Preventive Care- Initial Office Visit, 0 to 17"]
-		union ["Encounter": "Preventive Care - Established Office Visit, 0 to 17"]
-		union ["Encounter": "Hospital Observation Care - Initial"]
-		union ["Encounter": "Face-to-Face Interaction"]
-
-define "EncountersDuringMeasurementPeriod":
-	"ValidEncounters" E where E."period" during MeasurementPeriod
-
-define "URIDiagnosis":
-	["Condition": "Upper Respiratory Infection"]
-
-define "ValidDiagnosis":
-	"URIDiagnosis" U
-		where exists ("EncountersDuringMeasurementPeriod" E where U."onsetDateTime" during E."period")
-			or exists ("ValidEncounters" E where Interval[U."onsetDateTime", U."abatementDate"] includes E."period")
-
-define "InitialPopulation":
-	"ValidDiagnosis" V
-		where "InDemographic"
-
-define "Denominator":
-	true
-
-define "Numerator":
-	"ValidDiagnosis" V where not exists (["MedicationPrescription": "Antibiotic Medications"] M where M."dateWritten" occurs 3 days or less after V."onsetDateTime")
-
-context Population
-
-define "MeasureScore": (Count("Numerator") / Count("Denominator")) * 100

@@ -16,7 +16,7 @@ final expressionDefinitionLexer = (string('define') &
         whiteSpaceLexer.optional() &
         cqlExpressionLexer())
     .flatten()
-    .map((value) => print(value));
+    .map((value) => print('expressionDefinitionLexer: $value'));
 
 final contextDefinitionLexer = string('context') &
     whiteSpaceLexer &
