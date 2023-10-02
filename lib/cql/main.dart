@@ -9,13 +9,17 @@ Future<void> main() async {
       final pathExpression = await file.readAsString();
       final pathExpressionLists = pathExpression.split('\n');
       final librariesList = <String>[];
+      bool record = false;
       for (final line in pathExpressionLists) {
-        if (line.startsWith('library')) {
-          librariesList.add(line);
-          await File(file.path.replaceAll('cooking_with_cql', 'libraries'))
-              .writeAsString(librariesList.join('\n'));
-        } else {
-          librariesList.add(line);
+        if (record) {
+          if (line.startsWith('define') || line.startsWith('context')) {
+            await File(file.path.replaceAll('cooking_with_cql', 'definitions'))
+                .writeAsString(librariesList.join('\n'));
+          } else {
+            librariesList.add(line);
+          }
+        } else if (line.startsWith('library')) {
+          record = true;
         }
       }
     }

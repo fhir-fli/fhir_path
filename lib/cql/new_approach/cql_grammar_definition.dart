@@ -304,12 +304,17 @@ class CqlGrammarDefinition extends GrammarDefinition {
 
   Parser qualifier() => ref0(identifier);
 
-// query:
-// 	sourceClause letClause? queryInclusionClause* whereClause? (
-// 		aggregateClause
-// 		| returnClause
-// 	)? sortClause?;
+  Parser query() =>
+      ref0(sourceClause) &
+      ref0(whiteSpacePlus) &
+      (ref0(letClause) & ref0(whiteSpacePlus)).optional() &
+      (ref0(queryInclusionClause) & ref0(whiteSpacePlus)).star() &
+      (ref0(whereClause) & ref0(whiteSpacePlus)).optional() &
+      ((ref0(aggregateClause) | ref0(returnClause)) & ref0(whiteSpacePlus))
+          .optional() &
+      ref0(sortClause).optional();
 
+Parser
 // sourceClause:
 // 	'from'? aliasedQuerySource (',' aliasedQuerySource)*;
 
@@ -353,9 +358,12 @@ class CqlGrammarDefinition extends GrammarDefinition {
   Parser expression() =>
 
       /// termExpression
-      ref0(expressionTerm)
+      ref0(expressionTerm) |
 // 	| retrieve																					# retrieveExpression
-// 	| query																						# queryExpression
+
+      /// queryExpression
+      ref0(query)
+
 // 	| expression 'is' 'not'? ('null' | 'true' | 'false')										# booleanExpression
 // 	| expression ('is' | 'as') typeSpecifier													# typeExpression
 // 	| 'cast' expression 'as' typeSpecifier														# castExpression
@@ -405,9 +413,16 @@ class CqlGrammarDefinition extends GrammarDefinition {
   Parser expressionTerm() =>
 
       /// termExpressionTerm
-      ref0(term)
+      ref0(term) |
 // 	| expressionTerm '.' qualifiedInvocation							# invocationExpressionTerm
-// 	| expressionTerm '[' expression ']'									# indexedExpressionTerm
+      /// indexedExpressionTerm
+      (ref0(expressionTerm) &
+          ref0(ignored) &
+          ref1(token, '[') &
+          ref0(ignored) &
+          ref0(expression) &
+          ref0(ignored) &
+          ref1(token, ']'))
 // 	| 'convert' expression 'to' (typeSpecifier | unit)					# conversionExpressionTerm
 // 	| ('+' | '-') expressionTerm										# polarityExpressionTerm
 // 	| ('start' | 'end') 'of' expressionTerm								# timeBoundaryExpressionTerm
