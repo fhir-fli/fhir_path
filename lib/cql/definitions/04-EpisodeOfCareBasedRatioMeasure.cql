@@ -15,39 +15,3 @@ parameter "Measurement Period" Interval<DateTime>
 
   The measure score is described in the population context section below.
 */
-
-
-  ["Encounter, Performed": "Inpatient"] Encounter
-    where Encounter.startDateTime during "Measurement Period"
-
-  "Valid Encounter" Encounter
-    where AgeInYearsAt(Encounter.startDateTime) >= 18
-
-  "Valid Encounter" Encounter
-    with ["Diagnosis": "AMI"] AMIDiagnosis
-      such that AMIDiagnosis.startDateTime <= Encounter.startDateTime
-
-  "Valid Encounter" Encounter
-    where Encounter.dischargeStatus in "Patient Expired"
-
-  "Valid Encounter" Encounter
-    with ["Medication, Discharge": "Statin"] Medication
-      such that Medication.startDateTime >= Encounter.startDateTime
-
-
-// Measure score definition starts here
-// NOTE: This is the formal description of the measure score calculation for
-// this type of measure. It is the same for all measures of this type, and is
-// provided here for reference. It is NOT expected that this calculation be
-// included in each measure.
-
-    "Initial Population"
-      intersect "Numerator"
-      except "Numerator Exclusion"
-
-    "Initial Population"
-      intersect "Denominator"
-      except "Denominator Exclusion"
-
-
-  Count("Numerator Membership")

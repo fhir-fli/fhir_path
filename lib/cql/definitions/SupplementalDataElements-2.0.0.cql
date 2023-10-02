@@ -7,28 +7,3 @@ valueset "ONC Administrative Sex": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.84
 valueset "Race": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.836'
 valueset "Ethnicity": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.837'
 valueset "Payer": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.114222.4.11.3591'
-
-
-  (flatten (
-    Patient.extension Extension
-      where Extension.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-ethnicity'
-        return Extension.extension
-  )) E
-    where E.url = 'ombCategory'
-      or E.url = 'detailed'
-    return E.value as Coding
-
-    [Coverage: type in "Payer"] Payer
-      return {
-        code: Payer.type,
-        period: Payer.period
-      }
-
-  (flatten (
-    Patient.extension Extension
-      where Extension.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-race'
-        return Extension.extension
-  )) E
-    where E.url = 'ombCategory'
-      or E.url = 'detailed'
-    return E.value as Coding

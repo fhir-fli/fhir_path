@@ -34,25 +34,3 @@ However I can’t think of a way to have it look for the lowest on a certain day
 */
 
 // Assuming it is really the case that we want the lowest diastolic and lowest systolic:
-
-  ["Physical Exam, Performed": "HTN 2 SYSTOLIC_CODE"] Systolic
-    where Systolic.relevantPeriod during "Measurement Period"
-      and Systolic.result as Quantity <= 140 'mmHg'
-
-  Last("Htn Bp Systolic" Systolic sort by start of Systolic.relevantPeriod)
-
-  "Htn Bp Systolic" Systolic
-    with "Most Recent Systolic By Date" MostRecentSystolic
-      such that Systolic.relevantPeriod starts same day as start of MostRecentSystolic.relevantPeriod
-
-  First("Most Recent Systolics On Same Day" Systolic sort by (Systolic.result as Quantity))
-
-  ["Physical Exam, Performed": "HTN 2 DIASTOLIC_CODE"] Diastolic
-    where Diastolic.relevantPeriod during "Measurement Period"
-      and Diastolic.result as Quantity <= 90 'mmHg'
-
-  Last("Htn Bp Diastolic" Diastolic sort by start of Diastolic.relevantPeriod)
-
-  "Htn Bp Diastolic" Diastolic
-    with "Most Recent Diastolic By Date" MostRecentDiastolic
-      such that Diastolic.relevantPeriod starts same day as start of MostRecentDiastolic.relevantPeriod

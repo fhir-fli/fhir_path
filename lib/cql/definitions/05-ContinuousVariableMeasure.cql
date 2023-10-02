@@ -16,26 +16,3 @@ parameter "Measurement Period" Interval<DateTime>
 
   The measure score is described in the population context section below.
 */
-
-
-	["Encounter, Performed": "Inpatient"] Encounter
-		where Encounter.lengthOfStay <= 120 days
-			and Encounter.dischargeDatetime during "Measurement Period"
-
-	["Encounter, Performed": "Emergency Department Visit"] EmergencyEncounter
-		with "Inpatient Encounters" InpatientEncounter
-			such that EmergencyEncounter.dischargeDatetime 1 hour or less before InpatientEncounter.admissionDatetime
-
-	"Emergency Department Encounters" Encounter
-		where Encounter.admissionDatetime is not null
-			and Encounter.dischargeDatetime is not null
-
-	return minutes between Encounter.facilityLocationArrivalDatetime and Encounter.facilityLocationDepartureDatetime
-
-// Measure score definition starts here
-// NOTE: This is the formal description of the measure score calculation for
-// this type of measure. It is the same for all measures of this type, and is
-// provided here for reference. It is NOT expected that this calculation be
-// included in each measure, with the exception that for continuous variable
-// measures, the HQMF itself specifies the aggregation method (Avg in this case).
-

@@ -53,18 +53,3 @@ include MATGlobalCommonFunctions called Global
 
 valueset "Inpatient": 'TBD'
 valueset "Fall": 'TBD'
-
-  exists "Qualifying Encounters"
-
-  true // No additional filters
-
-  ["Encounter, Performed": "Inpatient"]
-
-  Sum(
-    "Qualifying Encounters" Q
-      return duration in hours of Global.Hospitalization(Q) / 24
-  )
-
-  ["Assessment, Performed": "Fall"]
-
-  "Encounter Days"

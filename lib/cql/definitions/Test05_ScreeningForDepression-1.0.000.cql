@@ -23,21 +23,3 @@ code "Birthdate": '21112-8' from "LOINC:2.46" display 'Birth date'
 code "Dead": '419099009' from "SNOMEDCT:2016-03" display 'Dead'
 
 parameter "Measurement Period" Interval<DateTime>
-
-
-	["Patient Characteristic Ethnicity": "Ethnicity"]
-
-	["Patient Characteristic Payer": "Payer"]
-
-	["Patient Characteristic Race": "Race"]
-
-	["Patient Characteristic Sex": "ONC Administrative Sex"]
-
-	exists ( AWV."Annual Wellness Encounters" )
-
-	"Initial Population"
-
-	exists ( ["Diagnosis": "Depression or Bipolar Disorder"] Bipolar
-			with AWV."Annual Wellness Encounters" AWV
-				such that Bipolar.prevalencePeriod overlaps before AWV.relevantPeriod
-	)

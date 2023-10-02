@@ -38,17 +38,3 @@ sterile site cultures are negative for resistant Staphylococcus aureus isolates
 // Initiate IV anti-MRSA Antibiotic
 // Test for resistant Staphylococcus aureus isolates
 // If negative, discontinue anti-MRSA Antibiotic within 72 hours
-
-  ["Medication, Administered": "X_Anti-MRSA Antibiotic"] M
-    where M.route ~ "X_Intravenous"
-    
-  ["Laboratory Test, Performed": "Resistant Staphylococcus Aureus Isolates"] L
-    where L.method ~ "X_Sterile Site Culture" // NOTE: method is the closest attribute in QDM here
-
-  // MAYBE: Procedure performed?
-  ["Procedure, Performed": "Sterile Site Culture"] P
-    where P.anatomicalSiteLocation in "Sterile Sites"
-    
-  "Sterile Site Cultures for Resistant Staphylococcus Aureus Isolates" L
-    where L.result ~ "X_Negative"
-    

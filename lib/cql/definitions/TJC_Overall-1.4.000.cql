@@ -22,31 +22,3 @@ code "Birthdate": '21112-8' from "LOINC:2.46" display 'Birth date'
 code "Dead": '419099009' from "SNOMEDCT:2016-03" display 'Dead'
 
 parameter "Measurement Period" Interval<DateTime>
-
-
-	["Intervention, Order": "Comfort Measures"]
-		union ["Intervention, Performed": "Comfort Measures"]
-
-	"Non Elective Inpatient Encounter" NonElectiveEncounter
-		where NonElectiveEncounter.principalDiagnosis in "Hemorrhagic Stroke"
-			or NonElectiveEncounter.principalDiagnosis in "Ischemic Stroke"
-
-	"Encounter with Principal Diagnosis and Age" EncounterWithAge
-		where EncounterWithAge.principalDiagnosis in "Ischemic Stroke"
-
-	( ( "Ischemic Stroke Encounter" IschemicStrokeEncounter
-				where IschemicStrokeEncounter.dischargeDisposition in "Discharge To Acute Care Facility"
-					or IschemicStrokeEncounter.dischargeDisposition in "Left Against Medical Advice"
-					or IschemicStrokeEncounter.dischargeDisposition in "Patient Expired"
-					or IschemicStrokeEncounter.dischargeDisposition in "Discharged to Home for Hospice Care"
-					or IschemicStrokeEncounter.dischargeDisposition in "Discharged to Health Care Facility for Hospice Care"
-		)
-	)
-
-	"Ischemic Stroke Encounter" IschemicStrokeEncounter
-		with "Intervention Comfort Measures" ComfortMeasure
-			such that Coalesce(start of ComfortMeasure.relevantPeriod, ComfortMeasure.authorDatetime)during Global."Hospitalization"(IschemicStrokeEncounter)
-
-	"All Stroke Encounter" AllStrokeEncounter
-		with ["Patient Characteristic Birthdate"] BirthDate
-			such that Global."CalendarAgeInYearsAt"(BirthDate.birthDatetime, start of AllStrokeEncounter.relevantPeriod)>= 18

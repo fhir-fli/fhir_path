@@ -15,6 +15,7 @@ Future<void> main() async {
           if (line.startsWith('define') || line.startsWith('context')) {
             await File(file.path.replaceAll('cooking_with_cql', 'definitions'))
                 .writeAsString(librariesList.join('\n'));
+            break;
           } else {
             librariesList.add(line);
           }

@@ -15,26 +15,3 @@ valueset "Standardized Tools for Assessment of Cognition": 'Standardized Tools f
 valueset "Cognitive Assessment": 'Cognitive Assessment'
 
 parameter "Measurement Period" Interval<DateTime>
-
-  ["Assessment, Performed": "Standardized Tools for Assessment of Cognition"] Assessment
-    where Assessment.result is not null
-
-  ["Intervention, Performed": "Cognitive Assessment"] Intervention
-
-  "DEM Encounters 149" Encounter
-    where exists (
-        "Cognition Risk Assessment" Assessment
-          where Assessment.authorDatetime 12 months or less before end of Encounter.relevantPeriod
-      )
-      or exists (
-        "Cognitive Intervention" Intervention
-          where Intervention.relevantPeriod starts 12 months or less before end of Encounter.relevantPeriod
-      )
-
-/*
-Numerator =
-  AND: Union of:
-    "Risk Category Assessment: Standardized Tools for Assessment of Cognition (result)"
-    "Intervention, Performed: Cognitive Assessment"
-    <= 12 month(s) starts before end of Occurrence A of $DEMEncounters149
-*/

@@ -8,6 +8,3 @@ include 04_ScreeningForColorectalCancer called "Screening For Colorectal Cancer"
 include 05_ScreeningForDepression called "Screening For Depression"
 
 parameter "Measurement Period" Interval<DateTime>
-
-
-// Take the average of the weigthed measure scores

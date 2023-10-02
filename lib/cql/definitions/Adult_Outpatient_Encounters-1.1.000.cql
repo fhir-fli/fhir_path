@@ -14,4 +14,3 @@ code "Birthdate": '21112-8' from "LOINC:2.46" display 'Birth date'
 code "Dead": '419099009' from "SNOMEDCT:2016-03" display 'Dead'
 
 parameter "Measurement Period" Interval<DateTime>
-

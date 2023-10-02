@@ -10,10 +10,3 @@ valueset "Office Visit": 'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1001'
 valueset "Outpatient Consultation": 'urn:oid:2.16.840.1.113883.3.464.1003.101.12.1008'
 
 parameter "Measurement Period" Interval<DateTime>
-
-
-// NOTE: Removed several union elements as not relevant for this example
-	( ["Encounter, Performed": "Office Visit"]
-		union ["Encounter, Performed": "Outpatient Consultation"] ) ValidEncounter
-		where ValidEncounter.relevantPeriod during "Measurement Period"
-    

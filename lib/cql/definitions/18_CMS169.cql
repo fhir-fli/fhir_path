@@ -16,4 +16,3 @@ valueset "BH Outpatient encounter": 'urn:oid:2.16.840.1.113883.3.464.1.49'
 valueset "BH Condition Involving Unipolar Depression": 'urn:oid:2.16.840.1.113883.3.1257.1.1505'
 
 parameter "Measurement Period" Interval<DateTime>
-

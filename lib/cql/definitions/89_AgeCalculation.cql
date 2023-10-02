@@ -14,11 +14,3 @@ valueset "Encounter Inpatient": 'urn:oid:2.16.840.1.113883.3.666.5.307'
 code "Birthdate": '21112-8' from "LOINC" display 'Birth date'
 
 parameter "Measurement Period" Interval<DateTime>
-
-
-// Age at start of measurement period
-  exists ( ["Patient Characteristic Birthdate": "Birthdate"] BirthDate 
-    where Global."CalendarAgeInYearsAt"(BirthDate.birthDatetime, start of "Measurement Period") >= 18
-  )
-
-// Age at start of encounter

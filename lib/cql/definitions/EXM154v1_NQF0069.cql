@@ -75,30 +75,3 @@ Supplemental Data Elements
 using QUICK
 
 parameter MeasurementPeriod default Interval[DateTime(2013, 1, 1, 0, 0, 0, 0), DateTime(2014, 1, 1, 0, 0, 0, 0))
-
-
-    AgeInMonthsAt(start of MeasurementPeriod) >= 3
-        and AgeInYearsAt(start of MeasurementPeriod) <= 18
-
-	[Encounter: "Office Visit"]
-		union [Encounter: "Emergency Department Visit"]
-		union [Encounter: "Preventive Care- Initial Office Visit, 0 to 17"]
-		union [Encounter: "Preventive Care - Established Office Visit, 0 to 17"]
-		union [Encounter: "Hospital Observation Care - Initial"]
-		union [Encounter: "Face-to-Face Interaction"]
-
-	ValidEncounters E where E.period during MeasurementPeriod
-
-	[Condition: "Upper Respiratory Infection"]
-
-	URIDiagnosis U
-		where exists (EncountersDuringMeasurementPeriod E where U.onsetDateTime during E.period)
-			or exists (ValidEncounters E where Interval[U.onsetDateTime, U.abatementDate] includes E.period)
-
-	ValidDiagnosis V
-		where InDemographic
-
-	true
-
-	ValidDiagnosis V where not exists ([MedicationPrescription: "Antibiotic Medications"] M where M.dateWritten occurs 3 days or less after V.onsetDateTime)
-

@@ -18,15 +18,3 @@ using QDM version '5.0.2'
 // and days as "zeroing" the time components.
 
 parameter "Measurement Period" Interval<DateTime>
-
-  CalculateAgeInYearsAt(Patient.birthDatetime, start of "Measurement Period")
-  
-  AgeInYearsAt(start of "Measurement Period")
-  
-  Common.CalculateAgeInYearsAt(Patient.birthDatetime, start of "Measurement Period")
-
-  DateTime(year from dateTime, month from dateTime, day from dateTime, 0, 0, 0, 0, timezone from dateTime)
-  
-  years between ToDate(birthDateTime) and ToDate(asOf)
-  
-  months between ToDate(birthDateTime) and ToDate(asOf)

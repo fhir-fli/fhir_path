@@ -20,24 +20,3 @@ code "Birthdate": '21112-8' from "LOINC:2.46" display 'Birth date'
 code "Dead": '419099009' from "SNOMEDCT:2016-03" display 'Dead'
 
 parameter "Measurement Period" Interval<DateTime>
-
-
-	["Patient Characteristic Ethnicity": "Ethnicity"]
-
-	["Patient Characteristic Payer": "Payer"]
-
-	["Patient Characteristic Race": "Race"]
-
-	["Patient Characteristic Sex": "ONC Administrative Sex"]
-
-	exists ( AWV."Annual Wellness Encounters" )
-
-	exists ( ["Patient Characteristic Birthdate": "Birthdate"] BirthDate
-			where Global."CalendarAgeInYearsAt"(BirthDate.birthDatetime, start of "Measurement Period")< 75
-				and exists ( ["Patient Characteristic Sex": "Female"] )
-	)
-
-	exists ( ["Diagnostic Study, Performed": "Mammography"] Mammogram
-			where Mammogram.result is not null
-				and Mammogram.relevantPeriod ends 26 months or less on or before end of "Measurement Period"
-	)

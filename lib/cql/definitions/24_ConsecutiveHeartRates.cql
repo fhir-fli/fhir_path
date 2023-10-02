@@ -20,21 +20,3 @@ AND: "Occurrence A of Physical Exam, Performed: Heart Rate (result < 50 bpm)"
 AND: "Occurrence B of Physical Exam, Performed: Heart Rate (result < 50 bpm)" 
   during Occurrence A of $CADEncounters145  
 */
-
-  from
-    ["Physical Exam, Performed": "Heart Rate"] Exam,
-    CADEncounters145 Encounter
-  let
-    PriorExam: Last(["Physical Exam, Performed": "Heart Rate"] X 
-      where X.relevantPeriod during Encounter.relevantPeriod
-        and X.relevantPeriod starts before start of Exam.relevantPeriod
-      sort by start of relevantPeriod)
-  where Exam.relevantPeriod during Encounter.relevantPeriod
-    and Exam.result < 50 'bpm'
-    and PriorExam.result < 50 'bpm'
-    
-//PE { 1, 88 }, { 2, 90 }, { 3, 74 } { 4, 45 } { 5, 46 } // True
-//PE { 1, 88 }, { 2, 36 }, { 3, 74 } { 4, 80 } { 5, 46 } // False
-
-
-// NOTE: For illustration purposes only

@@ -26,37 +26,3 @@ code "Birth date": '21112-8' from "LOINC" display 'Birth date'
 
 parameter "Measurement Period" Interval<DateTime>
   default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)
-
-
-//Changed "ProcedureRequest" to "ServiceRequest"
-	(["ServiceRequest": "Comfort Measures"] P
-		where P.intent = 'order')
-		union
-		(["Procedure": "Comfort Measures"] InterventionPerformed
-		where InterventionPerformed.status = 'completed')
-
-	"Non Elective Inpatient Encounter" NonElectiveEncounter
-    where Global.PrincipalDiagnosis(NonElectiveEncounter).code in "Hemorrhagic Stroke"
-      or Global.PrincipalDiagnosis(NonElectiveEncounter).code in "Ischemic Stroke"
-
-	"Encounter with Principal Diagnosis and Age" EncounterWithAge
-		where Global.PrincipalDiagnosis(EncounterWithAge).code in "Ischemic Stroke"
-
-	["Encounter": "Non-Elective Inpatient Encounter"] NonElectiveEncounter
-		where Global."LengthInDays"(NonElectiveEncounter.period) <= 120
-			and NonElectiveEncounter.period ends during "Measurement Period"
-
-	"Ischemic Stroke Encounter" IschemicStrokeEncounter
-		where IschemicStrokeEncounter.hospitalization.dischargeDisposition in "Discharge To Acute Care Facility"
-			or IschemicStrokeEncounter.hospitalization.dischargeDisposition in "Left Against Medical Advice"
-			or IschemicStrokeEncounter.hospitalization.dischargeDisposition in "Patient Expired"
-			or IschemicStrokeEncounter.hospitalization.dischargeDisposition in "Discharged to Home for Hospice Care"
-			or IschemicStrokeEncounter.hospitalization.dischargeDisposition in "Discharged to Health Care Facility for Hospice Care"
-
-	"Ischemic Stroke Encounter" IschemicStrokeEncounter
-   	with "Intervention Comfort Measures" ComfortMeasure
-    	such that FHIRHelpers.ToDateTime(Coalesce(ComfortMeasure.performed as dateTime,ComfortMeasure.authoredOn)) during Global."HospitalizationWithObservation"(IschemicStrokeEncounter)
-
-	"All Stroke Encounter" AllStrokeEncounter
-		with ["Patient"] BirthDate
-			such that Global."CalendarAgeInYearsAt"(FHIRHelpers.ToDate(BirthDate.birthDate), start of FHIRHelpers.ToInterval(AllStrokeEncounter.period)) >= 18

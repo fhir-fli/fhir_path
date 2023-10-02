@@ -36,17 +36,3 @@ another expression.
 /*
 Looking at an example from CMS122v7:
 */
-
-	Last(["Laboratory Test, Performed": "HbA1c Laboratory Test"] HighHbA1c
-			where HighHbA1c.relevantPeriod during "Measurement Period"
-				and HighHbA1c.result is not null
-			sort by resultDatetime
-	).result > 9 '%'
-
-	Last(["Laboratory Test, Performed": "HbA1c Laboratory Test"] HbA1cNoResult
-			where HbA1cNoResult.relevantPeriod during "Measurement Period"
-			sort by resultDatetime
-	).result is null
-
-	not exists ["Laboratory Test, Performed": "HbA1c Laboratory Test"] NoHbA1c
-		where NoHbA1c.relevantPeriod during "Measurement Period"

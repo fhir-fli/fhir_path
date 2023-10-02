@@ -14,17 +14,3 @@ parameter "Measurement Period" Interval<DateTime>
 */
 
 // NOTE: The issue here is that the "not" is being invoked around both conditions, which changes the logic
-    where Dx.prevalencePeriod overlaps "Measurement Period"
-        and not (Dx.prevalencePeriod starts 90 days or more after start of "Measurement Period" 
-          and Dx.prevalencePeriod ends 89 days or less after start of "Measurement Period")
-
-
-// NOTE: The issue here is that the "not" has a higher precendence than the timing phrases, so it is
-// being applied to the "Dx.prevalencePeriod" rather than to the conditions, so we get the error:
-// Could not resolve call to operator Not with signature (interval<System.DateTime>)
-    where Dx.prevalencePeriod overlaps "Measurement Period"
-        and not Dx.prevalencePeriod starts 90 days or more after start of "Measurement Period"
-        and not Dx.prevalencePeriod ends 89 days or less after start of "Measurement Period"
-
-// NOTE: So the correction is to use parentheses to force the "not" to apply to the conditions
-// Note also that as of CQL 1.2, we can use "more than 89 days"

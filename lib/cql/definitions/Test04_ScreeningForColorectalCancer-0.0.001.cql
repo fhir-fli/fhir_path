@@ -15,19 +15,3 @@ valueset "Total Colectomy": 'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1019'
 code "Birth date": '21112-8' from "LOINC" display 'Birthdate'
 
 parameter "Measurement Period" Interval<DateTime>
-
-
-	exists ( AWV."Annual Wellness Encounters" )
-
-	exists ( ["Patient Characteristic Birthdate": "Birthdate"] BirthDate
-			where Global."CalendarAgeInYearsAt"(BirthDate.birthDatetime, start of "Measurement Period")< 75
-	)
-
-	exists ( ["Procedure, Performed": "Total Colectomy"] Colectomy
-			where Colectomy.relevantPeriod ends before 
-			end of "Measurement Period"
-	)
-		or exists ( ["Diagnosis": "Malignant Neoplasm of Colon"] Neoplasm
-				where Neoplasm.prevalencePeriod starts before 
-				end of "Measurement Period"
-		)

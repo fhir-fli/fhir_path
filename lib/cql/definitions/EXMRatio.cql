@@ -48,16 +48,3 @@ and is not supported by the MAT at this time.
 
 valueset "Inpatient": 'TBD'
 valueset "Fall": 'TBD'
-
-
-  "Qualifying Encounters"
-
-  "Initial Population"
-
-  "Initial Population"
-
-  ["Encounter": "Inpatient"]
-
-  ["Observation": "Fall"]
-
-  duration in hours of Global.Hospitalization(Encounter) / 24

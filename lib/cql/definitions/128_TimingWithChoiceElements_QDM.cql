@@ -24,8 +24,3 @@ types.
 Is there a potential for defining a "Normalize Interval" function that would enable
 more flexible CQL that could work however the data was communicated?
 */
-
-  if assessmentPerformed.relevantDatetime is not null then
-    Interval[assessmentPerformed.relevantDatetime, assessmentPerformed.relevantDatetime]
-  else
-    assessmentPerformed.relevantPeriod

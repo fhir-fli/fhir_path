@@ -9,17 +9,3 @@ valueset "Non-Elective Inpatient Encounter": 'Non-Elective Inpatient Encounter'
 valueset "Discharged to Rehabilitation Facility": 'Discharged to Rehabilitation Facility'
 
 parameter "Measurement Period" Interval<DateTime>
-
-  ["Encounter, Performed": "Non-Elective Inpatient Encounter"] Encounter
-    where Encounter.lengthOfStay <= 120 days
-      and Encounter.relevantPeriod ends during "Measurement Period"
-
-  distinct (
-    ["Procedure, Performed": "Rehabilitation Assessment"]
-      union ["Procedure, Performed": "Rehabilitation Therapy"]
-      union (
-        ["Procedure, Not Performed": "Rehabilitation Assessment"] Procedure
-          where Procedure.negationRationale in "Patient Refusal"
-            or Procedure.negationRationale in "Medical Reason"
-      )
-  )

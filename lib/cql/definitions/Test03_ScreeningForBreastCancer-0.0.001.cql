@@ -14,17 +14,3 @@ valueset "Unilateral Mastectomy": 'urn:oid:2.16.840.1.113883.3.464.1003.198.12.1
 code "Birth date": '21112-8' from "LOINC" display 'Birthdate'
 
 parameter "Measurement Period" Interval<DateTime>
-
-
-	exists ( AWV."Annual Wellness Encounters" )
-
-	exists ( ["Patient Characteristic Birthdate": "Birthdate"] BirthDate
-			where Global."CalendarAgeInYearsAt"(BirthDate.birthDatetime, start of "Measurement Period")< 75
-				and exists ( ["Patient Characteristic Sex": "Female"] )
-	)
-
-	exists ( ["Diagnostic Study, Performed": "Mammography"] Mammogram
-			where Mammogram.result is not null
-				and Mammogram.relevantPeriod ends 26 months or less on or before 
-				end of "Measurement Period"
-	)

@@ -19,4 +19,3 @@ code "Hospice care [Minimum Data Set]": '45755-6' from "LOINC" display 'Hospice 
 code "Yes (qualifier value)": '373066001' from "SNOMEDCT" display 'Yes (qualifier value)'
 
 parameter "Measurement Period" Interval<DateTime>
-

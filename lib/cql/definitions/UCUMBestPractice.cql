@@ -20,4 +20,3 @@ code "vital-signs": 'vital-signs' from ObservationCategoryCodes
 code "Body mass index (BMI) [Ratio]": '39156-5' from Common.LOINC
 
 parameter "Measurement Period" Interval<DateTime>
-

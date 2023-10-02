@@ -12,16 +12,3 @@ code "Birthdate": '21112-8' from "LOINC:2.46" display 'Birth date'
 code "Dead": '419099009' from "SNOMEDCT:2016-03" display 'Dead'
 
 parameter "Measurement Period" Interval<DateTime>
-
-
-	DateTime(year from Value, month from Value, day from Value, 0, 0, 0, 0, timezone from Value)
-
-	Interval[StartValue, ToDate(StartValue + 2 days))
-
-	First(("Inpatient Locations"(Encounter))L
-			where L.code in "Intensive Care Unit"
-			sort by start of locationPeriod
-	)
-
-	Encounter.facilityLocations L
-		where L.locationPeriod during Encounter.relevantPeriod

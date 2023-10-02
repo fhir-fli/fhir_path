@@ -54,17 +54,3 @@ valueset "Inpatient": '2.16.840.1.113883.3.666.5.307'
 valueset "Emergency Department Visit": '2.16.840.1.113883.3.117.1.7.1.293'
 
 parameter MeasurementPeriod default Interval[@2014-01-01T00:00:00.0, @2015-01-01T00:00:00.0)
-
-
-	[Encounter: "Inpatient"] E
-		where E.length <= 120 days
-			and E.period ends during MeasurementPeriod
-
-	[Encounter: "Emergency Department Visit"] ED
-		with InpatientEncounters E such that ED.period ends 1 hour or less before start of E.period
-
-	EDEncounters E
-		where start of E.period is not null
-			and end of E.period is not null
-		return duration in minutes of E.period
-

@@ -9,20 +9,3 @@ valueset "Macular Edema Findings Absent": '3.2' // { Absent: No macular edema fi
 valueset "Macular Edema Findings Present": '3.3' // { Present: Macular edema findings present }
 
 parameter "Measurement Period" Interval<DateTime>
-
-
-  ["Diagnostic Study, Performed": "Macular Exam"] Study
-    where exists ( Study.components component1
-      where component1.code in "Macular Exam"
-        and component1.result in "Level of Severity of Retinopathy Findings"
-    )
-      and exists ( Study.components component2
-        where component2.code in "Macular Exam"
-          and ( component2.result in "Macular Edema Findings Absent"
-            or component2.result in "Macular Edema Findings Present"
-          )
-      )
-
-  ["Diagnostic Study, Performed": "Macular Exam"] Study
-    where Study.result in "Level of Severity of Retinopathy Findings"
-   

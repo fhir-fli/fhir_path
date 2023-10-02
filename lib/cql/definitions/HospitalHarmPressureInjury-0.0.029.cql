@@ -19,34 +19,3 @@ code "Pressure ulcer stage 3 (disorder)": '421927004' from "SNOMEDCT:2017-09" di
 code "Pressure ulcer stage 4 (disorder)": '420597008' from "SNOMEDCT:2017-09" display 'Pressure ulcer stage 4 (disorder)'
 
 parameter "Measurement Period" Interval<DateTime>
-
-
-	["Patient Characteristic Ethnicity": "Ethnicity"]
-
-	["Patient Characteristic Payer": "Payer"]
-
-	["Patient Characteristic Race": "Race"]
-
-	["Patient Characteristic Sex": "ONC Administrative Sex"]
-
-	["Encounter, Performed": "Encounter Inpatient"] InpatientEncounter
-		where InpatientEncounter.relevantPeriod during "Measurement Period"
-
-	"Qualifying Inpatient Encounter" QualifyingEncounter
-		where AgeInYearsAt(start of "Hospitalization, Potentially Starting in Emergency Department and or with Observation"(QualifyingEncounter))>= 18
-
-	"Initial Population"
-
-	"Denominator"
-		intersect "New Pressure Injury Stage 2, Stage 3, Stage 4, Nonstageable, or Deep Tissue Injury"
-
-	"Denominator" EncounterWithQualifyingAge
-		with ["Diagnosis": "Pressure Ulcer Stage"] PressureInjuryStage
-			such that ( PressureInjuryStage.code ~ "Pressure ulcer stage 2 (disorder)"
-					or PressureInjuryStage.code ~ "Pressure ulcer stage 3 (disorder)"
-					or PressureInjuryStage.code ~ "Pressure ulcer stage 4 (disorder)"
-					or PressureInjuryStage.code ~ "Nonstageable pressure ulcer (disorder)"
-					or PressureInjuryStage.code ~ "Pressure injury of deep tissue (disorder)"
-			)
-				and PressureInjuryStage.prevalencePeriod starts more than 24 hours after start of "Hospitalization, Potentially Starting in Emergency Department and or with Observation"(EncounterWithQualifyingAge)
-				and PressureInjuryStage.prevalencePeriod during "Hospitalization, Potentially Starting in Emergency Department and or with Observation"(EncounterWithQualifyingAge)

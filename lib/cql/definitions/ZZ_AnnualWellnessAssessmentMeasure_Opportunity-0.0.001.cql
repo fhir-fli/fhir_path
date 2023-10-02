@@ -15,34 +15,3 @@ valueset "Ethnicity": 'urn:oid:2.16.840.1.114222.4.11.837'
 valueset "Payer": 'urn:oid:2.16.840.1.114222.4.11.3591'
 
 code "Birth date": '21112-8' from "LOINC" display 'Birthdate'
-
-
-	["Patient Characteristic Ethnicity": "Ethnicity"]
-
-	["Patient Characteristic Payer": "Payer"]
-
-	["Patient Characteristic Race": "Race"]
-
-	["Patient Characteristic Sex": "ONC Administrative Sex"]
-
-// NOTE: The cases in the population are service opportunities per patient
-// Which means measures where the patient was in the initial population
-
-
-  ("Patient Record" P where ScreeningForAlcoholMisuse."Initial Population" return { service: 'Screening For Alcohol Misuse' })
-	  union ("Patient Record" P where HypertensionAssessment."Initial Population" return { service: 'Hypertension Assessment' })
-		union ("Patient Record" P where ScreeningForBreastCancer."Initial Population" return { service: 'Screening For Breast Cancer' })
-		union ("Patient Record" P where ScreeningForColorectalCancer."Initial Population" return { service: 'Screening For Colorectal Cancer' })
-		union ("Patient Record" P where ScreeningForDepression."Initial Population" return { service: 'Screening For Depression' })
-
-  ("Patient Record" P where ScreeningForAlcoholMisuse."Denominator" return { service: 'Screening For Alcohol Misuse' })
-	  union ("Patient Record" P where HypertensionAssessment."Denominator" return { service: 'Hypertension Assessment' })
-		union ("Patient Record" P where ScreeningForBreastCancer."Denominator" return { service: 'Screening For Breast Cancer' })
-		union ("Patient Record" P where ScreeningForColorectalCancer."Denominator" return { service: 'Screening For Colorectal Cancer' })
-		union ("Patient Record" P where ScreeningForDepression."Denominator" return { service: 'Screening For Depression' })
-
-  ("Patient Record" P where ScreeningForAlcoholMisuse."Denominator Exclusions" return { service: 'Screening For Alcohol Misuse' })
-	  //union ("Patient Record" P where HypertensionAssessment."Denominator Exclusion" return { service: 'Hypertension Assessment' })
-		  union ("Patient Record" P where ScreeningForBreastCancer."Denominator Exclusions" return { service: 'Screening For Breast Cancer' })
-  		union ("Patient Record" P where ScreeningForColorectalCancer."Denominator Exclusions" return { service: 'Screening For Colorectal Cancer' })
-		  union ("Patient Record" P where ScreeningForDepression."Denominator Exclusions" return { service: 'Screening For Depression' })

@@ -13,28 +13,3 @@ valueset "Pap Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.4
 
 parameter "Measurement Period" Interval<DateTime>
   default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)
-
-
-/*
-Consider the Observation effective element
-in STU3, it is a choice of dateTime|Period:
-http://hl7.org/fhir/STU3/observation-definitions.html#Observation.effective_x_
-So the "Normalize Interval(Choice<FHIR.dateTime, FHIR.Period>) function works"
-*/
-
-	[Observation: "Pap Test"] PapTest
-		where PapTest.value is not null
-			and PapTest.status in { 'final', 'amended', 'corrected', 'preliminary' }
-
-	"Pap Test with Results" PapTest
-		where Global."Normalize Interval"(PapTest.effective) ends 3 years or less before end of "Measurement Period"
-
-/*
-But in R4, the choices were expanded to include Timing and instant:
-http://hl7.org/fhir/observation-definitions.html#Observation.effective_x_
-
-So we define an additional "Normalize Interval", both functions work now
-NOTE: QI-Core Observation is still constrained to the set of (dateTime|Period), but since we're using just FHIR, all the options are available
-If the system provides a Timing, that's actually non-compliant with QI-Core, so we
-are safe to throw an error for that case in this function:
-*/

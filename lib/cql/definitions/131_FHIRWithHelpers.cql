@@ -15,27 +15,3 @@ code "Alaska Native": '1735-0' from "CDC Race and Ethnicity Codes"
 code "Blood pressure": '85354-9' from "LOINC" display 'blood pressure'
 code "Diastolic blood pressure": '8462-4' from "LOINC" display 'Diastolic blood pressure'
 code "Systolic blood pressure": '8480-6' from "LOINC" display 'Systolic blood pressure'
-
-
-  Patient P
-    where P.gender = 'male'
-      and P.active is true
-      and P.birthDate before Today()
-      and P.maritalStatus in "Marital Status"
-      and P.maritalStatus ~ "Marital Status - Married"
-
-  Patient P
-    where P.deceased is false
-      or P.deceased before Today()
-
-  [Observation: "Blood pressure"] BP
-    let
-      SystolicBP: singleton from (BP.component C where C.code ~ "Systolic blood pressure"),
-      DiastolicBP: singleton from (BP.component C where C.code ~ "Diastolic blood pressure")
-    where SystolicBP.value < 140 'mm[Hg]'
-      and DiastolicBP.value < 90 'mm[Hg]'
-
-  Patient P
-    let birthsex: singleton from (P.extension E
-      where E.url = 'http://hl7.org/fhir/us/core/StructureDefinition/us-core-birthsex')
-    where birthsex.value = 'M'

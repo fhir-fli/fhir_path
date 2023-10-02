@@ -39,32 +39,3 @@ $EncounterInpatientNonElective =
     (length of stay <= 120 day(s))
     ends during "Measurement Period"
 */
-
-  ["Encounter, Performed": "Non-Elective Inpatient Encounter"] Encounter
-    where Encounter.lengthOfStay <= 120 days
-      and Encounter.relevantPeriod ends during "Measurement Period"
-
-  ["Medication, Not Ordered": "Antithrombotic ingredient specific"] Medication
-    where Medication.negationRationale in "Medical Reason"
-      or Medication.negationRationale in "Patient Refusal"
-
-  ["Medication, Not Administered": "Antithrombotic Therapy"] Medication
-    where Medication.negationRationale in "Medical Reason"
-      or Medication.negationRationale in "Patient Refusal"
-
-  "Antithrombotic Not Ordered"
-    union "Antithrombotic Not Administered"
-
-  "Encounter Inpatient Non-Elective" Encounter
-    with (
-      ["Encounter, Performed": "Emergency Department Visit"] EmergencyVisit
-        with "Antithrombotic Not Done" Medication
-          such that Medication.authorDatetime 1 day or less after start of EmergencyVisit.relevantPeriod
-      ) EmergencyVisit
-        such that EmergencyVisit.relevantPeriod ends 1 hour or less before start of Encounter.relevantPeriod
-
-  "Encounter Inpatient Non-Elective" Encounter
-    with "Antithrombotic Not Done" Medication
-      such that Medication.authorDatetime 1 day or less after start of Encounter.relevantPeriod
-    without ["Encounter, Performed": "Emergency Department Visit"] EmergencyVisit
-      such that EmergencyVisit.relevantPeriod ends 1 hour or less before start of Encounter.relevantPeriod

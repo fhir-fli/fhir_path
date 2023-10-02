@@ -10,15 +10,3 @@ valueset "ICU": '7.8.9'
 
 // Arrival time: earliest start of a location period for any facility location
 // Departure time: latest end of a location period for any facility location
-  Interval
-  [
-    First(Encounter.facilityLocations Location 
-      return start of Location.locationPeriod sort ascending),
-    Last(Encounter.facilityLocations Location 
-      return end of Location.locationPeriod sort ascending)
-  ]
-  
-//define "Measure Observation":
-//    duration in minutes of "Arrival And Departure Time"("Related ED Visit"(Encounter))
-    
-// Location-specific period

@@ -46,38 +46,3 @@ valueset "Antibiotic Medications": '2.16.840.1.113883.3.464.1003.196.12.1001'
 valueset "Group A Streptococcus Test": '2.16.840.1.113883.3.464.1003.198.12.1012'
 
 parameter MeasurementPeriod Interval<DateTime>
-
-
-    Patient Characteristic, birthdate: Birthdate (start of MeasurementPeriod) >= 2 and Patient Characteristic, Birthdate: birthdate (start of MeasurementPeriod) < 18
-
-    [Diagnosis: "Acute Pharyngitis"] union [Diagnosis: "Acute Tonsillitis"]
-
-    [Medication, Ordered: "Antibiotic Medications"]
-
-    [Encounter, performed: "Ambulatory/ED Visit"] E
-        where InDemographic and E.period during MeasurementPeriod
-[Note: Diagnosis Onset time is often not available - use Diagnosis Documented Time]
-    MeasurementPeriodEncounters E
-        with Pharyngitis P such that
-            Interval[P.onsetDateTime, P.abatementDate] includes E.period
-            or P.onsetDateTime in E.period
-        with Antibiotics A such that A.dateWritten 3 days or less after start of E.period
-
-    Pharyngitis P
-        with Antibiotics A such that A.dateWritten 30 days or less before P.onsetDateTime
-
-    PharyngitisEncounters E
-        with PharyngitisWithPriorAntibiotics P such that
-            Interval[P.onsetDateTime, P.abatementDate] includes E.period
-            or P.onsetDateTime in E.period
-
-    PharyngitisEncounters E
-        with [Laboratory Test, performed: "Group A Streptococcus Test" (result)] T
-            such that T.result is not null
-                and T.issued in Interval[start of E.period - 3 days, end of E.period + 3 days]
-
-    Count(PharyngitisEncounters)
-
-    IPPCount
-
-    Count(ExcludedEncounters)

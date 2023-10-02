@@ -17,8 +17,3 @@ parameter "Measurement Period" default Interval[@2014-01-01T00:00:00.0, @2015-01
 
 // Identifiers can include spaces and punctuation to make logic more readable
 // Because the result is a set, rather than a criteria definition, the notion of occurrencing is not required
-    ["Encounter, Performed": "Care Services in Long-Term Residential Facility"] E
-        // By always specifying the attribute involved, filtering is explicit, rather than implicit in the model
-        with ["Diagnosis, Active": "Heart Failure"] D
-          such that Interval[D."start datetime", D."stop datetime"] overlaps before Interval[E."start datetime", E."stop datetime"]
-        where Interval[E."start datetime", E."stop datetime"] during "Measurement Period"

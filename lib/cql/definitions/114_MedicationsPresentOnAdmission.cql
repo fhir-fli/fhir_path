@@ -15,10 +15,3 @@ the hospital, but we are looking for the clearest way to use logic to express ou
 */
 
 using QDM version '5.4'
-
-
-/*
-QDM does not specifically have an "Admission Medication" like "MedicationDischarge", this
-concept would be represented with Medication, Active where the medication relevant period
-contains the encounter start date.
-*/

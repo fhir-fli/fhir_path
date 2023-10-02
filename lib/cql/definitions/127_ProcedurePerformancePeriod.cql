@@ -13,25 +13,3 @@ valueset "Total Colectomy": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113
 
 parameter "Measurement Period" Interval<DateTime>
   default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)
-
-
-/*
-Consider the Procedure performed element:
-http://hl7.org/fhir/STU3/procedure-definitions.html#Procedure.performed_x_
-http://hl7.org/fhir/procedure-definitions.html#Procedure.performed_x_
-
-In STU3 it is defined as a choice of dateTime|Period
-In R4, it is defined as a choice of dateTime|Period|string|Age|Range
-
-Note that for R4, QI-Core constrains out the "string" type
-
-For STU3, the standard "Normalize Interval" function works:
-*/
-
-	[Procedure: "Total Colectomy"] Colectomy
-		where Colectomy.status = 'completed'
-			and Global."Normalize Interval"(Colectomy.performed) starts on or before end of "Measurement Period"
-
-/*
-But for R4, we need to expand the "Normalize Interval function to allow for the new types:
-*/

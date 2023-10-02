@@ -20,37 +20,3 @@ code "Birthdate": '21112-8' from "LOINC:2.46" display 'Birth date'
 code "Dead": '419099009' from "SNOMEDCT:2016-03" display 'Dead'
 
 parameter "Measurement Period" Interval<DateTime>
-
-
-// Measure intent is looking for 3 Hepatitis B vaccinations, each on different days
-// However, the first of those vaccinations can be a newborn hepatitis vaccination
-// which must be administered between 1 and 8 days of birth
-
-// This expression identifies valid immunizations
-	( ["Immunization, Administered": "Hepatitis B Vaccine"]
-		union ( ["Procedure, Performed": "Hepatitis B Vaccine Administered"] Procedure
-				return "Immunization, Administered" { authorDatetime: start of Procedure.relevantPeriod }
-		) ) HepBVaccination
-		where AgeInDaysAt(HepBVaccination.authorDatetime)>= 1
-			and AgeInDaysAt(HepBVaccination.authorDatetime)<= 730
-
-// This expression works for identifying 3 vaccinations on different days, but does not account 
-// for the infant vaccination
-/*
-	from
-		( "Hepatitis B Immunizations or Procedures" ) Vaccination1,
-		( "Hepatitis B Immunizations or Procedures" ) Vaccination2,
-		( "Hepatitis B Immunizations or Procedures" ) Vaccination3
-		where Vaccination2.authorDatetime 1 day or more after Vaccination1.authorDatetime
-			and Vaccination3.authorDatetime 1 day or more after Vaccination2.authorDatetime
-*/
-
-// This expression identifies the infant vaccination, but we now need to combine the above
-// pattern so that this vaccination can count for the first of the 3
-	( ["Immunization, Administered": "Newborn Hepatitis Vaccine Administered"] Procedure
-			with ["Patient Characteristic Birthdate": "Birthdate"] Birthdate
-				such that Procedure.authorDatetime 1 day or more after Birthdate.birthDatetime
-					and Procedure.authorDatetime 8 day or less after Birthdate.birthDatetime
-	)
-	
-// The solution is to union the two in the first term of the pattern:

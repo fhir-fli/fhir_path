@@ -10,13 +10,3 @@ code "Birthdate": '21112-8' from "LOINC:2.46" display 'Birth date'
 code "Dead": '419099009' from "SNOMEDCT:2016-03" display 'Dead'
 
 parameter "Measurement Period" Interval<DateTime>
-
-
-  AgeInYearsAt(start of "Measurement Period") = 13
-    or exists ( ["Patient Characteristic Birthdate": "Birthdate"] Birthdate
-      where AgeInYearsAt(start of "Measurement Period") >= 12
-        and AgeInYearsAt(end of "Measurement Period") = 13
-    )
-
-// The Patient Characteristic retrieves the patient's birthdate, if you need that for calculation
-// But the AgeInYearsAt calculation does this automatically, so this can be simplified to:

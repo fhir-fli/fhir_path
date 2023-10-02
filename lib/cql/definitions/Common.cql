@@ -7,4 +7,3 @@ in the measure development community.
 */
 
 using QDM version '5.0.2'
-

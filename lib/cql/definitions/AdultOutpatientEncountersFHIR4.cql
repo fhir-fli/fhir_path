@@ -21,4 +21,3 @@ valueset "Preventive Care Services-Initial Office Visit, 18 and Up": 'http://cts
 
 parameter "Measurement Period" Interval<DateTime>
   default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)
-

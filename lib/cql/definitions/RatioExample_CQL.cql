@@ -62,16 +62,3 @@ valueset "Inpatient": 'TBD'
 valueset "Fall": 'TBD'
 
 parameter "Measurement Period" Interval<DateTime>
-
-
-  exists "Qualifying Encounters"
-
-  "Initial Population"
-
-  "Initial Population"
-
-  ["Encounter, Performed": "Inpatient"]
-
-  ["Assessment, Performed": "Fall"]
-
-  duration in hours of Global.Hospitalization(Encounter) / 24

@@ -273,34 +273,71 @@ class CqlGrammarDefinition extends GrammarDefinition {
   /// Expressions
   ///
 
+  Parser querySource() => ref0(retrieve);
 // querySource:
 // 	retrieve
 // 	| qualifiedIdentifierExpression
 // 	| '(' expression ')';
 
-// aliasedQuerySource: querySource alias;
+  Parser aliasedQuerySource() =>
+      ref0(querySource) & ref0(whiteSpacePlus) & ref0(alias);
 
-// alias: identifier;
+  Parser alias() => ref0(identifier);
 
-// queryInclusionClause: withClause | withoutClause;
+  Parser queryInclusionClause() => ref0(withClause) | ref0(withoutClause);
 
-// withClause: 'with' aliasedQuerySource 'such that' expression;
+  Parser withClause() =>
+      ref1(token, 'with') &
+      ref0(whiteSpacePlus) &
+      ref0(aliasedQuerySource) &
+      ref0(whiteSpacePlus) &
+      ref1(token, 'such that') &
+      ref0(whiteSpacePlus)
+      // &
+      // ref0(expression)
+      ;
 
-// withoutClause:
-// 	'without' aliasedQuerySource 'such that' expression;
+  Parser withoutClause() =>
+      ref1(token, 'without') &
+      ref0(whiteSpacePlus) &
+      ref0(aliasedQuerySource) &
+      ref0(whiteSpacePlus) &
+      ref1(token, 'such that') &
+      ref0(whiteSpacePlus)
+      // &
+      // ref0(expression)
+      ;
 
-// retrieve:
-// 	'[' (contextIdentifier '->')? namedTypeSpecifier (
-// 		':' (codePath codeComparator)? terminology
-// 	)? ']';
+  Parser retrieve() =>
+      ref1(token, '[') &
+      ref0(ignored) &
+      (ref0(contextIdentifier) & ref0(whiteSpacePlus) & ref1(token, '->'))
+          .optional() &
+      ref0(namedTypeSpecifier) &
+      (ref0(ignored) &
+              ref1(token, ':') &
+              ref0(ignored) &
+              (ref0(codePath) &
+                      ref0(whiteSpacePlus) &
+                      ref0(codeComparator) &
+                      ref0(whiteSpacePlus))
+                  .optional() &
+              ref0(terminology))
+          .optional() &
+      ref0(ignored) &
+      ref1(token, ']');
 
-// contextIdentifier: qualifiedIdentifierExpression;
+  Parser contextIdentifier() => ref0(qualifiedIdentifierExpression);
 
-// codePath: simplePath;
+  Parser codePath() => ref0(simplePath);
 
-// codeComparator: 'in' | '=' | '~';
+  Parser codeComparator() =>
+      ref1(token, 'in') | ref1(token, '=') | ref1(token, '~');
 
-// terminology: qualifiedIdentifierExpression | expression;
+  Parser terminology() => ref0(qualifiedIdentifierExpression)
+      // |
+      // ref0(expression)
+      ;
 
   Parser qualifier() => ref0(identifier);
 
@@ -314,46 +351,122 @@ class CqlGrammarDefinition extends GrammarDefinition {
           .optional() &
       ref0(sortClause).optional();
 
-Parser
-// sourceClause:
-// 	'from'? aliasedQuerySource (',' aliasedQuerySource)*;
+  Parser sourceClause() =>
+      (ref1(token, 'from') & ref0(whiteSpacePlus)).optional() &
+      ref0(aliasedQuerySource) &
+      (ref0(ignored) &
+              ref1(token, ',') &
+              ref0(ignored) &
+              ref0(aliasedQuerySource))
+          .star();
 
-// letClause: 'let' letClauseItem (',' letClauseItem)*;
+  Parser letClause() =>
+      ref1(token, 'let') &
+      ref0(whiteSpacePlus) &
+      ref0(letClauseItem) &
+      (ref0(ignored) & ref1(token, ',') & ref0(ignored) & ref0(letClauseItem))
+          .star();
 
-// letClauseItem: identifier ':' expression;
+  Parser letClauseItem() =>
+      ref0(identifier) &
+      ref0(ignored) &
+      ref1(token, ':') &
+      ref0(ignored) &
+      ref0(expression);
 
-// whereClause: 'where' expression;
+  Parser whereClause() => ref1(token, 'where') & ref0(whiteSpacePlus)
+      // & ref0(expression)
+      ;
 
-// returnClause: 'return' ('all' | 'distinct')? expression;
+  Parser returnClause() =>
+      ref1(token, 'return') &
+      ref0(whiteSpacePlus) &
+      ((ref1(token, 'all') | ref1(token, 'distinct')) & ref0(whiteSpacePlus))
+          .optional()
 
-// aggregateClause:
-// 	'aggregate' ('all' | 'distinct')? identifier startingClause? ':' expression;
+      // & ref0(expression)
+      ;
 
-// startingClause:
-// 	'starting' (simpleLiteral | quantity | ('(' expression ')'));
+  Parser aggregateClause() =>
+      ref1(token, 'aggregate') &
+      ref0(whiteSpacePlus) &
+      ((ref1(token, 'all') | ref1(token, 'distinct')) & ref0(whiteSpacePlus))
+          .optional() &
+      ref0(identifier) &
+      (ref0(whiteSpacePlus) & ref0(startingClause)).optional() &
+      ref0(ignored) &
+      ref1(token, ':') &
+      ref0(ignored)
+      // & ref0(expression)
+      ;
 
-// sortClause:
-// 	'sort' (sortDirection | ('by' sortByItem (',' sortByItem)*));
+  Parser startingClause() =>
+      ref1(token, 'starting') &
+      ref0(whiteSpacePlus) &
+      (ref0(simpleLiteral) |
+          quantityLexer |
+          (ref1(token, '(') &
+              ref0(ignored) &
+              ref0(expression) &
+              ref0(ignored) &
+              ref1(token, ')')));
 
-// sortDirection: 'asc' | 'ascending' | 'desc' | 'descending';
+  Parser sortClause() =>
+      ref1(token, 'sort') &
+      ref0(whiteSpacePlus) &
+      (ref0(sortDirection) |
+          (ref1(token, 'by') &
+              ref0(whiteSpacePlus) &
+              ref0(sortByItem) &
+              (ref0(ignored) &
+                      ref1(token, ',') &
+                      ref0(ignored) &
+                      ref0(sortByItem))
+                  .star()));
 
-// sortByItem: expressionTerm sortDirection?;
+  Parser sortDirection() =>
+      ref1(token, 'ascending') |
+      ref1(token, 'asc') |
+      ref1(token, 'descending') |
+      ref1(token, 'desc');
+
+  Parser sortByItem() =>
+      ref0(expression) &
+      (ref0(whiteSpacePlus) & ref0(sortDirection)).optional();
 
   Parser qualifiedIdentifier() =>
       (ref0(qualifier) & ref1(token, '.')).star() & ref0(identifier);
 
-// qualifiedIdentifierExpression: (qualifierExpression '.')* referentialIdentifier;
+  Parser qualifiedIdentifierExpression() =>
+      (ref0(qualifierExpression) & ref1(token, '.')).star() &
+      ref0(referentialIdentifier);
 
-// qualifierExpression: referentialIdentifier;
+  Parser qualifierExpression() => ref0(referentialIdentifier);
 
-// simplePath:
-// 	referentialIdentifier					# simplePathReferentialIdentifier
-// 	| simplePath '.' referentialIdentifier	# simplePathQualifiedIdentifier
-// 	| simplePath '[' simpleLiteral ']'		# simplePathIndexer;
+  Parser simplePath() =>
 
-// simpleLiteral:
-// 	STRING		# simpleStringLiteral
-// 	| NUMBER	# simpleNumberLiteral;
+      /// simplePathReferentialIdentifier
+      ref0(referentialIdentifier) |
+
+      /// simplePathQualifiedIdentifier
+      (ref0(simplePath) & ref1(token, '.') & ref0(referentialIdentifier)) |
+
+      /// simplePathIndexer
+      (ref0(simplePath) &
+          ref0(ignored) &
+          ref1(token, '[') &
+          ref0(ignored) &
+          ref0(simpleLiteral) &
+          ref0(ignored) &
+          ref1(token, ']'));
+
+  Parser simpleLiteral() =>
+
+      /// simpleStringLiteral
+      stringLexer |
+
+      ///  simpleNumberLiteral
+      numberLexer;
 
   Parser expression() =>
 
@@ -412,6 +525,21 @@ Parser
 
   Parser expressionTerm() =>
 
+      /// caseExpressionTerm
+      ref1(token, 'case').flatten().map((value) => print('Case:$value')) &
+          ref0(whiteSpacePlus) &
+          (ref0(expression) & ref0(whiteSpacePlus))
+              .optional()
+              .flatten()
+              .map((value) => print('Exp:$value')) &
+          ref0(caseExpressionItem).plus() &
+          ref0(whiteSpacePlus) &
+          ref1(token, 'else') &
+          ref0(whiteSpacePlus) &
+          ref0(expression) &
+          ref0(whiteSpacePlus) &
+          ref1(token, 'end') |
+
       /// termExpressionTerm
       ref0(term) |
 // 	| expressionTerm '.' qualifiedInvocation							# invocationExpressionTerm
@@ -439,14 +567,21 @@ Parser
 // 	| expressionTerm ('*' | '/' | 'div' | 'mod') expressionTerm			# multiplicationExpressionTerm
 // 	| expressionTerm ('+' | '-' | '&') expressionTerm					# additionExpressionTerm
 // 	| 'if' expression 'then' expression 'else' expression				# ifThenElseExpressionTerm
-// 	| 'case' expression? caseExpressionItem+ 'else' expression 'end'	# caseExpressionTerm
+
 // 	| ('distinct' | 'flatten') expression								# aggregateExpressionTerm
 // 	| ('expand' | 'collapse') expression (
 // 		'per' (dateTimePrecision | expression)
 // 	)? # setAggregateExpressionTerm
       ;
 
-// caseExpressionItem: 'when' expression 'then' expression;
+  Parser caseExpressionItem() =>
+      ref1(token, 'when') &
+      ref0(whiteSpacePlus) &
+      ref0(expression) &
+      ref0(whiteSpacePlus) &
+      ref1(token, 'then') &
+      ref0(whiteSpacePlus) &
+      ref0(expression);
 
 // dateTimePrecisionSpecifier: dateTimePrecision 'of';
 
