@@ -43,13 +43,15 @@ final functionDefinitionLexer = string('define') &
     whiteSpaceLexer.optional() &
     char(')') &
     whiteSpaceLexer.optional() &
-    (string('returns') & whiteSpaceLexer & typeSpecifierLexer()).optional() &
+    (string('returns') & whiteSpaceLexer & typeSpecifierLexer(null))
+        .optional() &
     whiteSpaceLexer.optional() &
     char(':') &
     whiteSpaceLexer.optional() &
     (functionBodyLexer | string('external'));
 
-final operandDefinitionLexer =
-    referentialIdentifierLexer & whiteSpaceLexer & typeSpecifierLexer();
+final operandDefinitionLexer = referentialIdentifierLexer(null) &
+    whiteSpaceLexer &
+    typeSpecifierLexer(null);
 
 final functionBodyLexer = cqlExpressionLexer();

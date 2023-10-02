@@ -144,9 +144,31 @@ final parameterDefinitionLexer =
         string('parameter') &
         whiteSpaceLexer &
         cqlIdentifierLexer &
-        (whiteSpaceLexer & typeSpecifierLexer()).optional() &
-        (whiteSpaceLexer &
-                string('default') &
-                whiteSpaceLexer &
-                cqlExpressionLexer())
+        // (whiteSpaceLexer & typeSpecifierLexer('default'))
+        //     .optional()
+        //     .flatten()
+        //     .map((value) => print('TS: $value')) &
+        (whiteSpaceLexer & string('default') & whiteSpaceLexer
+            // &
+            // intervalSelectorPart
+            // cqlExpressionLexer()
+            )
             .optional();
+
+final intervalSelectorPart =
+
+    /// TODO: Consider this as an alternative syntax for intervals... (would need to be moved up to
+    /// expression to make it work) expression ( '..' | '*.' | '.*' | '**' ) expression;
+    string('Interval') &
+        whiteSpaceLexer.optional() &
+        (char('[') | char('(')) &
+        whiteSpaceLexer.optional() &
+        any().star() &
+        // cqlExpression &
+        whiteSpaceLexer.optional() &
+        char(',') &
+        whiteSpaceLexer.optional() &
+        any().star() &
+        // cqlExpression &
+        whiteSpaceLexer.optional() &
+        (char(']') | char(')'));

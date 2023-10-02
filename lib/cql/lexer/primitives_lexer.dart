@@ -11,12 +11,12 @@ final Parser<TypeNameIdentifierParser> typeNameIdentifierLexer =
     (string('Code') | string('Concept') | string('date') | string('time'))
         .map((value) => TypeNameIdentifierParser(value));
 
-final referentialIdentifierLexer = cqlIdentifierLexer |
-    keywordIdentifierLexer.map((value) {
-      return value;
-    });
+Parser referentialIdentifierLexer(String? notString) => notString == null
+    ? (cqlIdentifierLexer | keywordIdentifierLexer)
+    : string(notString).not().seq(cqlIdentifierLexer) |
+        string(notString).not().seq(keywordIdentifierLexer);
 
-final referentialOrTypeNameIdentifierLexer = referentialIdentifierLexer |
+final referentialOrTypeNameIdentifierLexer = referentialIdentifierLexer(null) |
     typeNameIdentifierLexer.map((value) {
       return value;
     });
@@ -26,8 +26,13 @@ final identifierOrFunctionIdentifierLexer = cqlIdentifierLexer |
       return value;
     });
 
-final cqlIdentifierLexer =
-    identifierLexer | delimitedIdentifierLexer | quotedIdentifierLexer;
+final cqlIdentifierLexer = (functionIdentifierLexer |
+        keywordIdentifierLexer |
+        keywordLexer |
+        obsoleteIdentifierLexer |
+        reservedWordLexer)
+    .not()
+    .seq(identifierLexer | delimitedIdentifierLexer | quotedIdentifierLexer);
 
 /// QuotedIdentifier is signified by a double quote (") on either end
 final Parser<QuotedIdentifierParser> quotedIdentifierLexer =

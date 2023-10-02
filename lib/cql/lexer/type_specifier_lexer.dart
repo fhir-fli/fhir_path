@@ -4,7 +4,7 @@ import 'package:petitparser/petitparser.dart';
 import 'lexer.dart';
 
 /// Primary lexing function for this library
-Parser typeSpecifierLexer() {
+Parser typeSpecifierLexer(String? notString) {
   final typeSpecifierLexer = undefined();
   final listTypeSpecifierLexer = undefined();
   final intervalTypeSpecifierLexer = undefined();
@@ -27,16 +27,17 @@ Parser typeSpecifierLexer() {
       string('Interval') & char('<') & typeSpecifierLexer & char('>');
   intervalTypeSpecifierLexer.set(intervalTypeSpecifierLexerPart);
 
-  final tupleElementDefintionLexerPart =
-      referentialIdentifierLexer & typeSpecifierLexer;
-  tupleElementDefinitionLexer.set(tupleElementDefintionLexerPart);
-
   final tupleTypeSpecifierLexerPart = string('Tuple') &
       char('{') &
       tupleElementDefinitionLexer &
       (char(',') & tupleElementDefinitionLexer).star() &
       char('}');
   tupleTypeSpecifierLexer.set(tupleTypeSpecifierLexerPart);
+
+  final tupleElementDefintionLexerPart = referentialIdentifierLexer(notString)
+          .map((value) => print('Tuple1: $value')) &
+      typeSpecifierLexer.map((value) => print('Tuble2: $value'));
+  tupleElementDefinitionLexer.set(tupleElementDefintionLexerPart);
 
   final choiceTypeSpecifierLexerPart = string('Choice') &
       char('<') &
