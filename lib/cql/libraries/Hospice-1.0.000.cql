@@ -1,0 +1,1 @@
+library Hospice version '1.0.000'

@@ -1,0 +1,1 @@
+library ExampleContraceptiveMeasureWorking version '0.0.008'

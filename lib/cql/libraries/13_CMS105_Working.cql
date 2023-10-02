@@ -1,0 +1,1 @@
+library CMS105 version '5.2.000'

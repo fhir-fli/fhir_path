@@ -27,6 +27,7 @@ class CqlGrammarDefinition extends GrammarDefinition {
   Parser start() => ref0(library).end();
 
   Parser library() =>
+      ref0(ignored) &
       ref0(libraryDefinition).optional() &
       (ref0(ignored) & ref0(definition)).star() &
       (whiteSpaceLexer & ref0(ignored) & ref0(statement)).star() &

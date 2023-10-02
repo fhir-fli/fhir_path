@@ -1,0 +1,1 @@
+library HospitalizationWithObservation version '0.0.000'

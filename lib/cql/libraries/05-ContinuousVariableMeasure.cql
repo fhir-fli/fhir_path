@@ -1,0 +1,1 @@
+library ContinuousVariableMeasure version '1'

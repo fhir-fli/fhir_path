@@ -1,0 +1,1 @@
+library TypesAndValues version '3.0.000'
