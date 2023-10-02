@@ -15,17 +15,22 @@ class CqlGrammarDefinition extends GrammarDefinition {
     throw ArgumentError.value(input, 'Invalid token parser');
   }
 
-  Parser ignoredLexer() =>
+  Parser ignored() =>
       (whiteSpaceLexer | lineCommentLexer | multiLineCommentLexer).star();
+
+  Parser whiteSpacePlus() => whiteSpaceLexer & ref0(ignored);
+
+  Parser surroundingWhiteSpace(String inBetween) =>
+      whiteSpaceLexer & ref1(token, inBetween) & whiteSpaceLexer;
 
   @override
   Parser start() => ref0(library).end();
 
   Parser library() =>
       ref0(libraryDefinition).optional() &
-      (ref0(ignoredLexer) & ref0(definition)).star() &
-      (whiteSpaceLexer & ref0(ignoredLexer) & ref0(statement)).star() &
-      ref0(ignoredLexer);
+      (ref0(ignored) & ref0(definition)).star() &
+      (whiteSpaceLexer & ref0(ignored) & ref0(statement)).star() &
+      ref0(ignored);
 
   Parser definition() =>
       ref0(usingDefinition) |
@@ -42,36 +47,36 @@ class CqlGrammarDefinition extends GrammarDefinition {
 
   Parser libraryDefinition() =>
       ref1(token, 'library') &
-      whiteSpaceLexer &
+      ref0(whiteSpacePlus) &
       ref0(qualifiedIdentifier) &
-      (whiteSpaceLexer &
+      (ref0(whiteSpacePlus) &
               ref1(token, 'version') &
-              whiteSpaceLexer &
+              ref0(whiteSpacePlus) &
               ref0(versionSpecifier))
           .optional();
 
   Parser usingDefinition() =>
       ref1(token, 'using') &
-      whiteSpaceLexer &
+      ref0(whiteSpacePlus) &
       ref0(modelIdentifier) &
-      (whiteSpaceLexer &
+      (ref0(whiteSpacePlus) &
               ref1(token, 'version') &
-              whiteSpaceLexer &
+              ref0(whiteSpacePlus) &
               ref0(versionSpecifier))
           .optional();
 
   Parser includeDefinition() =>
       ref1(token, 'include') &
-      whiteSpaceLexer &
+      ref0(whiteSpacePlus) &
       ref0(qualifiedIdentifier) &
-      (whiteSpaceLexer &
+      (ref0(whiteSpacePlus) &
               ref1(token, 'version') &
-              whiteSpaceLexer &
+              ref0(whiteSpacePlus) &
               ref0(versionSpecifier))
           .optional() &
-      (whiteSpaceLexer &
+      (ref0(whiteSpacePlus) &
               ref1(token, 'called') &
-              whiteSpaceLexer &
+              ref0(whiteSpacePlus) &
               ref0(localIdentifier))
           .optional();
 
@@ -80,60 +85,61 @@ class CqlGrammarDefinition extends GrammarDefinition {
   Parser accessModifier() => ref1(token, 'public') | ref1(token, 'private');
 
   Parser parameterDefinition() =>
-      (ref0(accessModifier) & whiteSpaceLexer).optional() &
+      (ref0(accessModifier) & ref0(whiteSpacePlus)).optional() &
       ref1(token, 'parameter') &
-      whiteSpaceLexer &
-      ref0(identifier).flatten().map((value) => print('ID:$value')) &
-      (whiteSpaceLexer & ref0(typeSpecifier)).optional() &
-      (whiteSpaceLexer &
+      ref0(whiteSpacePlus) &
+      ref0(identifier) &
+      (ref0(whiteSpacePlus) & ref1(typeSpecifier, ref1(token, 'default')))
+          .optional() &
+      (ref0(whiteSpacePlus) &
               ref1(token, 'default') &
-              whiteSpaceLexer &
+              ref0(whiteSpacePlus) &
               ref0(expression))
           .optional();
 
   Parser codesystemDefinition() =>
-      (ref0(accessModifier) & whiteSpaceLexer).optional() &
+      (ref0(accessModifier) & ref0(whiteSpacePlus)).optional() &
       ref1(token, 'codesystem') &
-      whiteSpaceLexer &
+      ref0(whiteSpacePlus) &
       ref0(identifier) &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       ref1(token, ':') &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       ref0(codesystemId) &
-      (whiteSpaceLexer &
+      (ref0(whiteSpacePlus) &
               ref1(token, 'version') &
-              whiteSpaceLexer &
+              ref0(whiteSpacePlus) &
               ref0(versionSpecifier))
           .optional();
 
   Parser valuesetDefinition() =>
-      (ref0(accessModifier) & whiteSpaceLexer).optional() &
+      (ref0(accessModifier) & ref0(whiteSpacePlus)).optional() &
       ref1(token, 'valueset') &
-      whiteSpaceLexer &
+      ref0(whiteSpacePlus) &
       ref0(identifier) &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       ref1(token, ':') &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       ref0(valuesetId) &
-      (whiteSpaceLexer &
+      (ref0(whiteSpacePlus) &
               ref1(token, 'version') &
-              whiteSpaceLexer &
+              ref0(whiteSpacePlus) &
               ref0(versionSpecifier))
           .optional() &
-      (whiteSpaceLexer & ref0(codesystems)).optional();
+      (ref0(whiteSpacePlus) & ref0(codesystems)).optional();
 
   Parser codesystems() =>
       ref1(token, 'codesystems') &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       ref1(token, '{') &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       ref0(codesystemIdentifier) &
-      (whiteSpaceLexer.optional() &
+      (ref0(whiteSpacePlus).optional() &
               ref1(token, ',') &
-              whiteSpaceLexer.optional() &
+              ref0(whiteSpacePlus).optional() &
               ref0(codesystemIdentifier))
           .star() &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       ref1(token, '}');
 
   Parser codesystemIdentifier() =>
@@ -143,41 +149,39 @@ class CqlGrammarDefinition extends GrammarDefinition {
   Parser libraryIdentifier() => ref0(identifier);
 
   Parser codeDefinition() =>
-      (ref0(accessModifier) & whiteSpaceLexer).optional() &
+      (ref0(accessModifier) & ref0(whiteSpacePlus)).optional() &
       ref1(token, 'code') &
-      whiteSpaceLexer &
-      ref0(identifier).flatten().map((value) => print('ID:$value')) &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus) &
+      ref0(identifier) &
+      ref0(whiteSpacePlus).optional() &
       ref1(token, ':') &
-      whiteSpaceLexer.optional() &
-      ref0(codeId).flatten().map((value) => print('CodeId:$value')) &
-      whiteSpaceLexer &
-      ref1(token, 'from').flatten().map((value) => print('From:$value')) &
-      whiteSpaceLexer &
-      ref0(codesystemIdentifier)
-          .flatten()
-          .map((value) => print('CodeSystem:$value')) &
-      (whiteSpaceLexer & ref0(displayClause)).optional();
+      ref0(whiteSpacePlus).optional() &
+      ref0(codeId) &
+      ref0(whiteSpacePlus) &
+      ref1(token, 'from') &
+      ref0(whiteSpacePlus) &
+      ref0(codesystemIdentifier) &
+      (ref0(whiteSpacePlus) & ref0(displayClause)).optional();
 
   Parser conceptDefinition() =>
-      (ref0(accessModifier) & whiteSpaceLexer).optional() &
+      (ref0(accessModifier) & ref0(whiteSpacePlus)).optional() &
       ref1(token, 'concept') &
-      whiteSpaceLexer &
+      ref0(whiteSpacePlus) &
       ref0(identifier) &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       ref1(token, ':') &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       ref1(token, '{') &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       ref0(codeIdentifier) &
-      (whiteSpaceLexer.optional() &
+      (ref0(whiteSpacePlus).optional() &
               ref1(token, ',') &
-              whiteSpaceLexer.optional() &
+              ref0(whiteSpacePlus).optional() &
               ref0(codeIdentifier))
           .star() &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       ref1(token, '}') &
-      (whiteSpaceLexer.optional() & ref0(displayClause)).optional();
+      (ref0(whiteSpacePlus).optional() & ref0(displayClause)).optional();
 
   Parser codeIdentifier() =>
       (ref0(libraryIdentifier) & ref1(token, '.')).optional() &
@@ -195,10 +199,14 @@ class CqlGrammarDefinition extends GrammarDefinition {
   /// Type Specifiers
   ///
 
-  Parser typeSpecifier() =>
-      ref0(namedTypeSpecifier) |
+  Parser typeSpecifier([Parser? notParser]) =>
+      ref0(intervalTypeSpecifier) |
+      (notParser == null
+          ? ref0(namedTypeSpecifier)
+          : notParser.not().seq(ref0(namedTypeSpecifier)))
+
       // ref0(listTypeSpecifier) |
-      ref0(intervalTypeSpecifier)
+
       //  |
       // ref0(tupleTypeSpecifier) |
       // ref0(choiceTypeSpecifier)
@@ -213,12 +221,10 @@ class CqlGrammarDefinition extends GrammarDefinition {
 // listTypeSpecifier: 'List' '<' typeSpecifier '>';
 
   Parser intervalTypeSpecifier() =>
-      ref1(token, 'Interval')
-          .flatten()
-          .map((value) => print('Interval:$value')) &
-      ref1(token, '<').flatten().map((value) => print('$value')) &
+      ref1(token, 'Interval') &
+      ref1(token, '<') &
       ref0(typeSpecifier) &
-      ref1(token, '>').flatten().map((value) => print('$value'));
+      ref1(token, '>');
 
 // tupleTypeSpecifier:
 // 	'Tuple' '{' tupleElementDefinition (
@@ -246,7 +252,7 @@ class CqlGrammarDefinition extends GrammarDefinition {
 
   Parser contextDefinition() =>
       ref1(token, 'context') &
-      whiteSpaceLexer &
+      ref0(whiteSpacePlus) &
       (ref0(modelIdentifier) & ref1(token, '.')).optional() &
       ref0(identifier);
 
@@ -511,20 +517,20 @@ class CqlGrammarDefinition extends GrammarDefinition {
 
   Parser intervalSelector() =>
       ref1(token, 'Interval') &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       ((ref1(token, '[') & ref1(internalInterval, ']') & ref1(token, ']')) |
           (ref1(token, '(') & ref1(internalInterval, ')') & ref1(token, ')')));
 
   Parser internalInterval(String end) =>
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       ref1(token, ',').neg().star() &
       // ref0(expression) &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       ref1(token, ',') &
-      whiteSpaceLexer.optional() &
+      ref0(whiteSpacePlus).optional() &
       // ref0(expression) &
       (ref1(token, end)).neg().star() &
-      whiteSpaceLexer.optional();
+      ref0(whiteSpacePlus).optional();
 
 // tupleSelector:
 // 	'Tuple'? '{' (
@@ -549,7 +555,7 @@ class CqlGrammarDefinition extends GrammarDefinition {
 // 	)? '}';
 
   Parser displayClause() =>
-      ref1(token, 'display') & whiteSpaceLexer & stringLexer;
+      ref1(token, 'display') & ref0(whiteSpacePlus) & stringLexer;
 
 // codeSelector:
 // 	'Code' STRING 'from' codesystemIdentifier displayClause?;
