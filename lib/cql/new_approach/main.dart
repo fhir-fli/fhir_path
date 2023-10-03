@@ -9,7 +9,7 @@ Future<void> main() async {
     if (file is File) {
       print(file.path);
       final pathExpression = await file.readAsString();
-      CqlGrammarDefinition().parse(pathExpression).value;
+      cqlLexer.parse(pathExpression).value;
     }
   }
   final definitionsDir = Directory('../definitions');
@@ -18,7 +18,7 @@ Future<void> main() async {
     if (file is File) {
       print(file.path);
       final pathExpression = await file.readAsString();
-      CqlGrammarDefinition().parse(pathExpression).value;
+      cqlLexer.parse(pathExpression).value;
     }
   }
   // final librariesAndDefinitionsDir = Directory('../libraries_and_definitions');

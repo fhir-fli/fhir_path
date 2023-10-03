@@ -3,10 +3,9 @@ import 'package:petitparser/petitparser.dart';
 import '../../fhir_path.dart';
 
 Parser cqlLexer = (ignored &
-        libraryDefinition.optional() &
-        (whiteSpacePlus & definition).star() &
-        (whiteSpacePlus & statement).star() &
-        ignored)
+        (libraryDefinition & ignored).optional() &
+        (definition & ignored).star() &
+        (statement & ignored).star())
     .end();
 
 Parser ignored =
@@ -54,11 +53,11 @@ Parser parameterDefinition = (accessModifier & whiteSpacePlus).optional() &
     string('parameter') &
     whiteSpacePlus &
     identifier &
-    (whiteSpacePlus & typeSpecifier()).optional() &
-    (whiteSpacePlus & string('default') & whiteSpacePlus
-        //  &
-        // expression()
-        )
+    (whiteSpacePlus & typeSpecifier(string('default')))
+        .optional()
+        .flatten()
+        .map((value) => print(value)) &
+    (whiteSpacePlus & string('default') & whiteSpacePlus & expression())
         .optional();
 
 Parser codesystemDefinition = (accessModifier & whiteSpacePlus).optional() &
@@ -141,38 +140,49 @@ Parser codeId = stringLexer;
 /// Type Specifiers
 ///
 
-Parser typeSpecifier([Parser? notParser]) =>
-    intervalTypeSpecifier |
-    (notParser == null
-        ? namedTypeSpecifier
-        : notParser.not().seq(namedTypeSpecifier))
+Parser typeSpecifier([Parser? notParser]) {
+  print(notParser.toString());
+  final _typeSpecifier = undefined();
 
-    // listTypeSpecifier |
+  final _tupleElementDefinition =
+      referentialIdentifier & whiteSpacePlus & _typeSpecifier;
 
-    //  |
-    // tupleTypeSpecifier |
-    // choiceTypeSpecifier
-    ;
+  final _tupleTypeSpecifier = string('Tuple') &
+      ignored &
+      char('{') &
+      ignored &
+      _tupleElementDefinition &
+      (ignored & char(',') & ignored & _tupleElementDefinition).star() &
+      ignored &
+      char('}');
+
+  final _listTypeSpecifier =
+      string('List') & char('<') & _typeSpecifier & char('>');
+
+  final _intervalTypeSpecifier =
+      string('Interval') & char('<') & _typeSpecifier & char('>');
+
+  final _choiceTypeSpecifier = string('Choice') &
+      char('<') &
+      _typeSpecifier &
+      (ignored & char(',') & ignored & _typeSpecifier).star() &
+      char('>');
+
+  _typeSpecifier.set(_intervalTypeSpecifier |
+      (notParser == null
+          ? namedTypeSpecifier
+          : notParser.not().seq(namedTypeSpecifier)) |
+      _listTypeSpecifier |
+      _tupleTypeSpecifier |
+      _choiceTypeSpecifier);
+
+  return _typeSpecifier;
+}
 
 Parser namedTypeSpecifier =
     (qualifier & char('.')).star() & referentialOrTypeNameIdentifier;
 
 Parser modelIdentifier = identifier;
-
-// listTypeSpecifier: 'List' '<' typeSpecifier '>';
-
-Parser intervalTypeSpecifier =
-    string('Interval') & char('<') & typeSpecifier() & char('>');
-
-// tupleTypeSpecifier:
-// 	'Tuple' '{' tupleElementDefinition (
-// 		',' tupleElementDefinition
-// 	)* '}';
-
-// tupleElementDefinition: referentialIdentifier typeSpecifier;
-
-// choiceTypeSpecifier:
-// 	'Choice' '<' typeSpecifier (',' typeSpecifier)* '>';
 
 ///
 /// Statements
@@ -259,7 +269,7 @@ Parser retrieve = char('[') &
 
 Parser contextIdentifier = qualifiedIdentifierExpression;
 
-Parser codePath = simplePath;
+Parser codePath = simplePath();
 
 Parser codeComparator = string('in') | char('=') | char('~');
 
@@ -338,22 +348,25 @@ Parser qualifiedIdentifierExpression =
 
 Parser qualifierExpression = referentialIdentifier;
 
-Parser simplePath =
+Parser simplePath() {
+  final _simplePath = undefined();
 
-    /// simplePathReferentialIdentifier
-    referentialIdentifier |
+  /// simplePathReferentialIdentifier
+  _simplePath.set(referentialIdentifier |
 
-        /// simplePathQualifiedIdentifier
-        (simplePath & char('.') & referentialIdentifier) |
+      /// simplePathQualifiedIdentifier
+      (_simplePath & char('.') & referentialIdentifier) |
 
-        /// simplePathIndexer
-        (simplePath &
-            ignored &
-            char('[') &
-            ignored &
-            simpleLiteral &
-            ignored &
-            char(']'));
+      /// simplePathIndexer
+      (_simplePath &
+          ignored &
+          char('[') &
+          ignored &
+          simpleLiteral &
+          ignored &
+          char(']')));
+  return _simplePath;
+}
 
 Parser simpleLiteral =
 
@@ -363,155 +376,148 @@ Parser simpleLiteral =
         ///  simpleNumberLiteral
         numberLexer;
 
-//   Parser expression() {
-//     final SettableParser _expression = undefined();
-//     final SettableParser _expressionTerm = undefined();
-//     final SettableParser _query = undefined();
-//     final SettableParser _caseExpressionItem = undefined();
-//     final SettableParser _term = undefined();
-//     final SettableParser _intervalSelector = undefined();
+Parser expression() {
+  final SettableParser _expression = undefined();
+  final SettableParser _expressionTerm = undefined();
 
-//     /// termExpression
-//     final Parser _expressionPart = _expressionTerm |
-// // 	| retrieve																					# retrieveExpression
+  final Parser _query = sourceClause &
+      whiteSpacePlus &
+      (letClause & whiteSpacePlus).optional() &
+      (queryInclusionClause & whiteSpacePlus).star() &
+      (whereClause & whiteSpacePlus).optional() &
+      ((aggregateClause | returnClause) & whiteSpacePlus).optional() &
+      sortClause.optional();
 
-//             /// queryExpression
-//             _query
+  final Parser _caseExpressionItem = string('when') &
+      whiteSpacePlus &
+      _expression &
+      whiteSpacePlus &
+      string('then') &
+      whiteSpacePlus &
+      _expression;
 
-// // 	| expression 'is' 'not'? ('null' | 'true' | 'false')										# booleanExpression
-// // 	| expression ('is' | 'as') typeSpecifier													# typeExpression
-// // 	| 'cast' expression 'as' typeSpecifier														# castExpression
-// // 	| 'not' expression																			# notExpression
-// // 	| 'exists' expression																		# existenceExpression
-// // 	| expression 'properly'? 'between' expressionTerm 'and' expressionTerm						# betweenExpression
-// // 	| ('duration' 'in')? pluralDateTimePrecision 'between' expressionTerm 'and' expressionTerm	#
-// // 		durationBetweenExpression
-// // 	| 'difference' 'in' pluralDateTimePrecision 'between' expressionTerm 'and' expressionTerm #
-// // 		differenceBetweenExpression
-// // 	| expression ('<=' | '<' | '>' | '>=') expression						# inequalityExpression
-// // 	| expression intervalOperatorPhrase expression							# timingExpression
-// // 	| expression ('=' | '!=' | '~' | '!~') expression						# equalityExpression
-// // 	| expression ('in' | 'contains') dateTimePrecisionSpecifier? expression	# membershipExpression
-// // 	| expression 'and' expression											# andExpression
-// // 	| expression ('or' | 'xor') expression									# orExpression
-// // 	| expression 'implies' expression										# impliesExpression
-// // 	| expression ('|' | 'union' | 'intersect' | 'except') expression		# inFixSetExpression
-//         ;
+  Parser _internalInterval(String end) =>
+      ignored.flatten().map((value) => print('ignored')) &
+      char(',').neg().star().flatten().map((value) => print(value)) &
+      // expression &
+      ignored &
+      char(',') &
+      ignored &
+      // expression &
+      (char(end)).neg().star() &
+      ignored;
 
-//     _expression.set(_expressionPart);
+  // TODO: Consider this as an alternative syntax for intervals... (would need to be moved up to
+  // expression to make it work) expression ( '..' | '*.' | '.*' | '**' ) expression;
 
-//     final Parser _expressionTermPart =
+  final Parser _intervalSelector =
+      string('Interval').map((value) => print(value)) &
+          ignored &
+          ((char('[').map((value) => print(value)) &
+                  _internalInterval(']') &
+                  char(']')) |
+              (char('(') & _internalInterval(')') & char(')')));
 
-//         /// caseExpressionTerm
-//         string('case').flatten().map((value) => print('Case:$value')) &
-//                 whiteSpacePlus &
-//                 (_expression & whiteSpacePlus)
-//                     .optional()
-//                     .flatten()
-//                     .map((value) => print('Exp:$value')) &
-//                 _caseExpressionItem.plus() &
-//                 whiteSpacePlus &
-//                 string('else') &
-//                 whiteSpacePlus &
-//                 _expression &
-//                 whiteSpacePlus &
-//                 string('end') |
+  final Parser _term =
 
-//             /// termExpressionTerm
-//             _term |
-// // 	| expressionTerm '.' qualifiedInvocation							# invocationExpressionTerm
-//             /// indexedExpressionTerm
-//             (_expressionTerm &
-//                 ignored &
-//                 char('[') &
-//                 ignored &
-//                 _expression &
-//                 ignored &
-//                 char(']'))
-// // 	| 'convert' expression 'to' (typeSpecifier | unit)					# conversionExpressionTerm
-// // 	| ('+' | '-') expressionTerm										# polarityExpressionTerm
-// // 	| ('start' | 'end') 'of' expressionTerm								# timeBoundaryExpressionTerm
-// // 	| dateTimeComponent 'from' expressionTerm							# timeUnitExpressionTerm
-// // 	| 'duration' 'in' pluralDateTimePrecision 'of' expressionTerm		# durationExpressionTerm
-// // 	| 'difference' 'in' pluralDateTimePrecision 'of' expressionTerm		# differenceExpressionTerm
-// // 	| 'width' 'of' expressionTerm										# widthExpressionTerm
-// // 	| 'successor' 'of' expressionTerm									# successorExpressionTerm
-// // 	| 'predecessor' 'of' expressionTerm									# predecessorExpressionTerm
-// // 	| 'singleton' 'from' expressionTerm									# elementExtractorExpressionTerm
-// // 	| 'point' 'from' expressionTerm										# pointExtractorExpressionTerm
-// // 	| ('minimum' | 'maximum') namedTypeSpecifier						# typeExtentExpressionTerm
-// // 	| expressionTerm '^' expressionTerm									# powerExpressionTerm
-// // 	| expressionTerm ('*' | '/' | 'div' | 'mod') expressionTerm			# multiplicationExpressionTerm
-// // 	| expressionTerm ('+' | '-' | '&') expressionTerm					# additionExpressionTerm
-// // 	| 'if' expression 'then' expression 'else' expression				# ifThenElseExpressionTerm
-// // 	| ('distinct' | 'flatten') expression								# aggregateExpressionTerm
-// // 	| ('expand' | 'collapse') expression (
-// // 		'per' (dateTimePrecision | expression)
-// // 	)? # setAggregateExpressionTerm
-//         ;
-//     _expressionTerm.set(_expressionTermPart);
+      /// intervalSelectorTerm
+      _intervalSelector |
+// 	invocation				# invocationTerm
+          /// literalTerm
+          literal
+// 	| externalConstant		# externalConstantTerm
 
-//     final Parser _queryPart = sourceClause &
-//         whiteSpacePlus &
-//         (letClause) & ref0(whiteSpacePlus)).optional() &
-//         (queryInclusionClause) & ref0(whiteSpacePlus)).star( &
-//         (whereClause) & ref0(whiteSpacePlus)).optional() &
-//         ((aggregateClause) | ref0(returnClause)) & ref0(whiteSpacePlus)
-//             .optional() &
-//         sortClause).optional();
+// 	| tupleSelector			# tupleSelectorTerm
+// 	| instanceSelector		# instanceSelectorTerm
+// 	| listSelector			# listSelectorTerm
+// 	| codeSelector			# codeSelectorTerm
+// 	| conceptSelector		# conceptSelectorTerm
+// 	| '(' expression ')'	# parenthesizedTerm
+      ;
 
-//     _query.set(_queryPart);
+  final _expressionTermPart =
 
-//     final Parser _caseExpressionItemPart = string('when') &
-//         whiteSpacePlus &
-//         _expression &
-//         whiteSpacePlus &
-//         string('then') &
-//         whiteSpacePlus &
-//         _expression;
+      /// caseExpressionTerm
+      // string('case').flatten().map((value) => print('Case:$value')) &
+      //         whiteSpacePlus &
+      //         (_expression & whiteSpacePlus)
+      //             .optional()
+      //             .flatten()
+      //             .map((value) => print('Exp:$value')) &
+      //         _caseExpressionItem.plus() &
+      //         whiteSpacePlus &
+      //         string('else') &
+      //         whiteSpacePlus &
+      //         _expression &
+      //         whiteSpacePlus &
+      //         string('end') |
 
-//     _caseExpressionItem.set(_caseExpressionItemPart);
+      /// termExpressionTerm
+      _term
+      // |
+// 	| expressionTerm '.' qualifiedInvocation							# invocationExpressionTerm
+      /// indexedExpressionTerm
+      // (_expressionTerm &
+      //     ignored &
+      //     char('[') &
+      //     ignored &
+      //     _expression &
+      //     ignored &
+      //     char(']')
+// 	| 'convert' expression 'to' (typeSpecifier | unit)					# conversionExpressionTerm
+// 	| ('+' | '-') expressionTerm										# polarityExpressionTerm
+// 	| ('start' | 'end') 'of' expressionTerm								# timeBoundaryExpressionTerm
+// 	| dateTimeComponent 'from' expressionTerm							# timeUnitExpressionTerm
+// 	| 'duration' 'in' pluralDateTimePrecision 'of' expressionTerm		# durationExpressionTerm
+// 	| 'difference' 'in' pluralDateTimePrecision 'of' expressionTerm		# differenceExpressionTerm
+// 	| 'width' 'of' expressionTerm										# widthExpressionTerm
+// 	| 'successor' 'of' expressionTerm									# successorExpressionTerm
+// 	| 'predecessor' 'of' expressionTerm									# predecessorExpressionTerm
+// 	| 'singleton' 'from' expressionTerm									# elementExtractorExpressionTerm
+// 	| 'point' 'from' expressionTerm										# pointExtractorExpressionTerm
+// 	| ('minimum' | 'maximum') namedTypeSpecifier						# typeExtentExpressionTerm
+// 	| expressionTerm '^' expressionTerm									# powerExpressionTerm
+// 	| expressionTerm ('*' | '/' | 'div' | 'mod') expressionTerm			# multiplicationExpressionTerm
+// 	| expressionTerm ('+' | '-' | '&') expressionTerm					# additionExpressionTerm
+// 	| 'if' expression 'then' expression 'else' expression				# ifThenElseExpressionTerm
+// 	| ('distinct' | 'flatten') expression								# aggregateExpressionTerm
+// 	| ('expand' | 'collapse') expression (
+// 		'per' (dateTimePrecision | expression)
+// 	)? # setAggregateExpressionTerm
+      ;
 
-//     final Parser _termPart =
-// // 	invocation				# invocationTerm
-// // 	| literal				# literalTerm
-// // 	| externalConstant		# externalConstantTerm
-//         /// intervalSelectorTerm
-//         _intervalSelector
-// // 	| tupleSelector			# tupleSelectorTerm
-// // 	| instanceSelector		# instanceSelectorTerm
-// // 	| listSelector			# listSelectorTerm
-// // 	| codeSelector			# codeSelectorTerm
-// // 	| conceptSelector		# conceptSelectorTerm
-// // 	| '(' expression ')'	# parenthesizedTerm
-//         ;
+  final _expressionPart = _expressionTerm
+      // |
+// 	| retrieve																					# retrieveExpression
 
-//     _term.set(_termPart);
+      /// queryExpression
+      // _query
 
-//     Parser internalInterval(String end) =>
-//         whiteSpacePlus).optional() &
-//         char(',').neg().star() &
-//         // expression &
-//         whiteSpacePlus).optional() &
-//         char(',') &
-//         whiteSpacePlus).optional() &
-//         // expression &
-//         (char(end)).neg().star() &
-//         whiteSpacePlus).optional();
+// 	| expression 'is' 'not'? ('null' | 'true' | 'false')										# booleanExpression
+// 	| expression ('is' | 'as') typeSpecifier													# typeExpression
+// 	| 'cast' expression 'as' typeSpecifier														# castExpression
+// 	| 'not' expression																			# notExpression
+// 	| 'exists' expression																		# existenceExpression
+// 	| expression 'properly'? 'between' expressionTerm 'and' expressionTerm						# betweenExpression
+// 	| ('duration' 'in')? pluralDateTimePrecision 'between' expressionTerm 'and' expressionTerm	#
+// 		durationBetweenExpression
+// 	| 'difference' 'in' pluralDateTimePrecision 'between' expressionTerm 'and' expressionTerm #
+// 		differenceBetweenExpression
+// 	| expression ('<=' | '<' | '>' | '>=') expression						# inequalityExpression
+// 	| expression intervalOperatorPhrase expression							# timingExpression
+// 	| expression ('=' | '!=' | '~' | '!~') expression						# equalityExpression
+// 	| expression ('in' | 'contains') dateTimePrecisionSpecifier? expression	# membershipExpression
+// 	| expression 'and' expression											# andExpression
+// 	| expression ('or' | 'xor') expression									# orExpression
+// 	| expression 'implies' expression										# impliesExpression
+// 	| expression ('|' | 'union' | 'intersect' | 'except') expression		# inFixSetExpression
+      ;
 
-//     // TODO: Consider this as an alternative syntax for intervals... (would need to be moved up to
-//     // expression to make it work) expression ( '..' | '*.' | '.*' | '**' ) expression;
+  _expressionTerm.set(_expressionTermPart);
+  _expression.set(_expressionPart);
 
-//     Parser _intervalSelectorPart = string('Interval') &
-//         whiteSpacePlus).optional() &
-//         ((char('[') & ref1(internalInterval, ']') & char(']')) |
-//             (char('(') &
-//                 ref1(internalInterval, ')') &
-//                 char(')')));
-
-//     _intervalSelector.set(_intervalSelectorPart);
-
-//     return _expression;
+  return _expression;
+}
 
 // dateTimePrecision:
 // 	'year'
@@ -592,18 +598,49 @@ Parser simpleLiteral =
 
 // function: referentialIdentifier '(' paramList? ')';
 
-// ratio: quantity ':' quantity;
+final Parser ratio =
+    quantityLexer & ignored & char(':') & ignored & quantityLexer;
 
-// literal: ('true' | 'false')	# booleanLiteral
-// 	| 'null'				# nullLiteral
-// 	| STRING				# stringLiteral
-// 	| NUMBER				# numberLiteral
-// 	| LONGNUMBER			# longNumberLiteral
-// 	| DATETIME				# dateTimeLiteral
-// 	| DATE					# dateLiteral
-// 	| TIME					# timeLiteral
-// 	| quantity				# quantityLiteral
-// 	| ratio					# ratioLiteral;
+final literal =
+
+    /// booleanLiteral
+    (string('true') | string('false'))
+
+        /// nullLiteral
+        |
+        string('null')
+
+        /// stringLiteral
+        |
+        stringLexer
+
+        /// numberLiteral
+        |
+        numberLexer
+
+        /// longNumberLiteral
+        |
+        longNumber
+
+        /// dateTimeLiteral
+        |
+        cqlDateTime
+
+        /// dateLiteral
+        |
+        dateLexer
+
+        /// timeLiteral
+        |
+        timeLexer
+
+        /// quantityLiteral
+        |
+        quantityLexer
+
+        /// ratioLiteral
+        |
+        ratio;
 
 // tupleSelector:
 // 	'Tuple'? '{' (
@@ -1038,12 +1075,10 @@ Parser typeNameIdentifier =
 
 Parser referentialIdentifier = identifier | keywordIdentifier;
 
-// referentialIdentifier: identifier | keywordIdentifier;
-
 Parser referentialOrTypeNameIdentifier =
     referentialIdentifier | typeNameIdentifier;
 
-// identifierOrFunctionIdentifier: identifier | functionIdentifier;
+Parser identifierOrFunctionIdentifier = identifier | functionIdentifier;
 
 Parser identifier =
     identifierLexer | delimitedIdentifierLexer | quotedIdentifier;
@@ -1051,10 +1086,12 @@ Parser identifier =
 Parser quotedIdentifier =
     char('"') & (escLexer | char('"').neg()).star() & char('"');
 
-// DATETIME: '@' DATEFORMAT 'T' TIMEFORMAT? TIMEZONEOFFSETFORMAT?;
-
-// LONGNUMBER: [0-9]+ 'L';
+final Parser cqlDateTime = (char('@') &
+    dateFormatLexer &
+    char('T') &
+    timeFormatLexer.optional() &
+    timeZoneOffsetFormatLexer.optional());
+final Parser longNumber = (digit().plus() & char('L'));
 
 // fragment ESC:
 // 	'\\' ([`'"\\/fnrt] | UNICODE); // allow \`, \', \", \\, \/, \f, etc. and \uXXX
-
