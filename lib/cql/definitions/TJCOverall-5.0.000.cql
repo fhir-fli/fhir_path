@@ -24,5 +24,4 @@ valueset "Observation Services": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.
 
 code "Birth date": '21112-8' from "LOINC" display 'Birth date'
 
-parameter "Measurement Period" Interval<DateTime>
-  default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)
+parameter "Measurement Period" Interval<DateTime>default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0]

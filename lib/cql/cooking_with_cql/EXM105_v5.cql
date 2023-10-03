@@ -18,13 +18,12 @@ valueset "Ischemic Stroke": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.247'
 valueset "Discharge To Acute Care Facility": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.87'
 valueset "Discharged to Home for Hospice Care": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.209'
 valueset "Hemorrhagic Stroke": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.212'
-
 valueset "Ethnicity": 'urn:oid:2.16.840.1.114222.4.11.837'
 valueset "Payer": 'urn:oid:2.16.840.1.114222.4.11.3591'
 valueset "Race": 'urn:oid:2.16.840.1.114222.4.11.836'
 valueset "ONC Administrative Sex": 'urn:oid:2.16.840.1.113762.1.4.1'
 
-parameter "Measurement Period" default Interval[@2015-01-01T00:00:00, @2016-01-01T00:00:00)
+parameter "Measurement Period" default Interval[@2015-01-01T00:00:00, @2016-01-01T00:00:00]
 
 context Patient
 
@@ -52,6 +51,10 @@ Initial Population =
       Occurrence A of $EncounterInpatientNonElective
       "Encounter, Performed: Non-Elective Inpatient Encounter (principal diagnosis: Hemorrhagic Stroke)"
 */
+
+
+
+
 define "Non-Elective Encounter":
   ["Encounter, Performed": "Non-Elective Inpatient Encounter"] NonElectiveEncounter
     where NonElectiveEncounter.lengthOfStay <= 120 days
@@ -64,7 +67,7 @@ define "Encounter with Principal Diagnosis of Hemorrhagic or Ischemic Stroke":
 
 define "Initial Population":
   "Encounter with Principal Diagnosis of Hemorrhagic or Ischemic Stroke" NonElectiveEncounter
-	   where AgeInYearsAt(start of NonElectiveEncounter.relevantPeriod) >= 18
+    where AgeInYearsAt(start of NonElectiveEncounter.relevantPeriod) >= 18
 
 //EndRegion: Initial Population
 
@@ -76,13 +79,17 @@ Denominator =
     Occurrence A of $EncounterInpatientNonElective
     "Encounter, Performed: Non-Elective Inpatient Encounter (principal diagnosis: Ischemic Stroke)"
 */
+
+
+
+
 define "Encounter with Principal Diagnosis of Ischemic Stroke":
   "Non-Elective Encounter" Encounter
     where Encounter.principalDiagnosis in "Ischemic Stroke"
 
 define "Denominator":
-    "Initial Population"
-        intersect "Encounter with Principal Diagnosis of Ischemic Stroke"
+  "Initial Population"
+    intersect "Encounter with Principal Diagnosis of Ischemic Stroke"
 
 //EndRegion: Denominator
 
@@ -108,27 +115,32 @@ Denominator Exclusions =
 
 // LA: Not able to use special characters in define statements in the MAT entry
 // LA: Getting a lot of errors in the MAT entry
+
+
+
+
+
+
 define "LDL-c < 70 mg/dL":
   // LA: Do we want to reference this or do we need to reference Non Elective Inpatient Encounter instead?
   // BR: Either one will work because we are excluding encounters that had LDL < 70, but the denominator already consists
   // of only those encounters with a principal diagnosis of Ischemic Stroke
+  
+  
+  
   "Encounter with Principal Diagnosis of Ischemic Stroke" Encounter
     with ["Laboratory Test, Performed": "LDL-c"] Ldl
-     	such that  Ldl.result < 70 'mg/dL'
-    		and (Ldl.resultDatetime 30 days or less before start of Encounter.relevantPeriod
-          or Ldl.resultDatetime during Encounter.relevantPeriod)
+      such that Ldl.result < 70 'mg/dL'
+        and ( Ldl.resultDatetime 30 days or less before start of Encounter.relevantPeriod
+            or Ldl.resultDatetime during Encounter.relevantPeriod
+        )
 
 define "Intervention Comfort Measures":
-  distinct (
- ["Intervention, Order": "Comfort Measures"]
-   union (
-    ["Intervention, Performed": "Comfort Measures"] Intervention
-       return "Intervention, Order" {
-        authorDatetime: start of Intervention.relevantPeriod,
-            reason: Intervention.reason
-          }
-       )
-    )
+  distinct ( ["Intervention, Order": "Comfort Measures"]
+      union ( ["Intervention, Performed": "Comfort Measures"] Intervention
+          return "Intervention, Order" { authorDatetime: start of Intervention.relevantPeriod, reason: Intervention.reason }
+      )
+  )
 
 // LA: Original measure has comfort measures either during the ED encounter or
 // the Inpatient encounter, this seems to only have the Inpatient encounter.
@@ -140,6 +152,17 @@ define "Intervention Comfort Measures":
 // Regarding the use of an EpisodeOfCare, yes, that would be an appropriate use
 // of an episode of care, so if we express this measure with FHIR, it could take
 // advantage of that construct.
+
+
+
+
+
+
+
+
+
+
+
 define "Encounters with Comfort Measures":
   "Non-Elective Encounter" NonElectiveEncounter
     with "Intervention Comfort Measures" ComfortMeasure
@@ -156,16 +179,17 @@ define "Encounters with Prior ED Encounters with Comfort Measures":
       such that EDEncounter.relevantPeriod ends 1 hour or less before start of NonElectiveEncounter.relevantPeriod
 
 // LA: Multiple errors with MAT entry
+
+
 define "Denominator Exclusions":
-  distinct ((
-    "Non-Elective Encounter" Encounter
-      where Encounter.dischargeDisposition in "Discharge To Acute Care Facility"
-         or Encounter.dischargeDisposition in "Left Against Medical Advice"
-         or Encounter.dischargeDisposition in "Patient Expired"
-         or Encounter.dischargeDisposition in "Discharged to Home for Hospice Care"
-         or Encounter.dischargeDisposition in "Discharged to Health Care Facility for Hospice Care"
+  distinct ( ( "Non-Elective Encounter" Encounter
+        where Encounter.dischargeDisposition in "Discharge To Acute Care Facility"
+          or Encounter.dischargeDisposition in "Left Against Medical Advice"
+          or Encounter.dischargeDisposition in "Patient Expired"
+          or Encounter.dischargeDisposition in "Discharged to Home for Hospice Care"
+          or Encounter.dischargeDisposition in "Discharged to Health Care Facility for Hospice Care"
     )
-    union "Encounters with Comfort Measures"
+      union "Encounters with Comfort Measures"
     // LA: Cannot just Or this, as we are describing a list of encounters,
     // but cannot figure out how to add it as an exclusion - want to exclude
     // people with the appropriate discharge statues, or people with comfort measures,
@@ -175,8 +199,17 @@ define "Denominator Exclusions":
     // true/false values like they would for a patient-based measure.
     // We want to include any of the sets of encounters we've defined for inclusion
     // so we use "union" to combine them all
-    union "LDL-c < 70 mg/dL"
-    union "Encounters with Prior ED Encounters with Comfort Measures"
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      union "LDL-c < 70 mg/dL"
+      union "Encounters with Prior ED Encounters with Comfort Measures"
   )
 
 //EndRegion: Denominator Exclusions
@@ -186,8 +219,12 @@ define "Denominator Exclusions":
 Numerator =
   AND: "Medication, Discharge: Statin Grouper" starts during Occurrence A of $EncounterInpatientNonElective
 */
+
+
+
+
 define "Statin at Discharge":
-    ["Medication, Discharge": "Statin Grouper"] Statin
+  ["Medication, Discharge": "Statin Grouper"] Statin
 
 define "Numerator":
     // LA: Do we want to reference this or the Encounter with Principal Diagnosis
@@ -195,8 +232,14 @@ define "Numerator":
     // Also, I am getting errors with MAT entry, I think because this definition
     // is referencing an alias that is not in this section, but was already defined
     // in a previous section. How do I get them both in this section?
-    "Non-Elective Encounter" Encounter
-        with "Statin at Discharge" Statin such that Statin.authorDatetime during Encounter.relevantPeriod
+  
+  
+  
+  
+  
+  "Non-Elective Encounter" Encounter
+    with "Statin at Discharge" Statin
+      such that Statin.authorDatetime during Encounter.relevantPeriod
 
 //EndRegion: Numerator
 
@@ -213,6 +256,13 @@ Denominator Exceptions =
     "Medication, Discharge not done: Medical Reason" for "Statin ingredient specific"
     starts during Occurrence A of $EncounterInpatientNonElective
 */
+
+
+
+
+
+
+
 define "Statin Allergy":
   ["Allergy/Intolerance": "Statin Allergen"] Allergy
 
@@ -225,13 +275,16 @@ define "Denominator Exceptions":
   // LA: Getting lots of errors with MAT entry- first, do we want to call in the non-elective encounter,
   // or should I really be calling in the Encounters with Principal Diagnosis of Ischemic Stroke
   // Second - there is no attribute of authorDatetime Medication, Not Discharge
-  distinct (
-    ("Non-Elective Encounter" Encounter
-      with "Statin Not Given at Discharge" StatinDischarge such that StatinDischarge.authorDatetime during Encounter.relevantPeriod
+  
+  
+  
+  distinct ( ( "Non-Elective Encounter" Encounter
+        with "Statin Not Given at Discharge" StatinDischarge
+          such that StatinDischarge.authorDatetime during Encounter.relevantPeriod
     )
-      union (
-        "Non-Elective Encounter" Encounter
-          with "Statin Allergy" Allergy such that Allergy.prevalencePeriod starts same or before end of Encounter.relevantPeriod
+      union ( "Non-Elective Encounter" Encounter
+          with "Statin Allergy" Allergy
+            such that Allergy.prevalencePeriod starts same or before end of Encounter.relevantPeriod
       )
   )
 
@@ -243,20 +296,25 @@ define "Denominator Exceptions":
 
 //Region: Supplemental Data Elements
 
+
+
+
+
+
 define "SDE Ethnicity":
-    ["Patient Characteristic Ethnicity": "Ethnicity"] Characteristic
-        return Characteristic.code
+  ["Patient Characteristic Ethnicity": "Ethnicity"] Characteristic
+    return Characteristic.code
 
 define "SDE Payer":
-    ["Patient Characteristic Payer": "Payer"] Characteristic
-        return Characteristic.code
+  ["Patient Characteristic Payer": "Payer"] Characteristic
+    return Characteristic.code
 
 define "SDE Race":
-    ["Patient Characteristic Race": "Race"] Characteristic
-        return Characteristic.code
+  ["Patient Characteristic Race": "Race"] Characteristic
+    return Characteristic.code
 
 define "SDE Sex":
-    ["Patient Characteristic Sex": "ONC Administrative Sex"] Characteristic
-        return Characteristic.code
+  ["Patient Characteristic Sex": "ONC Administrative Sex"] Characteristic
+    return Characteristic.code
 
 //EndRegion: Supplemental Data Elements

@@ -81,15 +81,15 @@ define "Had Additional Surgery Within 35 Days Post-Procedure":
 define "Had More Than 2 THA_TKA Procedures Codes During The Index Admission":
   "Qualifying Encounters Related To Elective Primary THA and TKA Procedures" QE
     where Count(("Primary THA-TKA Procedures"
-        union "Non-Primary THA_TKA Procedures")Procedures
+        union "Non-Primary THA_TKA Procedures") Procedures
         where Procedures.relevantPeriod starts during QE.QEncounter.relevantPeriod
-    )> 2
+    ) > 2
 
 define "Had Multiple Blood Transfusion Procedures During The Index Admission":
   "Qualifying Encounters Related To Elective Primary THA and TKA Procedures" QE
     where Count(["Procedure, Performed": "Blood Transfusion Administration"] BTProcedure
         where BTProcedure.relevantPeriod starts during QE.QEncounter.relevantPeriod
-    )> 1
+    ) > 1
 
 define "Had Treatment of Hemorrhage or Hematoma During The Index Admission":
   ["Procedure, Performed": "Treatment of Hemorrhage or Hematoma"] Treatment
@@ -98,7 +98,7 @@ define "Had Treatment of Hemorrhage or Hematoma During The Index Admission":
 
 define "Has Normal BMI":
   "Most Recent Documented BMI" BMIValue
-    where BMIValue.result included in Interval[18.5 'kg/m2', 25 'kg/m2' )
+    where BMIValue.result included in Interval[18.5 'kg/m2', 25 'kg/m2']
 
 define "Most Recent Documented BMI":
   Last(["Physical Exam, Performed": "Body mass index (BMI) [Ratio]"] LastBMI
@@ -150,10 +150,10 @@ define "Transferred From Another Acute Care Facility or Discharged Against Medic
 
 define "Screened and Identified as Tobacco User":
   ( Last(["Assessment, Performed": "Tobacco Use Screening"] TobaccoUseScreening
-      where TobaccoUseScreening.authorDatetime 24 months or less on or before
+      where TobaccoUseScreening.authorDatetime 24 months or less on or before 
       end of "Measurement Period"
       sort by authorDatetime
-  )) MostRecentTobaccoUseScreening
+  ) ) MostRecentTobaccoUseScreening
     where MostRecentTobaccoUseScreening.result in "Current Smoking Tobacco User"
 
 define "Existing Comorbidities Prior To Surgery":
@@ -172,6 +172,7 @@ define "Postoperative Encounter Related To Major Bleeding":
   /***
   We only focus on postoperative follow-up visits to indicate that an evaluation and management service was performed during a postoperative period for a reason(s) related to the original procedure
   ***/
+  
   ["Encounter, Performed": "Postoperative Visit"] PostoperativeEncounter
     with ( ["Diagnosis": "General Major Bleeding Events"]
       union ["Diagnosis": "Active Bleeding"] ) DiagnosisEvent
@@ -181,6 +182,7 @@ define "Postoperative Encounter Related To Treatment of Hemorrhage or Hematoma":
   /***
   We only focus on postoperative follow-up visits to indicate that an evaluation and management service was performed during a postoperative period for a reason(s) related to the original procedure
   ***/
+  
   ["Encounter, Performed": "Postoperative Visit"] PostoperativeEncounter
     with ["Procedure, Performed": "Treatment of Hemorrhage or Hematoma"] HHTreatment
       such that HHTreatment.relevantPeriod starts during PostoperativeEncounter.relevantPeriod
@@ -209,6 +211,8 @@ define "Common Denominator Exclusions":
     or exists "Had Additional Surgery Within 35 Days Post-Procedure"
 
 /* Bleeding-specific */
+
+
 define "Diagnosed With Major Bleeding 30 Days Prior To The Index Admission":
   ["Diagnosis": "General Major Bleeding Events"] GMBEDiagnosis
     with "Qualifying Encounters Related To Elective Primary THA and TKA Procedures" QE
@@ -221,7 +225,7 @@ define "Diagnosed With Major Bleeding During The Index Admission":
       such that MBDiagnosis.prevalencePeriod starts during QE.QEncounter.relevantPeriod
 
 define "Bleeding Rate Denominator Exclusions":
-    exists "Diagnosed With Major Bleeding 30 Days Prior To The Index Admission"
+  exists "Diagnosed With Major Bleeding 30 Days Prior To The Index Admission"
 
 define "Bleeding Rate Numerator":
   exists "Diagnosed With Major Bleeding During The Index Admission"
@@ -232,6 +236,9 @@ define "Bleeding Rate Numerator":
 /* End Bleeding-specific*/
 
 /* VTE-specific */
+
+
+
 define "Diagnosed With VTE or DVT 30 Days Prior To The Index Admission":
   ( ["Diagnosis": "Venous Thromboembolism"]
     union ["Diagnosis": "Pulmonary Embolism or DVT"] ) VTEDiagnosis
@@ -253,9 +260,9 @@ define "Diagnosed With VTE or DVT in the ED Within 35 Days Of The Surgery":
 define "Had 2 or More VTE Diagnosis Codes During Outpatient Visit Within 35 Days Of The Surgery":
   "Outpatient Care Visit Within 35 Days Of the Surgery" OV
     where Count((["Diagnosis": "Venous Thromboembolism"]
-        union ["Diagnosis": "Pulmonary Embolism or DVT"])VTEDiagnosis
+        union ["Diagnosis": "Pulmonary Embolism or DVT"]) VTEDiagnosis
         where VTEDiagnosis.prevalencePeriod starts during OV.relevantPeriod
-    )>= 2
+    ) >= 2
 
 define "ED Visit Within 35 Days Of The Surgery":
   Global."ED Encounter" EDVisit
@@ -268,13 +275,14 @@ define "Outpatient Care Visit Within 35 Days Of the Surgery":
       such that OutpatientVisit.relevantPeriod starts 35 days or less after QP.QProcedure.relevantPeriod
 
 define "VTE Rate Denominator Exclusions":
-    exists "Diagnosed With VTE or DVT 30 Days Prior To The Index Admission"
+  exists "Diagnosed With VTE or DVT 30 Days Prior To The Index Admission"
 
 define "VTE Numerator":
   exists "Diagnosed With VTE or DVT During The Index Admission"
     or exists "Diagnosed With VTE or DVT in the ED Within 35 Days Of The Surgery"
     or exists "Had 2 or More VTE Diagnosis Codes During Outpatient Visit Within 35 Days Of The Surgery"
 /* End VTE-specific*/
+
 
 define "Initial Population":
   exists "Encounter Related To Elective Primary THA and TKA Procedures With Age"

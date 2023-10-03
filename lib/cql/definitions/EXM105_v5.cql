@@ -17,10 +17,9 @@ valueset "Ischemic Stroke": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.247'
 valueset "Discharge To Acute Care Facility": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.87'
 valueset "Discharged to Home for Hospice Care": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.209'
 valueset "Hemorrhagic Stroke": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.212'
-
 valueset "Ethnicity": 'urn:oid:2.16.840.1.114222.4.11.837'
 valueset "Payer": 'urn:oid:2.16.840.1.114222.4.11.3591'
 valueset "Race": 'urn:oid:2.16.840.1.114222.4.11.836'
 valueset "ONC Administrative Sex": 'urn:oid:2.16.840.1.113762.1.4.1'
 
-parameter "Measurement Period" default Interval[@2015-01-01T00:00:00, @2016-01-01T00:00:00)
+parameter "Measurement Period" default Interval[@2015-01-01T00:00:00, @2016-01-01T00:00:00]

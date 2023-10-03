@@ -7,7 +7,6 @@ include MATGlobalCommonFunctionsFHIR4 version '6.0.000' called Global
 
 valueset "Influenza Vaccination Declined": 'urn:oid:2.16.840.1.113883.3.526.3.1255'
 valueset "Influenza Vaccine": 'urn:oid:2.16.840.1.113883.3.526.3.1254'
-
 valueset "Medical Reason": 'urn:oid:2.16.840.1.113883.3.526.3.1007'
 valueset "Patient Reason": 'urn:oid:2.16.840.1.113883.3.526.3.1008'
 valueset "System Reason": 'urn:oid:2.16.840.1.113883.3.526.3.1009'
@@ -17,13 +16,15 @@ valueset "System Reason": 'urn:oid:2.16.840.1.113883.3.526.3.1009'
   http://cts.nlm.nih.gov/fhir/2.16.840.1.113762.1.4.1021.58
   http://cts.nlm.nih.gov/fhir/2.16.840.1.113883.3.526.3.1009
 */
+
 valueset "Negation Reason Codes": 'http://hl7.org/fhir/us/qicore/ValueSet/qicore-negation-reason'
 
 /*
 2021 AU also has valueset "Medical Reason": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.473'
 */
 
-parameter "Measurement Period" Interval<DateTime> default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)
+
+parameter "Measurement Period" Interval<DateTime>default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0]
 
 context Patient
 
@@ -62,12 +63,14 @@ http://build.fhir.org/ig/HL7/fhir-qi-core/StructureDefinition-qicore-immunizatio
 Following the negation rationale pattern:
 */
 
+
+
+
 define "Medical Patient or System Reason for Not Administering Influenza Vaccine":
   [Immunization: "Influenza Vaccine"] NoFluVaccine
     where NoFluVaccine.recorded during "Influenza Season Including August and September of the Prior Year"
       and NoFluVaccine.status = 'not-done'
-      and (
-        NoFluVaccine.statusReason in "Medical Reason"
+      and ( NoFluVaccine.statusReason in "Medical Reason"
           or NoFluVaccine.statusReason in "Patient Reason"
           or NoFluVaccine.statusReason in "System Reason"
           or NoFluVaccine.statusReason in "Influenza Vaccination Declined"
@@ -76,6 +79,7 @@ define "Medical Patient or System Reason for Not Administering Influenza Vaccine
 /*
 What's happening underneath:
 */
+
 
 define "Influenza Vaccine Not Administered":
   [Immunization] I
@@ -90,8 +94,9 @@ define function ToValueSet(uri FHIR.uri):
 CMS147 Supporting Definitions
 */
 
+
 define "Influenza Season":
-  Interval[start of "Measurement Period" - 3 months, start of "Measurement Period" + 3 months )
+  Interval[start of "Measurement Period" - 3 months, start of "Measurement Period" + 3 months]
 
 define "Influenza Season Including August and September of the Prior Year":
   Interval[start of "Measurement Period" - 5 months, start of "Measurement Period" + 3 months )

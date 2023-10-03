@@ -32,7 +32,7 @@ context Patient
 define "Advanced Illness and Frailty Exclusion Including Over Age 80":
   //If the measure includes populations age 80 and older, then use this logic:
   exists ( ["Patient Characteristic Birthdate": "Birth date"] BirthDate
-  		where ( Global."CalendarAgeInYearsAt"(BirthDate.birthDatetime, start of "Measurement Period")in Interval[66, 80])
+  		where ( Global."CalendarAgeInYearsAt"(BirthDate.birthDatetime, start of "Measurement Period")in Interval[66, 80]]
   			and "Has Criteria Indicating Frailty"
   			and ( Count("Outpatient Encounters with Advanced Illness")>= 2
   					or exists ( "Inpatient Encounter with Advanced Illness" )

@@ -19,6 +19,8 @@ valueset "Observation Services": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.
 //valueset "Active Condition Codes": 'http://example.org/fhir/ValueSet/active-condition-codes'
 //valueset "Inactive Condition Codes": 'http://example.org/fhir/ValueSet/inactive-condition-codes'
 
+
+
 code "active": 'active' from "ConditionClinicalStatusCodes" display 'active'
 code "allergy-active": 'active' from "AllergyIntoleranceClinicalStatusCodes" display 'allergy-active'
 code "allergy-confirmed": 'confirmed' from "AllergyIntoleranceVerificationStatusCodes" display 'allergy-confirmed'
@@ -45,5 +47,4 @@ code "remission": 'remission' from "ConditionClinicalStatusCodes" display 'remis
 code "resolved": 'resolved' from "ConditionClinicalStatusCodes" display 'resolved'
 code "unconfirmed": 'unconfirmed' from "ConditionVerificationStatusCodes" display 'unconfirmed'
 
-parameter "Measurement Period" Interval<DateTime>
-  default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)
+parameter "Measurement Period" Interval<DateTime>default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0]

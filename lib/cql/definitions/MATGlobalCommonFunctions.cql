@@ -25,6 +25,7 @@ code "ICU": 'ICU' from "RoleCode" display 'Intensive care unit'
 code "Billing": 'billing' from "Diagnosis Role" display 'Billing'
 
 // Condition Clinical Status Codes - Consider value sets for these
+
 code "active": 'active' from "ConditionClinicalStatusCodes"
 code "recurrence": 'recurrence' from "ConditionClinicalStatusCodes"
 code "relapse": 'relapse' from "ConditionClinicalStatusCodes"
@@ -33,25 +34,26 @@ code "remission": 'remission' from "ConditionClinicalStatusCodes"
 code "resolved": 'resolved' from "ConditionClinicalStatusCodes"
 
 // Condition Verification Status Codes - Consider value sets for these
+
 code "unconfirmed": 'unconfirmed' from ConditionVerificationStatusCodes
 code "provisional": 'provisional' from ConditionVerificationStatusCodes
 code "differential": 'differential' from ConditionVerificationStatusCodes
 code "confirmed": 'confirmed' from ConditionVerificationStatusCodes
 code "refuted": 'refuted' from ConditionVerificationStatusCodes
 code "entered-in-error": 'entered-in-error' from ConditionVerificationStatusCodes
-
 code "allergy-active": 'active' from "AllergyIntoleranceClinicalStatusCodes"
 code "allergy-inactive": 'inactive' from "AllergyIntoleranceClinicalStatusCodes"
 code "allergy-resolved": 'resolved' from "AllergyIntoleranceClinicalStatusCodes"
 
 // Allergy/Intolerance Verification Status Codes - Consider value sets for these
+
 code "allergy-unconfirmed": 'unconfirmed' from AllergyIntoleranceVerificationStatusCodes
 code "allergy-confirmed": 'confirmed' from AllergyIntoleranceVerificationStatusCodes
 code "allergy-refuted": 'refuted' from AllergyIntoleranceVerificationStatusCodes
 
 // MedicationRequest Category Codes
+
 code "Community": 'community' from "MedicationRequestCategory" display 'Community'
 code "Discharge": 'discharge' from "MedicationRequestCategory" display 'Discharge'
 
-parameter "Measurement Period" Interval<DateTime>
-  default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)
+parameter "Measurement Period" Interval<DateTime>default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0]

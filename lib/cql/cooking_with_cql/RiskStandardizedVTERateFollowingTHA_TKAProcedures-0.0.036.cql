@@ -105,13 +105,13 @@ define "Had Additional Surgery Within 35 Days Post-Procedure":
 define "Had More Than 2 THA_TKA Procedures Codes During The Index Admission":
   "Qualifying Encounters Related To Elective Primary THA and TKA Procedures" QE
     where Count(("Primary THA-TKA Procedures"
-        union "Non-Primary THA_TKA Procedures")Procedures
+        union "Non-Primary THA_TKA Procedures") Procedures
         where Procedures.relevantPeriod starts during QE.QEncounter.relevantPeriod
-    )> 2
+    ) > 2
 
 define "Has Normal BMI":
   "Most Recent Documented BMI" BMIValue
-    where BMIValue.result included in Interval[18.5 'kg/m2', 25 'kg/m2' )
+    where BMIValue.result included in Interval[18.5 'kg/m2', 25 'kg/m2']
 
 define "Initial Population":
   exists "Encounter Related To Elective Primary THA and TKA Procedures With Age"
@@ -166,7 +166,7 @@ define "Screened and Identified as Tobacco User":
       where TobaccoUseScreening.authorDatetime 24 months or less on or before 
       end of "Measurement Period"
       sort by authorDatetime
-  )) MostRecentTobaccoUseScreening
+  ) ) MostRecentTobaccoUseScreening
     where MostRecentTobaccoUseScreening.result in "Current Smoking Tobacco User"
 
 define "Transferred From Another Acute Care Facility or Discharged Against Medical Advice During Index Admission":
@@ -188,9 +188,9 @@ define "Numerator":
 define "Had 2 or More VTE Diagnosis Codes During Outpatient Visit Within 35 Days Of The Surgery":
   "Outpatient Care Visit Within 35 Days Of the Surgery" OV
     where Count((["Diagnosis": "Venous Thromboembolism"]
-        union ["Diagnosis": "Pulmonary Embolism or DVT"])VTEDiagnosis
+        union ["Diagnosis": "Pulmonary Embolism or DVT"]) VTEDiagnosis
         where VTEDiagnosis.prevalencePeriod starts during OV.relevantPeriod
-    )>= 2
+    ) >= 2
 
 define "Received Anticoagulant Medication Injection Between 10-90 Days Prior To Surgery Date":
   ["Medication, Order": "Anticoagulant Medications, Injection"] AntiCoagulantMed

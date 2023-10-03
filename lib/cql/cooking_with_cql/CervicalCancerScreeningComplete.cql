@@ -47,42 +47,41 @@ valueset "HPV Test": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.4
 
 code "Congenital absence of cervix (disorder)": '37687000' from "SNOMEDCT:2017-09" display 'Congenital absence of cervix (disorder)'
 
-parameter "Measurement Period" Interval<DateTime>
-  default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)
+parameter "Measurement Period" Interval<DateTime>default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0]
 
 context Patient
 
 define "Initial Population":
-	Patient.gender = 'female'
-		and AgeInYearsAt(start of "Measurement Period") in Interval[23, 64]
+  Patient.gender = 'female'
+    and AgeInYearsAt(start of "Measurement Period") in Interval[23, 64]
 
 define "Denominator":
-	"Initial Population"
+  "Initial Population"
 
 define "Denominator Exclusion":
-		exists "Absence of Cervix"
+  exists "Absence of Cervix"
 
 define "Numerator":
-	exists "Cervical Cytology Within 3 Years"
-		or exists "HPV Test Within 5 Years for Women Age 30 and Older"
+  exists "Cervical Cytology Within 3 Years"
+    or exists "HPV Test Within 5 Years for Women Age 30 and Older"
 
 define "Absence of Cervix":
-  ([Procedure: "Hysterectomy with No Residual Cervix"] NoCervixProcedure
-    where FC.ToInterval(NoCervixProcedure.performed) ends on or before end of "Measurement Period"
-      and NoCervixProcedure.status = 'completed'
+  ( [Procedure: "Hysterectomy with No Residual Cervix"] NoCervixProcedure
+      where FC.ToInterval ( NoCervixProcedure.performed ) ends on or before end of "Measurement Period"
+        and NoCervixProcedure.status = 'completed'
   )
-    union [Condition : "Congenital absence of cervix (disorder)"] NoCervixBirth
-  		where FC.ToInterval(NoCervixBirth.onset) starts on or before end of "Measurement Period"
+    union [Condition: "Congenital absence of cervix (disorder)"] NoCervixBirth
+      where FC.ToInterval ( NoCervixBirth.onset ) starts on or before end of "Measurement Period"
 
 define "Cervical Cytology Within 3 Years":
-	[Observation: "Pap Test"] CervicalCytology
-		where CervicalCytology.value is not null
-			and CervicalCytology.status in { 'final', 'amended', 'corrected', 'preliminary' }
-		  and FC.ToInterval(CervicalCytology.effective) ends 3 years or less on or before end of "Measurement Period"
+  [Observation: "Pap Test"] CervicalCytology
+    where CervicalCytology.value is not null
+      and CervicalCytology.status in { 'final', 'amended', 'corrected', 'preliminary' }
+      and FC.ToInterval ( CervicalCytology.effective ) ends 3 years or less on or before end of "Measurement Period"
 
 define "HPV Test Within 5 Years for Women Age 30 and Older":
-	[Observation: "HPV Test"] HPVTest
+  [Observation: "HPV Test"] HPVTest
     where HPVTest.value is not null
       and HPVTest.status in { 'final', 'amended', 'corrected', 'preliminary' }
       and AgeInYearsAt(start of FC.ToInterval(HPVTest.effective)) >= 30
-      and FC.ToInterval(HPVTest.effective) ends 5 years or less on or before end of "Measurement Period"
+      and FC.ToInterval ( HPVTest.effective ) ends 5 years or less on or before end of "Measurement Period"

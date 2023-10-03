@@ -17,15 +17,19 @@ codesystem "TaskCodeSystem": 'http://hl7.org/fhir/CodeSystem/task-code'
 valueset "Marital Status": 'http://hl7.org/fhir/ValueSet/marital-status'
 valueset "CommunicationCodes": 'http://hl7.org/fhir/ValueSet/communication-category'
 valueset "DeviceCodes": 'http://example.org/fhir/ValueSet/device-codes' // Random set of device codes from 'http://hl7.org/fhir/ValueSet/device-type'
+
 valueset "Venous Foot Pumps (VFP)": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.230'
 valueset "ImmunizationCodes": 'http://example.org/fhir/ValueSet/immunization-codes' // Random set of immunization codes from 'http://hl7.org/fhir/us/core/ValueSet/us-core-vaccines-cvx'
+
 valueset "MedicationCodes": 'http://example.org/fhir/ValueSet/medication-codes' // Random set of medication codes from 'http://hl7.org/fhir/ValueSet/medication-codes'
+
 valueset "ObservationCodes": 'http://example.org/fhir/ValueSet/observation-codes' // Random set of observation codes from 'http://hl7.org/fhir/ValueSet/observation-codes'
+
 valueset "ProcedureCodes": 'http://example.org/fhir/ValueSet/procedure-codes' // Random set of procedure codes from 'http://hl7.org/fhir/us/core/ValueSet/us-core-procedure-code'
+
 valueset "Application of intermittent pneumatic compression devices (IPC)": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1110.65'
 valueset "TaskCodes": 'http://hl7.org/fhir/ValueSet/task-code'
 valueset "NegationReasonCodes": 'http://hl7.org/fhir/us/qicore/ValueSet/qicore-negation-reason'
-
 valueset "Office Visit": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001'
 valueset "Non-Elective Inpatient Encounter": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.424'
 valueset "Comfort Measures": 'http://cts.nlm.nih.gov/fhir/ValueSet/1.3.6.1.4.1.33895.1.3.0.45'
@@ -55,7 +59,7 @@ code "ProcedureCode": '7138802' from "SNOMED-CT" display 'Procedure'
 code "TaskCode": 'approve' from "TaskCodeSystem" display 'Activate/approve the focal resource'
 code "Macular edema absent (situation)": '428341000124108' from "SNOMED-CT" display 'Macular edema absent (situation)'
 
-parameter "Measurement Period" Interval<DateTime> default Interval[@2023-01-01T00:00:00.000, @2024-01-01T00:00:00.000)
+parameter "Measurement Period" Interval<DateTime>default Interval[@2023-01-01T00:00:00.000, @2024-01-01T00:00:00.000]
 
 context Patient
 
@@ -67,8 +71,12 @@ define "Patient Is Male":
 
 define "Patient Race Includes Alaska Native":
   Patient P
-    where exists (P.race.ombCategory C where C ~ "American Indian or Alaska Native")
-      and exists (P.race.detailed C where C ~ "Alaska Native")
+    where exists ( P.race.ombCategory C
+        where C ~ "American Indian or Alaska Native"
+    )
+      and exists ( P.race.detailed C
+          where C ~ "Alaska Native"
+      )
 
 define "Office Visit Encounters":
   [Encounter: "Office Visit"]
@@ -83,83 +91,107 @@ define "Completed Encounters During the Measurement Period":
 
 define "Non-Elective Inpatient Encounter Less Than 120 Days":
   ["Encounter": "Non-Elective Inpatient Encounter"] NonElectiveEncounter
-    where NonElectiveEncounter.period.lengthInDays() <= 120
+    where NonElectiveEncounter.period.lengthInDays ( ) <= 120
 
 define "Non-Elective Inpatient Encounter Over 24 Hours":
   ["Encounter": "Non-Elective Inpatient Encounter"] NonElectiveEncounter
     where duration in hours of NonElectiveEncounter.period >= 24
 
 define "Comfort Measures Performed":
-    ["Procedure": "Comfort Measures"] InterventionPerformed
-        where InterventionPerformed.status in { 'completed', 'in-progress' }
+  ["Procedure": "Comfort Measures"] InterventionPerformed
+    where InterventionPerformed.status in { 'completed', 'in-progress' }
 
 define "Encounter with Comfort Measures Performed during Hospitalization":
   "Non-Elective Inpatient Encounter Less Than 120 Days" Encounter
     with "Comfort Measures Performed" ComfortMeasure
-      such that start of ComfortMeasure.performed.toInterval() during Encounter.hospitalizationWithObservation()
+      such that start of ComfortMeasure.performed.toInterval ( ) during Encounter.hospitalizationWithObservation ( )
 
 define "Active Diabetes Conditions":
   [ConditionProblemsHealthConcerns: Diabetes] Condition
-    where Condition.isActive()
+    where Condition.isActive ( )
 
 define "Diabetes Conditions Indicated during an Encounter":
   [ConditionEncounterDiagnosis: Diabetes] Condition
 
 define "Active Diabetes Conditions Onset During the Measurement Period":
   "Active Diabetes Conditions" Diabetes
-    where Diabetes.prevalenceInterval() starts during "Measurement Period"
+    where Diabetes.prevalenceInterval ( ) starts during "Measurement Period"
 
 define "Encounter With Diabetes Diagnosis Present on Admission":
   "Non-Elective Inpatient Encounter Less Than 120 Days" IPEncounter
-    where exists (IPEncounter.diagnosis D
-      where D.condition.getCondition().code in "Diabetes"
-        and D.diagnosisPresentOnAdmission in "Present on Admission or Clinically Undetermined"
+    where exists ( IPEncounter.diagnosis D
+        where D.condition.getCondition ( ).code in "Diabetes"
+          and D.diagnosisPresentOnAdmission in "Present on Admission or Clinically Undetermined"
     )
 
 // Respiratory rate - 9279-1
 // @profile: http://hl7.org/fhir/us/core/StructureDefinition/us-core-respiratory-rate
+
+
+
 define RespiratoryRate:
   [USCoreRespiratoryRateProfile] O
     where O.status in { 'final', 'amended', 'corrected' }
 
 // Heart rate - 8867-4
 // @profile: http://hl7.org/fhir/us/core/StructureDefinition/us-core-heart-rate
+
+
+
 define HeartRate:
   [USCoreHeartRateProfile] O
     where O.status in { 'final', 'amended', 'corrected' }
 
 // Oxygen saturation - 2708-6
 // @profile: http://hl7.org/fhir/StructureDefinition/oxygensat
+
+
+
 define OxygenSaturation:
   ["observation-oxygensat"] O
     where O.status in { 'final', 'amended', 'corrected' }
 
 // Body temperature - 8310-5
 // @profile: http://hl7.org/fhir/us/core/StructureDefinition/us-core-body-temperature
+
+
+
 define BodyTemperature:
   [USCoreBodyTemperatureProfile] O
     where O.status in { 'final', 'amended', 'corrected' }
 
 // Body height - 8302-2
 // @profile: http://hl7.org/fhir/us/core/StructureDefinition/us-core-body-height
+
+
+
 define BodyHeight:
   [USCoreBodyHeightProfile] O
     where O.status in { 'final', 'amended', 'corrected' }
 
 // Head circumference - 9843-4
 // @profile: http://hl7.org/fhir/us/core/StructureDefinition/us-core-head-circumference
+
+
+
 define HeadCircumference:
   [USCoreHeadCircumferenceProfile] O
     where O.status in { 'final', 'amended', 'corrected' }
 
 // Body weight - 29463-7
 // @profile: http://hl7.org/fhir/us/core/StructureDefinition/us-core-body-weight
+
+
+
 define BodyWeight:
   [USCoreBodyWeightProfile] O
     where O.status in { 'final', 'amended', 'corrected' }
 
 // Body mass index - 39156-5
 // @profile: http://hl7.org/fhir/us/core/StructureDefinition/us-core-bmi
+
+
+
 define BodyMassIndex:
   [USCoreBMIProfile] O
     where O.status in { 'final', 'amended', 'corrected' }
@@ -168,6 +200,11 @@ define BodyMassIndex:
 // Systolic blood pressure - 8480-6
 // Diastolic blood pressure - 8462-4
 // @profile: http://hl7.org/fhir/us/core/StructureDefinition/us-core-blood-pressure
+
+
+
+
+
 define "BloodPressure less than 140 over 90":
   [USCoreBloodPressureProfile] BP
     where BP.status in { 'final', 'amended', 'corrected' }
@@ -176,44 +213,64 @@ define "BloodPressure less than 140 over 90":
 
 // USCore Smoking Status
 // @profile: http://hl7.org/fhir/us/core/StructureDefinition/us-core-smokingstatus
+
+
+
 define SmokingStatus:
   ["USCoreSmokingStatusProfile"] O
     where O.status in { 'final', 'amended', 'corrected' }
 
 // USCore Pediatric BMI for Age - 59576-9
 // @profile: http://hl7.org/fhir/us/core/StructureDefinition/pediatric-bmi-for-age
+
+
+
 define PediatricBMIForAge:
   [USCorePediatricBMIforAgeObservationProfile] O
     where O.status in { 'final', 'amended', 'corrected' }
 
 // USCore Pediatric Weight for Height - 77606-2
 // @profile: http://hl7.org/fhir/us/core/StructureDefinition/pediatric-weight-for-height
+
+
+
 define PediatricWeightForHeight:
   [USCorePediatricWeightForHeightObservationProfile] O
     where O.status in { 'final', 'amended', 'corrected' }
 
 // USCore Pulse Oximetry - 59408-5
 // @profile: http://hl7.org/fhir/us/core/StructureDefinition/us-core-pulse-oximetry
+
+
+
 define PulseOximetry:
   [USCorePulseOximetryProfile] O
     where O.status in { 'final', 'amended', 'corrected' }
 
 // Laboratory Result
+
+
 define LaboratoryResultObservation:
   [LaboratoryResultObservation] O
     where O.status in { 'final', 'amended', 'corrected' }
 
 // Clinical Test Result
+
+
 define ObservationClinicalTestResult:
   [ObservationClinicalTestResult] O
     where O.status in { 'final', 'amended', 'corrected' }
 
 // Imaging Result
+
+
 define ObservationImagingResult:
   [ObservationImagingResult] O
     where O.status in { 'final', 'amended', 'corrected' }
 
 // Survey
+
+
 define ObservationSurvey:
   [ObservationSurvey] O
     where O.status in { 'final', 'amended', 'corrected' }
@@ -235,19 +292,26 @@ define "Low Dose Unfractionated Heparin Administration":
 define "Low Dose Unfractionated Heparin for VTE Prophylaxis Not Administered":
   ["MedicationAdministrationNotDone": "Low Dose Unfractionated Heparin for VTE Prophylaxis"] VTEMedication
     where VTEMedication.category ~ QICoreCommon."Inpatient"
-      and (VTEMedication.reasonCode in "Medical Reason" or VTEMedication.reasonCode in "Patient Refusal")
+      and ( VTEMedication.reasonCode in "Medical Reason"
+          or VTEMedication.reasonCode in "Patient Refusal"
+      )
 
 define "Antithrombotic Therapy at Discharge":
   ["MedicationRequest": medication in "Antithrombotic Therapy"] Antithrombotic
-    where (Antithrombotic.isCommunity() or Antithrombotic.isDischarge())
+    where ( Antithrombotic.isCommunity ( )
+        or Antithrombotic.isDischarge ( )
+    )
       and Antithrombotic.status in { 'active', 'completed' }
       and Antithrombotic.intent = 'order'
 
 define "Reason for Not Ordering Antithrombotic":
   ["MedicationNotRequested": "Antithrombotic Therapy"] NoAntithromboticDischarge
-    where (NoAntithromboticDischarge.reasonCode in "Medical Reason"
-      or NoAntithromboticDischarge.reasonCode in "Patient Refusal")
-      and (NoAntithromboticDischarge.isCommunity() or NoAntithromboticDischarge.isDischarge())
+    where ( NoAntithromboticDischarge.reasonCode in "Medical Reason"
+        or NoAntithromboticDischarge.reasonCode in "Patient Refusal"
+    )
+      and ( NoAntithromboticDischarge.isCommunity ( )
+          or NoAntithromboticDischarge.isDischarge ( )
+      )
       and NoAntithromboticDischarge.status in { 'active', 'completed' }
       and NoAntithromboticDischarge.intent = 'order'
 
@@ -256,9 +320,9 @@ define "Dementia Medication Dispensed":
     where MedicationDispense.status in { 'active', 'completed', 'on-hold' }
 
 define "Dementia Medication Not Dispensed":
-    ["MedicationDispenseDeclined": "Dementia Medications"] MedicationDispense
-      where MedicationDispense.statusReason in "Medical Reason"
-        or MedicationDispense.statusReason in "Patient Refusal"
+  ["MedicationDispenseDeclined": "Dementia Medications"] MedicationDispense
+    where MedicationDispense.statusReason in "Medical Reason"
+      or MedicationDispense.statusReason in "Patient Refusal"
 
 define "Application of Intermittent Pneumatic Compression Devices":
   ["Procedure": "Application of Intermittent Pneumatic Compression Devices (IPC)"] DeviceApplied
@@ -285,8 +349,9 @@ define "Device Indicating Frailty":
 
 define "Venous Foot Pumps Not Ordered":
   ["DeviceNotRequested": "Venous Foot Pumps (VFP)"] DeviceNotOrdered
-    where (DeviceNotOrdered.doNotPerformReason in "Medical Reason"
-      or DeviceNotOrdered.doNotPerformReason in "Patient Refusal")
+    where ( DeviceNotOrdered.doNotPerformReason in "Medical Reason"
+        or DeviceNotOrdered.doNotPerformReason in "Patient Refusal"
+    )
       and DeviceNotOrdered.status in { 'active', 'on-hold', 'completed' }
 
 define "Statin Allergy Intolerance":
@@ -295,8 +360,8 @@ define "Statin Allergy Intolerance":
       or StatinAllergyIntolerance.clinicalStatus ~ QICoreCommon."allergy-active"
 
 define "Polio Immunizations":
- ["Immunization": "Inactivated Polio Vaccine (IPV)"] PolioVaccination
-     where PolioVaccination.status = 'completed'
+  ["Immunization": "Inactivated Polio Vaccine (IPV)"] PolioVaccination
+    where PolioVaccination.status = 'completed'
 
 define "Reason for No Polio Immunization":
   ["ImmunizationNotDone": "Inactivated Polio Vaccine (IPV)"] PolioVaccination
@@ -310,22 +375,24 @@ define "Macular Edema Absence Communicated":
 
 //> NOTE: This expression uses a _direct-reference code_ of "Macular edema absent (situation)" (i.e. referencing a specific code from a code system, rather than a value set consisting of multiple codes). For more information on using direct-reference codes in CQL expressions, refer to the [Codes](https://hl7.org/fhir/us/cqfmeasures/using-cql.html#codes) topic in the Quality Measure IG.
 
+
 define "Reason for Macular Edema Absent Not Communicated":
   ["CommunicationNotDone": "Macular Edema Absent Findings"] MacularEdemaAbsentNotCommunicated
     with "Office Visit Encounters" EncounterDiabeticRetinopathy
       such that MacularEdemaAbsentNotCommunicated.sent during EncounterDiabeticRetinopathy.period
     where MacularEdemaAbsentNotCommunicated.statusReason in "Medical Reason"
-        or MacularEdemaAbsentNotCommunicated.statusReason in "Patient Refusal"
+      or MacularEdemaAbsentNotCommunicated.statusReason in "Patient Refusal"
 
 //> NOTE: The positive counterpart for this statement (Macular Edema Absence Communicated) uses a direct-reference code, and ideally the negative statement would as well. However, at this time, direct-reference codes cannot be used as the terminology target of a retrieve. Available workarounds for this issue are to either create a value set with the single required code, or to use the long-hand expression of the negation statement, as shown in the following example:
+
 
 define "Reason for Macular Edema Absent Not Communicated (Explicit Test)":
   ["CommunicationNotDone"] MacularEdemaAbsentNotCommunicated
     with "Office Visit Encounters" EncounterDiabeticRetinopathy
       such that MacularEdemaAbsentNotCommunicated.sent during EncounterDiabeticRetinopathy.period
-    where (MacularEdemaAbsentNotCommunicated.topic ~ "Macular edema absent (situation)"
+    where ( MacularEdemaAbsentNotCommunicated.topic ~ "Macular edema absent (situation)"
         or "Macular edema absent (situation)" in MacularEdemaAbsentNotCommunicated.topic
-      )
-      and (MacularEdemaAbsentNotCommunicated.statusReason in "Medical Reason"
-        or MacularEdemaAbsentNotCommunicated.statusReason in "Patient Refusal"
+    )
+      and ( MacularEdemaAbsentNotCommunicated.statusReason in "Medical Reason"
+          or MacularEdemaAbsentNotCommunicated.statusReason in "Patient Refusal"
       )

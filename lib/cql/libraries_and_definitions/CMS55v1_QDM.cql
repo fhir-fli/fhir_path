@@ -51,4 +51,4 @@ valueset "Inpatient": '2.16.840.1.113883.3.666.5.307'
 valueset "Emergency Department Visit": '2.16.840.1.113883.3.117.1.7.1.293'
 
 parameter "Measurement Period" Interval<DateTime>
-//parameter "Measurement Period" default Interval[@2014-01-01T00:00:00.0, @2015-01-01T00:00:00.0)
+//parameter "Measurement Period" default Interval[@2014-01-01T00:00:00.0, @2015-01-01T00:00:00.0]

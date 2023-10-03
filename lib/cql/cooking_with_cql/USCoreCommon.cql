@@ -36,6 +36,7 @@ code "ICU": 'ICU' from "RoleCode" display 'Intensive care unit'
 code "Billing": 'billing' from "Diagnosis Role" display 'Billing'
 
 // Encounter Class Codes
+
 code "ambulatory": 'AMB' from ActCode display 'ambulatory'
 code "emergency": 'EMER' from ActCode display 'emergency'
 code "field": 'FLD' from ActCode display 'field'
@@ -49,11 +50,13 @@ code "short stay": 'SS' from ActCode display 'short stay'
 code "virtual": 'VR' from ActCode display 'VR'
 
 // Condition Category Codes
+
 code "problem-list-item": 'problem-list-item' from "ConditionCategory" display 'Problem List Item'
 code "encounter-diagnosis": 'encounter-diagnosis' from "ConditionCategory" display 'Encounter Diagnosis'
 code "health-concern": 'health-concern' from "USCoreConditionCategory" display 'Health Concern'
 
 // Condition Clinical Status Codes - Consider value sets for these
+
 code "active": 'active' from "ConditionClinicalStatusCodes"
 code "recurrence": 'recurrence' from "ConditionClinicalStatusCodes"
 code "relapse": 'relapse' from "ConditionClinicalStatusCodes"
@@ -62,29 +65,32 @@ code "remission": 'remission' from "ConditionClinicalStatusCodes"
 code "resolved": 'resolved' from "ConditionClinicalStatusCodes"
 
 // Condition Verification Status Codes - Consider value sets for these
+
 code "unconfirmed": 'unconfirmed' from ConditionVerificationStatusCodes
 code "provisional": 'provisional' from ConditionVerificationStatusCodes
 code "differential": 'differential' from ConditionVerificationStatusCodes
 code "confirmed": 'confirmed' from ConditionVerificationStatusCodes
 code "refuted": 'refuted' from ConditionVerificationStatusCodes
 code "entered-in-error": 'entered-in-error' from ConditionVerificationStatusCodes
-
 code "allergy-active": 'active' from "AllergyIntoleranceClinicalStatusCodes"
 code "allergy-inactive": 'inactive' from "AllergyIntoleranceClinicalStatusCodes"
 code "allergy-resolved": 'resolved' from "AllergyIntoleranceClinicalStatusCodes"
 
 // Allergy/Intolerance Verification Status Codes - Consider value sets for these
+
 code "allergy-unconfirmed": 'unconfirmed' from AllergyIntoleranceVerificationStatusCodes
 code "allergy-confirmed": 'confirmed' from AllergyIntoleranceVerificationStatusCodes
 code "allergy-refuted": 'refuted' from AllergyIntoleranceVerificationStatusCodes
 
 // MedicationRequest Category Codes
+
 code "Inpatient": 'inpatient' from "MedicationRequestCategory" display 'Inpatient'
 code "Outpatient": 'outpatient' from "MedicationRequestCategory" display 'Outpatient'
 code "Community": 'community' from "MedicationRequestCategory" display 'Community'
 code "Discharge": 'discharge' from "MedicationRequestCategory" display 'Discharge'
 
 // Diagnosis Role Codes
+
 code "AD": 'AD' from "Diagnosis Role" display 'Admission diagnosis'
 code "DD": 'DD' from "Diagnosis Role" display 'Discharge diagnosis'
 code "CC": 'CC' from "Diagnosis Role" display 'Chief complaint'
@@ -94,6 +100,7 @@ code "post-op": 'post-op' from "Diagnosis Role" display 'post-op diagnosis'
 code "billing": 'billing' from "Diagnosis Role" display 'billing diagnosis'
 
 // Observation Category Codes
+
 code "social-history": 'social-history' from "ObservationCategoryCodes" display 'Social History'
 code "vital-signs": 'vital-signs' from "ObservationCategoryCodes" display 'Vital Signs'
 code "imaging": 'imaging' from "ObservationCategoryCodes" display 'Imaging'
@@ -112,6 +119,9 @@ context Patient
 /*
 @description: Returns true if the given condition has a clinical status of active, recurrence, or relapse
 */
+
+
+
 define fluent function isActive(condition Condition):
   condition.clinicalStatus ~ "active"
     or condition.clinicalStatus ~ "recurrence"
@@ -168,33 +178,41 @@ define fluent function refuted(allergyIntolerances AllergyIntolerance):
 /*
 @description: Returns true if the given condition has the given category
 */
+
+
 define fluent function hasCategory(condition Condition, category Code):
-  exists (condition.category C
-    where C ~ category
+  exists ( condition.category C
+      where C ~ category
   )
 
 /*
 @description: Returns true if the given condition is a problem list item.
 */
+
+
 define fluent function isProblemListItem(condition Condition):
-  exists (condition.category C
-    where C ~ "problem-list-item"
+  exists ( condition.category C
+      where C ~ "problem-list-item"
   )
 
 /*
 @description: Returns true if the given condition is an encounter diagnosis
 */
+
+
 define fluent function isEncounterDiagnosis(condition Condition):
-  exists (condition.category C
-    where C ~ "encounter-diagnosis"
+  exists ( condition.category C
+      where C ~ "encounter-diagnosis"
   )
 
 /*
 @description: Returns true if the given condition is a health concern
 */
+
+
 define fluent function isHealthConcern(condition Condition):
-  exists (condition.category C
-    where C ~ "health-concern"
+  exists ( condition.category C
+      where C ~ "health-concern"
   )
 
 define fluent function isUnconfirmed(condition Condition):
@@ -235,33 +253,41 @@ define fluent function refuted(conditions List<Condition>):
 /*
 @description: Returns true if the given observation has the given category
 */
+
+
 define fluent function hasCategory(observation LaboratoryResultObservationProfile, category Code):
-  exists (observation.category C
-    where C ~ category
+  exists ( observation.category C
+      where C ~ category
   )
 
 /*
 @description: Returns true if the given MedicationRequest has a category of Community
 */
+
+
 define fluent function isCommunity(medicationRequest MedicationRequestProfile):
-  exists (medicationRequest.category C
-    where C ~ Community
+  exists ( medicationRequest.category C
+      where C ~ Community
   )
 
 /*
 @description: Returns true if the given MedicationRequest has a category of Discharge
 */
+
+
 define fluent function isDischarge(medicationRequest MedicationRequestProfile):
-  exists (medicationRequest.category C
-    where C ~ Discharge
+  exists ( medicationRequest.category C
+      where C ~ Discharge
   )
 
 /*
 @description: Returns true if the given MedicationRequest has the given category
 */
+
+
 define fluent function hasCategory(medicationRequest MedicationRequestProfile, category Code):
-  exists (medicationRequest.category C
-    where C ~ category
+  exists ( medicationRequest.category C
+      where C ~ category
   )
 
 /*
@@ -284,21 +310,15 @@ is a DateTime Interval beginning on the date the patient turned the age given as
 immediately before one year later than the date the patient turned the age given as the end of the quantity interval.
 Any other input will reslt in a null DateTime Interval
 */
+
+
 define fluent function toInterval(choice Choice<DateTime, Quantity, Interval<DateTime>, Interval<Quantity>>):
   case
-	  when choice is DateTime then
-    	Interval[choice as DateTime, choice as DateTime]
-		when choice is Interval<DateTime> then
-  		choice as Interval<DateTime>
-		when choice is Quantity then
-		  Interval[Patient.birthDate + (choice as Quantity),
-			  Patient.birthDate + (choice as Quantity) + 1 year)
-		when choice is Interval<Quantity> then
-		  Interval[Patient.birthDate + (choice.low as Quantity),
-			  Patient.birthDate + (choice.high as Quantity) + 1 year)
-		else
-			null as Interval<DateTime>
-	end
+    when choice is DateTime then Interval[choice as DateTime, choice as DateTime]
+    when choice is Interval<DateTime>then choice as Interval<DateTime>
+    when choice is Quantity then Interval[Patient.birthDate + ( choice as Quantity ), Patient.birthDate + ( choice as Quantity ) + 1 year]
+    when choice is Interval<Quantity>then Interval[Patient.birthDate + ( choice.low as Quantity ), Patient.birthDate + ( choice.high as Quantity ) + 1 year ) 
+    else null as Interval<DateTime>end
 
 /*
 @description: Returns an interval representing the normalized abatement of a given Condition.
@@ -310,18 +330,14 @@ If the abatement is represented as a Quantity Interval, the quantities are expec
 which the abatement occurred. The result is an interval from the date the patient turned the starting age of the quantity interval, and ending immediately
 before one year later than the date the patient turned the ending age of the quantity interval.
 */
+
+
 define fluent function abatementInterval(condition Condition):
-	if condition.abatement is DateTime then
-	  Interval[condition.abatement as DateTime, condition.abatement as DateTime]
-	else if condition.abatement is Quantity then
-		Interval[Patient.birthDate + (condition.abatement as Quantity),
-			Patient.birthDate + (condition.abatement as Quantity) + 1 year)
-	else if condition.abatement is Interval<Quantity> then
-	  Interval[Patient.birthDate + (condition.abatement.low as Quantity),
-		  Patient.birthDate + (condition.abatement.high as Quantity) + 1 year)
-	else if condition.abatement is Interval<DateTime> then
-	  Interval[condition.abatement.low, condition.abatement.high)
-	else null as Interval<DateTime>
+  if condition.abatement is DateTime then Interval[condition.abatement as DateTime, condition.abatement as DateTime]
+    else if condition.abatement is Quantity then Interval[Patient.birthDate + ( condition.abatement as Quantity ), Patient.birthDate + ( condition.abatement as Quantity ) + 1 year ) 
+    else if condition.abatement is Interval<Quantity>then Interval[Patient.birthDate + ( condition.abatement.low as Quantity ), Patient.birthDate + ( condition.abatement.high as Quantity ) + 1 year ) 
+    else if condition.abatement is Interval<DateTime>then Interval[condition.abatement.low, condition.abatement.high]
+    else null as Interval<DateTime>
 
 /*
 @description: Returns an interval representing the normalized prevalence period of a given Condition.
@@ -329,13 +345,13 @@ define fluent function abatementInterval(condition Condition):
 onset to abatement as specified in the given Condition. If the condition is active, the resulting interval will have
 a closed ending boundary. If the condition is not active, the resulting interval will have an open ending boundary.
 */
+
+
 define fluent function prevalenceInterval(condition Condition):
-if condition.clinicalStatus ~ "active"
-  or condition.clinicalStatus ~ "recurrence"
-  or condition.clinicalStatus ~ "relapse" then
-  Interval[start of condition.onset.toInterval(), end of condition.abatementInterval()]
-else
-  Interval[start of condition.onset.toInterval(), end of condition.abatementInterval())
+  if condition.clinicalStatus ~ "active"
+    or condition.clinicalStatus ~ "recurrence"
+    or condition.clinicalStatus ~ "relapse" then Interval[start of condition.onset.toInterval ( ), end of condition.abatementInterval ( )]
+    else Interval[start of condition.onset.toInterval ( ), end of condition.abatementInterval ( )]
 
 /*
 @description: Returns the tail of the given uri (i.e. everything after the last slash in the URI).
@@ -343,6 +359,8 @@ else
 a single-server environment to trace references. However, this function does not attempt to resolve
 or distinguish the base of the given url, and so cannot be used safely in multi-server environments.
 */
+
+
 define fluent function getId(uri String):
   Last(Split(uri, '/'))
 
@@ -350,7 +368,9 @@ define fluent function getId(uri String):
 @description: Given an interval, return true if the interval has a starting boundary specified
 (i.e. the start of the interval is not null and not the minimum DateTime value)
 */
-define fluent function hasStart(period Interval<DateTime> ):
+
+
+define fluent function hasStart(period Interval<DateTime>):
   not ( start of period is null
       or start of period = minimum DateTime
   )
@@ -359,9 +379,10 @@ define fluent function hasStart(period Interval<DateTime> ):
 @description: Given an interval, returns true if the interval has an ending boundary specified
 (i.e. the end of the interval is not null and not the maximum DateTime value)
 */
-define fluent function hasEnd(period Interval<DateTime> ):
-  not (
-    end of period is null
+
+
+define fluent function hasEnd(period Interval<DateTime>):
+  not ( end of period is null
       or end of period = maximum DateTime
   )
 
@@ -369,19 +390,20 @@ define fluent function hasEnd(period Interval<DateTime> ):
 @description: Given an interval, returns the ending point if the interval has an ending boundary specified,
 otherwise, returns the starting point
 */
-define fluent function latest(choice Choice<DateTime, Quantity, Interval<DateTime>, Interval<Quantity>> ):
-  (choice.toInterval()) period
-    return
-      if (period.hasEnd()) then end of period
+
+
+define fluent function latest(choice Choice<DateTime, Quantity, Interval<DateTime>, Interval<Quantity>>):
+  ( choice.toInterval ( ) ) period
+    return if ( period.hasEnd ( ) ) then end of period 
       else start of period
 
 /*
 @description: Given an interval, return the starting point if the interval has a starting boundary specified,
 otherwise, return the ending point
 */
-define fluent function earliest(choice Choice<DateTime, Quantity, Interval<DateTime>, Interval<Quantity>> ):
-  (choice.toInterval()) period
-    return
-      if (period.hasStart()) then start of period
-      else end of period
 
+
+define fluent function earliest(choice Choice<DateTime, Quantity, Interval<DateTime>, Interval<Quantity>>):
+  ( choice.toInterval ( ) ) period
+    return if ( period.hasStart ( ) ) then start of period 
+      else end of period

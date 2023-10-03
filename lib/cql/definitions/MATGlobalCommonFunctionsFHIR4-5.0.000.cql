@@ -50,5 +50,4 @@ code "remission": 'remission' from "ConditionClinicalStatusCodes" display 'remis
 code "resolved": 'resolved' from "ConditionClinicalStatusCodes" display 'resolved'
 code "unconfirmed": 'unconfirmed' from "ConditionVerificationStatusCodes" display 'unconfirmed'
 
-parameter "Measurement Period" Interval<DateTime>
-  default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)
+parameter "Measurement Period" Interval<DateTime>default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0]

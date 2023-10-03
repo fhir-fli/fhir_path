@@ -10,6 +10,7 @@ Incremented version to 2.0.000
 Updated FHIR version to 4.0.1
 @@@*/
 
+
 using FHIR version '4.0.1'
 
 include FHIRHelpers version '4.0.1' called FHIRHelpers
@@ -20,18 +21,15 @@ valueset "Office Visit": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883
 valueset "Preventive Care Services - Established Office Visit, 18 and Up": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1025'
 valueset "Preventive Care Services-Initial Office Visit, 18 and Up": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1023'
 
-parameter "Measurement Period" Interval<DateTime>
-  default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0)
+parameter "Measurement Period" Interval<DateTime>default Interval[@2019-01-01T00:00:00.0, @2020-01-01T00:00:00.0]
 
 context Patient
 
 define "Qualifying Encounters":
-  (
-      [Encounter: "Office Visit"]
-    		union [Encounter: "Annual Wellness Visit"]
-    		union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]
-    		union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]
-    		union [Encounter: "Home Healthcare Services"]
-    ) ValidEncounter
-  		where ValidEncounter.period during "Measurement Period"
-    		and ValidEncounter.status  = 'finished'
+  ( [Encounter: "Office Visit"]
+    union [Encounter: "Annual Wellness Visit"]
+    union [Encounter: "Preventive Care Services - Established Office Visit, 18 and Up"]
+    union [Encounter: "Preventive Care Services-Initial Office Visit, 18 and Up"]
+    union [Encounter: "Home Healthcare Services"] ) ValidEncounter
+    where ValidEncounter.period during "Measurement Period"
+      and ValidEncounter.status = 'finished'

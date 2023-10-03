@@ -228,14 +228,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_library; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterLibrary(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitLibrary(this);
-		}
 	}
 
 	public final LibraryContext library() throws RecognitionException {
@@ -325,14 +317,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_definition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitDefinition(this);
-		}
 	}
 
 	public final DefinitionContext definition() throws RecognitionException {
@@ -416,14 +400,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_libraryDefinition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterLibraryDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitLibraryDefinition(this);
-		}
 	}
 
 	public final LibraryDefinitionContext libraryDefinition() throws RecognitionException {
@@ -474,14 +450,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_usingDefinition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterUsingDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitUsingDefinition(this);
-		}
 	}
 
 	public final UsingDefinitionContext usingDefinition() throws RecognitionException {
@@ -535,14 +503,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_includeDefinition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterIncludeDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitIncludeDefinition(this);
-		}
 	}
 
 	public final IncludeDefinitionContext includeDefinition() throws RecognitionException {
@@ -602,14 +562,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_localIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterLocalIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitLocalIdentifier(this);
-		}
 	}
 
 	public final LocalIdentifierContext localIdentifier() throws RecognitionException {
@@ -639,14 +591,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_accessModifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterAccessModifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitAccessModifier(this);
-		}
 	}
 
 	public final AccessModifierContext accessModifier() throws RecognitionException {
@@ -697,14 +641,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_parameterDefinition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterParameterDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitParameterDefinition(this);
-		}
 	}
 
 	public final ParameterDefinitionContext parameterDefinition() throws RecognitionException {
@@ -781,14 +717,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_codesystemDefinition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterCodesystemDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitCodesystemDefinition(this);
-		}
 	}
 
 	public final CodesystemDefinitionContext codesystemDefinition() throws RecognitionException {
@@ -862,14 +790,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_valuesetDefinition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterValuesetDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitValuesetDefinition(this);
-		}
 	}
 
 	public final ValuesetDefinitionContext valuesetDefinition() throws RecognitionException {
@@ -944,14 +864,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_codesystems; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterCodesystems(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitCodesystems(this);
-		}
 	}
 
 	public final CodesystemsContext codesystems() throws RecognitionException {
@@ -1010,14 +922,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_codesystemIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterCodesystemIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitCodesystemIdentifier(this);
-		}
 	}
 
 	public final CodesystemIdentifierContext codesystemIdentifier() throws RecognitionException {
@@ -1062,14 +966,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_libraryIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterLibraryIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitLibraryIdentifier(this);
-		}
 	}
 
 	public final LibraryIdentifierContext libraryIdentifier() throws RecognitionException {
@@ -1114,14 +1010,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_codeDefinition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterCodeDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitCodeDefinition(this);
-		}
 	}
 
 	public final CodeDefinitionContext codeDefinition() throws RecognitionException {
@@ -1197,14 +1085,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_conceptDefinition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterConceptDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitConceptDefinition(this);
-		}
 	}
 
 	public final ConceptDefinitionContext conceptDefinition() throws RecognitionException {
@@ -1287,14 +1167,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_codeIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterCodeIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitCodeIdentifier(this);
-		}
 	}
 
 	public final CodeIdentifierContext codeIdentifier() throws RecognitionException {
@@ -1337,14 +1209,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_codesystemId; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterCodesystemId(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitCodesystemId(this);
-		}
 	}
 
 	public final CodesystemIdContext codesystemId() throws RecognitionException {
@@ -1375,14 +1239,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_valuesetId; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterValuesetId(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitValuesetId(this);
-		}
 	}
 
 	public final ValuesetIdContext valuesetId() throws RecognitionException {
@@ -1413,14 +1269,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_versionSpecifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterVersionSpecifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitVersionSpecifier(this);
-		}
 	}
 
 	public final VersionSpecifierContext versionSpecifier() throws RecognitionException {
@@ -1451,14 +1299,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_codeId; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterCodeId(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitCodeId(this);
-		}
 	}
 
 	public final CodeIdContext codeId() throws RecognitionException {
@@ -1503,14 +1343,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_typeSpecifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTypeSpecifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTypeSpecifier(this);
-		}
 	}
 
 	public final TypeSpecifierContext typeSpecifier() throws RecognitionException {
@@ -1640,14 +1472,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_namedTypeSpecifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterNamedTypeSpecifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitNamedTypeSpecifier(this);
-		}
 	}
 
 	public final NamedTypeSpecifierContext namedTypeSpecifier() throws RecognitionException {
@@ -1699,14 +1523,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_modelIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterModelIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitModelIdentifier(this);
-		}
 	}
 
 	public final ModelIdentifierContext modelIdentifier() throws RecognitionException {
@@ -1739,14 +1555,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_listTypeSpecifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterListTypeSpecifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitListTypeSpecifier(this);
-		}
 	}
 
 	public final ListTypeSpecifierContext listTypeSpecifier() throws RecognitionException {
@@ -1785,14 +1593,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_intervalTypeSpecifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterIntervalTypeSpecifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitIntervalTypeSpecifier(this);
-		}
 	}
 
 	public final IntervalTypeSpecifierContext intervalTypeSpecifier() throws RecognitionException {
@@ -1834,14 +1634,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_tupleTypeSpecifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTupleTypeSpecifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTupleTypeSpecifier(this);
-		}
 	}
 
 	public final TupleTypeSpecifierContext tupleTypeSpecifier() throws RecognitionException {
@@ -1900,14 +1692,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_tupleElementDefinition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTupleElementDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTupleElementDefinition(this);
-		}
 	}
 
 	public final TupleElementDefinitionContext tupleElementDefinition() throws RecognitionException {
@@ -1945,14 +1729,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_choiceTypeSpecifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterChoiceTypeSpecifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitChoiceTypeSpecifier(this);
-		}
 	}
 
 	public final ChoiceTypeSpecifierContext choiceTypeSpecifier() throws RecognitionException {
@@ -2014,14 +1790,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_statement; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterStatement(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitStatement(this);
-		}
 	}
 
 	public final StatementContext statement() throws RecognitionException {
@@ -2080,14 +1848,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_expressionDefinition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterExpressionDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitExpressionDefinition(this);
-		}
 	}
 
 	public final ExpressionDefinitionContext expressionDefinition() throws RecognitionException {
@@ -2140,14 +1900,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_contextDefinition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterContextDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitContextDefinition(this);
-		}
 	}
 
 	public final ContextDefinitionContext contextDefinition() throws RecognitionException {
@@ -2209,14 +1961,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_functionDefinition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterFunctionDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitFunctionDefinition(this);
-		}
 	}
 
 	public final FunctionDefinitionContext functionDefinition() throws RecognitionException {
@@ -2448,14 +2192,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_operandDefinition; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterOperandDefinition(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitOperandDefinition(this);
-		}
 	}
 
 	public final OperandDefinitionContext operandDefinition() throws RecognitionException {
@@ -2490,14 +2226,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_functionBody; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterFunctionBody(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitFunctionBody(this);
-		}
 	}
 
 	public final FunctionBodyContext functionBody() throws RecognitionException {
@@ -2536,14 +2264,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_querySource; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterQuerySource(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitQuerySource(this);
-		}
 	}
 
 	public final QuerySourceContext querySource() throws RecognitionException {
@@ -2658,14 +2378,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_aliasedQuerySource; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterAliasedQuerySource(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitAliasedQuerySource(this);
-		}
 	}
 
 	public final AliasedQuerySourceContext aliasedQuerySource() throws RecognitionException {
@@ -2700,14 +2412,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_alias; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterAlias(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitAlias(this);
-		}
 	}
 
 	public final AliasContext alias() throws RecognitionException {
@@ -2743,14 +2447,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_queryInclusionClause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterQueryInclusionClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitQueryInclusionClause(this);
-		}
 	}
 
 	public final QueryInclusionClauseContext queryInclusionClause() throws RecognitionException {
@@ -2801,14 +2497,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_withClause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterWithClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitWithClause(this);
-		}
 	}
 
 	public final WithClauseContext withClause() throws RecognitionException {
@@ -2850,14 +2538,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_withoutClause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterWithoutClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitWithoutClause(this);
-		}
 	}
 
 	public final WithoutClauseContext withoutClause() throws RecognitionException {
@@ -2908,14 +2588,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_retrieve; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterRetrieve(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitRetrieve(this);
-		}
 	}
 
 	public final RetrieveContext retrieve() throws RecognitionException {
@@ -2989,14 +2661,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_contextIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterContextIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitContextIdentifier(this);
-		}
 	}
 
 	public final ContextIdentifierContext contextIdentifier() throws RecognitionException {
@@ -3029,14 +2693,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_codePath; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterCodePath(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitCodePath(this);
-		}
 	}
 
 	public final CodePathContext codePath() throws RecognitionException {
@@ -3066,14 +2722,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_codeComparator; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterCodeComparator(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitCodeComparator(this);
-		}
 	}
 
 	public final CodeComparatorContext codeComparator() throws RecognitionException {
@@ -3118,14 +2766,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_terminology; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTerminology(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTerminology(this);
-		}
 	}
 
 	public final TerminologyContext terminology() throws RecognitionException {
@@ -3171,14 +2811,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_qualifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterQualifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitQualifier(this);
-		}
 	}
 
 	public final QualifierContext qualifier() throws RecognitionException {
@@ -3232,14 +2864,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_query; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterQuery(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitQuery(this);
-		}
 	}
 
 	public final QueryContext query() throws RecognitionException {
@@ -3338,14 +2962,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_sourceClause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterSourceClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitSourceClause(this);
-		}
 	}
 
 	public final SourceClauseContext sourceClause() throws RecognitionException {
@@ -3411,14 +3027,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_letClause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterLetClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitLetClause(this);
-		}
 	}
 
 	public final LetClauseContext letClause() throws RecognitionException {
@@ -3475,14 +3083,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_letClauseItem; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterLetClauseItem(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitLetClauseItem(this);
-		}
 	}
 
 	public final LetClauseItemContext letClauseItem() throws RecognitionException {
@@ -3519,14 +3119,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_whereClause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterWhereClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitWhereClause(this);
-		}
 	}
 
 	public final WhereClauseContext whereClause() throws RecognitionException {
@@ -3561,14 +3153,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_returnClause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterReturnClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitReturnClause(this);
-		}
 	}
 
 	public final ReturnClauseContext returnClause() throws RecognitionException {
@@ -3628,14 +3212,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_aggregateClause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterAggregateClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitAggregateClause(this);
-		}
 	}
 
 	public final AggregateClauseContext aggregateClause() throws RecognitionException {
@@ -3709,14 +3285,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_startingClause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterStartingClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitStartingClause(this);
-		}
 	}
 
 	public final StartingClauseContext startingClause() throws RecognitionException {
@@ -3783,14 +3351,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_sortClause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterSortClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitSortClause(this);
-		}
 	}
 
 	public final SortClauseContext sortClause() throws RecognitionException {
@@ -3864,14 +3424,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_sortDirection; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterSortDirection(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitSortDirection(this);
-		}
 	}
 
 	public final SortDirectionContext sortDirection() throws RecognitionException {
@@ -3916,14 +3468,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_sortByItem; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterSortByItem(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitSortByItem(this);
-		}
 	}
 
 	public final SortByItemContext sortByItem() throws RecognitionException {
@@ -3972,14 +3516,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_qualifiedIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterQualifiedIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitQualifiedIdentifier(this);
-		}
 	}
 
 	public final QualifiedIdentifierContext qualifiedIdentifier() throws RecognitionException {
@@ -4037,14 +3573,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_qualifiedIdentifierExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterQualifiedIdentifierExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitQualifiedIdentifierExpression(this);
-		}
 	}
 
 	public final QualifiedIdentifierExpressionContext qualifiedIdentifierExpression() throws RecognitionException {
@@ -4096,14 +3624,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_qualifierExpression; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterQualifierExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitQualifierExpression(this);
-		}
 	}
 
 	public final QualifierExpressionContext qualifierExpression() throws RecognitionException {
@@ -4148,14 +3668,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(SimpleLiteralContext.class,0);
 		}
 		public SimplePathIndexerContext(SimplePathContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterSimplePathIndexer(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitSimplePathIndexer(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class SimplePathQualifiedIdentifierContext extends SimplePathContext {
@@ -4166,14 +3678,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ReferentialIdentifierContext.class,0);
 		}
 		public SimplePathQualifiedIdentifierContext(SimplePathContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterSimplePathQualifiedIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitSimplePathQualifiedIdentifier(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class SimplePathReferentialIdentifierContext extends SimplePathContext {
@@ -4181,14 +3685,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ReferentialIdentifierContext.class,0);
 		}
 		public SimplePathReferentialIdentifierContext(SimplePathContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterSimplePathReferentialIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitSimplePathReferentialIdentifier(this);
-		}
 	}
 
 	public final SimplePathContext simplePath() throws RecognitionException {
@@ -4288,27 +3784,11 @@ public class cqlParser extends Parser {
 	public static class SimpleNumberLiteralContext extends SimpleLiteralContext {
 		public TerminalNode NUMBER() { return getToken(cqlParser.NUMBER, 0); }
 		public SimpleNumberLiteralContext(SimpleLiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterSimpleNumberLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitSimpleNumberLiteral(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class SimpleStringLiteralContext extends SimpleLiteralContext {
 		public TerminalNode STRING() { return getToken(cqlParser.STRING, 0); }
 		public SimpleStringLiteralContext(SimpleLiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterSimpleStringLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitSimpleStringLiteral(this);
-		}
 	}
 
 	public final SimpleLiteralContext simpleLiteral() throws RecognitionException {
@@ -4373,14 +3853,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,i);
 		}
 		public DurationBetweenExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterDurationBetweenExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitDurationBetweenExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class InFixSetExpressionContext extends ExpressionContext {
@@ -4391,14 +3863,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionContext.class,i);
 		}
 		public InFixSetExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterInFixSetExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitInFixSetExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class RetrieveExpressionContext extends ExpressionContext {
@@ -4406,14 +3870,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(RetrieveContext.class,0);
 		}
 		public RetrieveExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterRetrieveExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitRetrieveExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class TimingExpressionContext extends ExpressionContext {
@@ -4427,14 +3883,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(IntervalOperatorPhraseContext.class,0);
 		}
 		public TimingExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTimingExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTimingExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class QueryExpressionContext extends ExpressionContext {
@@ -4442,14 +3890,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(QueryContext.class,0);
 		}
 		public QueryExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterQueryExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitQueryExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class NotExpressionContext extends ExpressionContext {
@@ -4457,14 +3897,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionContext.class,0);
 		}
 		public NotExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterNotExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitNotExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class BooleanExpressionContext extends ExpressionContext {
@@ -4472,14 +3904,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionContext.class,0);
 		}
 		public BooleanExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterBooleanExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitBooleanExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class OrExpressionContext extends ExpressionContext {
@@ -4490,14 +3914,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionContext.class,i);
 		}
 		public OrExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterOrExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitOrExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class CastExpressionContext extends ExpressionContext {
@@ -4508,14 +3924,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(TypeSpecifierContext.class,0);
 		}
 		public CastExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterCastExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitCastExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class AndExpressionContext extends ExpressionContext {
@@ -4526,14 +3934,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionContext.class,i);
 		}
 		public AndExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterAndExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitAndExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class BetweenExpressionContext extends ExpressionContext {
@@ -4547,14 +3947,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,i);
 		}
 		public BetweenExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterBetweenExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitBetweenExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class MembershipExpressionContext extends ExpressionContext {
@@ -4568,14 +3960,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(DateTimePrecisionSpecifierContext.class,0);
 		}
 		public MembershipExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterMembershipExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitMembershipExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class DifferenceBetweenExpressionContext extends ExpressionContext {
@@ -4589,14 +3973,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,i);
 		}
 		public DifferenceBetweenExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterDifferenceBetweenExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitDifferenceBetweenExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class InequalityExpressionContext extends ExpressionContext {
@@ -4607,14 +3983,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionContext.class,i);
 		}
 		public InequalityExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterInequalityExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitInequalityExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class EqualityExpressionContext extends ExpressionContext {
@@ -4625,14 +3993,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionContext.class,i);
 		}
 		public EqualityExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterEqualityExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitEqualityExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ExistenceExpressionContext extends ExpressionContext {
@@ -4640,14 +4000,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionContext.class,0);
 		}
 		public ExistenceExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterExistenceExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitExistenceExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ImpliesExpressionContext extends ExpressionContext {
@@ -4658,14 +4010,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionContext.class,i);
 		}
 		public ImpliesExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterImpliesExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitImpliesExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class TermExpressionContext extends ExpressionContext {
@@ -4673,14 +4017,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,0);
 		}
 		public TermExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTermExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTermExpression(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class TypeExpressionContext extends ExpressionContext {
@@ -4691,14 +4027,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(TypeSpecifierContext.class,0);
 		}
 		public TypeExpressionContext(ExpressionContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTypeExpression(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTypeExpression(this);
-		}
 	}
 
 	public final ExpressionContext expression() throws RecognitionException {
@@ -5096,14 +4424,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_dateTimePrecision; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterDateTimePrecision(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitDateTimePrecision(this);
-		}
 	}
 
 	public final DateTimePrecisionContext dateTimePrecision() throws RecognitionException {
@@ -5145,14 +4465,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_dateTimeComponent; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterDateTimeComponent(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitDateTimeComponent(this);
-		}
 	}
 
 	public final DateTimeComponentContext dateTimeComponent() throws RecognitionException {
@@ -5218,14 +4530,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_pluralDateTimePrecision; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterPluralDateTimePrecision(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitPluralDateTimePrecision(this);
-		}
 	}
 
 	public final PluralDateTimePrecisionContext pluralDateTimePrecision() throws RecognitionException {
@@ -5279,14 +4583,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,i);
 		}
 		public AdditionExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterAdditionExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitAdditionExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class IndexedExpressionTermContext extends ExpressionTermContext {
@@ -5297,14 +4593,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionContext.class,0);
 		}
 		public IndexedExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterIndexedExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitIndexedExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class WidthExpressionTermContext extends ExpressionTermContext {
@@ -5312,14 +4600,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,0);
 		}
 		public WidthExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterWidthExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitWidthExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class SetAggregateExpressionTermContext extends ExpressionTermContext {
@@ -5333,14 +4613,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(DateTimePrecisionContext.class,0);
 		}
 		public SetAggregateExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterSetAggregateExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitSetAggregateExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class TimeUnitExpressionTermContext extends ExpressionTermContext {
@@ -5351,14 +4623,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,0);
 		}
 		public TimeUnitExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTimeUnitExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTimeUnitExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class IfThenElseExpressionTermContext extends ExpressionTermContext {
@@ -5369,14 +4633,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionContext.class,i);
 		}
 		public IfThenElseExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterIfThenElseExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitIfThenElseExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class TimeBoundaryExpressionTermContext extends ExpressionTermContext {
@@ -5384,14 +4640,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,0);
 		}
 		public TimeBoundaryExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTimeBoundaryExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTimeBoundaryExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ElementExtractorExpressionTermContext extends ExpressionTermContext {
@@ -5399,14 +4647,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,0);
 		}
 		public ElementExtractorExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterElementExtractorExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitElementExtractorExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ConversionExpressionTermContext extends ExpressionTermContext {
@@ -5420,14 +4660,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(UnitContext.class,0);
 		}
 		public ConversionExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterConversionExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitConversionExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class TypeExtentExpressionTermContext extends ExpressionTermContext {
@@ -5435,14 +4667,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(NamedTypeSpecifierContext.class,0);
 		}
 		public TypeExtentExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTypeExtentExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTypeExtentExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class PredecessorExpressionTermContext extends ExpressionTermContext {
@@ -5450,14 +4674,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,0);
 		}
 		public PredecessorExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterPredecessorExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitPredecessorExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class PointExtractorExpressionTermContext extends ExpressionTermContext {
@@ -5465,14 +4681,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,0);
 		}
 		public PointExtractorExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterPointExtractorExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitPointExtractorExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class MultiplicationExpressionTermContext extends ExpressionTermContext {
@@ -5483,14 +4691,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,i);
 		}
 		public MultiplicationExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterMultiplicationExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitMultiplicationExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class AggregateExpressionTermContext extends ExpressionTermContext {
@@ -5498,14 +4698,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionContext.class,0);
 		}
 		public AggregateExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterAggregateExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitAggregateExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class DurationExpressionTermContext extends ExpressionTermContext {
@@ -5516,14 +4708,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,0);
 		}
 		public DurationExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterDurationExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitDurationExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class DifferenceExpressionTermContext extends ExpressionTermContext {
@@ -5534,14 +4718,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,0);
 		}
 		public DifferenceExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterDifferenceExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitDifferenceExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class CaseExpressionTermContext extends ExpressionTermContext {
@@ -5558,14 +4734,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(CaseExpressionItemContext.class,i);
 		}
 		public CaseExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterCaseExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitCaseExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class PowerExpressionTermContext extends ExpressionTermContext {
@@ -5576,14 +4744,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,i);
 		}
 		public PowerExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterPowerExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitPowerExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class SuccessorExpressionTermContext extends ExpressionTermContext {
@@ -5591,14 +4751,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,0);
 		}
 		public SuccessorExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterSuccessorExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitSuccessorExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class PolarityExpressionTermContext extends ExpressionTermContext {
@@ -5606,14 +4758,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionTermContext.class,0);
 		}
 		public PolarityExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterPolarityExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitPolarityExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class TermExpressionTermContext extends ExpressionTermContext {
@@ -5621,14 +4765,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(TermContext.class,0);
 		}
 		public TermExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTermExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTermExpressionTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class InvocationExpressionTermContext extends ExpressionTermContext {
@@ -5639,14 +4775,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(QualifiedInvocationContext.class,0);
 		}
 		public InvocationExpressionTermContext(ExpressionTermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterInvocationExpressionTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitInvocationExpressionTerm(this);
-		}
 	}
 
 	public final ExpressionTermContext expressionTerm() throws RecognitionException {
@@ -6200,14 +5328,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_caseExpressionItem; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterCaseExpressionItem(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitCaseExpressionItem(this);
-		}
 	}
 
 	public final CaseExpressionItemContext caseExpressionItem() throws RecognitionException {
@@ -6246,14 +5366,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_dateTimePrecisionSpecifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterDateTimePrecisionSpecifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitDateTimePrecisionSpecifier(this);
-		}
 	}
 
 	public final DateTimePrecisionSpecifierContext dateTimePrecisionSpecifier() throws RecognitionException {
@@ -6285,14 +5397,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_relativeQualifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterRelativeQualifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitRelativeQualifier(this);
-		}
 	}
 
 	public final RelativeQualifierContext relativeQualifier() throws RecognitionException {
@@ -6331,14 +5435,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_offsetRelativeQualifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterOffsetRelativeQualifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitOffsetRelativeQualifier(this);
-		}
 	}
 
 	public final OffsetRelativeQualifierContext offsetRelativeQualifier() throws RecognitionException {
@@ -6377,14 +5473,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_exclusiveRelativeQualifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterExclusiveRelativeQualifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitExclusiveRelativeQualifier(this);
-		}
 	}
 
 	public final ExclusiveRelativeQualifierContext exclusiveRelativeQualifier() throws RecognitionException {
@@ -6432,14 +5520,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_quantityOffset; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterQuantityOffset(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitQuantityOffset(this);
-		}
 	}
 
 	public final QuantityOffsetContext quantityOffset() throws RecognitionException {
@@ -6502,14 +5582,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_temporalRelationship; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTemporalRelationship(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTemporalRelationship(this);
-		}
 	}
 
 	public final TemporalRelationshipContext temporalRelationship() throws RecognitionException {
@@ -6605,14 +5677,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(QuantityContext.class,0);
 		}
 		public WithinIntervalOperatorPhraseContext(IntervalOperatorPhraseContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterWithinIntervalOperatorPhrase(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitWithinIntervalOperatorPhrase(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class IncludedInIntervalOperatorPhraseContext extends IntervalOperatorPhraseContext {
@@ -6620,14 +5684,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(DateTimePrecisionSpecifierContext.class,0);
 		}
 		public IncludedInIntervalOperatorPhraseContext(IntervalOperatorPhraseContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterIncludedInIntervalOperatorPhrase(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitIncludedInIntervalOperatorPhrase(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class EndsIntervalOperatorPhraseContext extends IntervalOperatorPhraseContext {
@@ -6635,14 +5691,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(DateTimePrecisionSpecifierContext.class,0);
 		}
 		public EndsIntervalOperatorPhraseContext(IntervalOperatorPhraseContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterEndsIntervalOperatorPhrase(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitEndsIntervalOperatorPhrase(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ConcurrentWithIntervalOperatorPhraseContext extends IntervalOperatorPhraseContext {
@@ -6653,14 +5701,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(DateTimePrecisionContext.class,0);
 		}
 		public ConcurrentWithIntervalOperatorPhraseContext(IntervalOperatorPhraseContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterConcurrentWithIntervalOperatorPhrase(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitConcurrentWithIntervalOperatorPhrase(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class OverlapsIntervalOperatorPhraseContext extends IntervalOperatorPhraseContext {
@@ -6668,14 +5708,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(DateTimePrecisionSpecifierContext.class,0);
 		}
 		public OverlapsIntervalOperatorPhraseContext(IntervalOperatorPhraseContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterOverlapsIntervalOperatorPhrase(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitOverlapsIntervalOperatorPhrase(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class IncludesIntervalOperatorPhraseContext extends IntervalOperatorPhraseContext {
@@ -6683,14 +5715,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(DateTimePrecisionSpecifierContext.class,0);
 		}
 		public IncludesIntervalOperatorPhraseContext(IntervalOperatorPhraseContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterIncludesIntervalOperatorPhrase(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitIncludesIntervalOperatorPhrase(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class BeforeOrAfterIntervalOperatorPhraseContext extends IntervalOperatorPhraseContext {
@@ -6704,14 +5728,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(DateTimePrecisionSpecifierContext.class,0);
 		}
 		public BeforeOrAfterIntervalOperatorPhraseContext(IntervalOperatorPhraseContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterBeforeOrAfterIntervalOperatorPhrase(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitBeforeOrAfterIntervalOperatorPhrase(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class MeetsIntervalOperatorPhraseContext extends IntervalOperatorPhraseContext {
@@ -6719,14 +5735,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(DateTimePrecisionSpecifierContext.class,0);
 		}
 		public MeetsIntervalOperatorPhraseContext(IntervalOperatorPhraseContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterMeetsIntervalOperatorPhrase(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitMeetsIntervalOperatorPhrase(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class StartsIntervalOperatorPhraseContext extends IntervalOperatorPhraseContext {
@@ -6734,14 +5742,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(DateTimePrecisionSpecifierContext.class,0);
 		}
 		public StartsIntervalOperatorPhraseContext(IntervalOperatorPhraseContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterStartsIntervalOperatorPhrase(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitStartsIntervalOperatorPhrase(this);
-		}
 	}
 
 	public final IntervalOperatorPhraseContext intervalOperatorPhrase() throws RecognitionException {
@@ -7186,14 +6186,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExternalConstantContext.class,0);
 		}
 		public ExternalConstantTermContext(TermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterExternalConstantTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitExternalConstantTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class TupleSelectorTermContext extends TermContext {
@@ -7201,14 +6193,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(TupleSelectorContext.class,0);
 		}
 		public TupleSelectorTermContext(TermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTupleSelectorTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTupleSelectorTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class LiteralTermContext extends TermContext {
@@ -7216,14 +6200,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(LiteralContext.class,0);
 		}
 		public LiteralTermContext(TermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterLiteralTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitLiteralTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ConceptSelectorTermContext extends TermContext {
@@ -7231,14 +6207,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ConceptSelectorContext.class,0);
 		}
 		public ConceptSelectorTermContext(TermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterConceptSelectorTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitConceptSelectorTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ParenthesizedTermContext extends TermContext {
@@ -7246,14 +6214,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ExpressionContext.class,0);
 		}
 		public ParenthesizedTermContext(TermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterParenthesizedTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitParenthesizedTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class CodeSelectorTermContext extends TermContext {
@@ -7261,14 +6221,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(CodeSelectorContext.class,0);
 		}
 		public CodeSelectorTermContext(TermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterCodeSelectorTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitCodeSelectorTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class InvocationTermContext extends TermContext {
@@ -7276,14 +6228,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(InvocationContext.class,0);
 		}
 		public InvocationTermContext(TermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterInvocationTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitInvocationTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class InstanceSelectorTermContext extends TermContext {
@@ -7291,14 +6235,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(InstanceSelectorContext.class,0);
 		}
 		public InstanceSelectorTermContext(TermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterInstanceSelectorTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitInstanceSelectorTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class IntervalSelectorTermContext extends TermContext {
@@ -7306,14 +6242,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(IntervalSelectorContext.class,0);
 		}
 		public IntervalSelectorTermContext(TermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterIntervalSelectorTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitIntervalSelectorTerm(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ListSelectorTermContext extends TermContext {
@@ -7321,14 +6249,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ListSelectorContext.class,0);
 		}
 		public ListSelectorTermContext(TermContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterListSelectorTerm(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitListSelectorTerm(this);
-		}
 	}
 
 	public final TermContext term() throws RecognitionException {
@@ -7453,14 +6373,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(QualifiedFunctionContext.class,0);
 		}
 		public QualifiedFunctionInvocationContext(QualifiedInvocationContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterQualifiedFunctionInvocation(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitQualifiedFunctionInvocation(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class QualifiedMemberInvocationContext extends QualifiedInvocationContext {
@@ -7468,14 +6380,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ReferentialIdentifierContext.class,0);
 		}
 		public QualifiedMemberInvocationContext(QualifiedInvocationContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterQualifiedMemberInvocation(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitQualifiedMemberInvocation(this);
-		}
 	}
 
 	public final QualifiedInvocationContext qualifiedInvocation() throws RecognitionException {
@@ -7526,14 +6430,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_qualifiedFunction; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterQualifiedFunction(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitQualifiedFunction(this);
-		}
 	}
 
 	public final QualifiedFunctionContext qualifiedFunction() throws RecognitionException {
@@ -7587,38 +6483,14 @@ public class cqlParser extends Parser {
 	@SuppressWarnings("CheckReturnValue")
 	public static class TotalInvocationContext extends InvocationContext {
 		public TotalInvocationContext(InvocationContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTotalInvocation(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTotalInvocation(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ThisInvocationContext extends InvocationContext {
 		public ThisInvocationContext(InvocationContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterThisInvocation(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitThisInvocation(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class IndexInvocationContext extends InvocationContext {
 		public IndexInvocationContext(InvocationContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterIndexInvocation(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitIndexInvocation(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class FunctionInvocationContext extends InvocationContext {
@@ -7626,14 +6498,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(FunctionContext.class,0);
 		}
 		public FunctionInvocationContext(InvocationContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterFunctionInvocation(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitFunctionInvocation(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class MemberInvocationContext extends InvocationContext {
@@ -7641,14 +6505,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(ReferentialIdentifierContext.class,0);
 		}
 		public MemberInvocationContext(InvocationContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterMemberInvocation(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitMemberInvocation(this);
-		}
 	}
 
 	public final InvocationContext invocation() throws RecognitionException {
@@ -7723,14 +6579,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_function; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterFunction(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitFunction(this);
-		}
 	}
 
 	public final FunctionContext function() throws RecognitionException {
@@ -7781,14 +6629,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_ratio; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterRatio(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitRatio(this);
-		}
 	}
 
 	public final RatioContext ratio() throws RecognitionException {
@@ -7832,26 +6672,10 @@ public class cqlParser extends Parser {
 	public static class TimeLiteralContext extends LiteralContext {
 		public TerminalNode TIME() { return getToken(cqlParser.TIME, 0); }
 		public TimeLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTimeLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTimeLiteral(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class NullLiteralContext extends LiteralContext {
 		public NullLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterNullLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitNullLiteral(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class RatioLiteralContext extends LiteralContext {
@@ -7859,91 +6683,35 @@ public class cqlParser extends Parser {
 			return getRuleContext(RatioContext.class,0);
 		}
 		public RatioLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterRatioLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitRatioLiteral(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class DateTimeLiteralContext extends LiteralContext {
 		public TerminalNode DATETIME() { return getToken(cqlParser.DATETIME, 0); }
 		public DateTimeLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterDateTimeLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitDateTimeLiteral(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class StringLiteralContext extends LiteralContext {
 		public TerminalNode STRING() { return getToken(cqlParser.STRING, 0); }
 		public StringLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterStringLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitStringLiteral(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class DateLiteralContext extends LiteralContext {
 		public TerminalNode DATE() { return getToken(cqlParser.DATE, 0); }
 		public DateLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterDateLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitDateLiteral(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class BooleanLiteralContext extends LiteralContext {
 		public BooleanLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterBooleanLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitBooleanLiteral(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class NumberLiteralContext extends LiteralContext {
 		public TerminalNode NUMBER() { return getToken(cqlParser.NUMBER, 0); }
 		public NumberLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterNumberLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitNumberLiteral(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class LongNumberLiteralContext extends LiteralContext {
 		public TerminalNode LONGNUMBER() { return getToken(cqlParser.LONGNUMBER, 0); }
 		public LongNumberLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterLongNumberLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitLongNumberLiteral(this);
-		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class QuantityLiteralContext extends LiteralContext {
@@ -7951,14 +6719,6 @@ public class cqlParser extends Parser {
 			return getRuleContext(QuantityContext.class,0);
 		}
 		public QuantityLiteralContext(LiteralContext ctx) { copyFrom(ctx); }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterQuantityLiteral(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitQuantityLiteral(this);
-		}
 	}
 
 	public final LiteralContext literal() throws RecognitionException {
@@ -8082,14 +6842,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_intervalSelector; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterIntervalSelector(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitIntervalSelector(this);
-		}
 	}
 
 	public final IntervalSelectorContext intervalSelector() throws RecognitionException {
@@ -8152,14 +6904,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_tupleSelector; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTupleSelector(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTupleSelector(this);
-		}
 	}
 
 	public final TupleSelectorContext tupleSelector() throws RecognitionException {
@@ -8297,14 +7041,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_tupleElementSelector; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTupleElementSelector(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTupleElementSelector(this);
-		}
 	}
 
 	public final TupleElementSelectorContext tupleElementSelector() throws RecognitionException {
@@ -8347,14 +7083,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_instanceSelector; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterInstanceSelector(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitInstanceSelector(this);
-		}
 	}
 
 	public final InstanceSelectorContext instanceSelector() throws RecognitionException {
@@ -8484,14 +7212,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_instanceElementSelector; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterInstanceElementSelector(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitInstanceElementSelector(this);
-		}
 	}
 
 	public final InstanceElementSelectorContext instanceElementSelector() throws RecognitionException {
@@ -8534,14 +7254,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_listSelector; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterListSelector(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitListSelector(this);
-		}
 	}
 
 	public final ListSelectorContext listSelector() throws RecognitionException {
@@ -8625,14 +7337,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_displayClause; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterDisplayClause(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitDisplayClause(this);
-		}
 	}
 
 	public final DisplayClauseContext displayClause() throws RecognitionException {
@@ -8671,14 +7375,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_codeSelector; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterCodeSelector(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitCodeSelector(this);
-		}
 	}
 
 	public final CodeSelectorContext codeSelector() throws RecognitionException {
@@ -8733,14 +7429,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_conceptSelector; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterConceptSelector(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitConceptSelector(this);
-		}
 	}
 
 	public final ConceptSelectorContext conceptSelector() throws RecognitionException {
@@ -8803,14 +7491,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_keyword; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterKeyword(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitKeyword(this);
-		}
 	}
 
 	public final KeywordContext keyword() throws RecognitionException {
@@ -8849,14 +7529,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_reservedWord; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterReservedWord(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitReservedWord(this);
-		}
 	}
 
 	public final ReservedWordContext reservedWord() throws RecognitionException {
@@ -8895,14 +7567,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_keywordIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterKeywordIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitKeywordIdentifier(this);
-		}
 	}
 
 	public final KeywordIdentifierContext keywordIdentifier() throws RecognitionException {
@@ -8941,14 +7605,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_obsoleteIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterObsoleteIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitObsoleteIdentifier(this);
-		}
 	}
 
 	public final ObsoleteIdentifierContext obsoleteIdentifier() throws RecognitionException {
@@ -8987,14 +7643,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_functionIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterFunctionIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitFunctionIdentifier(this);
-		}
 	}
 
 	public final FunctionIdentifierContext functionIdentifier() throws RecognitionException {
@@ -9033,14 +7681,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_typeNameIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterTypeNameIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitTypeNameIdentifier(this);
-		}
 	}
 
 	public final TypeNameIdentifierContext typeNameIdentifier() throws RecognitionException {
@@ -9085,14 +7725,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_referentialIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterReferentialIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitReferentialIdentifier(this);
-		}
 	}
 
 	public final ReferentialIdentifierContext referentialIdentifier() throws RecognitionException {
@@ -9195,14 +7827,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_referentialOrTypeNameIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterReferentialOrTypeNameIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitReferentialOrTypeNameIdentifier(this);
-		}
 	}
 
 	public final ReferentialOrTypeNameIdentifierContext referentialOrTypeNameIdentifier() throws RecognitionException {
@@ -9251,14 +7875,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_identifierOrFunctionIdentifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterIdentifierOrFunctionIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitIdentifierOrFunctionIdentifier(this);
-		}
 	}
 
 	public final IdentifierOrFunctionIdentifierContext identifierOrFunctionIdentifier() throws RecognitionException {
@@ -9427,14 +8043,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_identifier; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterIdentifier(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitIdentifier(this);
-		}
 	}
 
 	public final IdentifierContext identifier() throws RecognitionException {
@@ -9477,14 +8085,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_externalConstant; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterExternalConstant(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitExternalConstant(this);
-		}
 	}
 
 	public final ExternalConstantContext externalConstant() throws RecognitionException {
@@ -9540,14 +8140,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_paramList; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterParamList(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitParamList(this);
-		}
 	}
 
 	public final ParamListContext paramList() throws RecognitionException {
@@ -9598,14 +8190,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_quantity; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterQuantity(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitQuantity(this);
-		}
 	}
 
 	public final QuantityContext quantity() throws RecognitionException {
@@ -9652,14 +8236,6 @@ public class cqlParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_unit; }
-		@Override
-		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).enterUnit(this);
-		}
-		@Override
-		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof cqlListener ) ((cqlListener)listener).exitUnit(this);
-		}
 	}
 
 	public final UnitContext unit() throws RecognitionException {

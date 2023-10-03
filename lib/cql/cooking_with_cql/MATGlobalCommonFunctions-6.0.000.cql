@@ -164,4 +164,4 @@ define function "FirstInpatientIntensiveCareUnit"(Encounter "Encounter, Performe
 define function "NormalizeInterval"(relevantDatetime DateTime, relevantPeriod Interval<DateTime> ):
   if relevantDatetime is null
     and relevantPeriod is null then null
-    else Coalesce(relevantPeriod, Interval[relevantDatetime, relevantDatetime])
+    else Coalesce(relevantPeriod, Interval[relevantDatetime, relevantDatetime]]

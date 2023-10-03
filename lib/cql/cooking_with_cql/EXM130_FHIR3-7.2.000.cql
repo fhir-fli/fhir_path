@@ -11,6 +11,8 @@ of finding conventions and usage patterns that meet the needs of the various sta
 in the measure development community.
 */
 
+
+
 using FHIR version '3.0.0'
 
 include AdultOutpatientEncounters_FHIR3 version '1.1.000' called AdultOutpatientEncounters
@@ -48,59 +50,62 @@ define "SDE Sex":
   SDE."SDE Sex"
 
 // NOTE: The interval here was closed, versus the open in the QDM expression
+
+
 define "Initial Population":
-	Global."CalendarAgeInYearsAt"(FHIRHelpers.ToDate(Patient.birthDate), start of "Measurement Period") in Interval[50, 75)
-			and exists AdultOutpatientEncounters."Qualifying Encounters"("Measurement Period")
+  Global."CalendarAgeInYearsAt" ( FHIRHelpers.ToDate ( Patient.birthDate ), start of "Measurement Period" ) in Interval[50, 75]
+    and exists AdultOutpatientEncounters."Qualifying Encounters" ( "Measurement Period" )
 
 define "Denominator":
-	true
+  true
 
 define "Flexible Sigmoidoscopy Performed":
-	[Procedure: "Flexible Sigmoidoscopy"] FlexibleSigmoidoscopy
-		where FlexibleSigmoidoscopy.status = 'completed'
-			and FlexibleSigmoidoscopy.performed ends 5 years or less on or before end of "Measurement Period"
+  [Procedure: "Flexible Sigmoidoscopy"] FlexibleSigmoidoscopy
+    where FlexibleSigmoidoscopy.status = 'completed'
+      and FlexibleSigmoidoscopy.performed ends 5 years or less on or before end of "Measurement Period"
 
 define "CT Colonography Performed":
-	[Procedure: "CT Colonography"] Colonography
-		where Colonography.status = 'completed'
-			and Colonography.performed ends 5 years or less on or before end of "Measurement Period"
+  [Procedure: "CT Colonography"] Colonography
+    where Colonography.status = 'completed'
+      and Colonography.performed ends 5 years or less on or before end of "Measurement Period"
 
 define "Fecal Occult Blood Test Performed":
-	[Observation: "Fecal Occult Blood Test (FOBT)"] FecalOccultResult
-		where FecalOccultResult.status in {'final', 'amended', 'corrected', 'preliminary'}
-			and FecalOccultResult.value is not null
-			and FecalOccultResult.effective during day of "Measurement Period"
+  [Observation: "Fecal Occult Blood Test (FOBT)"] FecalOccultResult
+    where FecalOccultResult.status in { 'final', 'amended', 'corrected', 'preliminary' }
+      and FecalOccultResult.value is not null
+      and FecalOccultResult.effective during day of "Measurement Period"
 			// and FecalOccultResult.FHIR.provenance.recorded during "Measurement Period"
 
+
 define "Fecal Immunochemical Test DNA":
-	[Observation: "FIT DNA"] FitDNA
-		where FitDNA.value is not null
-			and FitDNA.effective occurs 3 years or less on or before day of end of "Measurement Period"
+  [Observation: "FIT DNA"] FitDNA
+    where FitDNA.value is not null
+      and FitDNA.effective occurs 3 years or less on or before day of end of "Measurement Period"
 			// and FitDNA.FHIR.provenance.recorded occurs 3 years or less on or before end of "Measurement Period"
 
+
 define "Colonoscopy Performed":
-	[Procedure: "Colonoscopy"] Colonoscopy
-		where Colonoscopy.status = 'completed'
-		 	and Colonoscopy.performed ends 10 years or less on or before end of "Measurement Period"
+  [Procedure: "Colonoscopy"] Colonoscopy
+    where Colonoscopy.status = 'completed'
+      and Colonoscopy.performed ends 10 years or less on or before end of "Measurement Period"
 
 define "Numerator":
-	exists "Colonoscopy Performed"
-		or exists "Fecal Occult Blood Test Performed"
-		or exists "Flexible Sigmoidoscopy Performed"
-		or exists "Fecal Immunochemical Test DNA"
-		or exists "CT Colonography Performed"
+  exists "Colonoscopy Performed"
+    or exists "Fecal Occult Blood Test Performed"
+    or exists "Flexible Sigmoidoscopy Performed"
+    or exists "Fecal Immunochemical Test DNA"
+    or exists "CT Colonography Performed"
 
 define "Denominator Exclusion":
-	Hospice."Has Hospice"("Measurement Period")
-		or exists "Malignant Neoplasm"
-		or exists "Total Colectomy Performed"
+  Hospice."Has Hospice" ( "Measurement Period" )
+    or exists "Malignant Neoplasm"
+    or exists "Total Colectomy Performed"
 
 define "Malignant Neoplasm":
-	[Condition: "Malignant Neoplasm of Colon"] ColorectalCancer
-		where Global."Normalize Onset"(ColorectalCancer.onset) starts on or before end of "Measurement Period"
+  [Condition: "Malignant Neoplasm of Colon"] ColorectalCancer
+    where Global."Normalize Onset" ( ColorectalCancer.onset ) starts on or before end of "Measurement Period"
 
 define "Total Colectomy Performed":
-	[Procedure: "Total Colectomy"] Colectomy
-		where Colectomy.status = 'completed'
-			and Global."Get Choice Interval - dateTime or Period"(Colectomy.performed) starts on or before end of "Measurement Period"
-
+  [Procedure: "Total Colectomy"] Colectomy
+    where Colectomy.status = 'completed'
+      and Global."Get Choice Interval - dateTime or Period" ( Colectomy.performed ) starts on or before end of "Measurement Period"

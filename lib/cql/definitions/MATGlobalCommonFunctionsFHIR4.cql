@@ -11,5 +11,4 @@ valueset "Observation Services": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.
 valueset "Outpatient Surgery Service": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1110.38'
 valueset "Present on Admission or Clinically Undetermined": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1147.197'
 
-parameter "Measurement Period" Interval<DateTime>
-  default Interval[@2022-01-01T00:00:00.0, @2023-01-01T00:00:00.0)
+parameter "Measurement Period" Interval<DateTime>default Interval[@2022-01-01T00:00:00.0, @2023-01-01T00:00:00.0]

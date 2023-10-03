@@ -14,9 +14,11 @@ Future<void> main() async {
   }
   final definitionsDir = Directory('../definitions');
   final definitionsFiles = definitionsDir.listSync();
+  int i = 0;
   for (final file in definitionsFiles) {
     if (file is File) {
-      print(file.path);
+      print('$i: ${file.path}');
+      i++;
       final pathExpression = await file.readAsString();
       cqlLexer.parse(pathExpression).value;
     }

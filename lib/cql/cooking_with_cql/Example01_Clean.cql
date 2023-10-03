@@ -42,10 +42,10 @@ define "Depression Diagnosis":
       overlaps "Measurement Period"
 
 define "Assessment Period 1":
-  Interval[start of "Measurement Period", start of "Measurement Period" + 4 months)
+  Interval[start of "Measurement Period", start of "Measurement Period" + 4 months]
 
 define "Assessment Period 2":
-  Interval[start of "Measurement Period" + 4 months, start of "Measurement Period" + 8 months)
+  Interval[start of "Measurement Period" + 4 months, start of "Measurement Period" + 8 months]
 
 define "Assessment Period 3":
   Interval[start of "Measurement Period" + 8 months, end of "Measurement Period"]
@@ -130,13 +130,13 @@ Stratification=
 */
 
 define "Stratification 1":
-  AgeInYearsAt(start of "Measurement Period") in Interval[12, 18)
+  AgeInYearsAt(start of "Measurement Period") in Interval[12, 18]
 
 define "Stratification 1":
-  AgeInYearsAt(start of "Measurement Period") in Interval[18, 45)
+  AgeInYearsAt(start of "Measurement Period") in Interval[18, 45]
 
 define "Stratification 1":
-  AgeInYearsAt(start of "Measurement Period") in Interval[45, 65)
+  AgeInYearsAt(start of "Measurement Period") in Interval[45, 65]
 
 define "Stratification 1":
   AgeInYearsAt(start of "Measurement Period") >= 65

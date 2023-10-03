@@ -5,12 +5,15 @@ Future<void> main() async {
   final librariesFiles = librariesDir.listSync();
   for (final file in librariesFiles) {
     if (file is File) {
-      print(file.path);
+      // print(file.path);
       final pathExpression = await file.readAsString();
       final pathExpressionLists = pathExpression.split('\n');
       final librariesList = <String>[];
       bool record = false;
       for (final line in pathExpressionLists) {
+        if (file.path == 'cooking_with_cql/CalendarVsUCUM.cql') {
+          print(line);
+        }
         if (record) {
           if (line.startsWith('define') || line.startsWith('context')) {
             await File(file.path.replaceAll('cooking_with_cql', 'definitions'))

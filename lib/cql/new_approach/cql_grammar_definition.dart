@@ -2,14 +2,15 @@ import 'package:petitparser/petitparser.dart';
 
 import '../../fhir_path.dart';
 
-Parser cqlLexer = (ignored &
+Parser cqlLexer = (ignored.flatten() &
         (libraryDefinition & ignored).optional() &
         (definition & ignored).star() &
         (statement & ignored).star())
     .end();
 
 Parser ignored =
-    (whiteSpaceLexer | lineCommentLexer | multiLineCommentLexer).star();
+    (whiteSpaceLexer | lineCommentLexer | multiLineCommentLexer | escLexer)
+        .star();
 
 Parser whiteSpacePlus = whiteSpaceLexer & ignored;
 
@@ -52,13 +53,9 @@ Parser accessModifier = string('public') | string('private');
 Parser parameterDefinition = (accessModifier & whiteSpacePlus).optional() &
     string('parameter') &
     whiteSpacePlus &
-    identifier &
-    (whiteSpacePlus & typeSpecifier(string('default')))
-        .optional()
-        .flatten()
-        .map((value) => print(value)) &
-    (whiteSpacePlus & string('default') & whiteSpacePlus & expression())
-        .optional();
+    identifier.flatten() &
+    (whiteSpacePlus & typeSpecifier(string('default'))).optional() &
+    (ignored & string('default') & whiteSpacePlus & expression()).optional();
 
 Parser codesystemDefinition = (accessModifier & whiteSpacePlus).optional() &
     string('codesystem') &
@@ -98,7 +95,7 @@ Parser codesystemIdentifier =
 Parser libraryIdentifier = identifier;
 
 Parser codeDefinition = (accessModifier & whiteSpacePlus).optional() &
-    string('code') &
+    string('code').map((value) => print(value)) &
     whiteSpacePlus &
     identifier &
     ignored &
@@ -141,7 +138,6 @@ Parser codeId = stringLexer;
 ///
 
 Parser typeSpecifier([Parser? notParser]) {
-  print(notParser.toString());
   final _typeSpecifier = undefined();
 
   final _tupleElementDefinition =
@@ -169,12 +165,12 @@ Parser typeSpecifier([Parser? notParser]) {
       char('>');
 
   _typeSpecifier.set(_intervalTypeSpecifier |
-      (notParser == null
-          ? namedTypeSpecifier
-          : notParser.not().seq(namedTypeSpecifier)) |
       _listTypeSpecifier |
       _tupleTypeSpecifier |
-      _choiceTypeSpecifier);
+      _choiceTypeSpecifier |
+      (notParser == null
+          ? namedTypeSpecifier
+          : notParser.not().seq(namedTypeSpecifier)));
 
   return _typeSpecifier;
 }
@@ -203,17 +199,31 @@ Parser contextDefinition = string('context') &
     (modelIdentifier & char('.')).optional() &
     identifier;
 
-// functionDefinition:
-// 	'define' accessModifier? 'fluent'? 'function' identifierOrFunctionIdentifier '(' (
-// 		operandDefinition (',' operandDefinition)*
-// 	)? ')' ('returns' typeSpecifier)? ':' (
-// 		functionBody
-// 		| 'external'
-// 	);
+Parser functionDefinition = string('define') &
+    (whiteSpacePlus & accessModifier).optional() &
+    (whiteSpacePlus & string('fluent')).optional() &
+    string('function') &
+    whiteSpacePlus &
+    identifierOrFunctionIdentifier &
+    ignored &
+    char('(') &
+    (ignored &
+            operandDefinition &
+            (ignored & char(',') & ignored & operandDefinition).star())
+        .optional() &
+    ignored &
+    char(')') &
+    (whiteSpacePlus & string('returns') & whiteSpacePlus & typeSpecifier())
+        .optional() &
+    ignored &
+    char(':') &
+    ignored &
+    (functionBody | string('external'));
 
-// operandDefinition: referentialIdentifier typeSpecifier;
+Parser operandDefinition =
+    referentialIdentifier & whiteSpacePlus & typeSpecifier();
 
-// functionBody: expression;
+Parser functionBody = expression();
 
 ///
 /// Expressions
@@ -397,31 +407,42 @@ Parser expression() {
       _expression;
 
   Parser _internalInterval(String end) =>
-      ignored.flatten().map((value) => print('ignored')) &
-      char(',').neg().star().flatten().map((value) => print(value)) &
-      // expression &
+      ignored.flatten() &
+      // char(',').neg().star() &
+      _expression &
       ignored &
       char(',') &
       ignored &
-      // expression &
-      (char(end)).neg().star() &
+      _expression &
+      // (char(end)).neg().star() &
       ignored;
 
   // TODO: Consider this as an alternative syntax for intervals... (would need to be moved up to
   // expression to make it work) expression ( '..' | '*.' | '.*' | '**' ) expression;
 
-  final Parser _intervalSelector =
-      string('Interval').map((value) => print(value)) &
+  final Parser _intervalSelector = string('Interval') &
+      ignored &
+      ((char('[') & _internalInterval(']') & char(']')) |
+          (char('(') & _internalInterval(')') & char(')')));
+
+  final Parser _listSelector =
+      (string('List') & (char('<') & typeSpecifier() & char('>')).optional())
+              .optional() &
           ignored &
-          ((char('[').map((value) => print(value)) &
-                  _internalInterval(']') &
-                  char(']')) |
-              (char('(') & _internalInterval(')') & char(')')));
+          char('{') &
+          (_expression & (ignored & char(',') & ignored & _expression).star())
+              .optional() &
+          ignored &
+          char('}');
 
   final Parser _term =
 
       /// intervalSelectorTerm
       _intervalSelector |
+
+          /// listSelectorTerm
+
+          _listSelector |
 // 	invocation				# invocationTerm
           /// literalTerm
           literal
@@ -429,7 +450,7 @@ Parser expression() {
 
 // 	| tupleSelector			# tupleSelectorTerm
 // 	| instanceSelector		# instanceSelectorTerm
-// 	| listSelector			# listSelectorTerm
+
 // 	| codeSelector			# codeSelectorTerm
 // 	| conceptSelector		# conceptSelectorTerm
 // 	| '(' expression ')'	# parenthesizedTerm
@@ -659,10 +680,6 @@ final literal =
 // 	) '}';
 
 // instanceElementSelector: referentialIdentifier ':' expression;
-
-// listSelector: ('List' ('<' typeSpecifier '>')?)? '{' (
-// 		expression (',' expression)*
-// 	)? '}';
 
 Parser displayClause = string('display') & whiteSpacePlus & stringLexer;
 

@@ -23,64 +23,63 @@ parameter "Measurement Period" Interval<DateTime>
 context Patient
 
 define "SDE Ethnicity":
-	["Patient Characteristic Ethnicity": "Ethnicity"]
+  ["Patient Characteristic Ethnicity": "Ethnicity"]
 
 define "SDE Payer":
-	["Patient Characteristic Payer": "Payer"]
+  ["Patient Characteristic Payer": "Payer"]
 
 define "SDE Race":
-	["Patient Characteristic Race": "Race"]
+  ["Patient Characteristic Race": "Race"]
 
 define "SDE Sex":
-	["Patient Characteristic Sex": "ONC Administrative Sex"]
+  ["Patient Characteristic Sex": "ONC Administrative Sex"]
 
 define "Initial Population":
-	exists ["Patient Characteristic Birthdate"] BirthDate
-		where Global."CalendarAgeInYearsAt"(BirthDate.birthDatetime, start of "Measurement Period")in Interval[50, 75 )
-			and exists AdultOutpatientEncounters."Qualifying Encounters"
+  exists ["Patient Characteristic Birthdate"] BirthDate
+    where Global."CalendarAgeInYearsAt" ( BirthDate.birthDatetime, start of "Measurement Period" ) in Interval[50, 75]
+      and exists AdultOutpatientEncounters."Qualifying Encounters"
 
 define "Denominator":
-	"Initial Population"
+  "Initial Population"
 
 define "Flexible Sigmoidoscopy Performed":
-	["Procedure, Performed": "Flexible Sigmoidoscopy"] FlexibleSigmoidoscopy
-		where FlexibleSigmoidoscopy.relevantPeriod ends 5 years or less on or before end of "Measurement Period"
+  ["Procedure, Performed": "Flexible Sigmoidoscopy"] FlexibleSigmoidoscopy
+    where FlexibleSigmoidoscopy.relevantPeriod ends 5 years or less on or before end of "Measurement Period"
 
 define "CT Colonography Performed":
-	["Procedure, Performed": "CT Colonography"] Colonography
-		where Colonography.relevantPeriod ends 5 years or less on or before end of "Measurement Period"
+  ["Procedure, Performed": "CT Colonography"] Colonography
+    where Colonography.relevantPeriod ends 5 years or less on or before end of "Measurement Period"
 
 define "Fecal Occult Blood Test Performed":
-	["Laboratory Test, Performed": "Fecal Occult Blood Test (FOBT)"] FecalOccultResult
-		where FecalOccultResult.result is not null
-			and FecalOccultResult.authorDatetime during "Measurement Period"
+  ["Laboratory Test, Performed": "Fecal Occult Blood Test (FOBT)"] FecalOccultResult
+    where FecalOccultResult.result is not null
+      and FecalOccultResult.authorDatetime during "Measurement Period"
 
 define "Fecal Immunochemical Test DNA":
-	["Laboratory Test, Performed": "FIT DNA"] FitDNA
-		where FitDNA.result is not null
-			and FitDNA.authorDatetime occurs 3 years or less on or before end of "Measurement Period"
+  ["Laboratory Test, Performed": "FIT DNA"] FitDNA
+    where FitDNA.result is not null
+      and FitDNA.authorDatetime occurs 3 years or less on or before end of "Measurement Period"
 
 define "Colonoscopy Performed":
-	["Procedure, Performed": "Colonoscopy"] Colonoscopy
-		where Colonoscopy.relevantPeriod ends 10 years or less on or before end of "Measurement Period"
+  ["Procedure, Performed": "Colonoscopy"] Colonoscopy
+    where Colonoscopy.relevantPeriod ends 10 years or less on or before end of "Measurement Period"
 
 define "Numerator":
-	exists "Colonoscopy Performed"
-		or exists "Fecal Occult Blood Test Performed"
-		or exists "Flexible Sigmoidoscopy Performed"
-		or exists "Fecal Immunochemical Test DNA"
-		or exists "CT Colonography Performed"
+  exists "Colonoscopy Performed"
+    or exists "Fecal Occult Blood Test Performed"
+    or exists "Flexible Sigmoidoscopy Performed"
+    or exists "Fecal Immunochemical Test DNA"
+    or exists "CT Colonography Performed"
 
 define "Malignant Neoplasm":
-	["Diagnosis": "Malignant Neoplasm of Colon"] ColorectalCancer
-		where ColorectalCancer.prevalencePeriod starts on or before end of "Measurement Period"
+  ["Diagnosis": "Malignant Neoplasm of Colon"] ColorectalCancer
+    where ColorectalCancer.prevalencePeriod starts on or before end of "Measurement Period"
 
 define "Total Colectomy Performed":
-	["Procedure, Performed": "Total Colectomy"] Colectomy
-		where Colectomy.relevantPeriod starts on or before end of "Measurement Period"
+  ["Procedure, Performed": "Total Colectomy"] Colectomy
+    where Colectomy.relevantPeriod starts on or before end of "Measurement Period"
 
 define "Denominator Exclusions":
-	Hospice."Has Hospice"
-		or exists "Malignant Neoplasm"
-		or exists "Total Colectomy Performed"
-
+  Hospice."Has Hospice"
+    or exists "Malignant Neoplasm"
+    or exists "Total Colectomy Performed"

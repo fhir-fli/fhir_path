@@ -16,15 +16,19 @@ codesystem "TaskCodeSystem": 'http://hl7.org/fhir/CodeSystem/task-code'
 valueset "Marital Status": 'http://hl7.org/fhir/ValueSet/marital-status'
 valueset "CommunicationCodes": 'http://hl7.org/fhir/ValueSet/communication-category'
 valueset "DeviceCodes": 'http://example.org/fhir/ValueSet/device-codes' // Random set of device codes from 'http://hl7.org/fhir/ValueSet/device-type'
+
 valueset "Venous Foot Pumps (VFP)": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.230'
 valueset "ImmunizationCodes": 'http://example.org/fhir/ValueSet/immunization-codes' // Random set of immunization codes from 'http://hl7.org/fhir/us/core/ValueSet/us-core-vaccines-cvx'
+
 valueset "MedicationCodes": 'http://example.org/fhir/ValueSet/medication-codes' // Random set of medication codes from 'http://hl7.org/fhir/ValueSet/medication-codes'
+
 valueset "ObservationCodes": 'http://example.org/fhir/ValueSet/observation-codes' // Random set of observation codes from 'http://hl7.org/fhir/ValueSet/observation-codes'
+
 valueset "ProcedureCodes": 'http://example.org/fhir/ValueSet/procedure-codes' // Random set of procedure codes from 'http://hl7.org/fhir/us/core/ValueSet/us-core-procedure-code'
+
 valueset "Application of intermittent pneumatic compression devices (IPC)": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113762.1.4.1110.65'
 valueset "TaskCodes": 'http://hl7.org/fhir/ValueSet/task-code'
 valueset "NegationReasonCodes": 'http://hl7.org/fhir/us/qicore/ValueSet/qicore-negation-reason'
-
 valueset "Office Visit": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.464.1003.101.12.1001'
 valueset "Non-Elective Inpatient Encounter": 'http://cts.nlm.nih.gov/fhir/ValueSet/2.16.840.1.113883.3.117.1.7.1.424'
 valueset "Comfort Measures": 'http://cts.nlm.nih.gov/fhir/ValueSet/1.3.6.1.4.1.33895.1.3.0.45'
@@ -54,4 +58,4 @@ code "ProcedureCode": '7138802' from "SNOMED-CT" display 'Procedure'
 code "TaskCode": 'approve' from "TaskCodeSystem" display 'Activate/approve the focal resource'
 code "Macular edema absent (situation)": '428341000124108' from "SNOMED-CT" display 'Macular edema absent (situation)'
 
-parameter "Measurement Period" Interval<DateTime> default Interval[@2023-01-01T00:00:00.000, @2024-01-01T00:00:00.000)
+parameter "Measurement Period" Interval<DateTime>default Interval[@2023-01-01T00:00:00.000, @2024-01-01T00:00:00.000]

@@ -91,15 +91,15 @@ define "Had Additional Surgery Within 35 Days Post-Procedure":
 define "Had More Than 2 THA_TKA Procedures Codes During The Index Admission":
   "Qualifying Encounters Related To Elective Primary THA and TKA Procedures" QE
     where Count(("Primary THA-TKA Procedures"
-        union "Non-Primary THA_TKA Procedures")Procedures
+        union "Non-Primary THA_TKA Procedures") Procedures
         where Procedures.relevantPeriod starts during QE.QEncounter.relevantPeriod
-    )> 2
+    ) > 2
 
 define "Had Multiple Blood Transfusion Procedures During The Index Admission":
   "Qualifying Encounters Related To Elective Primary THA and TKA Procedures" QE
     where Count(["Procedure, Performed": "Blood Transfusion Administration"] BTProcedure
         where BTProcedure.relevantPeriod starts during QE.QEncounter.relevantPeriod
-    )> 1
+    ) > 1
 
 define "Had Treatment of Hemorrhage or Hematoma During The Index Admission":
   ["Procedure, Performed": "Treatment of Hemorrhage or Hematoma"] Treatment
@@ -108,7 +108,7 @@ define "Had Treatment of Hemorrhage or Hematoma During The Index Admission":
 
 define "Has Normal BMI":
   "Most Recent Documented BMI" BMIValue
-    where BMIValue.result included in Interval[18.5 'kg/m2', 25 'kg/m2' )
+    where BMIValue.result included in Interval[18.5 'kg/m2', 25 'kg/m2']
 
 define "Initial Population":
   exists "Encounter Related To Elective Primary THA and TKA Procedures With Age"
@@ -173,7 +173,7 @@ define "Screened and Identified as Tobacco User":
       where TobaccoUseScreening.authorDatetime 24 months or less on or before 
       end of "Measurement Period"
       sort by authorDatetime
-  )) MostRecentTobaccoUseScreening
+  ) ) MostRecentTobaccoUseScreening
     where MostRecentTobaccoUseScreening.result in "Current Smoking Tobacco User"
 
 define "Existing Comorbidities Prior To Surgery":
@@ -197,6 +197,7 @@ define "Postoperative Encounter Related To Major Bleeding":
   /***
   We only focus on postoperative follow-up visits to indicate that an evaluation and management service was performed during a postoperative period for a reason(s) related to the original procedure
   ***/
+  
   ["Encounter, Performed": "Postoperative Visit"] PostoperativeEncounter
     with ( ["Diagnosis": "General Major Bleeding Events"]
       union ["Diagnosis": "Active Bleeding"] ) DiagnosisEvent
@@ -206,6 +207,7 @@ define "Postoperative Encounter Related To Treatment of Hemorrhage or Hematoma":
   /***
   We only focus on postoperative follow-up visits to indicate that an evaluation and management service was performed during a postoperative period for a reason(s) related to the original procedure
   ***/
+  
   ["Encounter, Performed": "Postoperative Visit"] PostoperativeEncounter
     with ["Procedure, Performed": "Treatment of Hemorrhage or Hematoma"] HHTreatment
       such that HHTreatment.relevantPeriod starts during PostoperativeEncounter.relevantPeriod

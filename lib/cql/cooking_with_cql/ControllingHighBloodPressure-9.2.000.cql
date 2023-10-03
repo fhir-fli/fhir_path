@@ -3,6 +3,8 @@ library ControllingHighBloodPressure version '9.2.000'
 /*
 Update to 5.6 to get class attribute
 */
+
+
 using QDM version '5.6'
 
 include Adult_Outpatient_Encounters version '1.3.000' called AdultOutpatientEncounters
@@ -64,12 +66,13 @@ define "Denominator":
 
 define "End Stage Renal Disease Encounter":
   ["Encounter, Performed": "ESRD Monthly Outpatient Services"] ESRDEncounter
-    where ESRDEncounter.relevantPeriod starts before
-    end of "Measurement Period"
+    where ESRDEncounter.relevantPeriod starts before end of "Measurement Period"
 
 /*
 Then you can combine specific type codes with the class codes:
 */
+
+
 define "End Stage Renal Disease Encounter (1)":
   ["Encounter, Performed": class in Global."Ambulatory Encounter Class"] ESRDEncounter
     where ESRDEncounter.code in "ESRD Monthly Outpatient Services"
@@ -79,8 +82,7 @@ define "End Stage Renal Disease Procedures":
   ( ["Procedure, Performed": "Vascular Access for Dialysis"]
     union ["Procedure, Performed": "Kidney Transplant"]
     union ["Procedure, Performed": "Dialysis Services"] ) ESRDProcedure
-    where ESRDProcedure.relevantPeriod starts before
-    end of "Measurement Period"
+    where ESRDProcedure.relevantPeriod starts before end of "Measurement Period"
 
 define "Has Diastolic Blood Pressure Less Than 90":
   "Lowest Diastolic Reading on Most Recent Blood Pressure Day".result < 90 'mm[Hg]'
@@ -111,7 +113,7 @@ define "Blood Pressure Days":
 
 define "Initial Population":
   exists ["Patient Characteristic Birthdate": "Birth date"] BirthDate
-    where Global."CalendarAgeInYearsAt" ( BirthDate.birthDatetime, start of "Measurement Period" ) in Interval[18, 85 )
+    where Global."CalendarAgeInYearsAt" ( BirthDate.birthDatetime, start of "Measurement Period" ) in Interval[18, 85]
       and exists "Essential Hypertension Diagnosis"
       and exists AdultOutpatientEncounters."Qualifying Encounters"
 
@@ -122,6 +124,7 @@ define "Qualifying Diastolic Blood Pressure Reading":
       such that DiastolicBP.relevantDatetime during DisqualifyingEncounter.relevantPeriod
     where DiastolicBP.result.unit = 'mm[Hg]'
   //	and DiastolicBP.result is Quantity
+      
       and DiastolicBP.relevantDatetime during "Measurement Period"
 
 define "Qualifying Systolic Blood Pressure Reading":
@@ -131,6 +134,7 @@ define "Qualifying Systolic Blood Pressure Reading":
       such that SystolicBP.relevantDatetime during DisqualifyingEncounter.relevantPeriod
     where SystolicBP.result.unit = 'mm[Hg]'
   //	and SystolicBP.result is Quantity
+      
       and SystolicBP.relevantDatetime during "Measurement Period"
 
 define "Denominator Exclusions":
@@ -153,5 +157,4 @@ define "Most Recent Blood Pressure Day":
 
 define "Essential Hypertension Diagnosis":
   ["Diagnosis": "Essential Hypertension"] Hypertension
-    where Hypertension.prevalencePeriod overlaps Interval[start of "Measurement Period" - 1 year,
-    end of "Measurement Period"]
+    where Hypertension.prevalencePeriod overlaps Interval[start of "Measurement Period" - 1 year, end of "Measurement Period"]

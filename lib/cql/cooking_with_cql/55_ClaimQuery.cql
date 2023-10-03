@@ -10,8 +10,8 @@ parameter "Measurement Period" Interval<DateTime>
 
 context Patient
 
-define "Lookback Interval Total One Year": 
-  Interval[start of "Measurement Period" - 1 year, start of "Measurement Period")
+define "Lookback Interval Total One Year":
+  Interval[start of "Measurement Period" - 1 year, start of "Measurement Period"]
 
 /* We are trying to construct a CQL expression that allows the following:
 
@@ -27,22 +27,27 @@ In FHIR, a claim may contain multiple services (items) that may be associated to
 we are trying to write something like this:
 */
 
+
+
 define "Evidence of Diagnosis 1":
-     [Claim] C
-   with C.diagnosis D such that D.diagnosis in "Dx Cholesterol Embolism"
-     with C.item I such that I.serviced during "Lookback Interval Total One Year"
- where D.sequence = I.diagnosisLinkId 
+  [Claim] C
+    with C.diagnosis D
+      such that D.diagnosis in "Dx Cholesterol Embolism"
+    with C.item I
+      such that I.serviced during "Lookback Interval Total One Year"
+    where D.sequence = I.diagnosisLinkId 
  
 /*
 Because there are potentially multiple diagnoses linked to each item, this needs
 to be done with an exists:
 */
 
+
 define "Evidence of Diagnosis 1":
   [Claim] C
-    with C.item I such that I.serviced during "Lookback Interval Total One Year"
-      and exists (
-        C.diagnosis D 
-          where D.sequence in I.diagnosisLinkId
-            and D.diagnosis in "Dx Cholesterol Embolism"
-      )
+    with C.item I
+      such that I.serviced during "Lookback Interval Total One Year"
+        and exists ( C.diagnosis D
+            where D.sequence in I.diagnosisLinkId
+              and D.diagnosis in "Dx Cholesterol Embolism"
+        )

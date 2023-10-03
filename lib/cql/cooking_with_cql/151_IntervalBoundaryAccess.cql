@@ -7,8 +7,10 @@ CMS111v9
 Consider the following restriction on the end of the locationPeriod:
 */
 
+
 define "ED Encounter with Decision to Admit":
   /*Constrains the inpatient encounter to having an ED visit with a decision to admit (assessment or order) to inpatient and ED facility location period is not null*/
+  
   from
     Global."Inpatient Encounter" EncounterInpatient
     let LastEDVisit: LastEDEncounter(EncounterInpatient)
@@ -17,8 +19,7 @@ define "ED Encounter with Decision to Admit":
     )
       and exists ( LastEDVisit.facilityLocations Location
           where Location.code in "Emergency Department Visit"
-            and
-            end of Location.locationPeriod != maximum DateTime
+            and end of Location.locationPeriod != maximum DateTime
       )
 
 /*
@@ -36,7 +37,10 @@ point is _included_.
 For example:
 */
 
-define ClosedInterval: Interval[1, 10]
+
+
+define ClosedInterval:
+  Interval[1, 10]
 
 /*
 The closed interval [1, 10] means that the boundary points, 1 and 10, are included
@@ -45,7 +49,9 @@ in the range the interval covers.
 Whereas the open interval:
 */
 
-define OpenInterval: Interval(1, 10)
+
+define OpenInterval:
+  Interval ( 1, 10 )
 
 /*
 excludes them, so this interval includes only the integers 2, 3, 4, ..., 9.
@@ -61,16 +67,24 @@ ending point of the interval. When the boundary point is null, the above interpr
 means in particular that:
 */
 
-define ClosedNullBoundary: Interval[1, null]
-define OpenNullBoundary: Interval[1, null)
+
+define ClosedNullBoundary:
+  Interval[1, null]
+
+define OpenNullBoundary:
+  Interval[1, null]
 
 /*
 For `ClosedNullBoundary`, the `end of` will return the maximum Integer, but
 for `OpenNullBoundary` the `end of` will return null, or "unknown":
 */
 
-define EndOfClosedNullBoundary: end of Interval[1, null] = maximum Integer
-define EndOfOpenNullBoundary: end of Interval[1, null) is null
+
+define EndOfClosedNullBoundary:
+  end of Interval[1, null]= maximum Integer
+
+define EndOfOpenNullBoundary:
+  end of Interval[1, null ) is null
 
 /*
 So looking at the expression:
@@ -88,12 +102,21 @@ functions for HasEnd and HasStart:
 */
 
 /*Given an interval, return true if the interval has an ending boundary specified (i.e. the end of the interval is not null and not the maximum DateTime value)*/
+
+
+
 define function HasEnd(period Interval<DateTime>):
-  not (end of period is null or end of period = maximum DateTime)
+  not ( end of period is null
+      or end of period = maximum DateTime
+  )
 
 /* Given an interval, return true if the interval has a starting boundary specified (i.e. the start of the interval is not null and not the minimumDateTime value)*/
+
+
 define function HasStart(period Interval<DateTime>):
-  not (start of period is null or start of period = minimum DateTime)
+  not ( start of period is null
+      or start of period = minimum DateTime
+  )
 
 /*
 These functions can then be used to more clearly communicate the intent of
@@ -102,8 +125,10 @@ ensuring that the interval has a value for the boundary.
 Using this function in the original expression:
 */
 
+
 define "ED Encounter with Decision to Admit":
   /*Constrains the inpatient encounter to having an ED visit with a decision to admit (assessment or order) to inpatient and ED facility location period is not null*/
+  
   from
     Global."Inpatient Encounter" EncounterInpatient
     let LastEDVisit: LastEDEncounter(EncounterInpatient)
@@ -116,18 +141,15 @@ define "ED Encounter with Decision to Admit":
       )
 
 define function Latest(period Interval<DateTime>):
-  if (HasEnd(period)) then
-    end of period
-  else
-    start of period
+  if ( HasEnd(period) ) then end of period 
+    else start of period
 
 define function Earliest(period Interval<DateTime>):
-  if (HasStart(period)) then
-    start of period
-  else
-    end of period
+  if ( HasStart(period) ) then start of period 
+    else end of period
 
 //Latest(NormalizeInterval(Procedure.relevantDateTime, Procedure.relevantPeriod))
+
 
 define function LatestOf(pointInTime dateTime, period Interval<DateTime>):
   Latest(NormalizeInterval(pointInTime, period))

@@ -13,50 +13,130 @@ valueset "Dietary Intake Other than Breast Milk": 'urn:oid:2.16.840.1.113883.3.1
 valueset "Neonatal Intensive Care Unit (NICU)": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.75'
 valueset "Patient Expired": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.309'
 valueset "Discharge To Acute Care Facility": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.87'
-
 valueset "Ethnicity": 'urn:oid:2.16.840.1.114222.4.11.837'
 valueset "Payer": 'urn:oid:2.16.840.1.114222.4.11.3591'
 valueset "Race": 'urn:oid:2.16.840.1.114222.4.11.836'
 valueset "ONC Administrative Sex": 'urn:oid:2.16.840.1.113762.1.4.1'
 
-parameter "Measurement Period" default Interval[@2015-01-01T00:00:00, @2016-01-01T00:00:00)
+parameter "Measurement Period" default Interval[@2015-01-01T00:00:00, @2016-01-01T00:00:00]
 
 context Patient
 
 // Note the warning about a negatable type
-define "Inpatient Encounter":
-  ["Encounter, Performed": "Encounter Inpatient"] Encounter
-    where Encounter.lengthOfStay <= 120 days
-      and Encounter.relevantPeriod ends during "Measurement Period"
 
-define "Gestational Age at Birth <= 37 weeks":
-  ["Assessment, Performed": "Estimated Gestational Age at Birth"] Gestational
-    where (Gestational.result as Quantity) >= 259 days // 37 weeks
+
+define
+
+// Note the warning about a negatable type
+"Inpatient Encounter"
+
+// Note the warning about a negatable type
+:
+
+// Note the warning about a negatable type
+  
+  [
+
+// Note the warning about a negatable type
+  "Encounter, Performed"
+
+// Note the warning about a negatable type
+  :
+
+// Note the warning about a negatable type
+  "Encounter Inpatient"
+
+// Note the warning about a negatable type
+  ]
+
+// Note the warning about a negatable type
+  Encounter
+
+// Note the warning about a negatable type
+    
+    where
+
+// Note the warning about a negatable type
+    Encounter
+
+// Note the warning about a negatable type
+    .
+
+// Note the warning about a negatable type
+    lengthOfStay
+
+// Note the warning about a negatable type
+    <=
+
+// Note the warning about a negatable type
+    120
+
+// Note the warning about a negatable type
+    days
+
+// Note the warning about a negatable type
+      
+      and
+
+// Note the warning about a negatable type
+      Encounter
+
+// Note the warning about a negatable type
+      .
+
+// Note the warning about a negatable type
+      relevantPeriod
+
+// Note the warning about a negatable type
+      ends
+
+// Note the warning about a negatable type
+      during
+
+// Note the warning about a negatable type
+      "Measurement Period"
+
+// Note the warning about a negatable type
+
+
+define
+
+// Note the warning about a negatable type
+"Gestational Age at Birth <= 37 weeks"
+
+// Note the warning about a negatable type
+:
+
+// Note the warning about a negatable type
+  
+  [
+
+// Note the warning about a negatable type
+  "Assessment, Performed": "Estimated Gestational Age at Birth"] Gestational
+    where ( Gestational.result as Quantity ) >= 259 days // 37 weeks
+
 
 define "Single Live Birth Diagnosis":
-  distinct (
-    ["Diagnosis": "Single Live Birth"]
+  distinct ( ["Diagnosis": "Single Live Birth"]
       union ["Diagnosis": "Single Live Born Newborn Born in Hospital"]
   )
 
 define "Single Live Birth Encounter":
-  distinct ((
-    "Inpatient Encounter" Encounter
-      where Encounter.diagnosis in "Single Live Birth"
-        or Encounter.diagnosis in "Single Live Born Newborn Born in Hospital"
+  distinct ( ( "Inpatient Encounter" Encounter
+        where Encounter.diagnosis in "Single Live Birth"
+          or Encounter.diagnosis in "Single Live Born Newborn Born in Hospital"
     )
-    union (
-      "Inpatient Encounter" Encounter
-        with "Single Live Birth Diagnosis" Diagnosis
-          such that Diagnosis.prevalencePeriod starts during Encounter.relevantPeriod
-    )
+      union ( "Inpatient Encounter" Encounter
+          with "Single Live Birth Diagnosis" Diagnosis
+            such that Diagnosis.prevalencePeriod starts during Encounter.relevantPeriod
+      )
   )
 
 define "Single Live Birth Encounter Without Galactosemia":
   "Single Live Birth Encounter" Encounter
     without ["Diagnosis": "Galactosemia"] Diagnosis
       such that Diagnosis.prevalencePeriod starts during Encounter.relevantPeriod
-    where not (Encounter.diagnosis in "Galactosemia")
+    where not ( Encounter.diagnosis in "Galactosemia" )
 
 define "Single Live Birth Encounter Without Galactosemia or Parenteral Nutrition":
   "Single Live Birth Encounter Without Galactosemia" Encounter
@@ -64,6 +144,7 @@ define "Single Live Birth Encounter Without Galactosemia or Parenteral Nutrition
       such that Procedure.relevantPeriod starts during Encounter.relevantPeriod
 
 //Region: Initial Population
+
 
 define "Initial Population":
   "Single Live Birth Encounter Without Galactosemia or Parenteral Nutrition" Encounter
@@ -74,12 +155,16 @@ define "Initial Population":
 
 //Region: Denominator
 
+
+
 define "Denominator":
   "Initial Population"
 
 //EndRegion: Denominator
 
 //Region: Denominator Exclusions
+
+
 
 define "Denominator Exclusions":
   "Inpatient Encounter" Encounter
@@ -91,6 +176,8 @@ define "Denominator Exclusions":
 
 //Region: Numerator
 
+
+
 define "Breast Milk Feeding":
   ["Substance, Administered": "Breast Milk"]
 
@@ -99,8 +186,10 @@ define "Other Than Breast Milk Feeding":
 
 define "Numerator":
   "Inpatient Encounter" Encounter
-    with "Breast Milk Feeding" Feeding such that Feeding.relevantPeriod starts during Encounter.relevantPeriod
-    without "Other Than Breast Milk Feeding" Other such that Other.relevantPeriod starts during Encounter.relevantPeriod
+    with "Breast Milk Feeding" Feeding
+      such that Feeding.relevantPeriod starts during Encounter.relevantPeriod
+    without "Other Than Breast Milk Feeding" Other
+      such that Other.relevantPeriod starts during Encounter.relevantPeriod
 
 //EndRegion: Numerator
 
@@ -117,6 +206,17 @@ define "Numerator":
 //EndRegion: Stratification
 
 //Region: Supplemental Data Elements
+
+
+
+
+
+
+
+
+
+
+
 
 define "SDE Ethnicity":
   ["Patient Characteristic Ethnicity": "Ethnicity"] Characteristic

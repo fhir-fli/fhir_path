@@ -15,5 +15,5 @@ final Parser<AsFunctionParser> asFunctionLexer =
         .map((_) => AsFunctionParser(ParserList([])));
 
 final Parser<IsFunctionParser> isFunctionLexer =
-    (string('as(') | string('.as('))
+    (string('is(') | string('.is('))
         .map((_) => IsFunctionParser(ParserList([])));

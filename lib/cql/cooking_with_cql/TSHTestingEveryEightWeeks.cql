@@ -36,6 +36,7 @@ Calculation of the intervals using the following:
        If patient is on therapy for < 8 weeks, look for 1 TSH test within bin 1
 */
 
+
 valueset "Cancer": 'TBD'
 valueset "Immune Checkpoint Inhibitor": 'TBD'
 valueset "Thyrotropin [Units/volume] in Serum or Plasma": 'TBD'
@@ -53,8 +54,7 @@ define "Cancer Diagnosis":
     where Cancer.prevalencePeriod overlaps "Measurement Period"
 
 define "Denominator":
-  exists (
-    "ICI Therapy" Therapy
+  exists ( "ICI Therapy" Therapy
       where Therapy.relevantPeriod starts 1 year or less before start of "Measurement Period"
   )
 
@@ -62,9 +62,10 @@ define "ICI Therapy":
   ["Medication, Administered": "Immune Checkpoint Inhibitor"] ICI
     //where ICI.relevantPeriod starts 1 year or less before start of "Measurement Period"
 
+
 define "Numerator":
-  ("Distinct Lab and Bin" contains "Required Bins")
-    and ("Required Bins") < Count("Distinct Lab and Bin")
+  ( "Distinct Lab and Bin" contains "Required Bins" )
+    and ( "Required Bins" ) < Count("Distinct Lab and Bin")
     and Count("Abnormal TSH") = Count("Lab T4")
 
 /*
@@ -80,16 +81,21 @@ define "Numerator":
 // Since ICI Therapy includes any therapy that starts 1 year or less before the start of the measurement period,
 // this will include ICI therapy from the prior year, correct?
 // NOTE: Since the such that condition could never evaluate to true for the same ICI Therapy record, the !~ condition is unnecessary
+
+
+
+
+
+
+
+
 define "ICI Starts Within 8 weeks Interval":
-  {
-    First(
-      "ICI Therapy" Therapy
-        without "ICI Therapy" PriorTherapy
-          such that PriorTherapy.relevantPeriod starts 57 days or more before day of start of Therapy.relevantPeriod
-        where Therapy.relevantPeriod starts 1 year or less before start of "Measurement Period"
-        sort by start of relevantPeriod
-    )
-  }
+  { First("ICI Therapy" Therapy
+      without "ICI Therapy" PriorTherapy
+        such that PriorTherapy.relevantPeriod starts 57 days or more before day of start of Therapy.relevantPeriod
+      where Therapy.relevantPeriod starts 1 year or less before start of "Measurement Period"
+      sort by start of relevantPeriod
+  ) }
 
 define "Start of ICI":
   Min("ICI Starts Within 8 weeks Interval" ICITherapy
@@ -97,17 +103,17 @@ define "Start of ICI":
   )
 
 define "End of ICI":
-  Min({
+  Min({ 
     end of "Measurement Period", "Start of ICI" + 1 year, Max("ICI Starts Within 8 weeks Interval" Therapy
-        return
+        return 
         end of Therapy.relevantPeriod
-    )}
+    ) }
   )
 
 define "Abnormal TSH":
   ["Laboratory Test, Performed": "Thyrotropin [Units/volume] in Serum or Plasma"] LabT
-    where ( LabT.resultDatetime during Interval["Start of ICI", "Start of ICI" + 56 weeks )
-        or LabT.relevantDatetime during Interval["Start of ICI", "Start of ICI" + 56 weeks )
+    where ( LabT.resultDatetime during Interval["Start of ICI", "Start of ICI" + 56 weeks]
+        or LabT.relevantDatetime during Interval["Start of ICI", "Start of ICI" + 56 weeks]
     )
       and ( LabT.result < 0.40 'm[IU]/L'
           or LabT.result > 5.50 'm[IU]/L'
@@ -121,28 +127,29 @@ define "Lab T4":
 
 define "Lab TSH":
   ["Laboratory Test, Performed": "Thyrotropin [Units/volume] in Serum or Plasma"] TSH
-    where TSH.relevantDatetime during Interval["Start of ICI", "Start of ICI" + 56 weeks )
+    where TSH.relevantDatetime during Interval["Start of ICI", "Start of ICI" + 56 weeks]
       and TSH.result >= 0.40 'm[IU]/L'
       and TSH.result <= 5.50 'm[IU]/L'
 
 define "Required Bins":
-  (weeks between "Start of ICI" and "End of ICI") div 8
+  ( weeks between "Start of ICI" and "End of ICI" ) div 8
 
 define "Test Lab":
   "Lab TSH"
-    union ("Abnormal TSH" AbTSH
+    union ( "Abnormal TSH" AbTSH
         with "Lab T4" T4
-          such that (T4.relevantDatetime same as AbTSH.relevantDatetime
-              or T4.relevantDatetime 1 week or less after AbTSH.relevantDatetime)
+          such that ( T4.relevantDatetime same as AbTSH.relevantDatetime
+              or T4.relevantDatetime 1 week or less after AbTSH.relevantDatetime
+          )
     )
 
 define "Test Lab and Bin":
   "Test Lab" LT
-    where exists ("Test Lab" PriorLT
+    where exists ( "Test Lab" PriorLT
         where PriorLT.relevantDatetime 8 weeks or less after day of "Start of ICI"
           or LT.relevantDatetime 9 weeks or more after day of "Start of ICI"
     )
-    return (Ceiling(weeks between "Start of ICI" and LT.relevantDatetime) div 8 )
+    return ( Ceiling(weeks between "Start of ICI" and LT.relevantDatetime) div 8 )
 
 
 // It should work the way it is written, though I'm a little unsure about the behavior of
@@ -155,10 +162,23 @@ define "Test Lab and Bin":
 // In CQL 1.4, expand takes a List<Interval>>, so to make this 1.4 compatible, use the list overload:
 // Note that in the 1.4 version, the result is a list of unit intervals, so we use `point from` to
 // return just the bin numbers
+
+
+
+
+
+
+
+
+
+
+
 define "ICI Therapy Bins":
 //  expand Interval[1, "Required Bins"] // { 1, 2, 3, 4, 5 }
 // expand { Interval[1, "Required Bins"]} // { Interval[1, 1], Interval[2, 2], ... }
-  (expand { Interval[1, "Required Bins"] }) X
+  
+  
+  ( expand { Interval[1, "Required Bins"]} ) X
     return point from X
 
 // Then use the bin numbers to construct 8 week intervals, beginning at the start of ICI
@@ -166,18 +186,33 @@ define "ICI Therapy Bins":
 // ANSWER: The bin numbers are 1 through N, so we subtract 1 on the start because we
 // want that to represent the beginning of the interval. For example, when processing
 // the interval for the first bin, we want it to be:
-// Interval["Start of ICI" + 0 weeks, "Start of ICI" + 8 weeks)
+// Interval["Start of ICI" + 0 weeks, "Start of ICI" + 8 weeks]
 // when processing the interval for the second bin, we want it to be:
-// Interval["Start of ICI" + 8 weeks, "Start of ICI" + 16 weeks)
+// Interval["Start of ICI" + 8 weeks, "Start of ICI" + 16 weeks]
 // QUESTION: Error message in the MAT: could not resolve call to operator
 // Subtract with signature (interval<System.Integer>, System.Integer)
 // ANSWER: This is a side-effect of the use of the CQL 1.5 expand, versus the 1.4 expand
 // so the fix above will resolve this issue
+
+
+
+
+
+
+
+
+
+
+
+
+
 define "ICI Therapy Bin Periods":
   "ICI Therapy Bins" Bin
-    return Interval["Start of ICI" + ((Bin - 1) * 8 weeks), "Start of ICI" + (Bin * 8 weeks))
+    return Interval["Start of ICI" + ( ( Bin - 1 ) * 8 weeks ), "Start of ICI" + ( Bin * 8 weeks )]
 
 // Then look for bin periods that contain the expected tests
+
+
 define "ICI Therapy Bin Periods with Required Test Lab":
   "ICI Therapy Bin Periods" Period
     with "Test Lab" LT
@@ -191,5 +226,14 @@ define "ICI Therapy Bin Periods with Required Test Lab":
 // in the `with` clause of the above `ICI Therapy Bin Periods with Required Test Lab`
 // so the result of that expression will still be the Bin Numbers that have appropriate
 // tests, no matter how many tests are in each Bin Number.
+
+
+
+
+
+
+
+
+
 define "Proposed Numerator":
   Count("ICI Therapy Bin Periods with Required Test Lab") = "Required Bins"

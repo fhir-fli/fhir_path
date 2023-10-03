@@ -10,10 +10,11 @@ AND: $DepressionEncounter
 AND: $DepressionIndex
 */
 
+
 define "In Initial Population":
   AgeInYearsAt(start of "Measurement Period") >= 12
-    and exists ("Depression Encounter")
-    and exists ("Depression Index")
+    and exists ( "Depression Encounter" )
+    and exists ( "Depression Index" )
 
 /*
 Depression Followup
@@ -29,11 +30,11 @@ AND: Union Of:
 		< 7 month(s) ends after start of "$DepressionIndex.
 */
 
+
 define "Depression Followup":
   "PHQ-9 Assessment" Assessment
     with "Depression Index" DepressionIndex
-      such that Assessment.startDateTime in
-        Interval[DepressionIndex.startDateTime + 5 months, DepressionIndex.startDateTime + 7 months)
+      such that Assessment.startDateTime in Interval[DepressionIndex.startDateTime + 5 months, DepressionIndex.startDateTime + 7 months]
 
 /*
 Depression Remission
@@ -49,11 +50,11 @@ AND: Union Of:
 		< 7 month(s) ends after start of "$DepressionIndex "
 */
 
+
 define "Depression Remission":
   "PHQ-9 Assessment" Assessment
     with "Depression Index" DepressionIndex
-      such that Assessment.startDateTime in
-        Interval[DepressionIndex.startDateTime + 5 months, DepressionIndex.startDateTime + 7 months)
+      such that Assessment.startDateTime in Interval[DepressionIndex.startDateTime + 5 months, DepressionIndex.startDateTime + 7 months]
     where Assessment.result < 5
 
 
@@ -71,21 +72,23 @@ AND: Union Of:
 		< 7 month(s) ends after start of "$DepressionIndex "
 */
 
+
 define "Depression Remission":
   "PHQ-9 Assessment" Assessment
     with "Depression Index" DepressionIndex
-      such that Assessment.startDateTime in
-        Interval[DepressionIndex.startDateTime + 5 months, DepressionIndex.startDateTime + 7 months)
-          and Assessment.result < (DepressionIndex / 2)
+      such that Assessment.startDateTime in Interval[DepressionIndex.startDateTime + 5 months, DepressionIndex.startDateTime + 7 months]
+        and Assessment.result < ( DepressionIndex / 2 )
 // Result Type:
 // List<Assessment>
 
+
+
 define "Depression Remission":
-  "PHQ-9 Assessment" Assessment,
+  "PHQ-9 Assessment" Assessment
+    ,
     "Depression Index" DepressionIndex
-  where Assessment.startDateTime in
-    Interval[DepressionIndex.startDateTime + 5 months, DepressionIndex.startDateTime + 7 months)
-      and Assessment.result < (DepressionIndex / 2)
+    where Assessment.startDateTime in Interval[DepressionIndex.startDateTime + 5 months, DepressionIndex.startDateTime + 7 months]
+      and Assessment.result < ( DepressionIndex / 2 )
 
 // Result Type:
 // List<{ Assessment "Risk Category Assessment", DepressionIndex "Risk Category Assessment" }>
@@ -93,21 +96,19 @@ define "Depression Remission":
 
 
 define "Depression Diagnosis":
-  (["Diagnosis": "Major Depression Including Remission"]
-    union ["Diagnosis": "Dysthymia"]
+  ( ["Diagnosis": "Major Depression Including Remission"]
+      union ["Diagnosis": "Dysthymia"]
   )
 
 define "Outpatient Encounter During Intake":
   ["Encounter, Performed": "Outpatient"] Encounter
     where Encounter.negationRationale is null
-      and Interval[Encounter.admissionDateTime, Encounter.dischargeDateTime]
-        during Interval[start of "Measurement Period" - 8 months, start of "Measurement Period" + 4 months]
+      and Interval[Encounter.admissionDateTime, Encounter.dischargeDateTime]during Interval[start of "Measurement Period" - 8 months, start of "Measurement Period" + 4 months]
 
 define "Depression Encounter":
   "Outpatient Encounter During Intake" Encounter
     with "Depression Diagnosis" Diagnosis
-      such that Interval[Encounter.admissionDateTime, Encounter.dischargeDateTime]
-        overlaps Interval[Diagnosis.onsetDateTime, Diagnosis.abatementDateTime]
+      such that Interval[Encounter.admissionDateTime, Encounter.dischargeDateTime]overlaps Interval[Diagnosis.onsetDateTime, Diagnosis.abatementDateTime]
 
 /*
 $DepressionEncounter =
@@ -119,10 +120,10 @@ $DepressionEncounter =
 			overlaps "Diagnosis: Dysthymia"
 */
 
+
 define "PHQ-9 Assessment":
-  (["Risk Category Assessment": "PHQ-9 Tool"]
-    union ["Risk Category Assessment": "PHQ-9 Modified Score"]
-  ) RiskAssessment
+  ( ["Risk Category Assessment": "PHQ-9 Tool"]
+    union ["Risk Category Assessment": "PHQ-9 Modified Score"] ) RiskAssessment
     where RiskAssessment.negationRationale is null
       and RiskAssessment.result is not null
 
@@ -139,9 +140,10 @@ $DepressionIndex =
 			<=15 day(s) starts after start of $DepressionEncounter
 */
 
+
 define "Depression Index":
   First("PHQ-9 Assessment" Assessment
-    with "Depression Encounter" Encounter
-      such that Assessment.startDateTime within 15 days of Encounter.admissionDateTime
-    where Assessment.result > 9
+      with "Depression Encounter" Encounter
+        such that Assessment.startDateTime within 15 days of Encounter.admissionDateTime
+      where Assessment.result > 9
   )

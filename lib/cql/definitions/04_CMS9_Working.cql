@@ -12,10 +12,9 @@ valueset "Dietary Intake Other than Breast Milk": 'urn:oid:2.16.840.1.113883.3.1
 valueset "Neonatal Intensive Care Unit (NICU)": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.75'
 valueset "Patient Expired": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.309'
 valueset "Discharge To Acute Care Facility": 'urn:oid:2.16.840.1.113883.3.117.1.7.1.87'
-
 valueset "Ethnicity": 'urn:oid:2.16.840.1.114222.4.11.837'
 valueset "Payer": 'urn:oid:2.16.840.1.114222.4.11.3591'
 valueset "Race": 'urn:oid:2.16.840.1.114222.4.11.836'
 valueset "ONC Administrative Sex": 'urn:oid:2.16.840.1.113762.1.4.1'
 
-parameter "Measurement Period" default Interval[@2015-01-01T00:00:00, @2016-01-01T00:00:00)
+parameter "Measurement Period" default Interval[@2015-01-01T00:00:00, @2016-01-01T00:00:00]

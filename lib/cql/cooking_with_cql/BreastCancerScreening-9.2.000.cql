@@ -38,7 +38,7 @@ define "Denominator":
 define "Initial Population":
   exists ( ["Patient Characteristic Sex": "Female"] )
     and exists ["Patient Characteristic Birthdate": "Birth date"] BirthDate
-      where Global."CalendarAgeInYearsAt" ( BirthDate.birthDatetime, start of "Measurement Period" ) in Interval[51, 74 )
+      where Global."CalendarAgeInYearsAt" ( BirthDate.birthDatetime, start of "Measurement Period" ) in Interval[51, 74]
         and exists AdultOutpatientEncounters."Qualifying Encounters"
 
 define "SDE Ethnicity":
@@ -72,43 +72,35 @@ define "Denominator Exclusions":
 
 define "Left Mastectomy Procedure":
   ["Procedure, Performed": "Unilateral Mastectomy Left"] UnilateralMastectomyLeftPerformed
-    where UnilateralMastectomyLeftPerformed.relevantPeriod ends on or before 
-    end of "Measurement Period"
+    where UnilateralMastectomyLeftPerformed.relevantPeriod ends on or before end of "Measurement Period"
 
 define "Bilateral Mastectomy Diagnosis":
   ["Diagnosis": "History of bilateral mastectomy"] BilateralMastectomyHistory
-    where BilateralMastectomyHistory.prevalencePeriod starts on or before 
-    end of "Measurement Period"
+    where BilateralMastectomyHistory.prevalencePeriod starts on or before end of "Measurement Period"
 
 define "Bilateral Mastectomy Procedure":
   ["Procedure, Performed": "Bilateral Mastectomy"] BilateralMastectomyPerformed
-    where BilateralMastectomyPerformed.relevantPeriod ends on or before 
-    end of "Measurement Period"
+    where BilateralMastectomyPerformed.relevantPeriod ends on or before end of "Measurement Period"
 
 define "Right Mastectomy Procedure":
   ["Procedure, Performed": "Unilateral Mastectomy Right"] UnilateralMastectomyRightPerformed
-    where UnilateralMastectomyRightPerformed.relevantPeriod ends on or before 
-    end of "Measurement Period"
+    where UnilateralMastectomyRightPerformed.relevantPeriod ends on or before end of "Measurement Period"
 
 define "Left Mastectomy Diagnosis":
   ( ["Diagnosis": "Status Post Left Mastectomy"]
     union ( ["Diagnosis": "Unilateral Mastectomy, Unspecified Laterality"] UnilateralMastectomyDiagnosis
         where UnilateralMastectomyDiagnosis.anatomicalLocationSite ~ "Left (qualifier value)"
     ) ) LeftMastectomy
-    where LeftMastectomy.prevalencePeriod starts on or before 
-    end of "Measurement Period"
+    where LeftMastectomy.prevalencePeriod starts on or before end of "Measurement Period"
 
 define "Right Mastectomy Diagnosis":
   ( ["Diagnosis": "Status Post Right Mastectomy"] RightMastectomyProcedure
     union ( ["Diagnosis": "Unilateral Mastectomy, Unspecified Laterality"] UnilateralMastectomyDiagnosis
         where UnilateralMastectomyDiagnosis.anatomicalLocationSite ~ "Right (qualifier value)"
     ) ) RightMastectomy
-    where RightMastectomy.prevalencePeriod starts on or before 
-    end of "Measurement Period"
+    where RightMastectomy.prevalencePeriod starts on or before end of "Measurement Period"
 
 define "Numerator":
   exists ( ["Diagnostic Study, Performed": "Mammography"] Mammogram
-      where ( Mammogram.relevantDatetime 27 months or less on or before day of 
-        end of "Measurement Period"
-      )
+      where ( Mammogram.relevantDatetime 27 months or less on or before day of end of "Measurement Period" )
   )

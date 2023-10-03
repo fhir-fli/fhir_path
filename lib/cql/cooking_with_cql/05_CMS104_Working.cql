@@ -22,7 +22,7 @@ valueset "Payer": 'urn:oid:2.16.840.1.114222.4.11.3591'
 valueset "Race": 'urn:oid:2.16.840.1.114222.4.11.836'
 valueset "ONC Administrative": 'urn:oid:2.16.840.1.113762.1.4.1'
 
-parameter "Measurement Period" default Interval[@2015-01-01T00:00:00, @2016-01-01T00:00:00)
+parameter "Measurement Period" default Interval[@2015-01-01T00:00:00, @2016-01-01T00:00:00]
 
 context Patient
 /*QDM Variables
