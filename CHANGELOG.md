@@ -1,5 +1,10 @@
 # fhir_path
 
+## [0.11.3]
+
+* updated dependencies
+
+
 ## [0.11.2]
 
 * updated dependencies
