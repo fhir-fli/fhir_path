@@ -4,8 +4,7 @@
 import '../../petit_fhir_path.dart';
 
 class IndexOfParser extends ValueParser<ParserList> {
-  IndexOfParser();
-  late ParserList value;
+  IndexOfParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -50,8 +49,7 @@ class IndexOfParser extends ValueParser<ParserList> {
 }
 
 class SubstringParser extends ValueParser<ParserList> {
-  SubstringParser();
-  late ParserList value;
+  SubstringParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -120,8 +118,7 @@ class SubstringParser extends ValueParser<ParserList> {
 }
 
 class StartsWithParser extends ValueParser<ParserList> {
-  StartsWithParser();
-  late ParserList value;
+  StartsWithParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -165,8 +162,7 @@ class StartsWithParser extends ValueParser<ParserList> {
 }
 
 class EndsWithParser extends ValueParser<ParserList> {
-  EndsWithParser();
-  late ParserList value;
+  EndsWithParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -211,8 +207,7 @@ class EndsWithParser extends ValueParser<ParserList> {
 
 // http://hl7.org/fhirpath/#containssubstring-string-boolean
 class ContainsFunctionParser extends ValueParser<ParserList> {
-  ContainsFunctionParser();
-  late ParserList value;
+  ContainsFunctionParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -309,8 +304,7 @@ class LowerParser extends FhirPathParser {
 }
 
 class ReplaceParser extends ValueParser<ParserList> {
-  ReplaceParser();
-  late ParserList value;
+  ReplaceParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -352,8 +346,7 @@ class ReplaceParser extends ValueParser<ParserList> {
 }
 
 class FpMatchesParser extends ValueParser<ParserList> {
-  FpMatchesParser();
-  late ParserList value;
+  FpMatchesParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -394,8 +387,7 @@ class FpMatchesParser extends ValueParser<ParserList> {
 }
 
 class ReplaceMatchesParser extends ValueParser<ParserList> {
-  ReplaceMatchesParser();
-  late ParserList value;
+  ReplaceMatchesParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

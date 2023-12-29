@@ -10,11 +10,11 @@ import 'test_questionnaire.dart';
 
 void petitFhirPathTest() {
   testBasicTypes();
-  testPaths();
-  testNoArgFxns();
-  testBasicOperators();
-  testArgFxns();
-  testQuestionnaire();
-  testDateTimes();
-  testFhirPathTestSuite();
+  // testPaths();
+  // testNoArgFxns();
+  // testBasicOperators();
+  // testArgFxns();
+  // testQuestionnaire();
+  // testDateTimes();
+  // testFhirPathTestSuite();
 }

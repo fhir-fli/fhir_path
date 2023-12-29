@@ -365,9 +365,9 @@ class FhirPathQuantity {
     if (lhs is primitives.FhirDate && lhs.isValid && lhs.value != null) {
       final newDate = DateTime.utc(lhs.value!.year + yearAmount,
           lhs.value!.month + monthAmount, lhs.value!.day + dayAmount);
-      if (lhs.precision == primitives.DatePrecision.YYYY) {
+      if (lhs.precision == primitives.DateTimePrecision.yyyy) {
         return primitives.FhirDate(newDate.toString().substring(0, 4));
-      } else if (lhs.precision == primitives.DatePrecision.YYYYMM) {
+      } else if (lhs.precision == primitives.DateTimePrecision.yyyy_MM) {
         return primitives.FhirDate(newDate.toString().substring(0, 7));
       } else {
         return primitives.FhirDate(newDate.toString().substring(0, 10));
@@ -404,13 +404,13 @@ class FhirPathQuantity {
         oldDateTime.second + secondAmount,
         oldDateTime.millisecond + millisecondAmount,
       );
-      if (lhs.precision == primitives.DateTimePrecision.YYYY) {
+      if (lhs.precision == primitives.DateTimePrecision.yyyy) {
         return primitives.FhirDateTime(
             newDateTime.toIso8601String().substring(0, 4));
-      } else if (lhs.precision == primitives.DateTimePrecision.YYYYMM) {
+      } else if (lhs.precision == primitives.DateTimePrecision.yyyy_MM) {
         return primitives.FhirDateTime(
             newDateTime.toIso8601String().substring(0, 7));
-      } else if (lhs.precision == primitives.DateTimePrecision.YYYYMMDD) {
+      } else if (lhs.precision == primitives.DateTimePrecision.yyyy_MM_dd) {
         return primitives.FhirDateTime(
             newDateTime.toIso8601String().substring(0, 10));
       } else {

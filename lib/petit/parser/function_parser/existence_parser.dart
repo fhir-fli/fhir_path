@@ -34,9 +34,8 @@ class EmptyParser extends FhirPathParser {
   String prettyPrint([int indent = 2]) => '.empty()';
 }
 
-class HasValueParser extends FhirPathParser {
-  HasValueParser();
-  late ParserList value;
+class HasValueParser extends ValueParser<ParserList> {
+  HasValueParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -97,8 +96,7 @@ class HasValueParser extends FhirPathParser {
 /// function is shorthand for where(criteria).exists().
 /// Note that a common term for this function is any.
 class ExistsParser extends FunctionParser {
-  ExistsParser();
-  late ParserList value;
+  ExistsParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -145,8 +143,7 @@ class ExistsParser extends FunctionParser {
 }
 
 class AllParser extends ValueParser<ParserList> {
-  AllParser();
-  late ParserList value;
+  AllParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -334,8 +331,7 @@ class AnyFalseParser extends FhirPathParser {
 }
 
 class SubsetOfParser extends ValueParser<ParserList> {
-  SubsetOfParser();
-  late ParserList value;
+  SubsetOfParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

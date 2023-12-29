@@ -2,6 +2,8 @@
 
 /// FhirPathParser: base parser
 abstract class FhirPathParser {
+  const FhirPathParser();
+
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   List execute(List results, Map<String, dynamic> passed) => [];
@@ -24,15 +26,34 @@ abstract class FhirPathParser {
 
 /// ValueParser: basic parser that holds a value
 abstract class ValueParser<T> extends FhirPathParser {
-  ValueParser();
-  late T value;
+  const ValueParser(this.value);
+  final T value;
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed);
+
   @override
-  String toString();
+  String toString() => '$runtimeType: $value';
+
+  /// To print the entire parsed FHIRPath expression, this includes ALL
+  /// of the Parsers that are used in this package by the names used in
+  /// this package. These are not always synonymous with the FHIRPath
+  /// specification (although they usually are), and include some parser
+  /// classes that were created for ease of evaluation but are not included
+  /// at all as objects in the official spec. I'm generally going to recommend
+  /// that you use [prettyPrint] instead
+  @override
+  String verbosePrint(int indent) => '${"  " * indent}$runtimeType'
+      '${value is FhirPathParser ? (value as FhirPathParser).verbosePrint(indent + 1) : value}';
+
+  /// Uses a rough approximation of reverse polish notation to render the
+  /// parsed value of a FHIRPath in a more human readable way than
+  /// [verbosePrint], while still demonstrating how the expression was parsed
+  /// and nested according to this package
+  @override
+  String prettyPrint([int indent = 2]) => '$value';
 }
 
 /// OperatorParser: operators
@@ -57,9 +78,8 @@ abstract class OperatorParser extends FhirPathParser {
 }
 
 /// ParserList: anything that is a List of FhirPathParsers
-class ParserList extends FhirPathParser {
-  ParserList(this.value);
-  List<FhirPathParser> value;
+class ParserList extends ValueParser<List<FhirPathParser>> {
+  const ParserList(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

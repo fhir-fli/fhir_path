@@ -8,8 +8,7 @@ import '../../petit_fhir_path.dart';
 /// of FHIRPath. However, we have chosen not to support it.
 /// DEPRECATED
 class AsFunctionParser extends ValueParser<ParserList> {
-  AsFunctionParser();
-  late ParserList value;
+  AsFunctionParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -47,8 +46,7 @@ class AsFunctionParser extends ValueParser<ParserList> {
 /// of FHIRPath. However, we have chosen not to support it.
 /// DEPRECATED
 class IsFunctionParser extends ValueParser<ParserList> {
-  IsFunctionParser();
-  late ParserList value;
+  IsFunctionParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

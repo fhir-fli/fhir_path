@@ -128,8 +128,7 @@ class TailParser extends FhirPathParser {
 }
 
 class FpSkipParser extends FunctionParser {
-  FpSkipParser();
-  late ParserList value;
+  FpSkipParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -176,8 +175,7 @@ class FpSkipParser extends FunctionParser {
 }
 
 class TakeParser extends FunctionParser {
-  TakeParser();
-  late ParserList value;
+  TakeParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -224,8 +222,7 @@ class TakeParser extends FunctionParser {
 }
 
 class IntersectParser extends ValueParser<ParserList> {
-  IntersectParser();
-  late ParserList value;
+  IntersectParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -275,8 +272,7 @@ class IntersectParser extends ValueParser<ParserList> {
 }
 
 class ExcludeParser extends ValueParser<ParserList> {
-  ExcludeParser();
-  late ParserList value;
+  ExcludeParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

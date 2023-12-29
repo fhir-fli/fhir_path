@@ -4,6 +4,7 @@
 import 'dart:convert';
 
 // Package imports:
+import 'package:fhir/primitive_types/primitive_types.dart';
 import 'package:petitparser/petitparser.dart';
 
 // Project imports:
@@ -35,7 +36,7 @@ final Parser<WhiteSpaceParser> multiLineCommentLexer =
 /// Finds strings 'true' or 'false' (without quotes)
 final Parser<BooleanParser> booleanLexer = (string('true') | string('false'))
     .flatten()
-    .map((value) => BooleanParser(value));
+    .map((value) => BooleanParser(value == 'true'));
 
 /// Allows environmental variables to be passed to FHIRPath
 final Parser<EnvVariableParser> envVariableLexer =
@@ -53,10 +54,10 @@ final numberLexer = decimalLexer | integerLexer;
 final Parser<DecimalParser> decimalLexer =
     (digit().plus() & char('.') & digit().plus())
         .flatten()
-        .map((value) => DecimalParser(value));
+        .map((value) => DecimalParser(double.parse(value)));
 
 final Parser<IntegerParser> integerLexer =
-    digit().plus().flatten().map((value) => IntegerParser(value));
+    digit().plus().flatten().map((value) => IntegerParser(int.parse(value)));
 
 /// A String is signified by single quotes (') on either end
 final Parser<StringParser> stringLexer =
@@ -122,16 +123,17 @@ final dateTimeLexer = (char('@') &
         char('T') &
         (timeFormatLexer & timeZoneOffsetFormatLexer.optional()).optional())
     .flatten()
-    .map((value) => DateTimeParser(value));
+    .map((value) => DateTimeParser(FhirDateTime(value)));
 
 /// Follows Date format specified in FHIRPath
-final dateLexer =
-    (char('@') & dateFormatLexer).flatten().map((value) => DateParser(value));
+final dateLexer = (char('@') & dateFormatLexer)
+    .flatten()
+    .map((value) => DateParser(FhirDate(value)));
 
 /// Follows Time format specified in FHIRPath
 final timeLexer = (char('@') & char('T') & timeFormatLexer)
     .flatten()
-    .map((value) => TimeParser(value));
+    .map((value) => TimeParser(FhirTime(value)));
 
 final dateFormatLexer = (digit() &
         digit() &

@@ -8,8 +8,7 @@ import '../../petit_fhir_path.dart';
 /// determine equality). There is no expectation of order in
 /// the resulting collection.
 class UnionFunctionParser extends FunctionParser {
-  UnionFunctionParser();
-  late ParserList value;
+  UnionFunctionParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -50,8 +49,7 @@ class UnionFunctionParser extends FunctionParser {
 /// with a non-empty collection will return the non-empty collection.
 /// There is no expectation of order in the resulting collection.
 class CombineParser extends FunctionParser {
-  CombineParser();
-  late ParserList value;
+  CombineParser() : super(ParserList([]));
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

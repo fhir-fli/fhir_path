@@ -9,9 +9,9 @@ environment:
 
 dependencies:
   collection: ^1.17.2
-  fhir: ^0.11.4
-  # fhir:
-  #   path: ../fhir
+  # fhir: ^0.11.5-dev1
+  fhir:
+    path: ../fhir
   units_converter: ^2.1.1
   # units_converter:
   #   path: ../../units_converter

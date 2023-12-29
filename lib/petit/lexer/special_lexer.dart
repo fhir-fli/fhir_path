@@ -12,9 +12,8 @@ import '../petit_fhir_path.dart';
 
 /// identifies bracketsIndexs
 final Parser<BracketsIndexParser> bracketsIndexLexer =
-    (char('[') & digit().plus() & char(']'))
-        .flatten()
-        .map((value) => BracketsIndexParser(value));
+    (char('[') & digit().plus() & char(']')).flatten().map((value) =>
+        BracketsIndexParser(int.parse(value.substring(1, value.length - 1))));
 
 /// identifies indexs
 final Parser<IndexParser> indexLexer =
