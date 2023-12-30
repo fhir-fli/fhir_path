@@ -11,12 +11,13 @@ import 'package:fhir/stu3.dart' as stu3;
 import '../../petit_fhir_path.dart';
 
 class IsParser extends OperatorParser {
-  IsParser();
+  IsParser([FhirPathParser? super.nextParser]);
+
+  IsParser copyWithNextParser(FhirPathParser nextParser) =>
+      IsParser(nextParser);
   ParserList before = ParserList([]);
   ParserList after = ParserList([]);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) {
     final executedBefore = before.execute(results.toList(), passed);
@@ -87,22 +88,11 @@ class IsParser extends OperatorParser {
                                             : [false];
   }
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
   @override
   String verbosePrint(int indent) => '${"  " * indent}IsParser'
       '\n${before.verbosePrint(indent + 1)}'
       '\n${after.verbosePrint(indent + 1)}';
 
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
   @override
   String prettyPrint([int indent = 2]) => 'is('
       '\n${before.prettyPrint(indent + 1)}'
@@ -111,12 +101,13 @@ class IsParser extends OperatorParser {
 }
 
 class AsParser extends OperatorParser {
-  AsParser();
+  AsParser([FhirPathParser? super.nextParser]);
+
+  AsParser copyWithNextParser(FhirPathParser nextParser) =>
+      AsParser(nextParser);
   ParserList before = ParserList([]);
   ParserList after = ParserList([]);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) {
     final executedBefore = before.execute(results.toList(), passed);
@@ -182,22 +173,11 @@ class AsParser extends OperatorParser {
     return [];
   }
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
   @override
   String verbosePrint(int indent) => '${"  " * indent}AsParser'
       '\n${before.verbosePrint(indent + 1)}'
       '\n${after.verbosePrint(indent + 1)}';
 
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
   @override
   String prettyPrint([int indent = 2]) => 'as'
       '\n${"  " * indent}${before.prettyPrint(indent + 1)}'

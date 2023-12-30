@@ -5,7 +5,7 @@ import 'fhir_path_parser.dart';
 
 /// BaseDateTimeParser: either a DateParser or DateTimeParser
 abstract class BaseDateTimeParser<T> extends ValueParser<T> {
-  const BaseDateTimeParser(super.value);
+  const BaseDateTimeParser(super.value, [FhirPathParser? super.nextParser]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -25,7 +25,10 @@ abstract class BaseDateTimeParser<T> extends ValueParser<T> {
 
 /// ParenthesesParser: ()
 class ParenthesesParser extends ValueParser<ParserList> {
-  const ParenthesesParser(super.value);
+  const ParenthesesParser(super.value, [FhirPathParser? super.nextParser]);
+
+  ParenthesesParser copyWithNextParser(FhirPathParser nextParser) =>
+      ParenthesesParser(value, nextParser);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -57,5 +60,7 @@ class ParenthesesParser extends ValueParser<ParserList> {
 
 /// FunctionParser: functions
 abstract class FunctionParser extends ValueParser<ParserList> {
-  const FunctionParser(super.value);
+  const FunctionParser(super.value, [FhirPathParser? super.nextParser]);
+
+  FunctionParser copyWithNextParser(FhirPathParser nextParser);
 }

@@ -7,10 +7,11 @@ import 'package:fhir/primitive_types/primitive_types.dart';
 import '../../petit_fhir_path.dart';
 
 class FpNotParser extends FhirPathParser {
-  FpNotParser();
+  FpNotParser([FhirPathParser? super.nextParser]);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  FpNotParser copyWithNextParser(FhirPathParser nextParser) =>
+      FpNotParser(nextParser);
+
   @override
   List execute(List results, Map<String, dynamic> passed) {
     final input = SingletonEvaluation.toBool(results,
@@ -18,129 +19,78 @@ class FpNotParser extends FhirPathParser {
     return input != null ? [!input] : [];
   }
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
   @override
   String verbosePrint(int indent) => '${"  " * indent}FpNotParser';
 
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
   @override
   String prettyPrint([int indent = 2]) => '.not()';
 }
 
 class NowParser extends FhirPathParser {
-  NowParser();
+  NowParser([FhirPathParser? super.nextParser]);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  NowParser copyWithNextParser(FhirPathParser nextParser) =>
+      NowParser(nextParser);
+
   @override
   List execute(List results, Map<String, dynamic> passed) =>
       [FhirDateTime(DateTime.now())];
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
   @override
   String verbosePrint(int indent) => '${"  " * indent}NowParser';
 
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
   @override
   String prettyPrint([int indent = 2]) => '.now()';
 }
 
 class TimeOfDayParser extends FhirPathParser {
-  TimeOfDayParser();
+  TimeOfDayParser([FhirPathParser? super.nextParser]);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  TimeOfDayParser copyWithNextParser(FhirPathParser nextParser) =>
+      TimeOfDayParser(nextParser);
+
   @override
   List execute(List results, Map<String, dynamic> passed) => [
         FhirTime(
             DateTime.now().toIso8601String().split('T').last.substring(0, 12))
       ];
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
   @override
   String verbosePrint(int indent) => '${"  " * indent}TimeOfDayParser';
 
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
   @override
   String prettyPrint([int indent = 2]) => '.timeOfDay()';
 }
 
 class TodayParser extends FhirPathParser {
-  TodayParser();
+  TodayParser([FhirPathParser? super.nextParser]);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  TodayParser copyWithNextParser(FhirPathParser nextParser) =>
+      TodayParser(nextParser);
+
   @override
   List execute(List results, Map<String, dynamic> passed) =>
       [FhirDate(DateTime.now().toIso8601String().split('T').first)];
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
   @override
   String verbosePrint(int indent) => '${"  " * indent}TodayParser';
 
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
   @override
   String prettyPrint([int indent = 2]) => '.today()';
 }
 
 class TraceParser extends ValueParser<int> {
-  const TraceParser() : super(0);
+  const TraceParser([FhirPathParser? nextParser]) : super(0, nextParser);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  TraceParser copyWithNextParser(FhirPathParser nextParser) =>
+      TraceParser(nextParser);
+
   @override
   List execute(List results, Map<String, dynamic> passed) => results;
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
   @override
   String verbosePrint(int indent) => '${"  " * indent}TraceParser\n$value';
 
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
   @override
   String prettyPrint([int indent = 2]) => 'trace(\n$value\n)';
 }

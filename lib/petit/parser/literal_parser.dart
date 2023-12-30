@@ -15,22 +15,14 @@ import '../petit_fhir_path.dart';
 /// This includes all input that should be ignored, this includes pure white
 /// space, along with comments, it simply returns whatever has been passed to it
 class WhiteSpaceParser extends ValueParser<String> {
-  const WhiteSpaceParser(super.value);
+  const WhiteSpaceParser(super.value, [super.nextParser]);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  WhiteSpaceParser copyWithNextParser(FhirPathParser nextParser) =>
+      WhiteSpaceParser(value, nextParser);
+
   @override
   List execute(List results, Map<String, dynamic> passed) => results;
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead.
   @override
   String verbosePrint(int indent) =>
       '${"  " * indent}WhiteSpaceParser: "$value"';
@@ -41,10 +33,11 @@ class WhiteSpaceParser extends ValueParser<String> {
 
 /// Boolean Parser, it returns a FHIR Boolean value
 class BooleanParser extends ValueParser<bool> {
-  const BooleanParser(super.value);
+  const BooleanParser(super.value, [super.nextParser]);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  BooleanParser copyWithNextParser(FhirPathParser nextParser) =>
+      BooleanParser(value, nextParser);
+
   @override
   List execute(List results, Map<String, dynamic> passed) => [value];
 
@@ -71,10 +64,11 @@ class BooleanParser extends ValueParser<bool> {
 /// This allows the passing of a variable from the environment into the
 /// evaluation.
 class EnvVariableParser extends ValueParser<String> {
-  const EnvVariableParser(super.value);
+  const EnvVariableParser(super.value, [super.nextParser]);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  EnvVariableParser copyWithNextParser(FhirPathParser nextParser) =>
+      EnvVariableParser(value, nextParser);
+
   @override
   List execute(List results, Map<String, dynamic> passed) {
     final variableName = value.replaceAll('`', '');
@@ -137,14 +131,16 @@ class EnvVariableParser extends ValueParser<String> {
 /// Code for Units of Measure (UCUM) unit or one of the calendar duration
 /// keywords, singular or plural.
 class QuantityParser extends ValueParser<GenericQuantity> {
-  QuantityParser(String stringValue)
-      : super(GenericQuantity.fromString(stringValue));
+  QuantityParser(String stringValue, [FhirPathParser? nextParser])
+      : super(GenericQuantity.fromString(stringValue), nextParser);
 
-  QuantityParser.fromValues(num value, String? unit)
-      : super(GenericQuantity(value: value, unit: unit));
+  QuantityParser.fromValues(num value, String? unit,
+      [FhirPathParser? nextParser])
+      : super(GenericQuantity(value: value, unit: unit), nextParser);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  QuantityParser copyWithNextParser(FhirPathParser nextParser) =>
+      QuantityParser(value.toString());
+
   @override
   List execute(List results, Map<String, dynamic> passed) => [value];
 
@@ -161,10 +157,11 @@ class QuantityParser extends ValueParser<GenericQuantity> {
 /// The Integer type represents whole numbers in the range -2^31 to 2^31-1 in
 /// the FHIRPath spec, although we follow Dart's [int] which is +/- 2^53
 class IntegerParser extends ValueParser<int> {
-  const IntegerParser(super.value);
+  const IntegerParser(super.value, [super.nextParser]);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  IntegerParser copyWithNextParser(FhirPathParser nextParser) =>
+      IntegerParser(value, nextParser);
+
   @override
   List execute(List results, Map<String, dynamic> passed) => [value];
 
@@ -198,10 +195,11 @@ class IntegerParser extends ValueParser<int> {
 /// fixed-precision decimal formats to ensure that decimal values are
 /// accurately represented
 class DecimalParser extends ValueParser<double> {
-  const DecimalParser(super.value);
+  const DecimalParser(super.value, [super.nextParser]);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  DecimalParser copyWithNextParser(FhirPathParser nextParser) =>
+      DecimalParser(value, nextParser);
+
   @override
   List execute(List results, Map<String, dynamic> passed) => [value];
 
@@ -219,10 +217,11 @@ class DecimalParser extends ValueParser<double> {
 /// A simple identifier is any alphabetical character or an underscore,
 /// followed by any number of alpha-numeric characters or underscores
 class IdentifierParser extends ValueParser<String> {
-  const IdentifierParser(super.value);
+  const IdentifierParser(super.value, [super.nextParser]);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  IdentifierParser copyWithNextParser(FhirPathParser nextParser) =>
+      IdentifierParser(value, nextParser);
+
   @override
   List execute(List results, Map<String, dynamic> passed) {
     final identifierName = value;
@@ -298,7 +297,11 @@ class IdentifierParser extends ValueParser<String> {
 
     passed[ExtensionParser.extensionKey] = finalPrimitiveExtensions;
 
-    return finalResults;
+    if (nextParser != null) {
+      return nextParser!.execute(finalResults, passed);
+    } else {
+      return finalResults;
+    }
   }
 
   @override
@@ -320,10 +323,8 @@ class IdentifierParser extends ValueParser<String> {
 /// reference models that have property or type names that are not valid
 /// simple identifiers.
 class DelimitedIdentifierParser extends IdentifierParser {
-  const DelimitedIdentifierParser(super.value);
+  const DelimitedIdentifierParser(super.value, [super.nextParser]);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) {
     final identifierName = value;
@@ -421,10 +422,11 @@ class DelimitedIdentifierParser extends IdentifierParser {
 /// String literals are surrounded by single-quotes and may use \-escapes to
 /// escape quotes and represent Unicode characters.
 class StringParser extends ValueParser<String> {
-  const StringParser(super.value);
+  const StringParser(super.value, [super.nextParser]);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  StringParser copyWithNextParser(FhirPathParser nextParser) =>
+      StringParser(value, nextParser);
+
   @override
   List execute(List results, Map<String, dynamic> passed) => [value];
 
@@ -449,7 +451,10 @@ class StringParser extends ValueParser<String> {
 /// Implementations can provide support for larger ranges and higher precision,
 /// but must provide at least the range and precision defined here.
 class DateTimeParser extends BaseDateTimeParser<FhirDateTime> {
-  const DateTimeParser(super.value);
+  const DateTimeParser(super.value, [super.nextParser]);
+
+  DateTimeParser copyWithNextParser(FhirPathParser nextParser) =>
+      DateTimeParser(value, nextParser);
   //  {
   //   final removeAt = stringValue.replaceFirst('@', '');
   //   final split = removeAt.split('T');
@@ -500,7 +505,10 @@ class DateTimeParser extends BaseDateTimeParser<FhirDateTime> {
 /// The Date type represents date and partial date values in the range
 /// @0001-01-01 to @9999-12-31 with a 1 day step size.
 class DateParser extends BaseDateTimeParser<FhirDate> {
-  const DateParser(super.value);
+  const DateParser(super.value, [super.nextParser]);
+
+  DateParser copyWithNextParser(FhirPathParser nextParser) =>
+      DateParser(value, nextParser);
 
   @override
   operator ==(Object o) => o is DateParser
@@ -522,7 +530,10 @@ class DateParser extends BaseDateTimeParser<FhirDate> {
 /// and precision defined here. Time values in FHIRPath do not have a timezone
 /// or timezone offset.
 class TimeParser extends BaseDateTimeParser<FhirTime> {
-  const TimeParser(super.value);
+  const TimeParser(super.value, [super.nextParser]);
+
+  TimeParser copyWithNextParser(FhirPathParser nextParser) =>
+      TimeParser(value, nextParser);
 //  {
 //     final removeAt = stringValue.replaceFirst('@', '');
 //     value = FhirTime(removeAt.replaceFirst('T', ''));

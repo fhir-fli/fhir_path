@@ -11,7 +11,7 @@ import 'test_questionnaire.dart';
 void petitFhirPathTest() {
   testBasicTypes();
   testPaths();
-  // testNoArgFxns();
+  testNoArgFxns();
   // testBasicOperators();
   // testArgFxns();
   // testQuestionnaire();

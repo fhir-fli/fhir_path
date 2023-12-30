@@ -43,7 +43,7 @@ final Parser<SubsetOfParser> subsetOfLexer =
 /// identifies supersetOfs
 final Parser<SupersetOfParser> supersetOfLexer =
     (string('supersetOf(') | string('.supersetOf('))
-        .map((_) => SupersetOfParser());
+        .map((_) => SupersetOfParser(null));
 
 /// identifies wheres
 final Parser<FpWhereParser> whereLexer =

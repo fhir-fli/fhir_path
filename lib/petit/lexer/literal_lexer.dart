@@ -95,7 +95,7 @@ final Parser<DelimitedIdentifierParser> delimitedIdentifierLexer =
               ? ''
               : e)
       .join('');
-  return DelimitedIdentifierParser('${value[0]}$middleValue${value[2]}');
+  return DelimitedIdentifierParser(middleValue);
 });
 final escLexer = (char(r'\') &
         (char('`') |

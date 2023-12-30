@@ -8,10 +8,12 @@ import '../../petit_fhir_path.dart';
 /// of FHIRPath. However, we have chosen not to support it.
 /// DEPRECATED
 class AsFunctionParser extends ValueParser<ParserList> {
-  AsFunctionParser() : super(ParserList([]));
+  AsFunctionParser([FhirPathParser? nextParser])
+      : super(ParserList([]), nextParser);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  AsFunctionParser copyWithNextParser(FhirPathParser nextParser) =>
+      AsFunctionParser(nextParser);
+
   @override
   List execute(List results, Map<String, dynamic> passed) {
     throw FhirPathDeprecatedExpressionException(
@@ -20,21 +22,10 @@ class AsFunctionParser extends ValueParser<ParserList> {
         'Official explanation can be read here: https://hl7.org/fhirpath/#as-type-specifier');
   }
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
   @override
   String verbosePrint(int indent) =>
       '${"  " * indent}AsFunctionParser (Deprecated)\n${value.verbosePrint(indent + 1)}';
 
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
   @override
   String prettyPrint([int indent = 2]) =>
       '.as(Deprecated)(\n${"  " * indent}${value.prettyPrint(indent + 1)}\n'
@@ -46,10 +37,12 @@ class AsFunctionParser extends ValueParser<ParserList> {
 /// of FHIRPath. However, we have chosen not to support it.
 /// DEPRECATED
 class IsFunctionParser extends ValueParser<ParserList> {
-  IsFunctionParser() : super(ParserList([]));
+  IsFunctionParser([FhirPathParser? nextParser])
+      : super(ParserList([]), nextParser);
 
-  /// The iterable, nested function that evaluates the entire FHIRPath
-  /// expression one object at a time
+  IsFunctionParser copyWithNextParser(FhirPathParser nextParser) =>
+      IsFunctionParser(nextParser);
+
   @override
   List execute(List results, Map<String, dynamic> passed) {
     throw FhirPathDeprecatedExpressionException(
@@ -58,21 +51,10 @@ class IsFunctionParser extends ValueParser<ParserList> {
         'Official explanation can be read here: https://hl7.org/fhirpath/#as-type-specifier');
   }
 
-  /// To print the entire parsed FHIRPath expression, this includes ALL
-  /// of the Parsers that are used in this package by the names used in
-  /// this package. These are not always synonymous with the FHIRPath
-  /// specification (although they usually are), and include some parser
-  /// classes that were created for ease of evaluation but are not included
-  /// at all as objects in the official spec. I'm generally going to recommend
-  /// that you use [prettyPrint] instead
   @override
   String verbosePrint(int indent) =>
       '${"  " * indent}IsFunctionParser (Deprecated)\n${value.verbosePrint(indent + 1)}';
 
-  /// Uses a rough approximation of reverse polish notation to render the
-  /// parsed value of a FHIRPath in a more human readable way than
-  /// [verbosePrint], while still demonstrating how the expression was parsed
-  /// and nested according to this package
   @override
   String prettyPrint([int indent = 2]) =>
       '.is(Deprecated)(\n${"  " * indent}${value.prettyPrint(indent + 1)}\n'
