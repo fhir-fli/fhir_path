@@ -37,7 +37,7 @@ Parser fhirPathLexer() {
           (_expression & (char('+') | char('-') | char('&')) & _expression) |
 
           /// 	| expression ('is' | 'as') typeSpecifier			# typeExpression
-          (_expression & (string('is') | string('as')) & _expression) |
+          (_expression & (string('is') | string('as')) & typeSpecifier) |
 
           /// 	| expression '|' expression							# unionExpression
           (_expression & char('|') & _expression) |
@@ -78,7 +78,10 @@ Parser fhirPathLexer() {
           literal |
 
           /// 	identifier	# memberInvocation
-          identifier |
+          identifier.map((value) {
+            print('identifier: $value');
+            return value;
+          }) |
 
           /// 	'$this'	# thisInvocation
           string('\$this') |
@@ -148,7 +151,10 @@ final Parser literal = ((STRING |
                 TIME)
             .trim() &
         ignored.optional())
-    .map((value) => value[0]);
+    .map((value) {
+  print('literal: ${value[0]}');
+  return value[0];
+});
 
 final Parser NULL = string('{}');
 

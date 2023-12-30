@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, unnecessary_statements, leading_newlines_in_multiline_strings, directives_ordering, always_specify_types, unnecessary_parenthesis, avoid_dynamic_calls
+// ignore_for_file: unnecessary_string_escapes
 
 // Package imports:
 import 'package:fhir/primitive_types/primitive_types.dart';
@@ -82,45 +82,21 @@ void testBasicTypes() {
     expect(parseResult("4.5 'mg'"), QuantityParser("4.5 'mg'"));
     expect(parseResult("100 '[degF]'"), QuantityParser("100 '[degF]'"));
   });
-  // test('Duration quantities', () {
-  //   expect(
-  //       walkFhirPath(context: null, pathExpression: r"1 seconds = 1 second"),
-  //       [true]);
-  //   expect(walkFhirPath(context: null, pathExpression: r"1 seconds = 1 's'"),
-  //       [true]);
-  //   expect(walkFhirPath(context: null, pathExpression: r"2 seconds = 2 's'"),
-  //       [true]);
-  //   expect(walkFhirPath(context: null, pathExpression: r"1 week != 1 'w'"),
-  //       [true]);
-  // });
-  // test('Non-Escape Sequences', () {
-  // TODO(Dokotela):  figure out escape sequences
-  // expect(
-  //     ((parseResult("'\p' // 'p'") as ParserList).first as StringParser)
-  //         .value
-  //         .value,
-  //     'p');
-  // expect(
-  //     ((parseResult("'\\p' // '\p'") as ParserList).first as StringParser)
-  //         .value
-  //         .value,
-  //     '\p');
-  // expect(
-  //     ((parseResult("'\3' // '3'") as ParserList).first as StringParser)
-  //         .value
-  //         .value,
-  //     '3');
-  // expect(
-  //     ((parseResult("'\u005' // 'u005'") as ParserList).first
-  //             as StringParser)
-  //         .value
-  //         .value,
-  //     'u005');
-  // expect(
-  //     ((parseResult(""' // '"") as ParserList).first as StringParser)
-  //         .value
-  //         .value,
-  //     '');
-  // });
-  // });
+  test('Duration quantities', () {
+    expect(walkFhirPath(context: null, pathExpression: r"1 seconds = 1 second"),
+        [true]);
+    expect(walkFhirPath(context: null, pathExpression: r"1 seconds = 1 's'"),
+        [true]);
+    expect(walkFhirPath(context: null, pathExpression: r"2 seconds = 2 's'"),
+        [true]);
+    expect(walkFhirPath(context: null, pathExpression: r"1 week != 1 'w'"),
+        [true]);
+  });
+  test('Non-Escape Sequences', () {
+    expect(parseResult("'\p' // 'p'"), const StringParser('p'));
+    expect(parseResult("'\\p' // '\p'"), const StringParser(r'\p'));
+    expect(parseResult("'\3' // '3'"), const StringParser('3'));
+    // expect(parseResult("""'\u005' // 'u005'"""), 'u005');
+    expect(parseResult("'\' // ''"), const StringParser(''));
+  });
 }
