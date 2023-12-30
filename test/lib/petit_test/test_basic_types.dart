@@ -11,7 +11,6 @@ import 'package:fhir_path/petit/petit_fhir_path.dart';
 FhirPathParser parseResult(String arg) => fhirPathLexer().parse(arg).value;
 
 void testBasicTypes() {
-  print(FhirDateTime('2014-03-25T').isValid);
   group('Basic Types', () {
     test('Boolean', () {
       expect(parseResult('true'), const BooleanParser(true));

@@ -137,15 +137,15 @@ Parser fhirPathLexer() {
 /// 	| DATETIME				# dateTimeLiteral
 /// 	| TIME					# timeLiteral
 /// 	| quantity				# quantityLiteral;
-final Parser literal = ((NULL |
+final Parser literal = ((STRING |
+                NULL |
                 (string('true') | string('false'))
                     .map((value) => BooleanParser(value == 'true')) |
-                STRING |
+                quantity |
                 NUMBER |
                 DATETIME |
                 DATE |
-                TIME |
-                quantity)
+                TIME)
             .trim() &
         ignored.optional())
     .map((value) => value[0]);
@@ -156,15 +156,10 @@ final Parser NULL = string('{}');
 final Parser externalConstant = char('%').seq(identifier | STRING);
 
 /// quantity: NUMBER unit?;
-final Parser<QuantityParser> quantity = (NUMBER & unit.optional()).map((value) {
-  if (value[0] is IntegerParser) {
-    return QuantityParser.fromValues(
-        (value[0] as IntegerParser).value, value[1] as String?);
-  } else {
-    return QuantityParser.fromValues(
-        (value[0] as DecimalParser).value, value[1] as String?);
-  }
-});
+/// TODO(Dokotela): unit should be optional
+final Parser<QuantityParser> quantity = (NUMBER & (char(' ') & unit))
+    .flatten()
+    .map((value) => QuantityParser(value));
 
 /// unit:
 /// 	dateTimePrecision

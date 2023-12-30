@@ -149,15 +149,13 @@ class QuantityParser extends ValueParser<GenericQuantity> {
   List execute(List results, Map<String, dynamic> passed) => [value];
 
   @override
-  String toString() {
-    return 'Quantity: $value';
-  }
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}QuantityParser: "$value"';
-
-  @override
-  String prettyPrint([int indent = 2]) => '$value';
+  operator ==(Object o) => o is QuantityParser
+      ? o.value == value
+      : o is GenericQuantity
+          ? o == value
+          : o is String
+              ? GenericQuantity.fromString(o) == value
+              : false;
 }
 
 /// The Integer type represents whole numbers in the range -2^31 to 2^31-1 in
