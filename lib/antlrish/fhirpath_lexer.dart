@@ -8,7 +8,6 @@ import 'package:petitparser/parser.dart';
 
 Parser fhirPathLexer() {
   final _expression = undefined();
-  final _term = undefined();
   final _invocation = undefined();
   final _function = undefined();
   final _paramList = undefined();
@@ -16,11 +15,45 @@ Parser fhirPathLexer() {
   /// expression:
   final Parser expressionPart =
 
-      /// 	term												# termExpression
-      _term |
+      /// 	| '(' expression ')'	# parenthesizedTerm;
+      (char('(') & _expression & char(')')) |
 
-          /// 	| expression '.' invocation							# invocationExpression
-          (_expression & char('.') & _invocation) |
+          /// 	function	# functionInvocation
+          _function |
+
+          /// 	| literal				# literalTerm
+          literal.map((value) {
+            print('expressionliteral: $value');
+            return value;
+          }) |
+
+          /// 	identifier	# memberInvocation
+          (identifier &
+                  (char('.') & identifier).map((value) => value[1]).star())
+              .map((value) {
+            var newValue = value[0];
+            for (var i = 1; i < value[1].length; i++) {
+              newValue += '.' + value[1][i];
+            }
+            print('expressionidentifier: $newValue');
+            return IdentifierParser(newValue);
+          }) |
+          _invocation.map((value) {
+            print('expressioninvocation: $value');
+            return value;
+          }) |
+
+          /// 	'$this'	# thisInvocation
+          string('\$this') |
+
+          /// 	'$index'	# indexInvocation
+          string('\$index') |
+
+          /// 	'$total'	# totalInvocation;
+          string('\$total') |
+
+          /// 	| externalConstant		# externalConstantTerm
+          externalConstant |
 
           /// 	| expression '[' expression ']'						# indexerExpression
           (_expression & char('[') & _expression & char(']')) |
@@ -68,63 +101,37 @@ Parser fhirPathLexer() {
 
   /// | (IDENTIFIER)? '=>' expression #lambdaExpression
 
-  /// term:
-  final Parser termPart =
-
-      /// 	function	# functionInvocation
-      _function |
-
-          /// 	| literal				# literalTerm
-          literal |
-
-          /// 	identifier	# memberInvocation
-          identifier.map((value) {
-            print('identifier: $value');
-            return value;
-          }) |
-
-          /// 	'$this'	# thisInvocation
-          string('\$this') |
-
-          /// 	'$index'	# indexInvocation
-          string('\$index') |
-
-          /// 	'$total'	# totalInvocation;
-          string('\$total') |
-
-          /// 	| externalConstant		# externalConstantTerm
-          externalConstant |
-
-          /// 	| '(' expression ')'	# parenthesizedTerm;
-          (char('(') & _expression & char(')'));
-
   /// invocation : // Terms that can be used after the function/member invocation '.'
   final Parser invocationPart =
 
-      /// 	identifier	# memberInvocation
-      identifier |
+      /// 	| expression '.' invocation							# invocationExpression
+      _expression &
+          char('.') &
+          (
 
-          /// 	function	# functionInvocation
-          _function |
+              /// 	identifier	# memberInvocation
+              identifier |
 
-          /// 	'$this'	# thisInvocation
-          string('\$this') |
+                  /// 	function	# functionInvocation
+                  _function |
 
-          /// 	'$index'	# indexInvocation
-          string('\$index') |
+                  /// 	'$this'	# thisInvocation
+                  string('\$this') |
 
-          /// 	'$total'	# totalInvocation;
-          string('\$total');
+                  /// 	'$index'	# indexInvocation
+                  string('\$index') |
+
+                  /// 	'$total'	# totalInvocation;
+                  string('\$total'));
 
   /// function: identifier '(' paramList? ')';
   final Parser functionPart =
-      identifier & char('(') & _paramList.optional() & char(')');
+      functions & char('(') & _paramList.optional() & char(')');
 
   /// paramList: expression (',' expression)*;
   final Parser paramListPart = _expression & (char(',') & _expression).star();
 
   _expression.set(expressionPart.end());
-  _term.set(termPart);
   _invocation.set(invocationPart);
   _function.set(functionPart);
   _paramList.set(paramListPart);
@@ -226,12 +233,13 @@ final Parser qualifiedIdentifier =
 /// 	| 'contains'
 /// 	| 'in'
 /// 	| 'is';
-final Parser identifier = IDENTIFIER |
-    DELIMITEDIDENTIFIER |
-    string('as') |
-    string('contains') |
-    string('in') |
-    string('is');
+final Parser<String> identifier = (IDENTIFIER |
+        DELIMITEDIDENTIFIER |
+        string('as') |
+        string('contains') |
+        string('in') |
+        string('is'))
+    .map((value) => value);
 
 /// *********************** Lexical rules ************************************
 ///
@@ -293,20 +301,17 @@ final Parser<String> TIMEZONEOFFSETFORMAT = (char('Z') |
 
 /// IDENTIFIER: ([A-Za-z] | '_') ([A-Za-z0-9] | '_')*
 /// 		; // Added _ to support CQL (FHIR could constrain it out)
-final Parser<IdentifierParser> IDENTIFIER = (pattern('A-Za-z') | char('_'))
+final Parser<String> IDENTIFIER = (pattern('A-Za-z') | char('_'))
     .seq((pattern('A-Za-z0-9') | char('_')).star())
-    .flatten()
-    .map((value) => IdentifierParser(value));
+    .flatten();
 
 /// DELIMITEDIDENTIFIER: '`' (ESC | .)*? '`';
-final Parser<DelimitedIdentifierParser> DELIMITEDIDENTIFIER =
+final Parser<String> DELIMITEDIDENTIFIER =
     (char('`') & (ESC | char('`').neg()).star() & char('`'))
         .flatten()
-        .map((value) {
-  // Remove the backticks from the parsed value
-  final contentWithoutBackticks = value.substring(1, value.length - 1);
-  return DelimitedIdentifierParser(contentWithoutBackticks);
-});
+        .map((value) =>
+            // Remove the backticks from the parsed value
+            value.substring(1, value.length - 1));
 
 /// STRING: '\'' (ESC | .)*? '\'';
 final Parser<StringParser> STRING =
@@ -357,3 +362,87 @@ final Parser<String> UNICODE =
     string('u').seq(HEX).seq(HEX).seq(HEX).seq(HEX).flatten();
 
 final Parser<String> HEX = pattern('0-9a-fA-F');
+
+final Parser functions = string('union(') |
+    string('combine(') |
+    string('toQuantity(') |
+    string('convertsToQuantity(') |
+    string('exists(') |
+    string('all(') |
+    string('subsetOf(') |
+    string('supersetOf(') |
+    string('where(') |
+    string('select(') |
+    string('repeat(') |
+    string('ofType(') |
+    string('extension(') |
+    string('log(') |
+    string('power(') |
+    string('round(') |
+    string('indexOf(') |
+    string('substring(') |
+    string('startsWith(') |
+    string('endsWith(') |
+    string('contains(') |
+    string('replace(') |
+    string('matches(') |
+    string('replaceMatches(') |
+    string('skip(') |
+    string('take(') |
+    string('intersect(') |
+    string('exclude(') |
+    string('trace(') |
+    string('aggregate(') |
+    string('iif(') |
+    string('as(') |
+    string('as(') |
+    string('sum()') |
+    string('min()') |
+    string('max()') |
+    string('avg()') |
+    string('answers()') |
+    string('ordinal()') |
+    string('toBoolean()') |
+    string('convertsToBoolean()') |
+    string('toInteger()') |
+    string('convertsToInteger()') |
+    string('toDate()') |
+    string('convertsToDate()') |
+    string('toDateTime()') |
+    string('convertsToDateTime()') |
+    string('toDecimal()') |
+    string('convertsToDecimal()') |
+    string('toString()') |
+    string('convertsToString()') |
+    string('toTime()') |
+    string('convertsToTime()') |
+    string('hasValue()') |
+    string('empty()') |
+    string('allTrue()') |
+    string('anyTrue()') |
+    string('allFalse()') |
+    string('anyFalse()') |
+    string('count()') |
+    string('distinct()') |
+    string('isDistinct()') |
+    string('abs()') |
+    string('ceiling()') |
+    string('exp()') |
+    string('floor()') |
+    string('ln()') |
+    string('sqrt()') |
+    string('truncate()') |
+    string('upper()') |
+    string('lower()') |
+    string('length()') |
+    string('toChars()') |
+    string('single()') |
+    string('first()') |
+    string('laexecutedAfter.firstst()') |
+    string('tail()') |
+    string('children()') |
+    string('descendants()') |
+    string('not()') |
+    string('now()') |
+    string('timeOfDay()') |
+    string('today()');

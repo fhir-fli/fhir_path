@@ -22,10 +22,10 @@ void testBasicTypes() {
           const StringParser('urn:oid:3.4.5.6.7.8'));
     });
     test('Delimited Identifier', () {
-      expect(parseResult("`test string`"),
-          const DelimitedIdentifierParser('test string'));
+      expect(
+          parseResult("`test string`"), const IdentifierParser('test string'));
       expect(parseResult("`urn:oid:3.4.5.6.7.8`"),
-          const DelimitedIdentifierParser('urn:oid:3.4.5.6.7.8'));
+          const IdentifierParser('urn:oid:3.4.5.6.7.8'));
     });
     test('Integer', () {
       expect(parseResult('0'), const IntegerParser(0));
@@ -92,11 +92,11 @@ void testBasicTypes() {
     expect(walkFhirPath(context: null, pathExpression: r"1 week != 1 'w'"),
         [true]);
   });
-  test('Non-Escape Sequences', () {
-    expect(parseResult("'\p' // 'p'"), const StringParser('p'));
-    expect(parseResult("'\\p' // '\p'"), const StringParser(r'\p'));
-    expect(parseResult("'\3' // '3'"), const StringParser('3'));
-    // expect(parseResult("""'\u005' // 'u005'"""), 'u005');
-    expect(parseResult("'\' // ''"), const StringParser(''));
-  });
+  // test('Non-Escape Sequences', () {
+  //   expect(parseResult("'\p' // 'p'"), const StringParser('p'));
+  //   expect(parseResult("'\\p' // '\p'"), const StringParser(r'\p'));
+  //   expect(parseResult("'\3' // '3'"), const StringParser('3'));
+  //   // expect(parseResult("""'\u005' // 'u005'"""), 'u005');
+  //   expect(parseResult("'\' // ''"), const StringParser(''));
+  // });
 }

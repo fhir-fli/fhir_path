@@ -300,6 +300,13 @@ class IdentifierParser extends ValueParser<String> {
 
     return finalResults;
   }
+
+  @override
+  operator ==(Object o) => o is IdentifierParser
+      ? o.value == value
+      : o is String
+          ? o == value
+          : o.toString() == value;
 }
 
 /// Identifiers are used as labels to allow expressions to reference elements
@@ -312,7 +319,7 @@ class IdentifierParser extends ValueParser<String> {
 /// allows identifiers to be more descriptive, and also enables expressions to
 /// reference models that have property or type names that are not valid
 /// simple identifiers.
-class DelimitedIdentifierParser extends ValueParser<String> {
+class DelimitedIdentifierParser extends IdentifierParser {
   const DelimitedIdentifierParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
@@ -479,19 +486,15 @@ class DateTimeParser extends BaseDateTimeParser<FhirDateTime> {
   // }
 
   @override
-  operator ==(Object o) {
-    print((o as DateTimeParser).value.value);
-    print(value.value);
-    return o is DateTimeParser
-        ? o.value == value
-        : o is DateParser
-            ? o.value == value
-            : o is FhirDateTime || o is FhirDate
-                ? o == value
-                : o is String
-                    ? FhirDateTime(o).isValid && FhirDateTime(o) == value
-                    : false;
-  }
+  operator ==(Object o) => o is DateTimeParser
+      ? o.value == value
+      : o is DateParser
+          ? o.value == value
+          : o is FhirDateTime || o is FhirDate
+              ? o == value
+              : o is String
+                  ? FhirDateTime(o).isValid && FhirDateTime(o) == value
+                  : false;
 }
 
 /// The Date type represents date and partial date values in the range

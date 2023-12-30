@@ -18,8 +18,8 @@ expression:
 	| expression ('in' | 'contains') expression			# membershipExpression
 	| expression 'and' expression						# andExpression
 	| expression ('or' | 'xor') expression				# orExpression
-	| expression 'implies' expression					# impliesExpression
-	; //| (IDENTIFIER)? '=>' expression                             #lambdaExpression
+	| expression 'implies' expression					# impliesExpression;
+	//| (IDENTIFIER)? '=>' expression                             #lambdaExpression
 
 term:
 	invocation				# invocationTerm
@@ -39,7 +39,7 @@ literal:
 
 externalConstant: '%' ( identifier | STRING);
 
-invocation : // Terms that can be used after the function/member invocation '.'
+invocation: // Terms that can be used after the function/member invocation '.'
 	identifier	# memberInvocation
 	| function	# functionInvocation
 	| '$this'	# thisInvocation
@@ -55,7 +55,7 @@ quantity: NUMBER unit?;
 unit:
 	dateTimePrecision
 	| pluralDateTimePrecision
-	| STRING ; // UCUM syntax for units of measure
+	| STRING; // UCUM syntax for units of measure
 
 dateTimePrecision:
 	'year'
@@ -117,8 +117,8 @@ fragment TIMEZONEOFFSETFORMAT: (
 		| ('+' | '-') [0-9][0-9]':' [0-9][0-9]
 	);
 
-IDENTIFIER: ([A-Za-z] | '_') ([A-Za-z0-9] | '_')*
-		; // Added _ to support CQL (FHIR could constrain it out)
+IDENTIFIER: ([A-Za-z] | '_') ([A-Za-z0-9] | '_')*;
+	// Added _ to support CQL (FHIR could constrain it out)
 
 DELIMITEDIDENTIFIER: '`' (ESC | .)*? '`';
 
@@ -135,10 +135,7 @@ COMMENT: '/*' .*? '*/' -> channel(HIDDEN);
 LINE_COMMENT: '//' ~[\r\n]* -> channel(HIDDEN);
 
 fragment ESC:
-	'\\' (
-		[`'\\/fnrt]
-		| UNICODE
-	) ; // allow \`, \', \\, \/, \f, etc. and \uXXX
+	'\\' ([`'\\/fnrt] | UNICODE); // allow \`, \', \\, \/, \f, etc. and \uXXX
 
 fragment UNICODE: 'u' HEX HEX HEX HEX;
 
