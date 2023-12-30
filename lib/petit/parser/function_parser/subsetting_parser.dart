@@ -41,9 +41,6 @@ class FirstParser extends FhirPathParser {
       results.isEmpty ? [] : [results.first];
 
   @override
-  String verbosePrint(int indent) => '${"  " * indent}FirstParser';
-
-  @override
   String prettyPrint([int indent = 2]) => '.first()';
 }
 
@@ -56,9 +53,6 @@ class LastParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) =>
       results.isEmpty ? [] : [results.last];
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}LastParser';
 
   @override
   String prettyPrint([int indent = 2]) => '.last()';
@@ -79,9 +73,6 @@ class TailParser extends FhirPathParser {
       return results;
     }
   }
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}TailParser';
 
   @override
   String prettyPrint([int indent = 2]) => '.tail()';

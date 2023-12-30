@@ -25,9 +25,6 @@ class ChildrenParser extends FhirPathParser {
   }
 
   @override
-  String verbosePrint(int indent) => '${"  " * indent}ChildrenParser';
-
-  @override
   String prettyPrint([int indent = 2]) => '.children()';
 }
 
@@ -43,9 +40,6 @@ class DescendantsParser extends FhirPathParser {
     final repeatParser = RepeatParser(ParserList([ChildrenParser()]));
     return repeatParser.execute(results, passed);
   }
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}DescendantsParser';
 
   @override
   String prettyPrint([int indent = 2]) => '.descendants()';

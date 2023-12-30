@@ -26,9 +26,6 @@ class SumParser extends FhirPathParser {
       ];
 
   @override
-  String verbosePrint(int indent) => '${"  " * indent}SumParser';
-
-  @override
   String prettyPrint([int indent = 2]) => '.sum()';
 }
 
@@ -50,9 +47,6 @@ class MinParser extends FhirPathParser {
                     collection: results))
             .min
       ];
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}MinParser';
 
   @override
   String prettyPrint([int indent = 2]) => '.min()';
@@ -78,9 +72,6 @@ class MaxParser extends FhirPathParser {
       ];
 
   @override
-  String verbosePrint(int indent) => '${"  " * indent}MaxParser';
-
-  @override
   String prettyPrint([int indent = 2]) => '.max()';
 }
 
@@ -104,9 +95,6 @@ class AvgParser extends FhirPathParser {
       ];
 
   @override
-  String verbosePrint(int indent) => '${"  " * indent}AvgParser';
-
-  @override
   String prettyPrint([int indent = 2]) => '.avg()';
 }
 
@@ -127,9 +115,6 @@ class AnswersParser extends FhirPathParser {
     });
     return answers;
   }
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}AnswersParser';
 
   @override
   String prettyPrint([int indent = 2]) => '.answers()';
@@ -211,9 +196,6 @@ class OrdinalParser extends FhirPathParser {
 
     return newResults;
   }
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}OrdinalParser';
 
   @override
   String prettyPrint([int indent = 2]) => '.ordinal()';

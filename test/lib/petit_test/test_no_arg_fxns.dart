@@ -35,30 +35,30 @@ void testNoArgFxns() {
           walkNewFhirPath(
               context: resource.toJson(), pathExpression: '{ }.empty()'));
     });
-    // test('allTrue', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.active.allTrue()'),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.deceasedBoolean.allTrue()'),
-    //       [false]);
-    // });
-    // test('anyTrue', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.active.anyTrue()'),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.deceasedBoolean.anyTrue()'),
-    //       [false]);
-    // });
+    test('allTrue', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.active.allTrue()'),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.deceasedBoolean.allTrue()'),
+          [false]);
+    });
+    test('anyTrue', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.active.anyTrue()'),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.deceasedBoolean.anyTrue()'),
+          [false]);
+    });
     // test('allFalse', () {
     //   expect(
     //       walkNewFhirPath(

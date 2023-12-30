@@ -44,9 +44,6 @@ class IndexParser extends FhirPathParser {
       [IterationContext.current(passed).indexValue];
 
   @override
-  String verbosePrint(int indent) => '${"  " * indent}IndexParser';
-
-  @override
   String prettyPrint([int indent = 2]) => 'index';
 }
 
@@ -101,9 +98,6 @@ class ThisParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) =>
       [IterationContext.current(passed).thisValue];
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}ThisParser';
 
   @override
   String prettyPrint([int indent = 2]) => 'this';
@@ -195,7 +189,7 @@ class AggregateParser extends ValueParser<ParserList> {
 /// name elements in the instance.
 /// In expressions, the empty collection is represented as { }.
 class EmptySetParser extends FhirPathParser {
-  EmptySetParser([FhirPathParser? super.nextParser]);
+  const EmptySetParser([FhirPathParser? super.nextParser]);
 
   EmptySetParser copyWithNextParser(FhirPathParser nextParser) =>
       EmptySetParser(nextParser);
@@ -203,9 +197,6 @@ class EmptySetParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) =>
       nextParser == null ? [] : nextParser!.execute([], passed);
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}EmptySetParser';
 
   @override
   String prettyPrint([int indent = 2]) => '{ }';
@@ -219,9 +210,6 @@ class DotParser extends FhirPathParser {
 
   @override
   List execute(List results, Map<String, dynamic> passed) => results;
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}DotParser';
 
   @override
   String prettyPrint([int indent = 2]) => '.';

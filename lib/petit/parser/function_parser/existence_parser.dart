@@ -8,17 +8,17 @@ import '../../petit_fhir_path.dart';
 
 /// Returns true if the input collection is empty ({ }) and false otherwise.
 class EmptyParser extends FhirPathParser {
-  EmptyParser([FhirPathParser? super.nextParser]);
+  const EmptyParser([FhirPathParser? super.nextParser]);
 
   EmptyParser copyWithNextParser(FhirPathParser nextParser) =>
       EmptyParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
-      results.isEmpty ? [true] : [false];
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}EmptyParser';
+  List execute(List results, Map<String, dynamic> passed) => nextParser != null
+      ? nextParser!.execute(results.isEmpty ? [true] : [false], passed)
+      : results.isEmpty
+          ? [true]
+          : [false];
 
   @override
   String prettyPrint([int indent = 2]) => '.empty()';
@@ -167,14 +167,13 @@ class AllTrueParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     if (results.isEmpty) {
-      return [true];
+      return nextParser != null ? nextParser!.execute([true], passed) : [true];
     }
     results.removeWhere((element) => element == true);
-    return [results.isEmpty];
+    return nextParser != null
+        ? nextParser!.execute([results.isEmpty], passed)
+        : [results.isEmpty];
   }
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}AllTrueParser';
 
   @override
   String prettyPrint([int indent = 2]) => '.allTrue()';
@@ -191,14 +190,15 @@ class AnyTrueParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     if (results.isEmpty) {
-      return [false];
+      return nextParser != null
+          ? nextParser!.execute([false], passed)
+          : [false];
     }
     results.retainWhere((element) => element == true);
-    return [results.isNotEmpty];
+    return nextParser != null
+        ? nextParser!.execute([results.isNotEmpty], passed)
+        : [results.isNotEmpty];
   }
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}AnyTrueParser';
 
   @override
   String prettyPrint([int indent = 2]) => '.anyTrue()';
@@ -222,9 +222,6 @@ class AllFalseParser extends FhirPathParser {
   }
 
   @override
-  String verbosePrint(int indent) => '${"  " * indent}AllFalseParser';
-
-  @override
   String prettyPrint([int indent = 2]) => '.allFalse()';
 }
 
@@ -244,9 +241,6 @@ class AnyFalseParser extends FhirPathParser {
     results.retainWhere((element) => element == false);
     return [results.isNotEmpty];
   }
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}AnyFalseParser';
 
   @override
   String prettyPrint([int indent = 2]) => '.anyFalse()';
@@ -325,9 +319,6 @@ class CountParser extends FhirPathParser {
   List execute(List results, Map<String, dynamic> passed) => [results.length];
 
   @override
-  String verbosePrint(int indent) => '${"  " * indent}CountParser';
-
-  @override
   String prettyPrint([int indent = 2]) => '.count()';
 }
 
@@ -349,9 +340,6 @@ class DistinctParser extends FhirPathParser {
   }
 
   @override
-  String verbosePrint(int indent) => '${"  " * indent}DistinctParser';
-
-  @override
   String prettyPrint([int indent = 2]) => '.distinct()';
 }
 
@@ -371,9 +359,6 @@ class IsDistinctParser extends FhirPathParser {
     }
     return [resultsList.length == results.length];
   }
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}IsDistinctParser';
 
   @override
   String prettyPrint([int indent = 2]) => '.isDistinct()';

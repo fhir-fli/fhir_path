@@ -28,9 +28,6 @@ class AbsParser extends FhirPathParser {
                   : throw _wrongTypes('.abs()', results, 'none');
 
   @override
-  String verbosePrint(int indent) => '${"  " * indent}AbsParser';
-
-  @override
   String prettyPrint([int indent = 2]) => '.abs()';
 }
 
@@ -48,9 +45,6 @@ class CeilingParser extends FhirPathParser {
           : results.first is num
               ? [(results.first as num).ceil()]
               : throw _wrongTypes('.ceiling()', results, 'none');
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}CeilingParser';
 
   @override
   String prettyPrint([int indent = 2]) => '.ceiling()';
@@ -72,9 +66,6 @@ class ExpParser extends FhirPathParser {
               : throw _wrongTypes('.exp()', results, 'none');
 
   @override
-  String verbosePrint(int indent) => '${"  " * indent}ExpParser';
-
-  @override
   String prettyPrint([int indent = 2]) => '.exp()';
 }
 
@@ -94,9 +85,6 @@ class FloorParser extends FhirPathParser {
               : throw _wrongTypes('.floor()', results, 'none');
 
   @override
-  String verbosePrint(int indent) => '${"  " * indent}FloorParser';
-
-  @override
   String prettyPrint([int indent = 2]) => '.floor()';
 }
 
@@ -114,9 +102,6 @@ class LnParser extends FhirPathParser {
           : results.first is num
               ? [log(results.first as num)]
               : throw _wrongTypes('.ln()', results, 'none');
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}LnParser';
 
   @override
   String prettyPrint([int indent = 2]) => '.ln()';
@@ -246,9 +231,6 @@ class SqrtParser extends FhirPathParser {
                   ? []
                   : [sqrt(results.first as num)])
               : throw _wrongTypes('.sqrt()', results, 'none');
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}SqrtParser';
 
   @override
   String prettyPrint([int indent = 2]) => '.sqrt()';
