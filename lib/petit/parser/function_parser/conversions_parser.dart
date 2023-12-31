@@ -4,6 +4,7 @@
 import 'package:fhir/primitive_types/primitive_types.dart';
 
 // Project imports:
+import '../../../antlrish/antlrish.dart';
 import '../../petit_fhir_path.dart';
 
 /// http://hl7.org/fhirpath/#iifcriterion-expression-true-result-collection-otherwise-result-collection-collection
@@ -320,7 +321,6 @@ class ToDateTimeParser extends FhirPathParser {
 
   @override
   List execute(List results, Map<String, dynamic> passed) {
-    print(results);
     List newResults() => results.isEmpty
         ? []
         : results.length > 1
@@ -556,12 +556,12 @@ class ToQuantityParser extends FhirPathParser {
         ? []
         : results.length > 1
             ? throw _conversionException('.toQuantity()', results)
-            : results.first is FhirPathQuantity
+            : results.first is GenericQuantity
                 ? [results.first]
                 : results.first is num
-                    ? [FhirPathQuantity(results.first as num, '1')]
+                    ? [GenericQuantity(value: results.first as num, unit: '1')]
                     : results.first is String
-                        ? [FhirPathQuantity.fromString(results.first as String)]
+                        ? [GenericQuantity.fromString(results.first as String)]
                         : [];
     if (nextParser != null) {
       return nextParser!.execute(newResults(), passed);
@@ -594,7 +594,7 @@ class ConvertsToQuantityParser extends FhirPathParser {
 
         /// otherwise if the first item is a Quantity already, a num or a
         /// bool, this is considered true
-        else if (results.first is FhirPathQuantity ||
+        else if (results.first is GenericQuantity ||
             results.first is num ||
             results.first is bool) {
           return [true];
@@ -602,8 +602,8 @@ class ConvertsToQuantityParser extends FhirPathParser {
 
         /// If it's a string & convertible to a Quantity using the Regex
         else if (results.first is String &&
-            FhirPathQuantity.fhirPathQuantityRegex
-                .hasMatch((results.first as String).replaceAll(r"\'", "'"))) {
+            GenericQuantity.GenericQuantityRegex.hasMatch(
+                (results.first as String).replaceAll(r"\'", "'"))) {
           return [true];
         }
 
@@ -636,7 +636,7 @@ bool _isAllTypes(List results) =>
     results.first is! FhirDateTime &&
     results.first is! FhirTime &&
     results.first is! DateTime &&
-    results.first is! FhirPathQuantity;
+    results.first is! GenericQuantity;
 
 Exception _conversionException(String function, List results) =>
     FhirPathEvaluationException(

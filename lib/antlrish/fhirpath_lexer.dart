@@ -29,7 +29,9 @@ final Parser<FhirPathParser> fhirPathLexer = fhirPathExpression().map((value) {
           }
         }
       } else {
-        print('$i: ${list[i].runtimeType}: ${list[i]}');
+        if (list[i] != '.') {
+          print('$i: ${list[i].runtimeType}: ${list[i]}');
+        }
       }
     }
     return null;
@@ -299,8 +301,6 @@ final Set<String> allFunctionNames = {
 final Set<String> argumentFunctionNames = {
   'union',
   'combine',
-  'toQuantity',
-  'convertsToQuantity',
   'exists',
   'all',
   'subsetOf',
@@ -354,6 +354,8 @@ final Map<String, FhirPathParser> noArgumentFunctions =
   'convertsToString': ConvertsToStringParser(),
   'toTime': ToTimeParser(),
   'convertsToTime': ConvertsToTimeParser(),
+  'toQuantity': ToQuantityParser(),
+  'convertsToQuantity': ConvertsToQuantityParser(),
   'hasValue': HasValueParser(),
   'empty': EmptyParser(),
   'allTrue': AllTrueOrFalseParser(true),

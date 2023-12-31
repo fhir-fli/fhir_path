@@ -14,7 +14,7 @@ import 'ucum_unit_codes.dart';
 import 'units.dart';
 
 class GenericQuantity {
-  static RegExp _GenericQuantityRegex = RegExp(
+  static RegExp GenericQuantityRegex = RegExp(
       r"^(?<value>(\+|-)?\d+(\.\d+)?)\s*('(?<unit>[^']+)'|(?<time>[a-zA-Z]+))?$");
 
   final num value;
@@ -151,7 +151,7 @@ class GenericQuantity {
       return 0;
     } else {
       final match =
-          _GenericQuantityRegex.firstMatch(string.replaceAll(r"\'", "'"));
+          GenericQuantityRegex.firstMatch(string.replaceAll(r"\'", "'"));
       final valueMatch = match?.namedGroup('value');
       if (valueMatch == null) {
         return 0;
@@ -167,7 +167,7 @@ class GenericQuantity {
       return '1';
     } else {
       final match =
-          _GenericQuantityRegex.firstMatch(string.replaceAll(r"\'", "'"));
+          GenericQuantityRegex.firstMatch(string.replaceAll(r"\'", "'"));
       final unit = match?.namedGroup('unit');
       final time = match?.namedGroup('time');
       String unitString = '';
@@ -189,8 +189,7 @@ class GenericQuantity {
       // Escaped ' can all be removed
       unitString.replaceAll(r"\'", '');
 
-      // Try to normalize time-valued units
-      return timeValuedQuantitiesUnits[unitString] ?? unitString;
+      return unitString;
     }
   }
 
