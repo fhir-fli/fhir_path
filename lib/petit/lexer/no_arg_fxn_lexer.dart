@@ -84,20 +84,24 @@ final Parser<EmptyParser> emptyLexer =
     (string('empty()') | string('.empty()')).map((_) => EmptyParser());
 
 /// identifies allTrues
-final Parser<AllTrueParser> allTrueLexer =
-    (string('allTrue()') | string('.allTrue()')).map((_) => AllTrueParser());
+final Parser<AllTrueOrFalseParser> allTrueLexer =
+    (string('allTrue()') | string('.allTrue()'))
+        .map((_) => AllTrueOrFalseParser(true));
 
 /// identifies anyTrues
-final Parser<AnyTrueParser> anyTrueLexer =
-    (string('anyTrue()') | string('.anyTrue()')).map((_) => AnyTrueParser());
+final Parser<AnyTrueOrFalseParser> anyTrueLexer =
+    (string('anyTrue()') | string('.anyTrue()'))
+        .map((_) => AnyTrueOrFalseParser(true));
 
 /// identifies allFalses
-final Parser<AllFalseParser> allFalseLexer =
-    (string('allFalse()') | string('.allFalse()')).map((_) => AllFalseParser());
+final Parser<AllTrueOrFalseParser> allFalseLexer =
+    (string('allFalse()') | string('.allFalse()'))
+        .map((_) => AllTrueOrFalseParser(true));
 
 /// identifies anyFalses
-final Parser<AnyFalseParser> anyFalseLexer =
-    (string('anyFalse()') | string('.anyFalse()')).map((_) => AnyFalseParser());
+final Parser<AnyTrueOrFalseParser> anyFalseLexer =
+    (string('anyFalse()') | string('.anyFalse()'))
+        .map((_) => AnyTrueOrFalseParser(false));
 
 /// identifies counts
 final Parser<CountParser> countLexer =

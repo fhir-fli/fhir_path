@@ -95,35 +95,46 @@ class IifParser extends FunctionParser {
 /// the item is a String that is equal to one of the possible string representations of Boolean values
 /// If the item is not one the above types, or the item is a String, Integer, or Decimal, but is not equal to one of the possible values convertible to a Boolean, the result is empty.
 class ToBooleanParser extends FhirPathParser {
-  ToBooleanParser([FhirPathParser? super.nextParser]);
+  const ToBooleanParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ToBooleanParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.isEmpty
-      ? []
-      : results.length > 1
-          ? throw _conversionException('.toBoolean()', results)
-          : _isNotAcceptedType(results)
-              ? []
-              : results.first == true ||
-                      results.first == 1 ||
-                      ['true', 't', 'yes', 'y', '1', '1.0'].indexWhere(
-                              (element) =>
-                                  element ==
-                                  results.first.toString().toLowerCase()) !=
-                          -1
-                  ? [true]
-                  : results.first == false ||
-                          results.first == 0 ||
-                          ['false', 'f', 'no', 'n', '0', '0.0'].indexWhere(
-                                  (element) =>
-                                      element ==
-                                      results.first.toString().toLowerCase()) !=
-                              -1
-                      ? [false]
-                      : [];
+  List execute(List results, Map<String, dynamic> passed) {
+    List newResults() => results.isEmpty
+        ? []
+        : results.length > 1
+            ? throw _conversionException('.toBoolean()', results)
+            : _isNotAcceptedType(results)
+                ? []
+                : results.first == true ||
+                        results.first == 1 ||
+                        ['true', 't', 'yes', 'y', '1', '1.0'].indexWhere(
+                                (element) =>
+                                    element ==
+                                    results.first.toString().toLowerCase()) !=
+                            -1
+                    ? [true]
+                    : results.first == false ||
+                            results.first == 0 ||
+                            [
+                                  'false',
+                                  'f',
+                                  'no',
+                                  'n',
+                                  '0',
+                                  '0.0'
+                                ].indexWhere((element) =>
+                                    element ==
+                                    results.first.toString().toLowerCase()) !=
+                                -1
+                        ? [false]
+                        : [];
+    return nextParser != null
+        ? nextParser!.execute(newResults(), passed)
+        : newResults();
+  }
 
   @override
   String prettyPrint([int indent = 2]) => '.toBoolean()';
@@ -136,40 +147,47 @@ class ToBooleanParser extends FhirPathParser {
 /// the item is a Decimal that is equal to one of the possible decimal representations of Boolean values
 /// the item is a String that is equal to one of the possible string representations of Boolean values
 class ConvertsToBooleanParser extends FhirPathParser {
-  ConvertsToBooleanParser([FhirPathParser? super.nextParser]);
+  const ConvertsToBooleanParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ConvertsToBooleanParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.isEmpty
-      ? []
-      : results.length > 1
-          ? throw _conversionException('.convertsToBoolean()', results)
-          : _isNotAcceptedType(results)
-              ? [false]
-              : results.first is bool ||
-                      results.first == 1 ||
-                      results.first == 0 ||
-                      [
-                            'true',
-                            't',
-                            'yes',
-                            'y',
-                            '1',
-                            '1.0',
-                            'false',
-                            'f',
-                            'no',
-                            'n',
-                            '0',
-                            '0.0'
-                          ].indexWhere((element) =>
-                              element ==
-                              results.first.toString().toLowerCase()) !=
-                          -1
-                  ? [true]
-                  : [false];
+  List execute(List results, Map<String, dynamic> passed) {
+    List newResults() => results.isEmpty
+        ? []
+        : results.length > 1
+            ? throw _conversionException('.convertsToBoolean()', results)
+            : _isNotAcceptedType(results)
+                ? [false]
+                : results.first is bool ||
+                        results.first == 1 ||
+                        results.first == 0 ||
+                        [
+                              'true',
+                              't',
+                              'yes',
+                              'y',
+                              '1',
+                              '1.0',
+                              'false',
+                              'f',
+                              'no',
+                              'n',
+                              '0',
+                              '0.0'
+                            ].indexWhere((element) =>
+                                element ==
+                                results.first.toString().toLowerCase()) !=
+                            -1
+                    ? [true]
+                    : [false];
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
+    } else {
+      return newResults();
+    }
+  }
 
   @override
   String prettyPrint([int indent = 2]) => '.convertsToBoolean()';
@@ -177,25 +195,32 @@ class ConvertsToBooleanParser extends FhirPathParser {
 
 /// Converts input to an [Integer] if possible
 class ToIntegerParser extends FhirPathParser {
-  ToIntegerParser([FhirPathParser? super.nextParser]);
+  const ToIntegerParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ToIntegerParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.isEmpty
-      ? []
-      : results.length > 1
-          ? throw _conversionException('.toInteger()', results)
-          : _isNotAcceptedType(results)
-              ? [false]
-              : results.first is bool
-                  ? [results.first == true ? 1 : 0]
-                  : results.first is num
-                      ? [(results.first as num).toInt()]
-                      : int.tryParse(results.first as String) != null
-                          ? [int.parse(results.first as String)]
-                          : [];
+  List execute(List results, Map<String, dynamic> passed) {
+    List newResults() => results.isEmpty
+        ? []
+        : results.length > 1
+            ? throw _conversionException('.toInteger()', results)
+            : _isNotAcceptedType(results)
+                ? [false]
+                : results.first is bool
+                    ? [results.first == true ? 1 : 0]
+                    : results.first is num
+                        ? [(results.first as num).toInt()]
+                        : int.tryParse(results.first as String) != null
+                            ? [int.parse(results.first as String)]
+                            : [];
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
+    } else {
+      return newResults();
+    }
+  }
 
   @override
   String prettyPrint([int indent = 2]) => '.toInteger()';
@@ -203,25 +228,32 @@ class ToIntegerParser extends FhirPathParser {
 
 /// Checks if input can be converted to an [Integer]
 class ConvertsToIntegerParser extends FhirPathParser {
-  ConvertsToIntegerParser([FhirPathParser? super.nextParser]);
+  const ConvertsToIntegerParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ConvertsToIntegerParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.isEmpty
-      ? []
-      : results.length > 1
-          ? throw _conversionException('.convertsToInteger()', results)
-          : _isNotAcceptedType(results)
-              ? []
-              : results.first is bool
-                  ? [true]
-                  : results.first is num
-                      ? [true]
-                      : int.tryParse(results.first as String) != null
-                          ? [true]
-                          : [false];
+  List execute(List results, Map<String, dynamic> passed) {
+    List newResults() => results.isEmpty
+        ? []
+        : results.length > 1
+            ? throw _conversionException('.convertsToInteger()', results)
+            : _isNotAcceptedType(results)
+                ? []
+                : results.first is bool
+                    ? [true]
+                    : results.first is num
+                        ? [true]
+                        : int.tryParse(results.first as String) != null
+                            ? [true]
+                            : [false];
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
+    } else {
+      return newResults();
+    }
+  }
 
   @override
   String prettyPrint([int indent = 2]) => '.convertsToInteger()';
@@ -229,19 +261,26 @@ class ConvertsToIntegerParser extends FhirPathParser {
 
 /// Converts input to an [Date] if possible
 class ToDateParser extends FhirPathParser {
-  ToDateParser([FhirPathParser? super.nextParser]);
+  const ToDateParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ToDateParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.isEmpty
-      ? []
-      : results.length > 1
-          ? throw _conversionException('.toDate()', results)
-          : FhirDate(results.first.toString()).isValid
-              ? [FhirDate(results.first.toString())]
-              : [];
+  List execute(List results, Map<String, dynamic> passed) {
+    List newResults() => results.isEmpty
+        ? []
+        : results.length > 1
+            ? throw _conversionException('.toDate()', results)
+            : FhirDate(results.first.toString()).isValid
+                ? [FhirDate(results.first.toString())]
+                : [];
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
+    } else {
+      return newResults();
+    }
+  }
 
   @override
   String prettyPrint([int indent = 2]) => '.toDate()';
@@ -249,17 +288,24 @@ class ToDateParser extends FhirPathParser {
 
 /// Checks if input can be converted to a [Date]
 class ConvertsToDateParser extends FhirPathParser {
-  ConvertsToDateParser([FhirPathParser? super.nextParser]);
+  const ConvertsToDateParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ConvertsToDateParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.isEmpty
-      ? []
-      : results.length > 1
-          ? throw _conversionException('.convertsToDate()', results)
-          : [FhirDate(results.first.toString()).isValid];
+  List execute(List results, Map<String, dynamic> passed) {
+    List newResults() => results.isEmpty
+        ? []
+        : results.length > 1
+            ? throw _conversionException('.convertsToDate()', results)
+            : [FhirDate(results.first.toString()).isValid];
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
+    } else {
+      return newResults();
+    }
+  }
 
   @override
   String prettyPrint([int indent = 2]) => '.convertsToDate()';
@@ -267,19 +313,27 @@ class ConvertsToDateParser extends FhirPathParser {
 
 /// Converts input to [FhirDateTime] if possible
 class ToDateTimeParser extends FhirPathParser {
-  ToDateTimeParser([FhirPathParser? super.nextParser]);
+  const ToDateTimeParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ToDateTimeParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.isEmpty
-      ? []
-      : results.length > 1
-          ? throw _conversionException('.toDateTime()', results)
-          : FhirDateTime(results.first.toString()).isValid
-              ? [FhirDateTime(results.first.toString())]
-              : [];
+  List execute(List results, Map<String, dynamic> passed) {
+    print(results);
+    List newResults() => results.isEmpty
+        ? []
+        : results.length > 1
+            ? throw _conversionException('.toDateTime()', results)
+            : FhirDateTime(results.first.toString()).isValid
+                ? [FhirDateTime(results.first.toString())]
+                : [];
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
+    } else {
+      return newResults();
+    }
+  }
 
   @override
   String prettyPrint([int indent = 2]) => '.toDateTime()';
@@ -287,19 +341,26 @@ class ToDateTimeParser extends FhirPathParser {
 
 /// Checks if input can be converted to a [FhirDateTime]
 class ConvertsToDateTimeParser extends FhirPathParser {
-  ConvertsToDateTimeParser([FhirPathParser? super.nextParser]);
+  const ConvertsToDateTimeParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ConvertsToDateTimeParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.isEmpty
-      ? []
-      : results.length > 1
-          ? throw _conversionException('.convertsToDateTime()', results)
-          : FhirDateTime(results.first.toString()).isValid
-              ? [FhirDateTime(results.first.toString()).isValid]
-              : [];
+  List execute(List results, Map<String, dynamic> passed) {
+    List newResults() => results.isEmpty
+        ? []
+        : results.length > 1
+            ? throw _conversionException('.convertsToDateTime()', results)
+            : FhirDateTime(results.first.toString()).isValid
+                ? [FhirDateTime(results.first.toString()).isValid]
+                : [];
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
+    } else {
+      return newResults();
+    }
+  }
 
   @override
   String prettyPrint([int indent = 2]) => '.convertsToDateTime()';
@@ -307,25 +368,32 @@ class ConvertsToDateTimeParser extends FhirPathParser {
 
 /// Converts input to a [Decimal] if possible
 class ToDecimalParser extends FhirPathParser {
-  ToDecimalParser([FhirPathParser? super.nextParser]);
+  const ToDecimalParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ToDecimalParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.isEmpty
-      ? []
-      : results.length > 1
-          ? throw _conversionException('.toDecimal()', results)
-          : _isNotAcceptedType(results)
-              ? [false]
-              : results.first is bool
-                  ? [results.first == true ? 1 : 0]
-                  : results.first is num
-                      ? [(results.first as num).toDouble()]
-                      : double.tryParse(results.first as String) != null
-                          ? [double.parse(results.first as String)]
-                          : [];
+  List execute(List results, Map<String, dynamic> passed) {
+    List newResults() => results.isEmpty
+        ? []
+        : results.length > 1
+            ? throw _conversionException('.toDecimal()', results)
+            : _isNotAcceptedType(results)
+                ? [false]
+                : results.first is bool
+                    ? [results.first == true ? 1 : 0]
+                    : results.first is num
+                        ? [(results.first as num).toDouble()]
+                        : double.tryParse(results.first as String) != null
+                            ? [double.parse(results.first as String)]
+                            : [];
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
+    } else {
+      return newResults();
+    }
+  }
 
   @override
   String prettyPrint([int indent = 2]) => '.toDecimal()';
@@ -333,25 +401,32 @@ class ToDecimalParser extends FhirPathParser {
 
 /// Checks if input can be converted into a [Decimal]
 class ConvertsToDecimalParser extends FhirPathParser {
-  ConvertsToDecimalParser([FhirPathParser? super.nextParser]);
+  const ConvertsToDecimalParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ConvertsToDecimalParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.isEmpty
-      ? []
-      : results.length > 1
-          ? throw _conversionException('.convertsToDecimal()', results)
-          : _isNotAcceptedType(results)
-              ? []
-              : results.first is bool
-                  ? [true]
-                  : results.first is num
-                      ? [true]
-                      : double.tryParse(results.first as String) != null
-                          ? [true]
-                          : [false];
+  List execute(List results, Map<String, dynamic> passed) {
+    List newResults() => results.isEmpty
+        ? []
+        : results.length > 1
+            ? throw _conversionException('.convertsToDecimal()', results)
+            : _isNotAcceptedType(results)
+                ? []
+                : results.first is bool
+                    ? [true]
+                    : results.first is num
+                        ? [true]
+                        : double.tryParse(results.first as String) != null
+                            ? [true]
+                            : [false];
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
+    } else {
+      return newResults();
+    }
+  }
 
   @override
   String prettyPrint([int indent = 2]) => '.convertsToDecimal()';
@@ -359,20 +434,25 @@ class ConvertsToDecimalParser extends FhirPathParser {
 
 /// Converts input to a [String] if possible
 class ToStringParser extends FhirPathParser {
-  ToStringParser([FhirPathParser? super.nextParser]);
+  const ToStringParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ToStringParser(nextParser);
 
   @override
   List execute(List results, Map<String, dynamic> passed) {
-    return results.isEmpty
+    List newResults() => results.isEmpty
         ? []
         : results.length > 1
             ? throw _conversionException('.toString()', results)
             : _isAllTypes(results)
                 ? [false]
                 : [results.first.toString()];
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
+    } else {
+      return newResults();
+    }
   }
 
   @override
@@ -381,19 +461,26 @@ class ToStringParser extends FhirPathParser {
 
 /// Checks if input can be converted to a [String]
 class ConvertsToStringParser extends FhirPathParser {
-  ConvertsToStringParser([FhirPathParser? super.nextParser]);
+  const ConvertsToStringParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ConvertsToStringParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.isEmpty
-      ? []
-      : results.length > 1
-          ? throw _conversionException('.convertsToString()', results)
-          : _isAllTypes(results)
-              ? [false]
-              : [true];
+  List execute(List results, Map<String, dynamic> passed) {
+    List newResults() => results.isEmpty
+        ? []
+        : results.length > 1
+            ? throw _conversionException('.convertsToString()', results)
+            : _isAllTypes(results)
+                ? [false]
+                : [true];
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
+    } else {
+      return newResults();
+    }
+  }
 
   @override
   String prettyPrint([int indent = 2]) => '.convertsToString()';
@@ -401,21 +488,28 @@ class ConvertsToStringParser extends FhirPathParser {
 
 /// Converts input to a [Time] if possible
 class ToTimeParser extends FhirPathParser {
-  ToTimeParser([FhirPathParser? super.nextParser]);
+  const ToTimeParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ToTimeParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.isEmpty
-      ? []
-      : results.length > 1
-          ? throw _conversionException('.toTime()', results)
-          : results.first is FhirTime
-              ? [results.first]
-              : results.first is String && FhirTime(results.first).isValid
-                  ? [FhirTime(results.first)]
-                  : [];
+  List execute(List results, Map<String, dynamic> passed) {
+    List newResults() => results.isEmpty
+        ? []
+        : results.length > 1
+            ? throw _conversionException('.toTime()', results)
+            : results.first is FhirTime
+                ? [results.first]
+                : results.first is String && FhirTime(results.first).isValid
+                    ? [FhirTime(results.first)]
+                    : [];
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
+    } else {
+      return newResults();
+    }
+  }
 
   @override
   String prettyPrint([int indent = 2]) => '.toTime()';
@@ -423,20 +517,27 @@ class ToTimeParser extends FhirPathParser {
 
 /// Checks if input can be converted to a [Time]
 class ConvertsToTimeParser extends FhirPathParser {
-  ConvertsToTimeParser([FhirPathParser? super.nextParser]);
+  const ConvertsToTimeParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ConvertsToTimeParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.isEmpty
-      ? []
-      : results.length > 1
-          ? throw _conversionException('.convertsToTime()', results)
-          : results.first is FhirTime ||
-                  (results.first is String && FhirTime(results.first).isValid)
-              ? [true]
-              : [false];
+  List execute(List results, Map<String, dynamic> passed) {
+    List newResults() => results.isEmpty
+        ? []
+        : results.length > 1
+            ? throw _conversionException('.convertsToTime()', results)
+            : results.first is FhirTime ||
+                    (results.first is String && FhirTime(results.first).isValid)
+                ? [true]
+                : [false];
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
+    } else {
+      return newResults();
+    }
+  }
 
   @override
   String prettyPrint([int indent = 2]) => '.convertsToTime()';
@@ -444,23 +545,30 @@ class ConvertsToTimeParser extends FhirPathParser {
 
 /// Converts input to a [Quantity] if possible
 class ToQuantityParser extends FhirPathParser {
-  ToQuantityParser([FhirPathParser? super.nextParser]);
+  const ToQuantityParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ToQuantityParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => results.isEmpty
-      ? []
-      : results.length > 1
-          ? throw _conversionException('.toQuantity()', results)
-          : results.first is FhirPathQuantity
-              ? [results.first]
-              : results.first is num
-                  ? [FhirPathQuantity(results.first as num, '1')]
-                  : results.first is String
-                      ? [FhirPathQuantity.fromString(results.first as String)]
-                      : [];
+  List execute(List results, Map<String, dynamic> passed) {
+    List newResults() => results.isEmpty
+        ? []
+        : results.length > 1
+            ? throw _conversionException('.toQuantity()', results)
+            : results.first is FhirPathQuantity
+                ? [results.first]
+                : results.first is num
+                    ? [FhirPathQuantity(results.first as num, '1')]
+                    : results.first is String
+                        ? [FhirPathQuantity.fromString(results.first as String)]
+                        : [];
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
+    } else {
+      return newResults();
+    }
+  }
 
   @override
   String prettyPrint([int indent = 2]) => '.toQuantity()';
@@ -468,40 +576,48 @@ class ToQuantityParser extends FhirPathParser {
 
 /// Checks if input can be converted to a [Quantity]
 class ConvertsToQuantityParser extends FhirPathParser {
-  ConvertsToQuantityParser([FhirPathParser? super.nextParser]);
+  const ConvertsToQuantityParser([FhirPathParser? super.nextParser]);
 
   FhirPathParser copyWithNextParser(FhirPathParser nextParser) =>
       ConvertsToQuantityParser(nextParser);
 
   @override
   List execute(List results, Map<String, dynamic> passed) {
-    if (results.isEmpty) {
-      return [];
+    List newResults() {
+      if (results.isEmpty) {
+        return [];
+      } else {
+        /// if there's more than 1 item in context, throw exception
+        if (results.length > 1) {
+          throw _conversionException('.convertsToQuantity()', results);
+        }
+
+        /// otherwise if the first item is a Quantity already, a num or a
+        /// bool, this is considered true
+        else if (results.first is FhirPathQuantity ||
+            results.first is num ||
+            results.first is bool) {
+          return [true];
+        }
+
+        /// If it's a string & convertible to a Quantity using the Regex
+        else if (results.first is String &&
+            FhirPathQuantity.fhirPathQuantityRegex
+                .hasMatch((results.first as String).replaceAll(r"\'", "'"))) {
+          return [true];
+        }
+
+        /// Otherwise it's definitely false
+        else {
+          return [false];
+        }
+      }
+    }
+
+    if (nextParser != null) {
+      return nextParser!.execute(newResults(), passed);
     } else {
-      /// if there's more than 1 item in context, throw exception
-      if (results.length > 1) {
-        throw _conversionException('.convertsToQuantity()', results);
-      }
-
-      /// otherwise if the first item is a Quantity already, a num or a
-      /// bool, this is considered true
-      else if (results.first is FhirPathQuantity ||
-          results.first is num ||
-          results.first is bool) {
-        return [true];
-      }
-
-      /// If it's a string & convertible to a Quantity using the Regex
-      else if (results.first is String &&
-          FhirPathQuantity.fhirPathQuantityRegex
-              .hasMatch((results.first as String).replaceAll(r"\'", "'"))) {
-        return [true];
-      }
-
-      /// Otherwise it's definitely false
-      else {
-        return [false];
-      }
+      return newResults();
     }
   }
 

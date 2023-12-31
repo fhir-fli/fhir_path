@@ -7,16 +7,20 @@ import 'package:collection/collection.dart';
 import '../../petit_fhir_path.dart';
 
 class SingleParser extends FhirPathParser {
-  SingleParser([FhirPathParser? super.nextParser]);
+  const SingleParser([FhirPathParser? super.nextParser]);
 
   SingleParser copyWithNextParser(FhirPathParser nextParser) =>
       SingleParser(nextParser);
 
   @override
   List execute(List results, Map<String, dynamic> passed) => results.length == 1
-      ? results
+      ? nextParser != null
+          ? nextParser!.execute(results, passed)
+          : results
       : results.isEmpty
-          ? []
+          ? nextParser != null
+              ? nextParser!.execute([], passed)
+              : []
           : throw FhirPathEvaluationException(
               'The List $results is only allowed to contain one '
               'item if evaluated using the .single() function',
@@ -24,42 +28,45 @@ class SingleParser extends FhirPathParser {
               collection: results);
 
   @override
-  String verbosePrint(int indent) => '${"  " * indent}SingleParser';
-
-  @override
   String prettyPrint([int indent = 2]) => '.single()';
 }
 
 class FirstParser extends FhirPathParser {
-  FirstParser([FhirPathParser? super.nextParser]);
+  const FirstParser([FhirPathParser? super.nextParser]);
 
   FirstParser copyWithNextParser(FhirPathParser nextParser) =>
       FirstParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
-      results.isEmpty ? [] : [results.first];
+  List execute(List results, Map<String, dynamic> passed) => nextParser != null
+      ? nextParser!.execute(results.isEmpty ? [] : [results.first], passed)
+      : results.isEmpty
+          ? []
+          : [results.first];
 
   @override
   String prettyPrint([int indent = 2]) => '.first()';
 }
 
 class LastParser extends FhirPathParser {
-  LastParser([FhirPathParser? super.nextParser]);
+  const LastParser([FhirPathParser? super.nextParser]);
 
   LastParser copyWithNextParser(FhirPathParser nextParser) =>
       LastParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
-      results.isEmpty ? [] : [results.last];
+  List execute(List results, Map<String, dynamic> passed) => nextParser != null
+      ? nextParser!.execute(results.isEmpty ? [] : [results.last], passed)
+      : results.isEmpty
+          ? []
+          : [results.last];
 
   @override
   String prettyPrint([int indent = 2]) => '.last()';
 }
 
 class TailParser extends FhirPathParser {
-  TailParser([FhirPathParser? super.nextParser]);
+  const TailParser([FhirPathParser? super.nextParser]);
 
   TailParser copyWithNextParser(FhirPathParser nextParser) =>
       TailParser(nextParser);
@@ -67,10 +74,12 @@ class TailParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     if (results.length < 2) {
-      return [];
+      return nextParser != null ? nextParser!.execute([], passed) : [];
     } else {
       results.removeAt(0);
-      return results;
+      return nextParser != null
+          ? nextParser!.execute(results, passed)
+          : results;
     }
   }
 

@@ -3,6 +3,7 @@
 // Package imports:
 import 'package:fhir/r4.dart';
 import 'package:fhir_path/antlrish/antlrish.dart';
+import 'package:fhir_path/petit/parser/parser.dart';
 import 'package:test/test.dart';
 
 // Project imports:
@@ -59,524 +60,524 @@ void testNoArgFxns() {
               pathExpression: 'Patient.deceasedBoolean.anyTrue()'),
           [false]);
     });
-    // test('allFalse', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.active.allFalse()'),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.deceasedBoolean.allFalse()'),
-    //       [true]);
-    // });
-    // test('anyFalse', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.active.anyFalse()'),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.deceasedBoolean.anyFalse()'),
-    //       [true]);
-    // });
-    // test('count', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.name.count()'),
-    //       [4]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.name.given.count()'),
-    //       [8]);
-    // });
-    // test('distinct', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.name.distinct()'),
-    //       [
-    //         {
-    //           'use': 'official',
-    //           'family': 'Faulkenberry',
-    //           'given': ['Jason', 'Grey']
-    //         },
-    //         {
-    //           'family': 'Niel',
-    //           'given': ['Kristin']
-    //         },
-    //         {
-    //           'family': 'Smith',
-    //           'given': ['John', 'Jacob', 'Jingleheimer']
-    //         },
-    //       ]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.name.given.distinct()'),
-    //       ['Jason', 'Grey', 'Kristin', 'John', 'Jacob', 'Jingleheimer']);
-    // });
-    // test('isDistinct', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.name.distinct().isDistinct()'),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.name.given.distinct().isDistinct()'),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.address.period.isDistinct()'),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.name.isDistinct()'),
-    //       [false]);
-    // });
-    // test('Single', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.telecom.single()'),
-    //       [
-    //         {
-    //           'system': 'email',
-    //           'use': 'mobile',
-    //           'rank': 3,
-    //         },
-    //       ]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.name.id.single()'),
-    //       []);
-    // });
-    // test('First', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.name.id.first()'),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.name.given.first()'),
-    //       ['Jason']);
-    // });
-    // test('Last', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.name.id.last()'),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.name.given.last()'),
-    //       ['Jingleheimer']);
-    // });
-    // test('Tail', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.name.id.tail()'),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: 'Patient.name.given.tail()'),
-    //       [
-    //         'Grey',
-    //         'Jason',
-    //         'Grey',
-    //         'Kristin',
-    //         'John',
-    //         'Jacob',
-    //         'Jingleheimer',
-    //       ]);
-    // });
-    // test('toBoolean', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'1'.toBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'true'.toBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'t'.toBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'yes'.toBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'y'.toBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'1.0'.toBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'0'.toBoolean()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'false'.toBoolean()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'f'.toBoolean()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'no'.toBoolean()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'n'.toBoolean()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'0.0'.toBoolean()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "1.toBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "0.toBoolean()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "1.0.toBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "0.0.toBoolean()"),
-    //       [false]);
-    // });
-    // test('convertsToBoolean', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'1'.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'true'.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'t'.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'yes'.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'y'.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'1.0'.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'0'.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'false'.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'f'.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'no'.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'n'.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'0.0'.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "1.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "0.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "1.0.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "0.0.toBoolean().convertsToBoolean()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "name.first().convertsToBoolean()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "name.given.first().convertsToBoolean()"),
-    //       [false]);
-    // });
-    // test('toInteger', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'1'.toInteger()"),
-    //       [1]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'true'.toInteger()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'t'.toInteger()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'yes'.toInteger()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'y'.toInteger()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'1.0'.toInteger()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'0'.toInteger()"),
-    //       [0]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'false'.toInteger()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'f'.toInteger()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'no'.toInteger()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'n'.toInteger()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'0.0'.toInteger()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "1.toInteger()"),
-    //       [1]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "0.toInteger()"),
-    //       [0]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "1.0.toInteger()"),
-    //       [1]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "0.0.toInteger()"),
-    //       [0]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "true.toInteger()"),
-    //       [1]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "false.toInteger()"),
-    //       [0]);
-    // });
-    // test('convertsToInteger', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'1'.convertsToInteger()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'true'.convertsToInteger()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'t'.convertsToInteger()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'yes'.convertsToInteger()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'y'.convertsToInteger()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'1.0'.convertsToInteger()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'0'.convertsToInteger()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'false'.convertsToInteger()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'f'.convertsToInteger()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'no'.convertsToInteger()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'n'.convertsToInteger()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'0.0'.convertsToInteger()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "1.convertsToInteger()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "0.convertsToInteger()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "1.0.convertsToInteger()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "0.0.convertsToInteger()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "true.convertsToInteger()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "false.convertsToInteger()"),
-    //       [true]);
-    // });
-    // test('toDate', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "@2021-01-01.toDate()"),
-    //       [FhirDate('2021-01-01')]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'2021-01-01'.toDate()"),
-    //       [FhirDate('2021-01-01')]);
-    // });
-    // test('convertsToDate', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "@2021-01-01.convertsToDate()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'2021-01-01'.convertsToDate()"),
-    //       [true]);
-    // });
-    // test('toDateTime', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "@2021-01-01.toDateTime()"),
-    //       [FhirDateTime('2021-01-01')]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'2021-01-01'.toDateTime()"),
-    //       [FhirDateTime('2021-01-01')]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "@2021-01-01T12:12.toDateTime()"),
-    //       [FhirDateTime('2021-01-01T12:12')]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'2021-01-01T12:12'.toDateTime()"),
-    //       [FhirDateTime('2021-01-01T12:12')]);
-    // });
+    test('allFalse', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.active.allFalse()'),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.deceasedBoolean.allFalse()'),
+          [true]);
+    });
+    test('anyFalse', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.active.anyFalse()'),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.deceasedBoolean.anyFalse()'),
+          [true]);
+    });
+    test('count', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.name.count()'),
+          [4]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.name.given.count()'),
+          [8]);
+    });
+    test('distinct', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.name.distinct()'),
+          [
+            {
+              'use': 'official',
+              'family': 'Faulkenberry',
+              'given': ['Jason', 'Grey']
+            },
+            {
+              'family': 'Niel',
+              'given': ['Kristin']
+            },
+            {
+              'family': 'Smith',
+              'given': ['John', 'Jacob', 'Jingleheimer']
+            },
+          ]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.name.given.distinct()'),
+          ['Jason', 'Grey', 'Kristin', 'John', 'Jacob', 'Jingleheimer']);
+    });
+    test('isDistinct', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.name.distinct().isDistinct()'),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.name.given.distinct().isDistinct()'),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.address.period.isDistinct()'),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.name.isDistinct()'),
+          [false]);
+    });
+    test('Single', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.telecom.single()'),
+          [
+            {
+              'system': 'email',
+              'use': 'mobile',
+              'rank': 3,
+            },
+          ]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.name.id.single()'),
+          []);
+    });
+    test('First', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.name.id.first()'),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.name.given.first()'),
+          ['Jason']);
+    });
+    test('Last', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.name.id.last()'),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.name.given.last()'),
+          ['Jingleheimer']);
+    });
+    test('Tail', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.name.id.tail()'),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: 'Patient.name.given.tail()'),
+          [
+            'Grey',
+            'Jason',
+            'Grey',
+            'Kristin',
+            'John',
+            'Jacob',
+            'Jingleheimer',
+          ]);
+    });
+    test('toBoolean', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'1'.toBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'true'.toBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'t'.toBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'yes'.toBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'y'.toBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'1.0'.toBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'0'.toBoolean()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'false'.toBoolean()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'f'.toBoolean()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'no'.toBoolean()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'n'.toBoolean()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'0.0'.toBoolean()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "1.toBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "0.toBoolean()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "1.0.toBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "0.0.toBoolean()"),
+          [false]);
+    });
+    test('convertsToBoolean', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'1'.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'true'.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'t'.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'yes'.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'y'.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'1.0'.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'0'.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'false'.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'f'.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'no'.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'n'.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'0.0'.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "1.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "0.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "1.0.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "0.0.toBoolean().convertsToBoolean()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "name.first().convertsToBoolean()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "name.given.first().convertsToBoolean()"),
+          [false]);
+    });
+    test('toInteger', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'1'.toInteger()"),
+          [1]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'true'.toInteger()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'t'.toInteger()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'yes'.toInteger()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'y'.toInteger()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'1.0'.toInteger()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'0'.toInteger()"),
+          [0]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'false'.toInteger()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'f'.toInteger()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'no'.toInteger()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'n'.toInteger()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'0.0'.toInteger()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "1.toInteger()"),
+          [1]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "0.toInteger()"),
+          [0]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "1.0.toInteger()"),
+          [1]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "0.0.toInteger()"),
+          [0]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "true.toInteger()"),
+          [1]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "false.toInteger()"),
+          [0]);
+    });
+    test('convertsToInteger', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'1'.convertsToInteger()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'true'.convertsToInteger()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'t'.convertsToInteger()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'yes'.convertsToInteger()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'y'.convertsToInteger()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'1.0'.convertsToInteger()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'0'.convertsToInteger()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'false'.convertsToInteger()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'f'.convertsToInteger()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'no'.convertsToInteger()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'n'.convertsToInteger()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'0.0'.convertsToInteger()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "1.convertsToInteger()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "0.convertsToInteger()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "1.0.convertsToInteger()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "0.0.convertsToInteger()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "true.convertsToInteger()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "false.convertsToInteger()"),
+          [true]);
+    });
+    test('toDate', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "@2021-01-01.toDate()"),
+          [FhirDate('2021-01-01')]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'2021-01-01'.toDate()"),
+          [FhirDate('2021-01-01')]);
+    });
+    test('convertsToDate', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "@2021-01-01.convertsToDate()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'2021-01-01'.convertsToDate()"),
+          [true]);
+    });
+    test('toDateTime', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "@2021-01-01.toDateTime()"),
+          [FhirDateTime('2021-01-01')]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'2021-01-01'.toDateTime()"),
+          [FhirDateTime('2021-01-01')]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "@2021-01-01T12:12.toDateTime()"),
+          [FhirDateTime('2021-01-01T12:12')]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'2021-01-01T12:12'.toDateTime()"),
+          [FhirDateTime('2021-01-01T12:12')]);
+    });
     // test('convertsToDateTime', () {
     //   expect(
     //       walkNewFhirPath(

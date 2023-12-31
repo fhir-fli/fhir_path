@@ -49,7 +49,7 @@ void testBasicTypes() {
 
   test('DateTime', () {
     expect(parseResult('@2015-02-04T14:34:28+09:00'),
-        DateTimeParser(FhirDateTime('2015-02-04T05:34:28')));
+        DateTimeParser(FhirDateTime('2015-02-04T05:34:28Z')));
     expect(parseResult('@2018-02-04T14:38:28+09:00'),
         DateTimeParser(FhirDateTime('2018-02-04T14:38:28+09:00')));
     expect(parseResult('@2014-01-25T14:30:14.559'),

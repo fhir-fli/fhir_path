@@ -11,6 +11,9 @@ abstract class FhirPathParser {
   /// expression one object at a time
   List execute(List results, Map<String, dynamic> passed) => [];
 
+  @override
+  String toString() => verbosePrint(0);
+
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
   /// this package. These are not always synonymous with the FHIRPath
@@ -18,7 +21,8 @@ abstract class FhirPathParser {
   /// classes that were created for ease of evaluation but are not included
   /// at all as objects in the official spec. I'm generally going to recommend
   /// that you use [prettyPrint] instead
-  String verbosePrint(int indent) => '${"  " * indent}$runtimeType';
+  String verbosePrint(int indent) => '\n${"  " * indent}$runtimeType\n'
+      '${"  " * (indent + 1)}${nextParser?.verbosePrint(indent + 1) ?? ''}';
 
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
@@ -38,7 +42,7 @@ abstract class ValueParser<T> extends FhirPathParser {
   List execute(List results, Map<String, dynamic> passed);
 
   @override
-  String toString() => '$runtimeType: $value';
+  String toString() => verbosePrint(0);
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -48,8 +52,9 @@ abstract class ValueParser<T> extends FhirPathParser {
   /// at all as objects in the official spec. I'm generally going to recommend
   /// that you use [prettyPrint] instead
   @override
-  String verbosePrint(int indent) => '${"  " * indent}$runtimeType'
-      '${value is FhirPathParser ? (value as FhirPathParser).verbosePrint(indent + 1) : value}';
+  String verbosePrint(int indent) => '\n${"  " * indent}$runtimeType\n'
+      '${"  " * (indent + 1)}${value is FhirPathParser ? (value as FhirPathParser).verbosePrint(indent + 2) : value}'
+      '${"  " * (indent + 1)}${nextParser?.verbosePrint(indent + 1) ?? ''}';
 
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than

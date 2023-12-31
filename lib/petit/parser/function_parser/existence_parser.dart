@@ -156,36 +156,44 @@ class AllParser extends ValueParser<ParserList> {
   }
 }
 
-/// Takes a collection of Boolean values and returns true if all the items are true.
-/// If any items are false, the result is false. If the input is empty ({ }), the result is true.
-class AllTrueParser extends FhirPathParser {
-  AllTrueParser([FhirPathParser? super.nextParser]);
+/// Takes a collection of Boolean values, if the [value] argument is true , it
+/// returns true if all the items are true, if [value] is false, it returns true
+/// if all items are false.
+/// If the input is empty ({ }), the result is true.
+class AllTrueOrFalseParser extends ValueParser<bool> {
+  const AllTrueOrFalseParser(super.value, [super.nextParser]);
 
-  AllTrueParser copyWithNextParser(FhirPathParser nextParser) =>
-      AllTrueParser(nextParser);
+  AllTrueOrFalseParser copyWithNextParser(FhirPathParser nextParser) =>
+      AllTrueOrFalseParser(value, nextParser);
 
   @override
   List execute(List results, Map<String, dynamic> passed) {
     if (results.isEmpty) {
       return nextParser != null ? nextParser!.execute([true], passed) : [true];
     }
-    results.removeWhere((element) => element == true);
+
+    /// remove all elements that are true or false (depending which we want)
+    /// if there are no elements left, then all elements were true or false
+    /// and we return true, otherwise we return false
+    results.removeWhere((element) => element == value);
     return nextParser != null
         ? nextParser!.execute([results.isEmpty], passed)
         : [results.isEmpty];
   }
 
   @override
-  String prettyPrint([int indent = 2]) => '.allTrue()';
+  String prettyPrint([int indent = 2]) => value ? '.allTrue()' : 'allFalse()';
 }
 
-/// Takes a collection of Boolean values and returns true if any of the items are true.
-/// If all the items are false, or if the input is empty ({ }), the result is false.
-class AnyTrueParser extends FhirPathParser {
-  AnyTrueParser([FhirPathParser? super.nextParser]);
+/// Takes a collection of Boolean values, if the [value] argument is true , it
+/// returns true if any the items are true, if [value] is false, it returns true
+/// if any items are false.
+/// If the input is empty ({ }), the result is false.
+class AnyTrueOrFalseParser extends ValueParser<bool> {
+  const AnyTrueOrFalseParser(super.value, [FhirPathParser? super.nextParser]);
 
-  AnyTrueParser copyWithNextParser(FhirPathParser nextParser) =>
-      AnyTrueParser(nextParser);
+  AnyTrueOrFalseParser copyWithNextParser(FhirPathParser nextParser) =>
+      AnyTrueOrFalseParser(value, nextParser);
 
   @override
   List execute(List results, Map<String, dynamic> passed) {
@@ -194,56 +202,18 @@ class AnyTrueParser extends FhirPathParser {
           ? nextParser!.execute([false], passed)
           : [false];
     }
-    results.retainWhere((element) => element == true);
+
+    /// retain all elements that are true or false (depending which we want)
+    /// if there are elements left, then at least some elements were true or
+    /// false and we return true, otherwise we return false
+    results.retainWhere((element) => element == value);
     return nextParser != null
         ? nextParser!.execute([results.isNotEmpty], passed)
         : [results.isNotEmpty];
   }
 
   @override
-  String prettyPrint([int indent = 2]) => '.anyTrue()';
-}
-
-/// Takes a collection of Boolean values and returns true if all the items are false.
-/// If any items are true, the result is false. If the input is empty ({ }), the result is true.
-class AllFalseParser extends FhirPathParser {
-  AllFalseParser([FhirPathParser? super.nextParser]);
-
-  AllFalseParser copyWithNextParser(FhirPathParser nextParser) =>
-      AllFalseParser(nextParser);
-
-  @override
-  List execute(List results, Map<String, dynamic> passed) {
-    if (results.isEmpty) {
-      return [true];
-    }
-    results.removeWhere((element) => element == false);
-    return [results.isEmpty];
-  }
-
-  @override
-  String prettyPrint([int indent = 2]) => '.allFalse()';
-}
-
-/// Takes a collection of Boolean values and returns true if any of the items are false.
-/// If all the items are true, or if the input is empty ({ }), the result is false.
-class AnyFalseParser extends FhirPathParser {
-  AnyFalseParser([FhirPathParser? super.nextParser]);
-
-  AnyFalseParser copyWithNextParser(FhirPathParser nextParser) =>
-      AnyFalseParser(nextParser);
-
-  @override
-  List execute(List results, Map<String, dynamic> passed) {
-    if (results.isEmpty) {
-      return [false];
-    }
-    results.retainWhere((element) => element == false);
-    return [results.isNotEmpty];
-  }
-
-  @override
-  String prettyPrint([int indent = 2]) => '.anyFalse()';
+  String prettyPrint([int indent = 2]) => !value ? '.anyFalse()' : '.anyTrue()';
 }
 
 class SubsetOfParser extends ValueParser<ParserList> {
@@ -310,20 +280,22 @@ class SupersetOfParser extends ValueParser {
 }
 
 class CountParser extends FhirPathParser {
-  CountParser([FhirPathParser? super.nextParser]);
+  const CountParser([FhirPathParser? super.nextParser]);
 
   CountParser copyWithNextParser(FhirPathParser nextParser) =>
       CountParser(nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => [results.length];
+  List execute(List results, Map<String, dynamic> passed) => nextParser != null
+      ? nextParser!.execute([results.length], passed)
+      : [results.length];
 
   @override
   String prettyPrint([int indent = 2]) => '.count()';
 }
 
 class DistinctParser extends FhirPathParser {
-  DistinctParser([FhirPathParser? super.nextParser]);
+  const DistinctParser([FhirPathParser? super.nextParser]);
 
   DistinctParser copyWithNextParser(FhirPathParser nextParser) =>
       DistinctParser(nextParser);
@@ -336,7 +308,9 @@ class DistinctParser extends FhirPathParser {
         resultsList.add(r);
       }
     }
-    return resultsList;
+    return nextParser != null
+        ? nextParser!.execute(resultsList, passed)
+        : resultsList;
   }
 
   @override
@@ -344,7 +318,7 @@ class DistinctParser extends FhirPathParser {
 }
 
 class IsDistinctParser extends FhirPathParser {
-  IsDistinctParser([FhirPathParser? super.nextParser]);
+  const IsDistinctParser([FhirPathParser? super.nextParser]);
 
   IsDistinctParser copyWithNextParser(FhirPathParser nextParser) =>
       IsDistinctParser(nextParser);
@@ -357,7 +331,9 @@ class IsDistinctParser extends FhirPathParser {
         resultsList.add(r);
       }
     }
-    return [resultsList.length == results.length];
+    return nextParser != null
+        ? nextParser!.execute([resultsList.length == results.length], passed)
+        : [resultsList.length == results.length];
   }
 
   @override

@@ -58,12 +58,9 @@ Parser fhirPathExpression() {
   final _paramList = undefined();
 
   final Parser expressionPart = (char('(') & _expression & char(')')) |
-      _function.map((value) {
-        print('function: $value');
-        return value;
-      }) |
       _invocation |
       (literal & char('.') & _invocation) |
+      _function |
       literal.map((value) {
         print('literal: $value');
         return value;
@@ -115,22 +112,23 @@ Parser fhirPathExpression() {
   final Parser invocationPart =
 
       /// 	identifier	# memberInvocation
-      ((identifier.map((value) {
-                print('identifier: $value');
-                return value;
-              }) |
+      ((
 
               /// 	function	# functionInvocation
               _function |
+                  identifier.map((value) {
+                    print('invocationPartIdentifier: $value');
+                    return value;
+                  }) |
 
-              /// 	'$this'	# thisInvocation
-              string('\$this') |
+                  /// 	'$this'	# thisInvocation
+                  string('\$this') |
 
-              /// 	'$index'	# indexInvocation
-              string('\$index') |
+                  /// 	'$index'	# indexInvocation
+                  string('\$index') |
 
-              /// 	'$total'	# totalInvocation;
-              string('\$total')) &
+                  /// 	'$total'	# totalInvocation;
+                  string('\$total')) &
           (char('.') & _invocation).star());
 
   /// function: identifier '(' paramList? ')';
@@ -141,16 +139,12 @@ Parser fhirPathExpression() {
             return noArgumentFunctions[value[0]]!;
           }) |
           (pattern('A-Za-z')
-                      .plus()
-                      .flatten()
-                      .where((value) => argumentFunctionNames.contains(value)) &
-                  char('(') &
-                  _paramList.optional() &
-                  char(')'))
-              .map((value) {
-            print('argsFunction: $value');
-            return value;
-          }))
+                  .plus()
+                  .flatten()
+                  .where((value) => argumentFunctionNames.contains(value)) &
+              char('(') &
+              _paramList.optional() &
+              char(')')))
       .map((value) => value);
 
   /// paramList: expression (',' expression)*;
@@ -282,7 +276,10 @@ final Parser<DateTimeParser> DATETIME = (char('@') &
         char('T') &
         (TIMEFORMAT & TIMEZONEOFFSETFORMAT.optional()).optional())
     .flatten()
-    .map((value) => DateTimeParser(FhirDateTime(value.replaceFirst('@', ''))));
+    .map((value) {
+  print('DATETIME: $value');
+  return DateTimeParser(FhirDateTime(value.replaceFirst('@', '')));
+});
 
 /// TIME: '@' 'T' TIMEFORMAT;
 final Parser<TimeParser> TIME = (char('@') & char('T') & TIMEFORMAT)
@@ -332,11 +329,7 @@ final Parser<String> IDENTIFIER = ((pattern('A-Za-z') | char('_'))
     .where((value) =>
         value != 'true' &&
         value != 'false' &&
-        !allFunctionNames.contains(value))
-    .map((value) {
-  print('identifier: $value');
-  return value;
-});
+        !allFunctionNames.contains(value));
 
 /// DELIMITEDIDENTIFIER: '`' (ESC | .)*? '`';
 final Parser<String> DELIMITEDIDENTIFIER =
@@ -346,23 +339,17 @@ final Parser<String> DELIMITEDIDENTIFIER =
             value != 'true' &&
             value != 'false' &&
             !allFunctionNames.contains(value))
-        .map((value) {
-  print('delimitedidentifier: $value');
-  return
-      // Remove the backticks from the parsed value
-      value.substring(1, value.length - 1);
-});
+        .map((value) =>
+            // Remove the backticks from the parsed value
+            value.substring(1, value.length - 1));
 
 /// STRING: '\'' (ESC | .)*? '\'';
 final Parser<StringParser> STRING =
     (char("'") & (ESC | char("'").neg()).star() & char("'"))
         .flatten()
-        .map((value) {
-  print('value: $value');
-  // Remove the quotes from the parsed value
-  final contentWithoutQuotes = value.substring(1, value.length - 1);
-  return StringParser(contentWithoutQuotes);
-});
+        .map((value) =>
+            // Remove the quotes from the parsed value
+            StringParser(value.substring(1, value.length - 1)));
 
 /// Also allows leading zeroes now (just like CQL and XSD)
 final Parser NUMBER = DECIMAL.or(INTEGER);
@@ -469,10 +456,10 @@ final Map<String, FhirPathParser> noArgumentFunctions =
   'convertsToTime': ConvertsToTimeParser(),
   'hasValue': HasValueParser(),
   'empty': EmptyParser(),
-  'allTrue': AllTrueParser(),
-  'anyTrue': AnyTrueParser(),
-  'allFalse': AllFalseParser(),
-  'anyFalse': AnyFalseParser(),
+  'allTrue': AllTrueOrFalseParser(true),
+  'anyTrue': AnyTrueOrFalseParser(true),
+  'allFalse': AllTrueOrFalseParser(false),
+  'anyFalse': AnyTrueOrFalseParser(false),
   'count': CountParser(),
   'distinct': DistinctParser(),
   'isDistinct': IsDistinctParser(),

@@ -39,10 +39,8 @@ class BooleanParser extends ValueParser<bool> {
       BooleanParser(value, nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => [value];
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}BooleanParser: "$value"';
+  List execute(List results, Map<String, dynamic> passed) =>
+      nextParser != null ? nextParser!.execute([value], passed) : [value];
 
   @override
   String prettyPrint([int indent = 2]) => '$value';
@@ -163,15 +161,8 @@ class IntegerParser extends ValueParser<int> {
       IntegerParser(value, nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => [value];
-
-  @override
-  String toString() {
-    return 'Integer: $value';
-  }
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}IntegerParser: "$value"';
+  List execute(List results, Map<String, dynamic> passed) =>
+      nextParser != null ? nextParser!.execute([value], passed) : [value];
 
   @override
   String prettyPrint([int indent = 2]) => '$value';
@@ -201,7 +192,8 @@ class DecimalParser extends ValueParser<double> {
       DecimalParser(value, nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => [value];
+  List execute(List results, Map<String, dynamic> passed) =>
+      nextParser != null ? nextParser!.execute([value], passed) : [value];
 
   @override
   operator ==(Object o) => o is DecimalParser
@@ -428,10 +420,8 @@ class StringParser extends ValueParser<String> {
       StringParser(value, nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => [value];
-
-  @override
-  String verbosePrint(int indent) => "${'  ' * indent}StringParser: '$value'";
+  List execute(List results, Map<String, dynamic> passed) =>
+      nextParser != null ? nextParser!.execute([value], passed) : [value];
 
   @override
   String prettyPrint([int indent = 2]) => "'$value'";
@@ -455,6 +445,11 @@ class DateTimeParser extends BaseDateTimeParser<FhirDateTime> {
 
   DateTimeParser copyWithNextParser(FhirPathParser nextParser) =>
       DateTimeParser(value, nextParser);
+
+  @override
+  List execute(List results, Map<String, dynamic> passed) =>
+      nextParser != null ? nextParser!.execute([value], passed) : [value];
+
   //  {
   //   final removeAt = stringValue.replaceFirst('@', '');
   //   final split = removeAt.split('T');
@@ -511,6 +506,10 @@ class DateParser extends BaseDateTimeParser<FhirDate> {
       DateParser(value, nextParser);
 
   @override
+  List execute(List results, Map<String, dynamic> passed) =>
+      nextParser != null ? nextParser!.execute([value], passed) : [value];
+
+  @override
   operator ==(Object o) => o is DateParser
       ? o.value == value
       : o is DateTimeParser
@@ -534,6 +533,11 @@ class TimeParser extends BaseDateTimeParser<FhirTime> {
 
   TimeParser copyWithNextParser(FhirPathParser nextParser) =>
       TimeParser(value, nextParser);
+
+  @override
+  List execute(List results, Map<String, dynamic> passed) =>
+      nextParser != null ? nextParser!.execute([value], passed) : [value];
+
 //  {
 //     final removeAt = stringValue.replaceFirst('@', '');
 //     value = FhirTime(removeAt.replaceFirst('T', ''));
