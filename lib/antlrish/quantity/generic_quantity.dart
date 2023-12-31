@@ -10,7 +10,7 @@ import 'package:units_converter/units_converter.dart';
 import 'quantity_comparator.dart';
 import 'ratios.dart';
 import 'string_unit_to_property.dart';
-import 'unit_code.dart';
+import 'ucum_unit_codes.dart';
 import 'units.dart';
 
 class GenericQuantity {
@@ -534,6 +534,6 @@ class GenericQuantity {
           ? value['value'] != null &&
               num.tryParse(value['value'].toString()) != null &&
               value['code'] != null &&
-              unitCode.contains(value['code'])
+              ucumUnitCodes.contains(value['code'])
           : false;
 }

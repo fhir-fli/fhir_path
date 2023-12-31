@@ -578,210 +578,209 @@ void testNoArgFxns() {
               pathExpression: "'2021-01-01T12:12'.toDateTime()"),
           [FhirDateTime('2021-01-01T12:12')]);
     });
-    // test('convertsToDateTime', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "@2021-01-01.convertsToDateTime()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'2021-01-01'.convertsToDateTime()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "@2021-01-01T12:12.convertsToDateTime()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'2021-01-01T12:12'.convertsToDateTime()"),
-    //       [true]);
-    // });
-    // test('toDecimal', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'1'.toDecimal()"),
-    //       [1.0]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'true'.toDecimal()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'t'.toDecimal()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'yes'.toDecimal()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'y'.toDecimal()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'1.0'.toDecimal()"),
-    //       [1.0]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'0'.toDecimal()"),
-    //       [0.0]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'false'.toDecimal()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'f'.toDecimal()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'no'.toDecimal()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'n'.toDecimal()"),
-    //       []);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'0.0'.toDecimal()"),
-    //       [0.0]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "1.toDecimal()"),
-    //       [1.0]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "0.toDecimal()"),
-    //       [0.0]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "1.0.toDecimal()"),
-    //       [1.0]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "0.0.toDecimal()"),
-    //       [0.0]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "true.toDecimal()"),
-    //       [1.0]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "false.toDecimal()"),
-    //       [0.0]);
-    // });
-    // test('convertsToDecimal', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'1'.convertsToDecimal()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'true'.convertsToDecimal()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'t'.convertsToDecimal()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'yes'.convertsToDecimal()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'y'.convertsToDecimal()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'1.0'.convertsToDecimal()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'0'.convertsToDecimal()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'false'.convertsToDecimal()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'f'.convertsToDecimal()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'no'.convertsToDecimal()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'n'.convertsToDecimal()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'0.0'.convertsToDecimal()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "1.convertsToDecimal()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "0.convertsToDecimal()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "1.0.convertsToDecimal()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "0.0.convertsToDecimal()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "true.convertsToDecimal()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "false.convertsToDecimal()"),
-    //       [true]);
-    // });
+    test('convertsToDateTime', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "@2021-01-01.convertsToDateTime()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'2021-01-01'.convertsToDateTime()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "@2021-01-01T12:12.convertsToDateTime()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'2021-01-01T12:12'.convertsToDateTime()"),
+          [true]);
+    });
+    test('toDecimal', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'1'.toDecimal()"),
+          [1.0]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'true'.toDecimal()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'t'.toDecimal()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'yes'.toDecimal()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'y'.toDecimal()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'1.0'.toDecimal()"),
+          [1.0]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'0'.toDecimal()"),
+          [0.0]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'false'.toDecimal()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'f'.toDecimal()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'no'.toDecimal()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'n'.toDecimal()"),
+          []);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'0.0'.toDecimal()"),
+          [0.0]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "1.toDecimal()"),
+          [1.0]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "0.toDecimal()"),
+          [0.0]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "1.0.toDecimal()"),
+          [1.0]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "0.0.toDecimal()"),
+          [0.0]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "true.toDecimal()"),
+          [1.0]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "false.toDecimal()"),
+          [0.0]);
+    });
+    test('convertsToDecimal', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'1'.convertsToDecimal()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'true'.convertsToDecimal()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'t'.convertsToDecimal()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'yes'.convertsToDecimal()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'y'.convertsToDecimal()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'1.0'.convertsToDecimal()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'0'.convertsToDecimal()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'false'.convertsToDecimal()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'f'.convertsToDecimal()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'no'.convertsToDecimal()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'n'.convertsToDecimal()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'0.0'.convertsToDecimal()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "1.convertsToDecimal()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "0.convertsToDecimal()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "1.0.convertsToDecimal()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "0.0.convertsToDecimal()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "true.convertsToDecimal()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "false.convertsToDecimal()"),
+          [true]);
+    });
+    test('toQuantity', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'4 days'.toQuantity()"),
+          [const GenericQuantity(value: 4, unit: 'days')]);
 
-    // test('toQuantity', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'4 days'.toQuantity()"),
-    //       [FhirPathQuantity(4, 'days')]);
-
-    //   // TODO(Dokotela):  toQuantity - more units
-    //   // expect(
-    //   //     walkNewFhirPath(
-    //   //         context: resource.toJson(),
-    //   //         pathExpression: ""10 \'mg[Hg]'".toQuantity()"),
-    //   //     ['true']);
-    // });
+      // TODO(Dokotela):  toQuantity - more units
+      // expect(
+      //     walkNewFhirPath(
+      //         context: resource.toJson(),
+      //         pathExpression: ""10 \'mg[Hg]'".toQuantity()"),
+      //     ['true']);
+    });
 
     // test('toQuantity', () {
     //   expect(

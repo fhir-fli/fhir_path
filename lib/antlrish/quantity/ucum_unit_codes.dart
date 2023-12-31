@@ -1,4 +1,4 @@
-const unitCode = [
+const ucumUnitCodes = [
   'millisecond',
   'second',
   'seconds',

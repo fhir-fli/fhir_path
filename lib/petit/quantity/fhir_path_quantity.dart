@@ -15,6 +15,8 @@ import 'ratios.dart';
 
 class FhirPathQuantity {
   factory FhirPathQuantity.fromString(String quantityString) {
+    final newString = quantityString.replaceAll(r"\'", "'");
+
     if (FhirPathQuantity.fhirPathQuantityRegex
         .hasMatch(quantityString.replaceAll(r"\'", "'"))) {
       final match = FhirPathQuantity.fhirPathQuantityRegex
@@ -58,8 +60,10 @@ class FhirPathQuantity {
   num amount;
   String unit;
 
-  static RegExp fhirPathQuantityRegex = RegExp(
-      r"^(?<value>(\+|-)?\d+(\.\d+)?)\s*('(?<unit>[^']+)'|(?<time>[a-zA-Z]+))?$");
+  static RegExp fhirPathQuantityRegex =
+      RegExp(r"^(?<value>(\+|-)?\d+(\.\d+)?)\s*");
+  static RegExp fhirPathQuantityRegexWithUnit =
+      RegExp(r"'('(?<unit>[^']+)'|(?<time>[a-zA-Z]+))?$");
 
   String get value => toString();
   bool get isNaN => amount.isNaN;

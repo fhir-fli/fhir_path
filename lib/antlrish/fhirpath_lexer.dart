@@ -75,63 +75,32 @@ Parser fhirPathExpression() {
       (_expression &
           (char('*') | char('/') | string('div') | string('mod')) &
           _expression) |
-
-      /// 	| expression ('+' | '-' | '&') expression			# additiveExpression
       (_expression & (char('+') | char('-') | char('&')) & _expression) |
-
-      /// 	| expression ('is' | 'as') typeSpecifier			# typeExpression
       (_expression & (string('is') | string('as')) & typeSpecifier) |
-
-      /// 	| expression '|' expression							# unionExpression
       (_expression & char('|') & _expression) |
-
-      /// 	| expression ('<=' | '<' | '>' | '>=') expression	# inequalityExpression
       (_expression &
           (string('<=') | char('<') | char('>') | string('>=') & _expression)) |
-
-      /// 	| expression ('=' | '~' | '!=' | '!~') expression	# equalityExpression
       (_expression &
           (char('=') | char('~') | string('!=') | string('!~')) &
           _expression) |
-
-      /// 	| expression ('in' | 'contains') expression			# membershipExpression
       (_expression & (string('in') | string('contains')) & _expression) |
-
-      /// 	| expression 'and' expression						# andExpression
       (_expression & string('and') & _expression) |
-
-      /// 	| expression ('or' | 'xor') expression				# orExpression
       (_expression & (string('or') | string('xor')) & _expression) |
-
-      /// 	| expression 'implies' expression					# impliesExpression
       (_expression & string('implies') & _expression);
 
   /// | (IDENTIFIER)? '=>' expression #lambdaExpression
 
   /// invocation : // Terms that can be used after the function/member invocation '.'
-  final Parser invocationPart =
+  final Parser invocationPart = ((_function |
+          identifier.map((value) {
+            print('invocationPartIdentifier: $value');
+            return value;
+          }) |
+          string('\$this') |
+          string('\$index') |
+          string('\$total')) &
+      (char('.') & _invocation).star());
 
-      /// 	identifier	# memberInvocation
-      ((
-
-              /// 	function	# functionInvocation
-              _function |
-                  identifier.map((value) {
-                    print('invocationPartIdentifier: $value');
-                    return value;
-                  }) |
-
-                  /// 	'$this'	# thisInvocation
-                  string('\$this') |
-
-                  /// 	'$index'	# indexInvocation
-                  string('\$index') |
-
-                  /// 	'$total'	# totalInvocation;
-                  string('\$total')) &
-          (char('.') & _invocation).star());
-
-  /// function: identifier '(' paramList? ')';
   final Parser functionPart = ((pattern('A-Za-z').plus().flatten().where(
                       (value) => noArgumentFunctions.keys.contains(value)) &
                   string('()'))
@@ -147,7 +116,6 @@ Parser fhirPathExpression() {
               char(')')))
       .map((value) => value);
 
-  /// paramList: expression (',' expression)*;
   final Parser paramListPart = _expression & (char(',') & _expression).star();
 
   _expression.set(expressionPart.end());
@@ -157,15 +125,6 @@ Parser fhirPathExpression() {
   return _expression;
 }
 
-/// literal:
-/// 	'{' '}'					# nullLiteral
-/// 	| ('true' | 'false')	# booleanLiteral
-/// 	| STRING				# stringLiteral
-/// 	| NUMBER				# numberLiteral
-/// 	| DATE					# dateLiteral
-/// 	| DATETIME				# dateTimeLiteral
-/// 	| TIME					# timeLiteral
-/// 	| quantity				# quantityLiteral;
 final Parser literal = ((STRING |
                 NULL.flatten().map((value) => EmptySetParser()) |
                 (string('true') | string('false'))
@@ -181,31 +140,16 @@ final Parser literal = ((STRING |
 
 final Parser NULL = char('{').trim() & char('}').trim();
 
-/// externalConstant: '%' ( identifier | STRING);
 final Parser externalConstant = char('%').seq(identifier | STRING);
 
-/// quantity: NUMBER unit?;
 /// TODO(Dokotela): unit should be optional
 final Parser<QuantityParser> quantity = (NUMBER & (char(' ') & unit))
     .flatten()
     .map((value) => QuantityParser(value));
 
-/// unit:
-/// 	dateTimePrecision
-/// 	| pluralDateTimePrecision
-/// 	| STRING ; // UCUM syntax for units of measure
 final Parser<String> unit =
     (dateTimePrecision | pluralDateTimePrecision | STRING).flatten();
 
-/// dateTimePrecision:
-/// 	'year'
-/// 	| 'month'
-/// 	| 'week'
-/// 	| 'day'
-/// 	| 'hour'
-/// 	| 'minute'
-/// 	| 'second'
-/// 	| 'millisecond';
 final Parser<String> dateTimePrecision = (string('year') |
         string('month') |
         string('week') |
@@ -216,15 +160,6 @@ final Parser<String> dateTimePrecision = (string('year') |
         string('millisecond'))
     .flatten();
 
-/// pluralDateTimePrecision:
-/// 	'years'
-/// 	| 'months'
-/// 	| 'weeks'
-/// 	| 'days'
-/// 	| 'hours'
-/// 	| 'minutes'
-/// 	| 'seconds'
-/// 	| 'milliseconds';
 final Parser<String> pluralDateTimePrecision = (string('years') |
         string('months') |
         string('weeks') |
@@ -235,20 +170,11 @@ final Parser<String> pluralDateTimePrecision = (string('years') |
         string('milliseconds'))
     .flatten();
 
-/// typeSpecifier: qualifiedIdentifier;
 final Parser typeSpecifier = qualifiedIdentifier;
 
-/// qualifiedIdentifier: identifier ('.' identifier)*;
 final Parser qualifiedIdentifier =
     identifier.seq(char('.').seq(identifier).star());
 
-/// identifier:
-/// 	IDENTIFIER
-/// 	| DELIMITEDIDENTIFIER
-/// 	| 'as'
-/// 	| 'contains'
-/// 	| 'in'
-/// 	| 'is';
 final Parser identifier = (IDENTIFIER.map((value) => IdentifierParser(value)) |
         DELIMITEDIDENTIFIER.map((value) => DelimitedIdentifierParser(value)) |
         string('as') |
@@ -264,13 +190,10 @@ final Parser identifier = (IDENTIFIER.map((value) => IdentifierParser(value)) |
 ///  interpreter.
 ///
 
-/// DATE: '@' DATEFORMAT;
 final Parser<DateParser> DATE = (char('@') & DATEFORMAT)
     .flatten()
     .map((value) => DateParser(FhirDate(value.replaceFirst('@', ''))));
 
-/// DATETIME:
-/// 	'@' DATEFORMAT 'T' (TIMEFORMAT TIMEZONEOFFSETFORMAT?)?;
 final Parser<DateTimeParser> DATETIME = (char('@') &
         DATEFORMAT &
         char('T') &
@@ -281,13 +204,10 @@ final Parser<DateTimeParser> DATETIME = (char('@') &
   return DateTimeParser(FhirDateTime(value.replaceFirst('@', '')));
 });
 
-/// TIME: '@' 'T' TIMEFORMAT;
 final Parser<TimeParser> TIME = (char('@') & char('T') & TIMEFORMAT)
     .flatten()
     .map((value) => TimeParser(FhirTime(value.replaceFirst('@T', ''))));
 
-/// fragment DATEFORMAT:
-/// 	[0-9][0-9][0-9][0-9] ('-' [0-9][0-9] ('-' [0-9][0-9])?)?;
 final Parser<String> DATEFORMAT = (pattern('0-9').times(4) &
         (char('-') &
                 pattern('0-9').times(2) &
@@ -295,8 +215,6 @@ final Parser<String> DATEFORMAT = (pattern('0-9').times(4) &
             .optional())
     .flatten();
 
-/// fragment TIMEFORMAT:
-/// 	[0-9][0-9] (':' [0-9][0-9] (':' [0-9][0-9] ('.' [0-9]+)?)?)?;
 final Parser<String> TIMEFORMAT = (pattern('0-9').times(2) &
         (char(':') &
                 pattern('0-9').times(2) &
@@ -307,10 +225,6 @@ final Parser<String> TIMEFORMAT = (pattern('0-9').times(2) &
             .optional())
     .flatten();
 
-/// fragment TIMEZONEOFFSETFORMAT: (
-/// 		'Z'
-/// 		| ('+' | '-') [0-9][0-9]':' [0-9][0-9]
-/// 	);
 final Parser<String> TIMEZONEOFFSETFORMAT = (char('Z') |
         (pattern('+-') &
             pattern('0-9').times(2) &
@@ -318,8 +232,6 @@ final Parser<String> TIMEZONEOFFSETFORMAT = (char('Z') |
             pattern('0-9').times(2)))
     .flatten();
 
-/// IDENTIFIER: ([A-Za-z] | '_') ([A-Za-z0-9] | '_')*
-/// 		; // Added _ to support CQL (FHIR could constrain it out)
 final Parser<String> trueFalseParser =
     (string('true') | string('false')).flatten();
 
@@ -331,7 +243,6 @@ final Parser<String> IDENTIFIER = ((pattern('A-Za-z') | char('_'))
         value != 'false' &&
         !allFunctionNames.contains(value));
 
-/// DELIMITEDIDENTIFIER: '`' (ESC | .)*? '`';
 final Parser<String> DELIMITEDIDENTIFIER =
     (char('`') & (ESC | char('`').neg()).star() & char('`'))
         .flatten()
@@ -343,7 +254,6 @@ final Parser<String> DELIMITEDIDENTIFIER =
             // Remove the backticks from the parsed value
             value.substring(1, value.length - 1));
 
-/// STRING: '\'' (ESC | .)*? '\'';
 final Parser<StringParser> STRING =
     (char("'") & (ESC | char("'").neg()).star() & char("'"))
         .flatten()
@@ -382,7 +292,6 @@ final Parser<WhiteSpaceParser> LINE_COMMENT =
         .flatten()
         .map((value) => WhiteSpaceParser(value));
 
-/// allow \`, \', \\, \/, \f, etc. and \uXXX
 final Parser<String> ESC =
     char('\\').seq(pattern('`\'\\/fnrt')).or(UNICODE).flatten();
 
