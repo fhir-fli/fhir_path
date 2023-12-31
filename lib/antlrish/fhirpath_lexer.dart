@@ -7,8 +7,6 @@ import 'package:petitparser/parser.dart';
 ///prog: line (line)*; line: ID ( '(' expr ')') ':' expr '\r'? '\n';
 
 final Parser<FhirPathParser> fhirPathLexer = fhirPathExpression().map((value) {
-  print('invocation: $value');
-  print('runtimeType: ${value.runtimeType}');
   FhirPathParser? setupParser(List<dynamic> list) {
     FhirPathParser? nextParser;
     for (var i = 0; i < list.length; i++) {
@@ -61,10 +59,7 @@ Parser fhirPathExpression() {
       _invocation |
       (literal & char('.') & _invocation) |
       _function |
-      literal.map((value) {
-        print('literal: $value');
-        return value;
-      }) |
+      literal |
       string('\$this') |
       string('\$index') |
       string('\$total') |
@@ -92,10 +87,7 @@ Parser fhirPathExpression() {
 
   /// invocation : // Terms that can be used after the function/member invocation '.'
   final Parser invocationPart = ((_function |
-          identifier.map((value) {
-            print('invocationPartIdentifier: $value');
-            return value;
-          }) |
+          identifier |
           string('\$this') |
           string('\$index') |
           string('\$total')) &
@@ -200,7 +192,6 @@ final Parser<DateTimeParser> DATETIME = (char('@') &
         (TIMEFORMAT & TIMEZONEOFFSETFORMAT.optional()).optional())
     .flatten()
     .map((value) {
-  print('DATETIME: $value');
   return DateTimeParser(FhirDateTime(value.replaceFirst('@', '')));
 });
 
