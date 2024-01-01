@@ -213,6 +213,8 @@ class GenericQuantity {
     } else {
       final fromUnit = stringUnitToProperty[unit];
       final toUnit = stringUnitToProperty[o.unit];
+      print('fromUnit: $fromUnit');
+      print('toUnit: $toUnit');
       var oValue = o.value;
       var thisValue = this.value;
       if (fromUnit == null || toUnit == null) {

@@ -13,7 +13,7 @@ final Parser<FhirPathParser> fhirPathLexer = fhirPathExpression().map((value) {
       if (list[i] is FhirPathParser) {
         nextParser = setupParser(list.sublist(i + 1));
         if (nextParser != null) {
-          return list[i].copyWithNextParser(nextParser);
+          return (list[i] as FhirPathParser).copyWithNextParser(nextParser);
         } else {
           return list[i];
         }

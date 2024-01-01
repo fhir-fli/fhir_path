@@ -775,11 +775,11 @@ void testNoArgFxns() {
           [const GenericQuantity(value: 4, unit: 'days')]);
 
       // TODO(Dokotela):  toQuantity - more units
-      // expect(
-      //     walkNewFhirPath(
-      //         context: resource.toJson(),
-      //         pathExpression: ""10 \'mg[Hg]'".toQuantity()"),
-      //     ['true']);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "10 'mg[Hg]'.toQuantity()"),
+          [const GenericQuantity(value: 10, unit: 'mg[Hg]')]);
     });
 
     test('toQuantity', () {
@@ -788,13 +788,11 @@ void testNoArgFxns() {
               context: resource.toJson(),
               pathExpression: "'4 days'.convertsToQuantity()"),
           [true]);
-
-      // TODO(Dokotela): still need to work on recognizing Quantity
-      // expect(
-      //     walkNewFhirPath(
-      //         context: resource.toJson(),
-      //         pathExpression: ""10 \'mg[Hg]'".convertsToQuantity()"),
-      //     ['true']);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "10 'mg[Hg]'.convertsToQuantity()"),
+          [true]);
     });
 
     test('toString', () {
@@ -847,105 +845,105 @@ void testNoArgFxns() {
               context: resource.toJson(), pathExpression: "@T12:12.toString()"),
           ['12:12']);
     });
-    // test('convertsToString', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "true.convertsToString()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "false.convertsToString()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "1.convertsToString()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "111.convertsToString()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "1.1.convertsToString()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "111.1.convertsToString()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "1.1 'mg'.convertsToString()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "111.1 'mL'.convertsToString()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "@2019-08-01.convertsToString()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "@2021-01-01T12:12.convertsToString()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "@T12:12.convertsToString()"),
-    //       [true]);
-    // });
-    // test('toTime', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "@T12:22.toTime()"),
-    //       [FhirTime('12:22')]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "@T12:22:33.toTime()"),
-    //       [FhirTime('12:22:33')]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(), pathExpression: "'12:22'.toTime()"),
-    //       [FhirTime('12:22')]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'12:22:33.321'.toTime()"),
-    //       [FhirTime('12:22:33.321')]);
-    // });
-    // test('convertsToTime', () {
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "@T12:22.convertsToTime()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "@T12:22:33.convertsToTime()"),
-    //       [true]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'T12:22'.convertsToTime()"),
-    //       [false]);
-    //   expect(
-    //       walkNewFhirPath(
-    //           context: resource.toJson(),
-    //           pathExpression: "'12:22:33.321'.convertsToTime()"),
-    //       [true]);
-    // });
+    test('convertsToString', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "true.convertsToString()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "false.convertsToString()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "1.convertsToString()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "111.convertsToString()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "1.1.convertsToString()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "111.1.convertsToString()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "1.1 'mg'.convertsToString()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "111.1 'mL'.convertsToString()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "@2019-08-01.convertsToString()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "@2021-01-01T12:12.convertsToString()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "@T12:12.convertsToString()"),
+          [true]);
+    });
+    test('toTime', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "@T12:22.toTime()"),
+          [FhirTime('12:22')]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "@T12:22:33.toTime()"),
+          [FhirTime('12:22:33')]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(), pathExpression: "'12:22'.toTime()"),
+          [FhirTime('12:22')]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'12:22:33.321'.toTime()"),
+          [FhirTime('12:22:33.321')]);
+    });
+    test('convertsToTime', () {
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "@T12:22.convertsToTime()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "@T12:22:33.convertsToTime()"),
+          [true]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'T12:22'.convertsToTime()"),
+          [false]);
+      expect(
+          walkNewFhirPath(
+              context: resource.toJson(),
+              pathExpression: "'12:22:33.321'.convertsToTime()"),
+          [true]);
+    });
     // test('upper', () {
     //   expect(
     //       walkNewFhirPath(

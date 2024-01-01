@@ -137,10 +137,11 @@ class QuantityParser extends ValueParser<GenericQuantity> {
       : super(GenericQuantity(value: value, unit: unit), nextParser);
 
   QuantityParser copyWithNextParser(FhirPathParser nextParser) =>
-      QuantityParser(value.toString());
+      QuantityParser(value.toString(), nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) => [value];
+  List execute(List results, Map<String, dynamic> passed) =>
+      nextParser != null ? nextParser!.execute([value], passed) : [value];
 
   @override
   operator ==(Object o) => o is QuantityParser

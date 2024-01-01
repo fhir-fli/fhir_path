@@ -98,14 +98,14 @@ const stringUnitToProperty = {
   ///
   /// PRESSURE
   ///
-// PRESSURE.pascal,
-// PRESSURE.bar,
+  'Pa': PRESSURE.pascal,
+  'bar': PRESSURE.bar,
 // PRESSURE.millibar,
-// PRESSURE.atmosphere,
-// PRESSURE.psi,
-// PRESSURE.torr,
+  'atm': PRESSURE.atmosphere,
+  'psi': PRESSURE.psi,
+  'torr': PRESSURE.torr,
 // PRESSURE.inchOfMercury,
-// PRESSURE.hectoPascal,
+  'hPa': PRESSURE.hectoPascal,
 
   ///
   /// SPEED
