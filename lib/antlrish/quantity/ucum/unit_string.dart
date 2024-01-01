@@ -1,19 +1,18 @@
 import 'ucum_pkg.dart';
 
 class UnitString {
-  // Dart doesn't support private properties in the same way as JavaScript,
-  // so we'll use underscores to denote private properties.
-  late UnitTables utabs;
-  late PrefixTables pfxTabs;
-  late String openEmph_;
-  late String closeEmph_;
-  late String bracesMsg;
-  late String parensFlag_;
+  // Get instances of the unit and prefix tables and the utilities
+  final UnitTables utabs_ = UnitTables.instance;
+  final PrefixTables pfxTabs_ = PrefixTables.instance;
+  final String openEmph_ = UcumConfig.openEmph_;
+  final String closeEmph_ = UcumConfig.closeEmph_;
+  String bracesMsg = '';
+  final String parensFlag_ = 'parens_placeholder';
   int pFlagLen = 0;
-  late String braceFlag_;
+  final String braceFlag_ = 'braces_placeholder';
   int bFlagLen = 0;
-  late String vcMsgStart_;
-  late String vcMsgEnd_;
+  String? vcMsgStart_;
+  String? vcMsgEnd_;
   List<String> retMsg_ = [];
   List<UcumUnit> parensUnits_ = [];
   List<String> annotations_ = [];
@@ -25,20 +24,20 @@ class UnitString {
   static final RegExp VALID_ANNOTATION_REGEX = RegExp(r'^\{[!-z|~]*\}$');
 
   // Dart constructor
-  UnitString()
-      :
-        // Initialize the properties
-        utabs = UnitTables.instance,
-        pfxTabs = PrefixTables.instance,
-        openEmph_ = '...', // Set appropriate values
-        closeEmph_ = '...', // Set appropriate values
-        bracesMsg = '',
-        parensFlag_ = "parens_placeholder",
-        // pFlagLen = parensFlag.length,
-        braceFlag_ = "braces_placeholder",
-        // bFlagLen = braceFlag.length,
-        vcMsgStart_ = '...', // Set appropriate values
-        vcMsgEnd_ = '...'; // Set appropriate values
+  UnitString({
+    this.bracesMsg = '',
+    required this.pFlagLen,
+    required this.bFlagLen,
+    this.vcMsgStart_,
+    this.vcMsgEnd_,
+    List<String>? retMsg,
+    List<UcumUnit>? parensUnits,
+    List<String>? annotations,
+    List<String>? suggestions,
+  })  : retMsg_ = retMsg ?? [],
+        parensUnits_ = parensUnits ?? [],
+        annotations_ = annotations ?? [],
+        suggestions_ = suggestions ?? [];
 
   static UnitString get instance => _instance;
 

@@ -8,24 +8,44 @@ bool isIntegerUnit(String str) {
   return RegExp(r'^\d+$').hasMatch(str);
 }
 
-Map<String, dynamic> getSynonyms(String theSyn) {
-  var retObj = <String, dynamic>{};
-  var utab = UnitTables.instance;
-  var resp = utab.getUnitBySynonym(theSyn);
-  if (resp.isEmpty || resp['units'] == null) {
-    retObj['status'] = resp['status'];
-    retObj['msg'] = resp['msg'];
+ReturnObject getSynonyms(String theSyn) {
+  final UnitTables utab = UnitTables.instance;
+  ReturnObject resp = utab.getUnitBySynonym(theSyn);
+  if (resp.units.isEmpty) {
+    return ReturnObject(UnitGetStatus.failed,
+        'No unit found for synonym $theSyn', <UcumUnit>[]);
   } else {
-    retObj['status'] = 'succeeded';
-    var units = resp['units']
-        as List<UcumUnit>; // Assuming Unit is a class defined in your code
-    retObj['units'] = units
-        .map((theUnit) => {
-              'code': theUnit.csCode_,
-              'name': theUnit.name_,
-              'guidance': theUnit.guidance_
-            })
-        .toList();
+    return resp.copyWith(status: UnitGetStatus.succeeded);
   }
-  return retObj;
 }
+
+class UnitEntry {
+  final String? mag;
+  final UcumUnit unit;
+  const UnitEntry(this.mag, this.unit);
+}
+
+class ReturnObject {
+  final UnitGetStatus status;
+  final String? msg;
+  final List<UcumUnit> units;
+
+  const ReturnObject(
+    this.status,
+    this.msg,
+    this.units,
+  );
+
+  ReturnObject copyWith({
+    UnitGetStatus? status,
+    String? msg,
+    List<UcumUnit>? units,
+  }) =>
+      ReturnObject(
+        status ?? this.status,
+        msg ?? this.msg,
+        units ?? this.units,
+      );
+}
+
+enum UnitGetStatus { succeeded, failed, error }

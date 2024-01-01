@@ -1,22 +1,66 @@
 import 'ucum_pkg.dart';
 
 class UnitTables {
-  // Declare the attributes
-  Map<String, List<UcumUnit>> unitNames = {};
-  Map<String, UcumUnit> unitCodes = {};
-  List<String> codeOrder = [];
-  Map<String, List<Map<String, dynamic>>> unitStrings = {};
-  Map<String, List<UcumUnit>> unitDimensions = {};
-  Map<String, List<String>> unitSynonyms = {};
-  int massDimIndex = 0;
-  Map<int, String> dimVecIndexToBaseUnit_ = {};
+  /// Tracks units by name, key is the name;
+  /// value is an array of references to the Unit objects
+  /// with the name.  More than one unit may have the same
+  /// name, e.g., "second", which is shared by the base unit
+  /// with the code = "s" and the unit with code = "'".
+  /// {UcumUnit.name_: <UcumUnit>[]}
+  // {'second': [UcumUnit('s'), UcumUnit('second')]}
+  final Map<String, List<UcumUnit>> unitNames_ = {};
+
+  /// Tracks units by code using case-sensitive version, key is the code.
+  /// value is the reference to the Unit object.  Codes must be unique.
+  /// {UcumUnit.csCode_: UcumUnit()}
+  final Map<String, UcumUnit> unitCodes_ = {};
+
+  /// Keeps track of the order in which units are defined.  The order is
+  /// important because unit definitions build on previous definitions.
+  final List<String> codeOrder_ = [];
+
+  /// Tracks units by unit strings, e.g., cm-1
+  /// key is the unit string
+  /// value is an array of unit objects with that ciUnitString (vs csUnitString
+  /// - the case sensitive version).
+  /// {"ciUnitString_": <_UnitEntry>[]}
+  final Map<String, List<UnitEntry>> unitStrings_ = {};
+
+  /// Tracks units by Dimension vector
+  /// key is the dimension vector (not the object, just the vector);
+  /// value is an array of references to the Unit objects with that vector.
+  /// More than one unit may have the same unit vector, and this can be
+  /// used to provide a list of commensurable units.
+  /// {[1, 0, 0, 0, 0, 0, 0]: <UcumUnit>[]}
+  final Map<List<int>, List<UcumUnit>> unitDimensions_ = {};
+
+  /// Maps synonyms to units. Not built until first requested. Key is the synonym
+  /// value is an array of references to Unit objects that include that synonym.
+  //  {UcumUnit.synonyms_: <UcumUnit.csCode_>[]}
+  final Map<String, List<String>> unitSynonyms_ = {};
+
+  /// Holds onto the index of the index of the dimension vector flag for the
+  /// base mass unit (gram). This is set when the base unit (gram) is created,
+  /// and is stored here so that it doesn't have to be found over and over
+  /// again to try to determine whether or not a unit is mass-based
+  /// (for mole<->mass conversions)
+  int massDimIndex_ = 0;
+
+  /// Map of indices in the dimension vector to base unit symbols.
+  final Map<int, String> dimVecIndexToBaseUnit_ = {};
 
   static UnitTables get instance => _instance;
 
-  static final UnitTables _instance = UnitTables._();
+  static UnitTables _instance = UnitTables._();
 
   UnitTables._();
 
+  int unitsCount() => unitCodes_.length;
+
+  /// Adds a Unit object to the tables.
+  /// theUnit the unit to be added
+  /// catches and doesn't react if there's aa problem with the unit code or
+  /// unit name
   void addUnit(UcumUnit theUnit) {
     addUnitName(theUnit);
     addUnitCode(theUnit);
@@ -33,11 +77,13 @@ class UnitTables {
     }
 
     if (theUnit.isBase_) {
-      final dimVec = theUnit.dim_?.dimVec_;
+      final List<int>? dimVec = theUnit.dim_?.dimVec_;
       int? nonZeroIndex;
-      for (var i = 0; nonZeroIndex == null && i < (dimVec?.length ?? 0); ++i) {
-        if (dimVec?[i] != 0) {
-          nonZeroIndex = i;
+      if (dimVec != null) {
+        for (var i = 0; nonZeroIndex == null && i < dimVec.length; ++i) {
+          if (dimVec[i] != 0) {
+            nonZeroIndex = i;
+          }
         }
       }
       if (nonZeroIndex != null) {
@@ -46,152 +92,237 @@ class UnitTables {
     }
   }
 
-  int unitsCount() => unitCodes.length;
-
+  /// Adds a Unit object to the unitNames_ table.  More than one unit
+  /// can have the same name, e.g., the two units with the name "second",
+  /// where the code for one of them is 's' and the code for the other is
+  /// "'".  Because of this, an array of unit objects is stored for the
+  /// name.  In most cases it will be an array of one object, but this
+  /// clarifies that there may be more than one.
   void addUnitName(UcumUnit theUnit) {
     final String uName = theUnit.name_;
-    unitNames[uName] = (unitNames[uName] ?? [])..add(theUnit);
+    unitNames_[uName] = (unitNames_[uName] ?? [])..add(theUnit);
   }
 
+  /// Adds a Unit object to the unitCodes_, unitUcCodes_, unitLcCodes_ and
+  /// codeOrder_ tables.  This also sets the mass dimension index when the
+  /// base mass unit (gram) is read.
   void addUnitCode(UcumUnit theUnit) {
     final String uCode = theUnit.csCode_;
-    if (unitCodes.containsKey(uCode)) {
+    if (unitCodes_.containsKey(uCode)) {
       throw Exception('Unit with code $uCode already exists');
-    }
-    unitCodes[uCode] = theUnit;
-    codeOrder.add(uCode);
-    if (uCode == 'g') {
-      var dimVec = theUnit.dim_?.dimVec_;
-      massDimIndex = dimVec?.indexWhere((x) => x != 0) ?? 0;
+    } else {
+      unitCodes_[uCode] = theUnit;
+      codeOrder_.add(uCode);
+      if (uCode == 'g') {
+        final List<int>? dimVec = theUnit.dim_?.dimVec_;
+        massDimIndex_ = dimVec?.indexWhere((x) => x != 0) ?? 0;
+      }
     }
   }
 
+  /// Adds a unit object to the unitStrings__ table.  More than one unit
+  /// can have the same string, so an array of unit objects is stored
+  /// for the string.  The unit string is the string that creates a non-base
+  /// unit, e.g., a Newton has a unit code of N, a name of Newton, and a
+  /// unitString of kg.m/s2.
+  /// If the unit has no string, nothing is stored and no error is reported.
   void addUnitString(UcumUnit theUnit) {
-    var uString = theUnit.ciUnitString_;
+    final String? uString = UcumConfig.caseSensitive_
+        ? theUnit.csUnitString_
+        : theUnit.ciUnitString_;
     if (uString != null) {
-      var uEntry = {'magn': theUnit.baseFactorStr_, 'unit': theUnit};
-      unitStrings[uString] = (unitStrings[uString] ?? [])..add(uEntry);
+      unitStrings_[uString] = (unitStrings_[uString] ?? <UnitEntry>[])
+        ..add(UnitEntry(theUnit.baseFactorStr_, theUnit));
     }
   }
 
+  /// Adds a Unit object to the unitDimensions_ table.  More than one unit
+  /// can have the same dimension (commensurable units have the same dimension).
+  /// Because of this, an array of unit objects is stored for the
+  /// dimension.
   void addUnitDimension(UcumUnit theUnit) {
-    var uDim = theUnit.dim_?.dimVec_;
+    final List<int>? uDim = theUnit.dim_?.dimVec_;
     if (uDim != null) {
-      unitDimensions[uDim] = (unitDimensions[uDim] ?? [])..add(theUnit);
+      unitDimensions_[uDim] = (unitDimensions_[uDim] ?? [])..add(theUnit);
+    } else {
+      throw (new Exception(
+          'UnitTables.addUnitDimension called for a unit with no dimension.  '
+          "Unit code = ${theUnit.csCode_}."));
     }
   }
 
+  /// Builds the unitSynonyms_ table. This is called the first time the
+  /// getUnitsBySynonym method is called.  The table/hash contains each word
+  /// (once) from each synonym as well as each word from each unit name.
+  ///
+  /// Hash keys are the words.  Hash values are an array of unit codes for
+  /// each unit that has that word in its synonyms or name.
   void buildUnitSynonyms() {
-    unitCodes.forEach((code, theUnit) {
-      var uSyns = theUnit.synonyms_;
-      // Process synonyms and names
-    });
-  }
+    for (final String code in unitCodes_.keys) {
+      final UcumUnit? theUnit = unitCodes_[code];
+      final String? uSyns = theUnit?.synonyms_;
 
-  void addSynonymCodes(String theCode, String theSynonyms) {
-    var words = theSynonyms.split(' ');
-    for (var word in words) {
-      unitSynonyms[word] = (unitSynonyms[word] ?? [])..add(theCode);
+      // If the current unit has synonyms, process each synonym (often multiples)
+      if (uSyns != null) {
+        final List<String> synsAry = uSyns.split(';');
+        if (synsAry.first != '') {
+          for (final syn in synsAry) {
+            final String theSyn = syn.trim();
+            // Call addSynonymCodes to process each word in the
+            // synonym, e.g., "British fluid ounces"
+            addSynonymCodes(code, theSyn);
+          }
+        }
+      }
+      if (theUnit != null) {
+        // Now call addSynonymCodes to process each word in the unit's name
+        addSynonymCodes(code, theUnit.name_);
+      }
     }
   }
 
-  dynamic getUnitByCode(String uCode) {
-    print('keys: ${unitCodes.keys}');
-    return unitCodes[uCode];
+  /// Adds unit code entries to the synonyms table for a string containing
+  /// one or more words to be considered as synonyms.
+  void addSynonymCodes(String theCode, String theSynonyms) {
+    final List<String> words = theSynonyms.split(' ');
+    for (final word in words) {
+      unitSynonyms_[word] = (unitSynonyms_[word] ?? [])..add(theCode);
+    }
   }
 
-  List<dynamic> getUnitByName(String uName) {
-    // Process to return unit by name
-    return [];
+  /// Returns a unit object with a case-sensitive code matching the
+  /// uCode parameter, or null if no unit is found with that code.
+  UcumUnit? getUnitByCode(String uCode) => unitCodes_[uCode];
+
+  /// Returns a array of unit objects based on the unit's name.  Usually this
+  /// will be an array of one, but there may be more, since unit names are
+  /// not necessarily unique.
+  List<UcumUnit> getUnitByName(String? uName) {
+    if (uName == null) {
+      throw Exception(
+          'Unable to find unit by name because no name was provided.');
+    } else {
+      final int sepPos = uName.indexOf(UcumConfig.codeSep_);
+      String? uCode = null;
+      if (sepPos >= 1) {
+        uCode = uName.substring(sepPos + UcumConfig.codeSep_.length);
+        uName = uName.substring(0, sepPos);
+      }
+      List<UcumUnit>? retUnits = unitNames_[uName];
+      if (retUnits != null) {
+        final int uLen = retUnits.length;
+        if (uCode != null && uLen > 1) {
+          for (var i = 0; i < uLen && retUnits![i].csCode_ != uCode; i++) {
+            if (i < uLen) {
+              retUnits = [retUnits[i]];
+            } else {
+              retUnits = null;
+            }
+          }
+        }
+      }
+      return retUnits ?? <UcumUnit>[];
+    }
   }
 
-  List<Map<String, dynamic>>? getUnitByString(String uString) {
-    return unitStrings[uString];
-  }
+  /// Returns an array of unit objects with the specified unit string.
+  /// The array may contain one or more unit reference objects.
+  /// Or none, if no units have a matching unit string (which is not
+  /// considered an error)
+  List<UnitEntry> getUnitByString(String uString) =>
+      unitStrings_[uString] ?? <UnitEntry>[];
 
-  List<UcumUnit>? getUnitsByDimension(String uDim) {
-    return unitDimensions[uDim];
-  }
+  /// Returns a array of unit objects based on the unit's dimension vector.
+  List<UcumUnit> getUnitsByDimension(List<int> uDim) =>
+      unitDimensions_[uDim] ?? <UcumUnit>[];
 
-  Map<String, dynamic> getUnitBySynonym(String? uSyn) {
-    Map<String, dynamic> retObj = {};
+  /// Returns a array of unit objects that include the specified synonym.
+  ReturnObject getUnitBySynonym(String? uSyn) {
+    ReturnObject retObj = ReturnObject(UnitGetStatus.failed, null, []);
     List<UcumUnit> unitsArray = [];
-
     try {
       if (uSyn == null || uSyn.isEmpty) {
-        retObj['status'] = 'error';
+        retObj = retObj.copyWith(status: UnitGetStatus.error);
         throw ('Unable to find unit by synonym because no synonym '
             'was provided.');
       }
-
       // If this is the first request for a unit by synonym, build the hash map
-      if (unitSynonyms.isEmpty) {
+      if (unitSynonyms_.isEmpty) {
         buildUnitSynonyms();
       }
-
-      List<String>? foundCodes = unitSynonyms[uSyn];
-
+      List<String>? foundCodes = unitSynonyms_[uSyn];
       if (foundCodes != null) {
-        retObj['status'] = 'succeeded';
+        retObj = retObj.copyWith(status: UnitGetStatus.succeeded);
         for (var code in foundCodes) {
-          if (unitCodes[code] != null) {
-            unitsArray.add(unitCodes[code]!);
+          if (unitCodes_[code] != null) {
+            unitsArray.add(unitCodes_[code]!);
           }
         }
-        retObj['units'] = unitsArray;
+        retObj.copyWith(units: unitsArray);
       }
-
       if (unitsArray.isEmpty) {
-        retObj['status'] = 'failed';
-        retObj['msg'] = 'Unable to find any units with synonym = $uSyn';
+        retObj = retObj.copyWith(
+            status: UnitGetStatus.failed,
+            msg: 'Unable to find any units with synonym = $uSyn');
       }
     } catch (err) {
-      retObj['msg'] = err.toString();
+      retObj =
+          retObj.copyWith(status: UnitGetStatus.error, msg: err.toString());
     }
-
     return retObj;
   }
 
-  List<String> getAllUnitNames() {
-    return unitNames.keys.toList();
-  }
+  /// Gets a list of all unit names in the Unit tables
+  List<String> getAllUnitNames() => unitNames_.keys.toList();
 
+  /// Gets a list of all unit names in the tables.  Where more than one
+  /// unit has the same name, the unit code, in parentheses, is appended
+  /// to the end of the name.
   List<String> getUnitNamesList() {
-    List<String> nameList = [];
-    List<String> codes = unitCodes.keys.toList();
+    List<String> nameList = <String>[];
+    List<String> codes = unitCodes_.keys.toList();
     codes.sort(compareCodes);
     for (String code in codes) {
-      nameList.add(code + UcumConfig.codeSep_ + (unitCodes[code]?.name_ ?? ''));
+      nameList
+          .add(code + UcumConfig.codeSep_ + (unitCodes_[code]?.name_ ?? ''));
     }
     return nameList;
   }
 
-  int getMassDimensionIndex() {
-    return massDimIndex;
-  }
+  /// Returns the mass dimension index
+  int getMassDimensionIndex() => massDimIndex_;
 
+  /// This provides a sort function for unit codes so that sorting ignores
+  /// square brackets and case.
   int compareCodes(String a, String b) {
     a = a.replaceAll(RegExp(r'[\[\]]'), '').toLowerCase();
     b = b.replaceAll(RegExp(r'[\[\]]'), '').toLowerCase();
     return a.compareTo(b);
   }
 
-  List<String> getAllUnitCodes() {
-    return unitCodes.keys.toList();
-  }
+  /// Gets a list of all unit codes in the Unit tables
+  List<String> getAllUnitCodes() => unitCodes_.keys.toList();
 
-  List<dynamic> allUnitsByDef() {
-    List<dynamic> unitsList = [];
-    for (String code in codeOrder) {
-      unitsList.add(unitCodes[code]);
+  /// This is used to get all unit objects.  Currently it is used
+  /// to get the objects to write to the json ucum definitions file
+  /// that is used to provide prefix and unit definition objects for
+  /// conversions and validations.
+  List<UcumUnit> allUnitsByDef() {
+    final List<UcumUnit> units = <UcumUnit>[];
+    for (final String code in codeOrder_) {
+      if (unitCodes_[code] != null) {
+        units.add(unitCodes_[code]!);
+      }
     }
-    return unitsList;
+    return units;
   }
 
+  /// This is used to get all unit objects, ordered by unit name.  Currently it
+  /// is used to create a csv list of all units.
   String allUnitsByName(List<String> cols, [String sep = '|']) {
     StringBuffer unitBuff = StringBuffer();
-    for (String unitName in unitNames.keys) {
-      List<UcumUnit>? nameRecs = unitNames[unitName];
+    for (String unitName in unitNames_.keys) {
+      List<UcumUnit>? nameRecs = unitNames_[unitName];
       for (UcumUnit rec in nameRecs ?? <UcumUnit>[]) {
         for (String col in cols) {
           if (col == 'dim_') {
@@ -216,6 +347,9 @@ class UnitTables {
     return unitBuff.toString();
   }
 
+  /// This creates a list of all units in the tables.  It uses the byCode
+  /// table, and uses the codeOrder_ array to determine the order in which
+  /// the units are listed.
   String printUnits(bool doLong, [String sep = '|']) {
     StringBuffer codeList = StringBuffer();
     String unitString = 'csCode$sep';
@@ -245,8 +379,8 @@ class UnitTables {
     unitString += 'comment';
     codeList.writeln(unitString);
 
-    for (String code in codeOrder) {
-      dynamic curUnit = unitCodes[code];
+    for (String code in codeOrder_) {
+      dynamic curUnit = unitCodes_[code];
       unitString = '$code$sep';
       if (doLong) {
         unitString += '${curUnit.getProperty("ciCode_")}$sep';
@@ -291,71 +425,46 @@ class UnitTables {
     return codeList.toString();
   }
 
-  // Method to add a unit object to the unitSynonyms map
-  void addUnitSynonym(String synonym, dynamic theUnit) {
-    if (!unitSynonyms.containsKey(synonym)) {
-      unitSynonyms[synonym] = [];
-    }
-    unitSynonyms[synonym]!.add(theUnit);
-  }
-
   // Method to get a list of all synonyms in the unit tables
-  List<String> getAllSynonyms() => unitSynonyms.keys.toList();
+  List<String> getAllSynonyms() => unitSynonyms_.keys.toList();
 
   // Method to get a list of all units with a particular synonym
   List<dynamic> getUnitsBySynonym(String synonym) =>
-      unitSynonyms[synonym] ?? [];
-
-  // Method to get a list of all unit dimensions in the unit tables
-  List<String> getAllUnitDimensions() => unitDimensions.keys.toList();
+      unitSynonyms_[synonym] ?? [];
 
   // Method to add a unit to the mass dimension index
   void addToMassDimensionIndex(dynamic theUnit) {
     if (theUnit.isBase_ && theUnit.dim_ != null) {
-      massDimIndex = theUnit.dim_.dimVec_.indexOf(1);
+      massDimIndex_ = theUnit.dim_.dimVec_.indexOf(1);
     }
-  }
-
-  // Method to retrieve the base unit symbol for a given dimension index
-  String getBaseUnitSymbolForDimIndex(int index) {
-    return dimVecIndexToBaseUnit[index] ?? '';
   }
 
   // Method to check if a unit code exists
-  bool hasUnitCode(String code) {
-    return unitCodes.containsKey(code);
-  }
+  bool hasUnitCode(String code) => unitCodes_.containsKey(code);
 
   // Method to check if a unit name exists
-  bool hasUnitName(String name) {
-    return unitNames.containsKey(name);
-  }
+  bool hasUnitName(String name) => unitNames_.containsKey(name);
 
   // Method to check if a unit string exists
-  bool hasUnitString(String unitString) {
-    return unitStrings.containsKey(unitString);
-  }
+  bool hasUnitString(String unitString) => unitStrings_.containsKey(unitString);
 
   // Method to check if a unit synonym exists
   bool hasUnitSynonym(String synonym) {
-    return unitSynonyms.containsKey(synonym);
+    return unitSynonyms_.containsKey(synonym);
   }
 
   // Method to check if a unit dimension exists
-  bool hasUnitDimension(String dimension) {
-    return unitDimensions.containsKey(dimension);
-  }
+  bool hasUnitDimension(String dimension) =>
+      unitDimensions_.containsKey(dimension);
 
   // Method to get the index of a unit code in the definition order
-  int getUnitCodeIndex(String code) {
-    return codeOrder.indexOf(code);
-  }
+  int getUnitCodeIndex(String code) => codeOrder_.indexOf(code);
 
   // Method to get the unit object at a specific index in the definition order
   dynamic getUnitAtIndex(int index) {
-    if (index < 0 || index >= codeOrder.length) {
+    if (index < 0 || index >= codeOrder_.length) {
       return null;
     }
-    return unitCodes[codeOrder[index]];
+    return unitCodes_[codeOrder_[index]];
   }
 }

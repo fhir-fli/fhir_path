@@ -17,7 +17,7 @@ class UcumUnit {
   bool isSpecial_;
   bool isArbitrary_;
   int moleExp_;
-  List<String>? synonyms_;
+  String? synonyms_;
   String? source_;
   String? loincProperty_;
   String? category_;
@@ -90,6 +90,7 @@ class UcumUnit {
   }) : dim_ = dim_ ?? Dimension();
 
   factory UcumUnit.fromJson(Map<String, dynamic> json) {
+    print(json['synonyms_'].runtimeType);
     return UcumUnit.namedConstructor(
       isBase_: json['isBase_'] as bool,
       name_: json['name_'] as String,
@@ -109,13 +110,7 @@ class UcumUnit {
       isSpecial_: json['isSpecial_'] as bool,
       isArbitrary_: json['isArbitrary_'] as bool,
       moleExp_: json['moleExp_'] as int,
-      synonyms_: json['synonyms_'] == null
-          ? null
-          : json['synonyms_'] is List<String>
-              ? json['synonyms_']
-              : json['synonyms_'] is String
-                  ? [json['synonyms_']]
-                  : null,
+      synonyms_: json['synonyms_'] as String?,
       source_: json['source_'] as String,
       loincProperty_: json['loincProperty_'] as String?,
       category_: json['category_'] as String?,

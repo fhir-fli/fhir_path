@@ -230,16 +230,10 @@ class UcumLhcUtils {
   }
 
   // Retrieves units that include a term as a synonym or in their name
-  Map<String, dynamic> checkSynonyms(String? theSyn) {
-    Map<String, dynamic> retObj = <String, dynamic>{};
-    if (theSyn == null) {
-      retObj['status'] = 'error';
-      retObj['msg'] = 'No term specified for synonym search.';
-    } else {
-      retObj = getSynonyms(theSyn);
-    }
-    return retObj;
-  }
+  ReturnObject checkSynonyms(String? theSyn) => theSyn == null
+      ? ReturnObject(UnitGetStatus.error,
+          'No term specified for synonym search.', <UcumUnit>[])
+      : getSynonyms(theSyn);
 
   Map<String, dynamic> getSpecifiedUnit(
     String uName,
@@ -341,7 +335,7 @@ class UcumLhcUtils {
         }
         if (dimVec != null) {
           final utab = UnitTables.instance;
-          // commUnits = utab.getUnitsByDimension(dimVec);
+          commUnits = utab.getUnitsByDimension(dimVec);
         }
       }
     }

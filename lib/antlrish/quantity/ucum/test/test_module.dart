@@ -139,9 +139,9 @@ void main() {
         group('Get synonyms for month', () {
           var resp = utils.checkSynonyms('month');
           test("should return multiple synonyms and at least mo", () {
-            expect(resp['status'], equals('succeeded'));
-            expect(resp['units'].length, greaterThan(0));
-            var foundMonth = resp['units'].any((unit) => unit.code == 'mo');
+            expect(resp.status, equals(UnitGetStatus.succeeded));
+            expect(resp.units.length, greaterThan(0));
+            var foundMonth = resp.units.any((unit) => unit.ciCode_ == 'mo');
             expect(foundMonth, isTrue);
           });
         });
@@ -149,8 +149,8 @@ void main() {
         group('Request synonyms for XmU72L', () {
           var resp = utils.checkSynonyms('XmU72L');
           test("should return no synonyms", () {
-            expect(resp['status'], equals('failed'));
-            expect(resp['units'], isNull);
+            expect(resp.status, equals(UnitGetStatus.failed));
+            expect(resp.units, isNull);
           });
         });
       });
