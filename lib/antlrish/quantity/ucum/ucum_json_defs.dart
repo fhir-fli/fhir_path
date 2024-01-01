@@ -7,7 +7,7 @@ class UcumJsonDefs {
 
   UcumJsonDefs._();
 
-  void loadUcumMinDefs() {
+  void loadUcumDefs() {
     final Map<String, dynamic> jsonDefs = ucumMinJsonDefs;
     final prefixes = unpackArray(jsonDefs['prefixes']);
     final units = unpackArray(jsonDefs['units']);

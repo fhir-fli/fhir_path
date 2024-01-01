@@ -3,7 +3,7 @@ import 'package:test/test.dart';
 
 void main() {
   var pkgs = ['../source-cjs/ucumPkg.dart', '../browser-dist/ucum-lhc.dart'];
-  UcumJsonDefs.instance.loadUcumMinDefs();
+  UcumJsonDefs.instance.loadUcumDefs();
   for (var u = 0; u < pkgs.length; u++) {
     var ucum = pkgs[u]; // Assuming you can import the package this way in Dart
     var utils = UcumLhcUtils.instance; // Adjust as per actual implementation

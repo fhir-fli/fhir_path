@@ -12,7 +12,7 @@ class UcumLhcUtils {
         _uStrParser = UnitString.instance {
     // Load JSON definitions if they haven't been loaded already
     if (UnitTables.instance.unitsCount() == 0) {
-      UcumJsonDefs.instance.loadUcumMinDefs();
+      UcumJsonDefs.instance.loadUcumDefs();
     }
   }
 
@@ -181,7 +181,7 @@ class UcumLhcUtils {
 
         if (dimVec != null) {
           final Map<int, String> dimVecIndexToBaseUnit =
-              UnitTables.instance.dimVecIndexToBaseUnit;
+              UnitTables.instance.dimVecIndexToBaseUnit_;
           for (var i = 0; i < dimVec.length; ++i) {
             final exp = dimVec[i];
             if (exp != null && dimVecIndexToBaseUnit[i] != null) {

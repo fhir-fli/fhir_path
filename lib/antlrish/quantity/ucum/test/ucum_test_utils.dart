@@ -6,7 +6,7 @@ class UcumTestUtils {
 
   List<dynamic> checkAllDimensions() {
     List<dynamic> problems = [];
-    UcumJsonDefs.instance.loadUcumMinDefs();
+    UcumJsonDefs.instance.loadUcumDefs();
 
     UnitString uString = UnitString.instance;
     dynamic parseResp;
