@@ -232,7 +232,7 @@ class UcumLhcUtils {
   // Retrieves units that include a term as a synonym or in their name
   ReturnObject checkSynonyms(String? theSyn) => theSyn == null
       ? ReturnObject(UnitGetStatus.error,
-          'No term specified for synonym search.', <UcumUnit>[])
+          'No term specified for synonym search.', null, <UcumUnit>[])
       : getSynonyms(theSyn);
 
   Map<String, dynamic> getSpecifiedUnit(

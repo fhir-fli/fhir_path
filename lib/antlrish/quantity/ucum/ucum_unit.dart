@@ -217,6 +217,15 @@ class UcumUnit {
     return UcumUnit.namedConstructor();
   }
 
+  ///  Clears fields like isBase_, synonyms_, etc. when a unit has been cloned
+  ///  from a known unit but it being used to construct a derived unit.
+  ///
+  resetFieldsForDerivedUnit() {
+    this.guidance_ = '';
+    this.synonyms_ = null;
+    this.isBase_ = false;
+  }
+
   dynamic fieldByString(String string) {
     switch (string) {
       case 'isBase_':

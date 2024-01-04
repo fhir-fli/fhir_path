@@ -238,7 +238,7 @@ class UnitTables {
 
   /// Returns a array of unit objects that include the specified synonym.
   ReturnObject getUnitBySynonym(String? uSyn) {
-    ReturnObject retObj = ReturnObject(UnitGetStatus.failed, null, []);
+    ReturnObject retObj = ReturnObject(UnitGetStatus.failed, null, null, []);
     List<UcumUnit> unitsArray = [];
     try {
       if (uSyn == null || uSyn.isEmpty) {
