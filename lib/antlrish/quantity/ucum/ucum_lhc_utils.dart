@@ -24,7 +24,7 @@ class UcumLhcUtils {
     _uStrParser.useBraceMsgForEachString(use);
   }
 
-  Map<String, dynamic> convertUnitTo({
+  ReturnObject convertUnitTo({
     String? fromUnitCode,
     num? fromVal,
     String? toUnitCode,
@@ -33,40 +33,42 @@ class UcumLhcUtils {
   }) {
     if (molecularWeight == null) molecularWeight = null;
 
-    Map<String, dynamic> returnObj = {
-      'status': 'failed',
-      'toVal': null,
-      'msg': [],
-    };
+    ReturnObject returnObj =
+        ReturnObject(status: UnitGetStatus.failed, units: [], msg: []);
 
     if (fromUnitCode != null) {
       fromUnitCode = fromUnitCode.trim();
     }
 
     if (fromUnitCode == null || fromUnitCode.isEmpty) {
-      returnObj['status'] = 'error';
-      returnObj['msg'].add('No "from" unit expression specified.');
+      returnObj = returnObj.copyWith(
+        status: UnitGetStatus.error,
+        msg: ['No "from" unit expression specified.'],
+      );
       return returnObj;
     }
 
-    _checkFromVal(fromVal, returnObj);
+    returnObj = _checkFromVal(fromVal, returnObj);
 
     if (toUnitCode != null) {
       toUnitCode = toUnitCode.trim();
     }
 
     if (toUnitCode == null || toUnitCode.isEmpty) {
-      returnObj['status'] = 'error';
-      returnObj['msg'].add('No "to" unit expression specified.');
+      returnObj = returnObj.copyWith(
+        status: UnitGetStatus.error,
+        msg: ['No "to" unit expression specified.'],
+      );
       return returnObj;
     }
 
-    if (returnObj['status'] != 'error') {
+    if (returnObj.status != UnitGetStatus.error) {
       try {
-        var fromUnit = null;
+        UcumUnit? fromUnit = null;
 
         var parseResp = getSpecifiedUnit(fromUnitCode, 'convert', suggest);
-        fromUnit = parseResp['unit'];
+
+        fromUnit = parseResp.units.first;
 
         if (parseResp['retMsg'] != null) {
           returnObj['msg'].addAll(parseResp['retMsg']);
@@ -75,12 +77,6 @@ class UcumLhcUtils {
         if (parseResp['suggestions'] != null) {
           returnObj['suggestions'] = {};
           returnObj['suggestions']['from'] = parseResp['suggestions'];
-        }
-
-        if (fromUnit == null) {
-          returnObj['msg'].add(
-            'Unable to find a unit for $fromUnitCode, so no conversion could be performed.',
-          );
         }
 
         var toUnit = null;
@@ -102,7 +98,7 @@ class UcumLhcUtils {
           );
         }
 
-        if (fromUnit != null && toUnit != null) {
+        if (toUnit != null) {
           try {
             if (molecularWeight == null) {
               returnObj['toVal'] = toUnit.convertFrom(fromVal, fromUnit);
@@ -218,32 +214,40 @@ class UcumLhcUtils {
     return retObj;
   }
 
-  void _checkFromVal(num? fromVal, Map<String, dynamic> responseObj) {
+  ReturnObject _checkFromVal(num? fromVal, ReturnObject responseObj) {
     if (fromVal == null ||
-        !isNumericString(fromVal.toString()) ||
+        !InternalUtils.isNumericString(fromVal.toString()) ||
         fromVal.isNaN) {
-      responseObj['status'] = 'error';
-      responseObj['msg'] ??= [];
-      responseObj['msg'].add(
-          'No "from" value, or an invalid "from" value, ' + 'was specified.');
+      responseObj = responseObj.copyWith(
+        status: UnitGetStatus.error,
+        msg: [
+          'No "from" value, or an invalid "from" value, ' + 'was specified.'
+        ],
+      );
     }
+    return responseObj;
   }
 
   // Retrieves units that include a term as a synonym or in their name
   ReturnObject checkSynonyms(String? theSyn) => theSyn == null
-      ? ReturnObject(UnitGetStatus.error,
-          'No term specified for synonym search.', null, <UcumUnit>[])
-      : getSynonyms(theSyn);
+      ? ReturnObject(
+          status: UnitGetStatus.error,
+          msg: ['No term specified for synonym search.'],
+          units: <UcumUnit>[])
+      : InternalUtils.getSynonyms(theSyn);
 
-  Map<String, dynamic> getSpecifiedUnit(
+  ReturnObject getSpecifiedUnit(
     String uName,
     String valConv, [
     bool suggest = false,
   ]) {
-    final retObj = <String, dynamic>{'retMsg': <String>[]};
+    ReturnObject retObj = ReturnObject.empty();
 
     if (uName.isEmpty) {
-      retObj['retMsg'].add('No unit string specified.');
+      retObj = retObj.copyWith(retMsg: <String>[
+        if (retObj.retMsg != null) ...retObj.retMsg!,
+        'No unit string specified.'
+      ]);
     } else {
       final utab = UnitTables.instance;
       uName = uName.trim();
@@ -253,20 +257,30 @@ class UcumLhcUtils {
       final theUnit = utab.getUnitByCode(uName);
 
       if (theUnit != null) {
-        retObj['unit'] = theUnit;
-        retObj['origString'] = uName;
+        retObj = retObj.copyWith(units: <UcumUnit>[
+          theUnit
+        ], retMsg: [
+          if (retObj.retMsg?.isNotEmpty ?? false) ...retObj.retMsg!,
+          uName
+        ]);
       } else {
         try {
           final resp = UnitString.instance.parseString(uName, valConv, suggest);
-          retObj['unit'] = resp[0];
-          retObj['origString'] = resp[1];
-          retObj['retMsg'] = resp[2];
-          retObj['suggestions'] = resp[3];
+          retObj = retObj.copyWith(
+            units: resp.units,
+            retMsg: resp.retMsg,
+            suggestions: resp.suggestions,
+          );
+          // retObj['unit'] = resp[0];
+          // retObj['origString'] = resp[1];
         } catch (err) {
           print('Unit requested for unit string $uName. ' +
               'Request unsuccessful; error thrown = ${err.toString()}');
-          retObj['retMsg']
-              .insert(0, '$uName is not a valid unit. ${err.toString()}');
+          retObj.copyWith(retMsg: [
+            '$uName is not a valid unit. ${err.toString()}',
+            if (retObj.retMsg?.isNotEmpty ?? false) ...retObj.retMsg!,
+            'Error: ${err.toString()}'
+          ]);
         }
       }
     }

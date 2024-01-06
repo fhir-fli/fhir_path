@@ -238,7 +238,8 @@ class UnitTables {
 
   /// Returns a array of unit objects that include the specified synonym.
   ReturnObject getUnitBySynonym(String? uSyn) {
-    ReturnObject retObj = ReturnObject(UnitGetStatus.failed, null, null, []);
+    ReturnObject retObj =
+        ReturnObject(UnitGetStatus.failed, null, null, null, []);
     List<UcumUnit> unitsArray = [];
     try {
       if (uSyn == null || uSyn.isEmpty) {
@@ -261,13 +262,16 @@ class UnitTables {
         retObj.copyWith(units: unitsArray);
       }
       if (unitsArray.isEmpty) {
-        retObj = retObj.copyWith(
-            status: UnitGetStatus.failed,
-            msg: 'Unable to find any units with synonym = $uSyn');
+        retObj = retObj.copyWith(status: UnitGetStatus.failed, msg: [
+          if (retObj.msg != null && retObj.msg!.isNotEmpty) ...retObj.msg!,
+          'Unable to find any units with synonym = $uSyn'
+        ]);
       }
     } catch (err) {
-      retObj =
-          retObj.copyWith(status: UnitGetStatus.error, msg: err.toString());
+      retObj = retObj.copyWith(status: UnitGetStatus.error, msg: [
+        if (retObj.msg != null && retObj.msg!.isNotEmpty) ...retObj.msg!,
+        err.toString()
+      ]);
     }
     return retObj;
   }

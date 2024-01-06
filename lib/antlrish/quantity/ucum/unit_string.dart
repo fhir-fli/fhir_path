@@ -1,3 +1,4 @@
+import 'dart:math' as Math;
 import 'ucum_pkg.dart';
 
 class UnitString {
@@ -126,7 +127,14 @@ class UnitString {
       //  the unit returned in position 0; and the origString (possibly
       //  modified) in position 1.  The origString in position 1 will not
       //  be changed by subsequent processing.
-      retObj = this._parseTheString(uStr, origString);
+      final parsedString = _parseTheString(uStr, origString);
+      retObj = retObj.copyWith(
+        units: [
+          if (retObj.units.isNotEmpty) retObj.units.first,
+          parsedString.unit
+        ],
+        origString: parsedString.mag,
+      );
 
       UcumUnit finalUnit = retObj.units.first;
 
@@ -134,7 +142,8 @@ class UnitString {
       // just a number.  Something like "8/{HCP}" will return a "unit" of 8
       // - which is not a unit.  Hm - evidently it is.  So just create a unit
       // object for it.
-      if (isIntegerUnit(finalUnit) || finalUnit is num) {
+      if (InternalUtils.isIntegerUnit(finalUnit.property_) ||
+          finalUnit is num) {
         finalUnit = UcumUnit.namedConstructor(
             csCode_: origString,
             ciCode_: origString,
@@ -144,15 +153,19 @@ class UnitString {
       }
     }
 
-    retObj.addAll(this.retMsg_);
+    retObj = retObj.copyWith(
+        retMsg: [if (retObj.retMsg != null) ...retObj.retMsg!, ...retMsg_]);
     if (this.suggestions_ != null && this.suggestions_!.isNotEmpty) {
-      retObj.addAll(this.suggestions_!);
+      retObj = retObj.copyWith(suggestions: [
+        if (retObj.suggestions != null) ...retObj.suggestions!,
+        ...suggestions_!
+      ]);
     }
 
     return retObj;
   }
 
-  List<dynamic> _parseTheString(String uStr, String origString) {
+  UnitEntry _parseTheString(String uStr, String origString) {
     var finalUnit;
     var endProcessing = retMsg_.length > 0;
 
@@ -175,7 +188,7 @@ class UnitString {
         for (var u1 = 0; u1 < uArray.length; u1++) {
           var curCode = uArray[u1]['un'];
 
-          if (isIntegerUnit(curCode)) {
+          if (InternalUtils.isIntegerUnit(curCode)) {
             uArray[u1]['un'] = int.parse(curCode);
           } else {
             if (curCode.contains(parensFlag_)) {
@@ -200,8 +213,8 @@ class UnitString {
     }
 
     if (!endProcessing) {
-      if ((uArray.isEmpty || uArray[0]['un'] == null) && retMsg.isEmpty) {
-        retMsg.add(
+      if ((uArray.isEmpty || uArray[0]['un'] == null) && retMsg_.isEmpty) {
+        retMsg_.add(
             'Unit string ($origString) did not contain anything that could be used to create a unit, or else something that is not handled yet by this package. Sorry');
         endProcessing = true;
       }
@@ -211,7 +224,7 @@ class UnitString {
       finalUnit = _performUnitArithmetic(uArray, origString);
     }
 
-    return [finalUnit, origString];
+    return UnitEntry(origString, finalUnit);
   }
 
   String _getAnnotations(String uString) {
@@ -427,7 +440,7 @@ class UnitString {
     return [retUnit, endProcessing];
   }
 
-  List<String?> _getAnnoText(String pStr, String origString) {
+  AnnotatedText _getAnnoText(String pStr, String origString) {
     int asIdx = pStr.indexOf(braceFlag_);
     String? startText = asIdx > 0 ? pStr.substring(0, asIdx) : null;
     if (asIdx != 0) {
@@ -454,7 +467,52 @@ class UnitString {
     }
 
     pStr = annotations_[idxNum];
-    return [pStr, startText, endText];
+    return AnnotatedText(pStr, startText, endText);
+  }
+
+  /// Takes a unit string and looks for suggested units. This should be
+  /// called for unit strings that cannot be resolved to unit codes. The
+  /// string is searched for in the synonyms table found in the UnitTables
+  /// class. That table includes all synonyms and unit names for the units
+  /// in the unit data table.
+  ///
+  /// @param pStr the string being parsed
+  /// @returns a string that indicates the status of the request:
+  ///   'succeeded' indicates that synonyms were found;
+  ///   'failed' indicates that no synonyms were found; or
+  ///   'error' which indicates that an error occurred
+  ///
+  /// The `retMsg_` array will be updated with a message indicating whether
+  /// or not synonyms/suggestions were found.
+  /// The `suggestions_` array will be updated with a hash (added to the
+  /// array if it already contains others) that contains three elements:
+  ///   'msg' which is a message indicating what unit expression the
+  ///      suggestions are for;
+  ///   'invalidUnit' which is the unit expression the suggestions are for; and
+  ///   'units' which is an array of data for each suggested unit found.
+  ///       Each array will contain the unit code, the unit name and the
+  ///       unit guidance (if any).
+  String _getSuggestions(String pStr) {
+    ReturnObject retObj = getSynonyms(pStr);
+    if (retObj.status == UnitGetStatus.succeeded) {
+      var suggSet = <String, dynamic>{};
+      suggSet['msg'] = "$pStr is not a valid UCUM code. We found possible " +
+          "units that might be what was meant:";
+      suggSet['invalidUnit'] = pStr;
+      int synLen = retObj.units.length;
+      suggSet['units'] = [];
+      for (int s = 0; s < synLen; s++) {
+        var unit = retObj.units[s];
+        var unitArray = [unit.csCode_, unit.name_, unit.guidance_];
+        suggSet['units'].add(unitArray);
+      }
+      this.suggestions_.add(suggSet);
+    } else {
+      this
+          .retMsg_
+          .add("$pStr is not a valid UCUM code. No alternatives were found.");
+    }
+    return retObj['status'];
   }
 
   /// Creates a unit object from a string defining one unit.  The string
@@ -462,18 +520,31 @@ class UnitString {
   /// otherwise).  It may include a prefix and an exponent, e.g., cm2
   /// (centimeter squared).  This should only be called from within this
   /// class (or by test code).
-  List<dynamic> makeUnit(String uCode, String origString) {
+  List<dynamic> _makeUnit(String uCode, String origString) {
+    /// First try the code just as is, without looking for annotations,
+    /// prefixes, exponents, or elephants.
     UcumUnit? retUnit = utabs_.getUnitByCode(uCode);
     if (retUnit != null) {
       retUnit = retUnit.clone();
-    } else if (uCode.contains(braceFlag_)) {
-      var getAnnoRet = _getUnitWithAnnotation(uCode, origString);
+    }
+
+    /// If we found it, we're done.  No need to parse for those elephants (or
+    /// other stuff).
+    else if (uCode.contains(braceFlag_)) {
+      List<dynamic> getAnnoRet = _getUnitWithAnnotation(uCode, origString);
       retUnit = getAnnoRet[0];
       if (retUnit != null) {
         origString = getAnnoRet[1];
       }
+
+      /// If a unit is not found, retUnit will be returned null and
+      /// the this.retMsg_ array will contain a message describing the problem.
+      /// If a unit is found, of course, all is good. So ... nothing left
+      /// to see here, move along.
     } else {
-      // Check for units with a caret symbol
+      /// So we didn't find a unit for the full uCode or for one with
+      /// annotations.  Try looking for a unit that uses a carat (^)
+      /// instead of an asterisk (*)
       if (uCode.contains('^')) {
         String tryCode = uCode.replaceAll('^', '*');
         retUnit = utabs_.getUnitByCode(tryCode);
@@ -484,7 +555,8 @@ class UnitString {
         }
       }
 
-      // Check if adding brackets might help
+      /// If that didn't work, check to see if it should have brackets
+      /// around it (uCode = degF when it should be [degF]
       if (retUnit == null) {
         String addBrackets = '[$uCode]';
         retUnit = utabs_.getUnitByCode(addBrackets);
@@ -516,14 +588,14 @@ class UnitString {
         }
       }
 
-      // Continuing from the previous part...
-
-// If we still don't have a unit, try assuming a modifier (prefix and/or exponent)
+      /// If we still don't have a unit, try assuming a modifier (prefix and/or
+      /// exponent) and look for a unit without the modifier
       if (retUnit == null) {
         // Check for special units first and replace placeholders
-        for (var sUnit in UcumConfig.specUnits_) {
-          if (uCode.contains(UcumConfig.specUnits_[sUnit])) {
-            uCode = uCode.replaceAll(UcumConfig.specUnits_[sUnit], sUnit);
+        for (var sUnit in UcumConfig.specUnits_.keys) {
+          if (UcumConfig.specUnits_[sUnit] != null &&
+              uCode.contains(UcumConfig.specUnits_[sUnit]!)) {
+            uCode = uCode.replaceAll(UcumConfig.specUnits_[sUnit]!, sUnit);
           }
         }
         retUnit = utabs_.getUnitByCode(uCode);
@@ -531,7 +603,7 @@ class UnitString {
           retUnit = retUnit.clone();
         }
 
-        // If still not found, separate out prefix and exponent
+        /// If still not found, separate out prefix and exponent
         if (retUnit == null) {
           String origCode = uCode;
           UcumUnit? origUnit;
@@ -541,7 +613,8 @@ class UnitString {
           num? pfxVal;
           int? pfxExp;
 
-          // Look for an exponent
+          /// Look first for an exponent.  If we got one, separate it out and
+          /// try to get the unit again
           var codeAndExp = _isCodeWithExponent(uCode);
           if (codeAndExp != null) {
             uCode = codeAndExp[0];
@@ -549,51 +622,141 @@ class UnitString {
             origUnit = utabs_.getUnitByCode(uCode);
           }
 
-          // If no unit found, separate out the prefix
+          /// If we still don't have a unit, separate out the prefix, if any,
+          /// and try without it.
           if (origUnit == null) {
             pfxCode = uCode[0];
             pfxObj = pfxTabs_.getPrefixByCode(pfxCode);
 
-            // Process the prefix if found
+            /// if we got a prefix, get its info and remove it from the unit code
             if (pfxObj != null) {
               pfxVal = pfxObj.value_;
               pfxExp = pfxObj.exp_;
               uCode = uCode.substring(pfxCode.length);
+
+              /// try again for the unit
               origUnit = utabs_.getUnitByCode(uCode);
 
-              // Handle "da" (deka) prefix separately
+              /// If we still don't have a unit, see if the prefix could be the
+              /// two character "da" (deka) prefix.  That's the only prefix with
+              /// two characters, and without this check it's interpreted as "d"
+              /// (deci) and the "a" is considered part of the unit code.
               if (origUnit == null && pfxCode == 'd' && uCode.startsWith('a')) {
                 pfxCode = 'da';
                 pfxObj = pfxTabs_.getPrefixByCode(pfxCode);
                 pfxVal = pfxObj?.value_;
                 uCode = uCode.substring(1);
+
+                /// try one more time for the unit
                 origUnit = utabs_.getUnitByCode(uCode);
               }
 
-              // Exclude units from certain sources
+              /// Reject the unit we found if it might have another prefix.
+              /// Such things are in our tables through the LOINC source_
+              /// (ucum.csv) which has guidance and synonyms.  I think it should be
+              /// safe to exclude anything whose source is LOINC from having a
+              /// prefix.
               if (origUnit != null && origUnit.source_ == 'LOINC') {
                 origUnit = null;
               }
             }
           }
 
-          // Apply prefix and exponent to the found unit
-          if (origUnit != null) {
-            retUnit = origUnit.clone();
-            retUnit.resetFieldsForDerivedUnit();
+          /// If we still haven't found anything, we're done looking.
+          /// (We tried with the full unit string, with the unit string
+          /// without the exponent, the unit string without a prefix,
+          /// common errors, etc. That's all we can try).
+          if (origUnit == null) {
+            retUnit = null;
 
-            return [retUnit, origString];
+            /// BUT if the user asked for suggestions, at least look for them
+            if (suggestions_ != null) {
+              // final suggestStat = _getSuggestions(origCode);
+            } else {
+              retMsg_.add('$origCode is not a valid UCUM code.');
+            }
           } else {
-            // Unable to find a unit - handle suggestions or error message
-            // (Placeholder for actual implementation)
+            /// Otherwise we found a unit object.  Clone it and then apply the
+            /// prefix and exponent, if any, to it.  And remove the guidance.
+            retUnit = origUnit.clone();
+
+            /// If we are here, this is only part of the full unit string, so
+            /// it is not a base unit, and the synonyms will mostly likely not
+            /// be correct for the full string.
+            retUnit.resetFieldsForDerivedUnit();
+            final Dimension? theDim = retUnit.dim_;
+            var theMag = retUnit.magnitude_;
+            String theName = retUnit.name_;
+            String theCiCode = retUnit.ciCode_;
+            String? thePrintSymbol = retUnit.printSymbol_;
+
+            /// If there is an exponent for the unit, apply it to the dimension
+            /// and magnitude now
+            if (exp != null) {
+              int? expMul = int.tryParse(exp);
+              if (expMul != null) {
+                if (theDim != null) {
+                  theDim.mul(expMul);
+                }
+                theMag = Math.pow(theMag, expMul);
+                retUnit.magnitude_ = theMag;
+
+                // If there is also a prefix, apply the exponent to the prefix.
+                if (pfxObj?.exp_ != null) {
+                  // if the prefix base is 10 it will have an exponent. Multiply
+                  // the current prefix exponent by the exponent for the unit
+                  // we're working with. Then raise the prefix value to the level
+                  // defined by the exponent.
+                  if (pfxExp != null) {
+                    expMul *= pfxObj!.exp_!;
+                    pfxVal = Math.pow(10, expMul);
+                  }
+                  // If the prefix base is not 10, it won't have an exponent.
+                  // Currently, there are no units using prefixes that aren't base 10.
+                  // But if we encounter one, the prefix value will be applied to the magnitude
+                  // if the unit does not have a conversion function, and to the conversion prefix
+                  // if it does.
+                }
+              }
+            }
+
+            // Now apply the prefix, if there is one, to the conversion
+            // prefix or the magnitude
+            if (pfxObj != null && pfxVal != null) {
+              if (retUnit.cnv_ != null) {
+                retUnit.cnvPfx_ = pfxVal;
+              } else {
+                theMag *= pfxVal;
+                retUnit.magnitude_ = theMag;
+              }
+            }
+            // if we have a prefix and/or an exponent, add them to the unit
+            // attributes - name, csCode, ciCode, and print symbol
+            String theCode = retUnit.csCode_;
+            if (pfxObj != null) {
+              theName = '${pfxObj.name_}$theName';
+              theCode = '${pfxCode ?? ""}$theCode';
+              theCiCode = '${pfxObj.ciCode_ ?? ""}$theCiCode';
+              thePrintSymbol = '${pfxObj.printSymbol_ ?? ""}$thePrintSymbol';
+              retUnit
+                ..name_ = theName
+                ..csCode_ = theCode
+                ..ciCode_ = theCiCode
+                ..printSymbol_ = thePrintSymbol;
+            }
+
+            if (exp != null) {
+              String expStr = exp.toString();
+              retUnit
+                ..name_ = '$theName<sup>$expStr</sup>'
+                ..csCode_ = '$theCode$expStr'
+                ..ciCode_ = '$theCiCode$expStr'
+                ..printSymbol_ = '$thePrintSymbol<sup>$expStr</sup>';
+            }
           }
         }
       }
-
-// Final return statement
-      return [retUnit, origString];
     }
-
     return [retUnit, origString];
   }
 
@@ -604,11 +767,10 @@ class UnitString {
   List<dynamic> _getUnitWithAnnotation(String uCode, String origString) {
     UcumUnit? retUnit;
 
-    var annoRet = _getAnnoText(
-        uCode, origString); // Placeholder for the actual implementation
-    var annoText = annoRet[0];
-    var befAnnoText = annoRet[1];
-    var aftAnnoText = annoRet[2];
+    AnnotatedText annoRet = _getAnnoText(uCode, origString);
+    String annoText = annoRet.pStr;
+    String? befAnnoText = annoRet.startText;
+    String? aftAnnoText = annoRet.endText;
 
     if (bracesMsg_.isNotEmpty && !retMsg_.contains(bracesMsg_)) {
       retMsg_.add(bracesMsg_);
@@ -616,8 +778,7 @@ class UnitString {
 
     if (befAnnoText == null && aftAnnoText == null) {
       var tryBrackets = '[' + annoText.substring(1, annoText.length - 1) + ']';
-      var mkUnitRet = _makeUnit(
-          tryBrackets, origString); // Placeholder for the actual implementation
+      var mkUnitRet = _makeUnit(tryBrackets, origString);
 
       if (mkUnitRet[0] != null) {
         retUnit = UcumUnit.namedConstructor(
@@ -636,13 +797,15 @@ class UnitString {
       }
     } else if (befAnnoText != null && aftAnnoText == null) {
       if (isIntegerUnit(befAnnoText)) {
-        // Placeholder for the actual implementation
-        retUnit = befAnnoText;
+        retUnit = UcumUnit.namedConstructor();
+        retUnit.magnitude_ = befAnnoText;
       } else {
-        var mkUnitRet = _makeUnit(befAnnoText,
-            origString); // Placeholder for the actual implementation
+        var mkUnitRet = _makeUnit(befAnnoText, origString);
         if (mkUnitRet[0] != null) {
           retUnit = mkUnitRet[0];
+          if (retUnit == null) {
+            retUnit = UcumUnit.namedConstructor();
+          }
           retUnit.csCode_ += annoText;
           origString = mkUnitRet[1];
         } else {
@@ -652,15 +815,17 @@ class UnitString {
       }
     } else if (befAnnoText == null && aftAnnoText != null) {
       if (isIntegerUnit(aftAnnoText)) {
-        // Placeholder for the actual implementation
-        retUnit = aftAnnoText + annoText;
+        retUnit = UcumUnit.namedConstructor();
+        retUnit.name_ = '$aftAnnoText$annoText';
         retMsg_.add(
             'The annotation $annoText before the $aftAnnoText is invalid. $vcMsgStart_$retUnit$vcMsgEnd_');
       } else {
-        var mkUnitRet = _makeUnit(aftAnnoText,
-            origString); // Placeholder for the actual implementation
+        var mkUnitRet = _makeUnit(aftAnnoText, origString);
         if (mkUnitRet[0] != null) {
-          retUnit = mkUnitRet[0];
+          retUnit = mkUnitRet[0] as UcumUnit?;
+          if (retUnit == null) {
+            retUnit = UcumUnit.namedConstructor();
+          }
           retUnit.csCode_ += annoText;
           origString = retUnit.csCode_;
           retMsg_.add(
