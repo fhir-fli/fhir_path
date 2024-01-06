@@ -238,12 +238,11 @@ class UnitTables {
 
   /// Returns a array of unit objects that include the specified synonym.
   ReturnObject getUnitBySynonym(String? uSyn) {
-    ReturnObject retObj =
-        ReturnObject(UnitGetStatus.failed, null, null, null, []);
+    ReturnObject retObj = ReturnObject(status: ReturnStatus.failed);
     List<UcumUnit> unitsArray = [];
     try {
       if (uSyn == null || uSyn.isEmpty) {
-        retObj = retObj.copyWith(status: UnitGetStatus.error);
+        retObj = retObj.copyWith(status: ReturnStatus.error);
         throw ('Unable to find unit by synonym because no synonym '
             'was provided.');
       }
@@ -253,7 +252,7 @@ class UnitTables {
       }
       List<String>? foundCodes = unitSynonyms_[uSyn];
       if (foundCodes != null) {
-        retObj = retObj.copyWith(status: UnitGetStatus.succeeded);
+        retObj = retObj.copyWith(status: ReturnStatus.succeeded);
         for (var code in foundCodes) {
           if (unitCodes_[code] != null) {
             unitsArray.add(unitCodes_[code]!);
@@ -262,13 +261,13 @@ class UnitTables {
         retObj.copyWith(units: unitsArray);
       }
       if (unitsArray.isEmpty) {
-        retObj = retObj.copyWith(status: UnitGetStatus.failed, msg: [
+        retObj = retObj.copyWith(status: ReturnStatus.failed, msg: [
           if (retObj.msg != null && retObj.msg!.isNotEmpty) ...retObj.msg!,
           'Unable to find any units with synonym = $uSyn'
         ]);
       }
     } catch (err) {
-      retObj = retObj.copyWith(status: UnitGetStatus.error, msg: [
+      retObj = retObj.copyWith(status: ReturnStatus.error, msg: [
         if (retObj.msg != null && retObj.msg!.isNotEmpty) ...retObj.msg!,
         err.toString()
       ]);

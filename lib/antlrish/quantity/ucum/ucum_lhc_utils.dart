@@ -24,124 +24,121 @@ class UcumLhcUtils {
     _uStrParser.useBraceMsgForEachString(use);
   }
 
-  ReturnObject convertUnitTo({
+  ReturnObject convertUnitTo(
     String? fromUnitCode,
-    num? fromVal,
-    String? toUnitCode,
+    double fromVal,
+    String? toUnitCode, [
     bool suggest = false,
-    dynamic molecularWeight,
-  }) {
-    if (molecularWeight == null) molecularWeight = null;
+    double? molecularWeight,
+  ]) {
+    molecularWeight ??= null;
 
-    ReturnObject returnObj =
-        ReturnObject(status: UnitGetStatus.failed, units: [], msg: []);
+    ConvertObject returnObj = ConvertObject(status: ReturnStatus.failed);
 
-    if (fromUnitCode != null) {
+    if (fromUnitCode != null && fromUnitCode.isNotEmpty) {
       fromUnitCode = fromUnitCode.trim();
     }
-
     if (fromUnitCode == null || fromUnitCode.isEmpty) {
-      returnObj = returnObj.copyWith(
-        status: UnitGetStatus.error,
+      return returnObj.copyWith(
+        status: ReturnStatus.error,
         msg: ['No "from" unit expression specified.'],
       );
-      return returnObj;
     }
 
-    returnObj = _checkFromVal(fromVal, returnObj);
+    // Assuming _checkFromVal is another method in this class
+    _checkFromVal(fromVal, returnObj);
 
-    if (toUnitCode != null) {
+    if (toUnitCode != null && toUnitCode.isNotEmpty) {
       toUnitCode = toUnitCode.trim();
     }
-
     if (toUnitCode == null || toUnitCode.isEmpty) {
-      returnObj = returnObj.copyWith(
-        status: UnitGetStatus.error,
+      return returnObj.copyWith(
+        status: ReturnStatus.error,
         msg: ['No "to" unit expression specified.'],
       );
-      return returnObj;
     }
 
-    if (returnObj.status != UnitGetStatus.error) {
+    if (returnObj.status != ReturnStatus.error) {
       try {
-        UcumUnit? fromUnit = null;
+        UcumUnit? fromUnit;
+        UcumUnit? toUnit;
 
-        var parseResp = getSpecifiedUnit(fromUnitCode, 'convert', suggest);
-
-        fromUnit = parseResp.units.first;
-
-        if (parseResp['retMsg'] != null) {
-          returnObj['msg'].addAll(parseResp['retMsg']);
+        ReturnObject parseResp =
+            getSpecifiedUnit(fromUnitCode, 'convert', suggest);
+        fromUnit = parseResp.unit;
+        if (parseResp.retMsg?.isNotEmpty ?? false) {
+          returnObj = returnObj.copyWith(
+            msg: (returnObj.msg ?? [])..addAll(parseResp.retMsg!),
+          );
         }
-
-        if (parseResp['suggestions'] != null) {
-          returnObj['suggestions'] = {};
-          returnObj['suggestions']['from'] = parseResp['suggestions'];
-        }
-
-        var toUnit = null;
-        parseResp = getSpecifiedUnit(toUnitCode, 'convert', suggest);
-        toUnit = parseResp['unit'];
-
-        if (parseResp['retMsg'] != null) {
-          returnObj['msg'].addAll(parseResp['retMsg']);
-        }
-
-        if (parseResp['suggestions'] != null) {
-          if (returnObj['suggestions'] == null) returnObj['suggestions'] = {};
-          returnObj['suggestions']['to'] = parseResp['suggestions'];
-        }
-
-        if (toUnit == null) {
-          returnObj['msg'].add(
-            'Unable to find a unit for $toUnitCode, so no conversion could be performed.',
+        if (parseResp.suggestions != null) {
+          returnObj = returnObj.copyWith(
+            suggestions: parseResp.suggestions,
           );
         }
 
-        if (toUnit != null) {
+        parseResp = this.getSpecifiedUnit(toUnitCode, 'convert', suggest);
+        toUnit = parseResp.unit;
+        if (parseResp.retMsg?.isNotEmpty ?? false) {
+          returnObj = returnObj.copyWith(
+            msg: (returnObj.msg ?? [])..addAll(parseResp.retMsg!),
+          );
+        }
+        if (parseResp.suggestions != null) {
+          returnObj = returnObj.copyWith(
+            suggestions: parseResp.suggestions,
+          );
+        }
+        if (fromUnit != null && toUnit != null) {
           try {
+            Number? toVal;
             if (molecularWeight == null) {
-              returnObj['toVal'] = toUnit.convertFrom(fromVal, fromUnit);
+              // Perform a normal conversion
+              toVal = toUnit.convertFrom(fromVal, fromUnit);
             } else {
+              // Handle molecular weight-based conversions
               if (fromUnit.moleExp_ != 0 && toUnit.moleExp_ != 0) {
-                throw (Exception(
-                    'A molecular weight was specified but a mass <-> mole conversion cannot be executed for two mole-based units. No conversion was attempted.'));
+                throw Exception(
+                    'Molecular weight specified but both units are mole-based. No conversion attempted.');
               }
-
               if (fromUnit.moleExp_ == 0 && toUnit.moleExp_ == 0) {
-                throw (Exception(
-                    'A molecular weight was specified but a mass <-> mole conversion cannot be executed when neither unit is mole-based. No conversion was attempted.'));
+                throw Exception(
+                    'Molecular weight specified but neither unit is mole-based. No conversion attempted.');
               }
-
               if (!fromUnit.isMoleMassCommensurable(toUnit)) {
-                throw (Exception(
-                    'Sorry. $fromUnitCode cannot be converted to $toUnitCode.'));
+                throw Exception('Units are not commensurable for conversion.');
               }
 
+              // Mole to mass or mass to mole conversion logic
               if (fromUnit.moleExp_ != 0) {
-                returnObj['toVal'] =
+                // Assume a mole to mass conversion
+                toVal =
                     fromUnit.convertMolToMass(fromVal, toUnit, molecularWeight);
               } else {
-                returnObj['toVal'] =
+                // Assume a mass to mole conversion
+                toVal =
                     fromUnit.convertMassToMol(fromVal, toUnit, molecularWeight);
               }
             }
 
-            returnObj['status'] = 'succeeded';
-            returnObj['fromUnit'] = fromUnit;
-            returnObj['toUnit'] = toUnit;
+            returnObj = returnObj.copyWith(
+              status: ReturnStatus.succeeded,
+              toVal: toVal,
+              fromUnit: fromUnit,
+              toUnit: toUnit,
+            );
           } catch (e) {
-            returnObj['status'] = 'failed';
-            returnObj['msg'].add(e.toString());
+            returnObj = returnObj.copyWith(
+              status: ReturnStatus.failed,
+              msg: (returnObj.msg ?? [])..add(e.toString()),
+            );
           }
         }
       } catch (e) {
-        if (e.toString() == UcumConfig.needMoleWeightMsg_) {
-          returnObj['status'] = 'failed';
-        } else {
-          returnObj['status'] = 'error';
-        }
-        returnObj['msg'].add(e.toString());
+        returnObj = returnObj.copyWith(
+          status: ReturnStatus.error,
+          msg: (returnObj.msg ?? [])..add(e.toString()),
+        );
       }
     }
 
@@ -216,10 +213,10 @@ class UcumLhcUtils {
 
   ReturnObject _checkFromVal(num? fromVal, ReturnObject responseObj) {
     if (fromVal == null ||
-        !InternalUtils.isNumericString(fromVal.toString()) ||
+        !UcumUtils.isNumericString(fromVal.toString()) ||
         fromVal.isNaN) {
       responseObj = responseObj.copyWith(
-        status: UnitGetStatus.error,
+        status: ReturnStatus.error,
         msg: [
           'No "from" value, or an invalid "from" value, ' + 'was specified.'
         ],
@@ -231,10 +228,10 @@ class UcumLhcUtils {
   // Retrieves units that include a term as a synonym or in their name
   ReturnObject checkSynonyms(String? theSyn) => theSyn == null
       ? ReturnObject(
-          status: UnitGetStatus.error,
+          status: ReturnStatus.error,
           msg: ['No term specified for synonym search.'],
           units: <UcumUnit>[])
-      : InternalUtils.getSynonyms(theSyn);
+      : UcumUtils.getSynonyms(theSyn);
 
   ReturnObject getSpecifiedUnit(
     String uName,

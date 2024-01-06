@@ -17,7 +17,7 @@ class UnitString {
   List<String> retMsg_ = [];
   List<UcumUnit> parensUnits_ = [];
   List<String> annotations_ = [];
-  List<String>? suggestions_ = [];
+  List<Suggestion>? suggestions_ = [];
 
   // Static properties in Dart can be managed using static variables or singletons.
   static final String INVALID_ANNOTATION_CHAR_MSG =
@@ -26,19 +26,19 @@ class UnitString {
 
   // Dart constructor
   UnitString({
-    this.bracesMsg_ = '',
-    required this.pFlagLen,
-    required this.bFlagLen_,
-    this.vcMsgStart_,
-    this.vcMsgEnd_,
+    bracesMsg_ = '',
+    required pFlagLen,
+    required bFlagLen_,
+    vcMsgStart_,
+    vcMsgEnd_,
     List<String>? retMsg,
     List<UcumUnit>? parensUnits,
     List<String>? annotations,
-    List<String>? suggestions,
+    List<Suggestion>? suggestions,
   })  : retMsg_ = retMsg ?? [],
-        parensUnits_ = parensUnits ?? [],
-        annotations_ = annotations ?? [],
-        suggestions_ = suggestions ?? [];
+        parensUnits_ = parensUnits ?? <UcumUnit>[],
+        annotations_ = annotations ?? <String>[],
+        suggestions_ = suggestions ?? <Suggestion>[];
 
   static UnitString get instance => _instance;
 
@@ -55,7 +55,7 @@ class UnitString {
     if (use) {
       bracesMsg_ = UcumConfig.bracesMsg_;
     } else {
-      this.bracesMsg_ = '';
+      bracesMsg_ = '';
     }
   }
 
@@ -74,37 +74,41 @@ class UnitString {
     }
 
     if (valConv == 'validate') {
-      this.vcMsgStart_ = UcumConfig.valMsgStart_;
-      this.vcMsgEnd_ = UcumConfig.valMsgEnd_;
+      vcMsgStart_ = UcumConfig.valMsgStart_;
+      vcMsgEnd_ = UcumConfig.valMsgEnd_;
     } else {
-      this.vcMsgStart_ = UcumConfig.cnvMsgStart_;
-      this.vcMsgEnd_ = UcumConfig.cnvMsgEnd_;
+      vcMsgStart_ = UcumConfig.cnvMsgStart_;
+      vcMsgEnd_ = UcumConfig.cnvMsgEnd_;
     }
 
     if (suggest == false) {
-      this.suggestions_ = null;
+      suggestions_ = null;
     } else {
-      this.suggestions_ = [];
+      suggestions_ = [];
     }
 
-    this.retMsg_ = [];
-    this.parensUnits_ = [];
-    this.annotations_ = [];
+    retMsg_ = [];
+    parensUnits_ = [];
+    annotations_ = [];
     String origString = uStr;
     ReturnObject retObj = ReturnObject.empty();
 
     /// Extract any annotations, i.e., text enclosed in braces ({}) from the
-    /// string before further processing.  Store each one in this.annotations_
+    /// string before further processing.  Store each one in annotations_
     /// array and put a placeholder in the string for the annotation.  Do
     /// this before other processing in case an annotation contains characters
     /// that will be interpreted as parenthetical markers or operators in
     /// subsequent processing.
 
-    uStr = this._getAnnotations(uStr);
+    uStr = _getAnnotations(uStr);
 
-    if (this.retMsg_.isNotEmpty) {
-      retObj.units.removeAt(0);
-      retObj.units.removeAt(0);
+    if (retMsg_.isNotEmpty) {
+      retObj = retObj.copyWith(
+          units: retObj.units == null
+              ? []
+              : retObj.units!.length < 3
+                  ? []
+                  : retObj.units!.sublist(2));
     } else {
       /// First check for one of the "special" units.  If it's one of those, put
       /// in a substitution phrase for it to avoid having it separated on its
@@ -128,34 +132,42 @@ class UnitString {
       //  modified) in position 1.  The origString in position 1 will not
       //  be changed by subsequent processing.
       final parsedString = _parseTheString(uStr, origString);
-      retObj = retObj.copyWith(
-        units: [
-          if (retObj.units.isNotEmpty) retObj.units.first,
-          parsedString.unit
-        ],
-        origString: parsedString.mag,
-      );
+      if (parsedString.unit != null) {
+        retObj = retObj.copyWith(
+          units: [
+            if (retObj.units?.isNotEmpty ?? false) retObj.units!.first,
+            parsedString.unit!
+          ],
+          origString: parsedString.mag,
+        );
+      }
 
-      UcumUnit finalUnit = retObj.units.first;
+      UcumUnit? finalUnit = retObj.units?.first;
 
       // Do a final check to make sure that finalUnit is a unit and not
       // just a number.  Something like "8/{HCP}" will return a "unit" of 8
       // - which is not a unit.  Hm - evidently it is.  So just create a unit
       // object for it.
-      if (InternalUtils.isIntegerUnit(finalUnit.property_) ||
+      if (finalUnit?.property_ != null &&
+              UcumUtils.isIntegerUnit(finalUnit!.property_) ||
           finalUnit is num) {
         finalUnit = UcumUnit.namedConstructor(
             csCode_: origString,
             ciCode_: origString,
             magnitude_: finalUnit,
             name_: origString);
-        retObj.units[0] = finalUnit;
+        if (retObj.units != null) {
+          retObj = retObj.copyWith(units: [
+            finalUnit,
+            if (retObj.units!.isNotEmpty) ...retObj.units!.sublist(1)
+          ]);
+        }
       }
     }
 
     retObj = retObj.copyWith(
         retMsg: [if (retObj.retMsg != null) ...retObj.retMsg!, ...retMsg_]);
-    if (this.suggestions_ != null && this.suggestions_!.isNotEmpty) {
+    if (suggestions_ != null && suggestions_!.isNotEmpty) {
       retObj = retObj.copyWith(suggestions: [
         if (retObj.suggestions != null) ...retObj.suggestions!,
         ...suggestions_!
@@ -166,7 +178,7 @@ class UnitString {
   }
 
   UnitEntry _parseTheString(String uStr, String origString) {
-    var finalUnit;
+    UcumUnit? finalUnit;
     var endProcessing = retMsg_.length > 0;
 
     var parensResp = _processParens(uStr, origString);
@@ -188,7 +200,7 @@ class UnitString {
         for (var u1 = 0; u1 < uArray.length; u1++) {
           var curCode = uArray[u1]['un'];
 
-          if (InternalUtils.isIntegerUnit(curCode)) {
+          if (UcumUtils.isIntegerUnit(curCode)) {
             uArray[u1]['un'] = int.parse(curCode);
           } else {
             if (curCode.contains(parensFlag_)) {
@@ -234,10 +246,10 @@ class UnitString {
       int closeBrace = uString.indexOf('}', openBrace);
 
       if (closeBrace < 0) {
-        this.retMsg_.add('Missing closing brace for annotation starting at ' +
-            this.openEmph_ +
+        retMsg_.add('Missing closing brace for annotation starting at ' +
+            openEmph_ +
             uString.substring(openBrace) +
-            this.closeEmph_);
+            closeEmph_);
         openBrace = -1;
       } else {
         String braceStr = uString.substring(openBrace, closeBrace + 1);
@@ -245,29 +257,29 @@ class UnitString {
         // Check for valid characters in the annotation.
         // Adapt this part based on how you handle regular expressions in Dart.
         if (!isValidAnnotation(braceStr)) {
-          this.retMsg_.add(UnitString.INVALID_ANNOTATION_CHAR_MSG +
-              this.openEmph_ +
+          retMsg_.add(UnitString.INVALID_ANNOTATION_CHAR_MSG +
+              openEmph_ +
               braceStr +
-              this.closeEmph_);
+              closeEmph_);
           openBrace = -1;
         } else {
-          String aIdx = this.annotations_.length.toString();
-          uString = uString.replaceFirst(
-              braceStr, this.braceFlag_ + aIdx + this.braceFlag_);
-          this.annotations_.add(braceStr);
+          String aIdx = annotations_.length.toString();
+          uString =
+              uString.replaceFirst(braceStr, braceFlag_ + aIdx + braceFlag_);
+          annotations_.add(braceStr);
           openBrace = uString.indexOf('{');
         }
       }
     }
 
     // Check for a stray/unmatched closing brace
-    if (this.retMsg_.isEmpty) {
+    if (retMsg_.isEmpty) {
       int closeBrace = uString.indexOf('}');
       if (closeBrace >= 0) {
-        this.retMsg_.add('Missing opening brace for closing brace found at ' +
-            this.openEmph_ +
+        retMsg_.add('Missing opening brace for closing brace found at ' +
+            openEmph_ +
             uString.substring(0, closeBrace + 1) +
-            this.closeEmph_);
+            closeEmph_);
       }
     }
 
@@ -279,18 +291,18 @@ class UnitString {
   ///
   /// Nested parenthesized strings are processed from the inside out.  The
   /// parseString function is called from within this one for each parenthesized
-  /// unit string, and the resulting unit object is stored in this.parensUnits_,
+  /// unit string, and the resulting unit object is stored in parensUnits_,
   /// to be processed after all strings are translated to units.
   ///
   /// A placeholder is placed in the unit string returned to indicate that the
-  /// unit object should be obtained from the this.parensUnits_ array.  The
-  /// placeholder consists of the parenthesis flag (this.parensFlag_) followed
-  /// by the index of the unit in this.parensUnits_ followed by this.parensFlag_.
+  /// unit object should be obtained from the parensUnits_ array.  The
+  /// placeholder consists of the parenthesis flag (parensFlag_) followed
+  /// by the index of the unit in parensUnits_ followed by parensFlag_.
   List<dynamic> _processParens(String uString, String origString) {
     List<String> uStrArray = [];
     // int uStrAryPos = 0;
     bool stopProcessing = false;
-    int pu = this.parensUnits_.length;
+    int pu = parensUnits_.length;
 
     int trimmedCt = 0;
 
@@ -304,13 +316,13 @@ class UnitString {
 
         if (closePos >= 0) {
           String theMsg =
-              'Missing open parenthesis for close parenthesis at ${uString.substring(0, closePos + trimmedCt)}${this.openEmph_}${uString[closePos]}${this.closeEmph_}';
+              'Missing open parenthesis for close parenthesis at ${uString.substring(0, closePos + trimmedCt)}${openEmph_}${uString[closePos]}${closeEmph_}';
 
           if (closePos < uString.length - 1) {
             theMsg += uString.substring(closePos + 1);
           }
 
-          this.retMsg_.add(theMsg);
+          retMsg_.add(theMsg);
           uStrArray.add(uString);
           stopProcessing = true;
         } else {
@@ -321,7 +333,7 @@ class UnitString {
         openCt++;
         if (openPos > 0) {
           uStrArray.add(uString.substring(0, openPos));
-          uStrAryPos++;
+          // uStrAryPos++;
         }
 
         int closePos = 0;
@@ -335,31 +347,33 @@ class UnitString {
 
         if (openCt == closeCt) {
           closePos = openPos + 1;
-          uStrArray.add('${this.parensFlag_}$pu${this.parensFlag_}');
+          uStrArray.add('${parensFlag_}$pu${parensFlag_}');
 
-          List<dynamic> parseResp = this._parseTheString(
+          UnitEntry parseResp = _parseTheString(
               uString.substring(openPos + 1, closePos - 1), origString);
 
-          if (parseResp[0] == null) {
+          if (parseResp.unit == null) {
             stopProcessing = true;
           } else {
-            origString = parseResp[1];
-            this.parensUnits_.add(parseResp[0]);
+            origString = parseResp.mag ?? origString;
+            if (parseResp.unit != null) {
+              parensUnits_.add(parseResp.unit!);
+            }
             uString = uString.substring(closePos);
             trimmedCt = closePos;
             pu++;
           }
         } else {
           uStrArray.add(origString.substring(openPos));
-          this.retMsg_.add(
-              'Missing close parenthesis for open parenthesis at ${origString.substring(0, openPos + trimmedCt)}${this.openEmph_}${origString[openPos]}${this.closeEmph_}${origString.substring(openPos + 1)}');
+          retMsg_.add(
+              'Missing close parenthesis for open parenthesis at ${origString.substring(0, openPos + trimmedCt)}${openEmph_}${origString[openPos]}${closeEmph_}${origString.substring(openPos + 1)}');
           stopProcessing = true;
         }
       }
     }
 
     if (stopProcessing) {
-      this.parensUnits_ = [];
+      parensUnits_ = [];
     }
     return [uStrArray.join(''), origString, stopProcessing];
   }
@@ -417,7 +431,7 @@ class UnitString {
 
     String pNumText = pStr.substring(psIdx + pFlagLen, peIdx);
 
-    if (isNumericString(pNumText)) {
+    if (UcumUtils.isNumericString(pNumText)) {
       retUnit = parensUnits_[int.parse(pNumText)];
       pStr = retUnit is int ? retUnit.toString() : retUnit.csCode;
     } else {
@@ -492,27 +506,34 @@ class UnitString {
   ///   'units' which is an array of data for each suggested unit found.
   ///       Each array will contain the unit code, the unit name and the
   ///       unit guidance (if any).
-  String _getSuggestions(String pStr) {
-    ReturnObject retObj = getSynonyms(pStr);
-    if (retObj.status == UnitGetStatus.succeeded) {
-      var suggSet = <String, dynamic>{};
-      suggSet['msg'] = "$pStr is not a valid UCUM code. We found possible " +
-          "units that might be what was meant:";
-      suggSet['invalidUnit'] = pStr;
-      int synLen = retObj.units.length;
-      suggSet['units'] = [];
-      for (int s = 0; s < synLen; s++) {
-        var unit = retObj.units[s];
-        var unitArray = [unit.csCode_, unit.name_, unit.guidance_];
-        suggSet['units'].add(unitArray);
+  ReturnStatus _getSuggestions(String pStr) {
+    ReturnObject retObj = UcumUtils.getSynonyms(pStr);
+    if (retObj.status == ReturnStatus.succeeded) {
+      ReturnObject suggSet = ReturnObject(
+        status: ReturnStatus.initialized,
+        msg: [
+          "$pStr is not a valid UCUM code. We found possible " +
+              "units that might be what was meant:"
+        ],
+        invalidUnit: pStr,
+        units: const <UcumUnit>[],
+      );
+      for (int s = 0; s < retObj.units.length; s++) {
+        suggSet = suggSet.copyWith(
+          units: [
+            if (suggSet.units.isNotEmpty) ...suggSet.units,
+            retObj.units[s],
+          ],
+        );
       }
-      this.suggestions_.add(suggSet);
+      suggestions_ ??= <String>[];
+      suggestions_!.addAll(suggSet.units.map((e) => e.csCode_).toList());
     } else {
       this
           .retMsg_
           .add("$pStr is not a valid UCUM code. No alternatives were found.");
     }
-    return retObj['status'];
+    return retObj.status;
   }
 
   /// Creates a unit object from a string defining one unit.  The string
@@ -538,7 +559,7 @@ class UnitString {
       }
 
       /// If a unit is not found, retUnit will be returned null and
-      /// the this.retMsg_ array will contain a message describing the problem.
+      /// the retMsg_ array will contain a message describing the problem.
       /// If a unit is found, of course, all is good. So ... nothing left
       /// to see here, move along.
     } else {
@@ -796,7 +817,7 @@ class UnitString {
             name_: annoText);
       }
     } else if (befAnnoText != null && aftAnnoText == null) {
-      if (isIntegerUnit(befAnnoText)) {
+      if (UcumUtils.isIntegerUnit(befAnnoText)) {
         retUnit = UcumUnit.namedConstructor();
         retUnit.magnitude_ = befAnnoText;
       } else {
@@ -814,7 +835,7 @@ class UnitString {
         }
       }
     } else if (befAnnoText == null && aftAnnoText != null) {
-      if (isIntegerUnit(aftAnnoText)) {
+      if (UcumUtils.isIntegerUnit(aftAnnoText)) {
         retUnit = UcumUnit.namedConstructor();
         retUnit.name_ = '$aftAnnoText$annoText';
         retMsg_.add(
@@ -850,7 +871,7 @@ class UnitString {
   UcumUnit? _performUnitArithmetic(
       List<Map<String, dynamic>> uArray, String origString) {
     dynamic finalUnit = uArray[0]['un'];
-    if (isIntegerUnit(finalUnit)) {
+    if (UcumUtils.isIntegerUnit(finalUnit)) {
       finalUnit = UcumUnit.namedConstructor(
           csCode_: finalUnit,
           ciCode_: finalUnit,
@@ -863,7 +884,7 @@ class UnitString {
 
     for (int u2 = 1; u2 < uLen && !endProcessing; u2++) {
       dynamic nextUnit = uArray[u2]['un'];
-      if (isIntegerUnit(nextUnit)) {
+      if (UcumUtils.isIntegerUnit(nextUnit)) {
         nextUnit = UcumUnit.namedConstructor(
             csCode_: nextUnit,
             ciCode_: nextUnit,

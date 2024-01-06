@@ -6,7 +6,7 @@ class UcumUnit {
   String csCode_;
   String ciCode_;
   String property_;
-  dynamic magnitude_;
+  Number magnitude_;
   Dimension? dim_;
   String? printSymbol_;
   String? class_;
@@ -66,7 +66,7 @@ class UcumUnit {
     this.csCode_ = '',
     this.ciCode_ = '',
     this.property_ = '',
-    this.magnitude_ = 1,
+    Number? magnitude_,
     Dimension? dim_,
     this.printSymbol_,
     this.class_,
@@ -87,7 +87,8 @@ class UcumUnit {
     this.baseFactorStr_,
     this.baseFactor_,
     this.defError_ = false,
-  }) : dim_ = dim_ ?? Dimension();
+  })  : dim_ = dim_ ?? Dimension(),
+        magnitude_ = magnitude_ ?? Number.integer(1);
 
   factory UcumUnit.fromJson(Map<String, dynamic> json) {
     print(json['synonyms_'].runtimeType);
@@ -215,6 +216,30 @@ class UcumUnit {
   UcumUnit power(int p) {
     // Placeholder for actual implementation
     return UcumUnit.namedConstructor();
+  }
+
+  // Convert a mass unit to a mole unit
+  Number convertMassToMol(
+    double amt,
+    UcumUnit molUnit,
+    double molecularWeight,
+  ) {
+    UnitTables tabs = getUnitTables();
+    Number? avoNum = tabs.getUnitByCode('mol')?.magnitude_;
+    Number? molesFactor = avoNum == null ? null : molUnit.magnitude_ / avoNum;
+    Number molAmt = this.magnitude_ * amt / molecularWeight;
+    return molesFactor == null ? Number.integer(0) : molAmt / molesFactor;
+  }
+
+  // Convert a mole unit to a mass unit
+  Number convertMolToMass(
+      double amt, UcumUnit massUnit, double molecularWeight) {
+    UnitTables tabs = getUnitTables();
+    Number? avoNum = tabs.getUnitByCode('mol')?.magnitude_;
+    Number? molesFactor = avoNum == null ? null : this.magnitude_ / avoNum;
+    Number? massAmt =
+        molesFactor == null ? null : (molesFactor * amt) * molecularWeight;
+    return massAmt == null ? Number.integer(0) : massAmt / massUnit.magnitude_;
   }
 
   ///  Clears fields like isBase_, synonyms_, etc. when a unit has been cloned
