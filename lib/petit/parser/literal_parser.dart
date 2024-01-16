@@ -448,8 +448,10 @@ class DateTimeParser extends BaseDateTimeParser<FhirDateTime> {
       DateTimeParser(value, nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
-      nextParser != null ? nextParser!.execute([value], passed) : [value];
+  List execute(List results, Map<String, dynamic> passed) {
+    print(value);
+    return nextParser != null ? nextParser!.execute([value], passed) : [value];
+  }
 
   //  {
   //   final removeAt = stringValue.replaceFirst('@', '');

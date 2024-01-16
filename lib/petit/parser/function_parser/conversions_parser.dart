@@ -441,6 +441,8 @@ class ToStringParser extends FhirPathParser {
 
   @override
   List execute(List results, Map<String, dynamic> passed) {
+    print(results.first);
+    print(results.first.runtimeType);
     List newResults() => results.isEmpty
         ? []
         : results.length > 1

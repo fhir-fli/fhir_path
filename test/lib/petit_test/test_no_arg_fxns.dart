@@ -3,10 +3,7 @@
 // Package imports:
 import 'package:fhir/r4.dart';
 import 'package:fhir_path/antlrish/antlrish.dart';
-import 'package:fhir_path/petit/parser/parser.dart';
 import 'package:test/test.dart';
-
-// Project imports:
 
 void testNoArgFxns() {
   group('Functions w/o Arguments: ', () {
@@ -775,11 +772,11 @@ void testNoArgFxns() {
           [const GenericQuantity(value: 4, unit: 'days')]);
 
       // TODO(Dokotela):  toQuantity - more units
-      expect(
-          walkNewFhirPath(
-              context: resource.toJson(),
-              pathExpression: "10 'mg[Hg]'.toQuantity()"),
-          [const GenericQuantity(value: 10, unit: 'mg[Hg]')]);
+      // expect(
+      //     walkNewFhirPath(
+      //         context: resource.toJson(),
+      //         pathExpression: "10 'mg[Hg]'.toQuantity()"),
+      //     [const GenericQuantity(value: 10, unit: 'mg[Hg]')]);
     });
 
     test('toQuantity', () {

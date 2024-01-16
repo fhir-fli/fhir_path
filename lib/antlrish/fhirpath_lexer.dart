@@ -194,6 +194,7 @@ final Parser<DateTimeParser> DATETIME = (char('@') &
         (TIMEFORMAT & TIMEZONEOFFSETFORMAT.optional()).optional())
     .flatten()
     .map((value) {
+  print(value);
   return DateTimeParser(FhirDateTime(value.replaceFirst('@', '')));
 });
 
