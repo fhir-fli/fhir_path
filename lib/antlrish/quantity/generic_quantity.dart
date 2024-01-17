@@ -8,10 +8,7 @@ import 'package:fhir_path/petit/utils/exceptions.dart';
 import 'package:units_converter/units_converter.dart';
 
 import 'quantity_comparator.dart';
-import 'ratios.dart';
-import 'string_unit_to_property.dart';
 import 'ucum_unit_codes.dart';
-import 'units.dart';
 
 class GenericQuantity {
   static RegExp GenericQuantityRegex = RegExp(
@@ -198,7 +195,7 @@ class GenericQuantity {
       unit: unitFromString(quantityString));
 
   bool get isNaN => value.isNaN;
-  bool get isTimeValued => timeValuedQuantitiesUnits.containsValue(unit);
+  bool get isTimeValued => timeValuedQuantitiesUnits.contains(unit);
   bool get isDefiniteDuration =>
       definiteQuantityDurationUnits.containsKey(unit);
   String toString() => isTimeValued ? '$value $unit' : "$value '$unit'";

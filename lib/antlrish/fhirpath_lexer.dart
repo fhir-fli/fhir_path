@@ -1,4 +1,5 @@
 import 'package:fhir/primitive_types/primitive_types.dart';
+import 'package:fhir_path/antlrish/quantity/ucum_unit_codes.dart';
 
 import '../fhir_path.dart';
 import 'package:petitparser/parser.dart';
@@ -141,8 +142,10 @@ final Parser<QuantityParser> quantity = (NUMBER & (char(' ') & unit))
     .flatten()
     .map((value) => QuantityParser(value));
 
-final Parser<String> unit =
-    (dateTimePrecision | pluralDateTimePrecision | STRING).flatten();
+final Parser<String> unit = (dateTimePrecision |
+        pluralDateTimePrecision |
+        STRING.flatten().where((value) => ucumUnitCodes.contains(value)))
+    .flatten();
 
 final Parser<String> dateTimePrecision = (string('year') |
         string('month') |
@@ -184,9 +187,10 @@ final Parser identifier = (IDENTIFIER.map((value) => IdentifierParser(value)) |
 ///  interpreter.
 ///
 
-final Parser<DateParser> DATE = (char('@') & DATEFORMAT)
-    .flatten()
-    .map((value) => DateParser(FhirDate(value.replaceFirst('@', ''))));
+final Parser<DateParser> DATE = (char('@') & DATEFORMAT).flatten().map((value) {
+  print('DATE: $value');
+  return DateParser(FhirDate(value.replaceFirst('@', '')));
+});
 
 final Parser<DateTimeParser> DATETIME = (char('@') &
         DATEFORMAT &
@@ -194,7 +198,7 @@ final Parser<DateTimeParser> DATETIME = (char('@') &
         (TIMEFORMAT & TIMEZONEOFFSETFORMAT.optional()).optional())
     .flatten()
     .map((value) {
-  print(value);
+  print('DATETIME: $value');
   return DateTimeParser(FhirDateTime(value.replaceFirst('@', '')));
 });
 

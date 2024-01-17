@@ -1,3 +1,33 @@
+// http://hl7.org/fhirpath/#time-valued-quantities
+const timeValuedQuantitiesUnits = {
+  'milliseconds',
+  'millisecond',
+  'seconds',
+  'second',
+  'minutes',
+  'minute',
+  'hours',
+  'hour',
+  'days',
+  'day',
+  'weeks',
+  'week',
+  'months',
+  'month',
+  'years',
+  'year',
+};
+
+// https://www.hl7.org/fhir/fhirpath.html#quantity
+const definiteQuantityDurationUnits = {
+  'a': 'year',
+  'mo': 'month',
+  'd': 'day',
+  'h': 'hour',
+  'min': 'minute',
+  's': 'second',
+};
+
 const ucumUnitCodes = [
   'millisecond',
   'second',
