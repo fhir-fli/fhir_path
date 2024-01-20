@@ -6,6 +6,7 @@ import 'dart:convert';
 // Package imports:
 import 'package:fhir/primitive_types/primitive_types.dart';
 import 'package:petitparser/petitparser.dart';
+import 'package:ucum/ucum.dart';
 
 // Project imports:
 import '../petit_fhir_path.dart';
@@ -44,10 +45,12 @@ final Parser<EnvVariableParser> envVariableLexer =
         .flatten()
         .map((value) => EnvVariableParser(value));
 
-final Parser<QuantityParser> quantityLexer =
-    (numberLexer & char(' ') & (durationLexer | stringLexer))
-        .flatten()
-        .map((value) => QuantityParser(value));
+final Parser<QuantityParser> quantityLexer = (numberLexer &
+        char(' ') &
+        (durationLexer | stringLexer))
+    .flatten()
+    .map((value) =>
+        QuantityParser(ValidatedQuantity(value: Decimal.fromString(value))));
 
 final numberLexer = decimalLexer | integerLexer;
 

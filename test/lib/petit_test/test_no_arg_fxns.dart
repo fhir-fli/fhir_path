@@ -4,6 +4,7 @@
 import 'package:fhir/r4.dart';
 import 'package:fhir_path/antlrish/antlrish.dart';
 import 'package:test/test.dart';
+import 'package:ucum/ucum.dart';
 
 void testNoArgFxns() {
   group('Functions w/o Arguments: ', () {
@@ -769,7 +770,10 @@ void testNoArgFxns() {
           walkNewFhirPath(
               context: resource.toJson(),
               pathExpression: "'4 days'.toQuantity()"),
-          [const GenericQuantity(value: 4, unit: 'days')]);
+          [
+            ValidatedQuantity(
+                value: Decimal.fromString(4.toString()), code: 'days')
+          ]);
 
       // TODO(Dokotela):  toQuantity - more units
       // expect(

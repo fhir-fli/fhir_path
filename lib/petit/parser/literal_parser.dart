@@ -7,9 +7,9 @@ import 'package:fhir/primitive_types/primitive_types.dart';
 import 'package:fhir/r4.dart' as r4;
 import 'package:fhir/r5.dart' as r5;
 import 'package:fhir/stu3.dart' as stu3;
+import 'package:ucum/ucum.dart';
 
 // Project imports:
-import '../../antlrish/quantity/generic_quantity.dart';
 import '../petit_fhir_path.dart';
 
 /// This includes all input that should be ignored, this includes pure white
@@ -128,28 +128,34 @@ class EnvVariableParser extends ValueParser<String> {
 /// represented as a String that is required to be either a valid Unified
 /// Code for Units of Measure (UCUM) unit or one of the calendar duration
 /// keywords, singular or plural.
-class QuantityParser extends ValueParser<GenericQuantity> {
-  QuantityParser(String stringValue, [FhirPathParser? nextParser])
-      : super(GenericQuantity.fromString(stringValue), nextParser);
+class QuantityParser extends ValueParser<ValidatedQuantity> {
+  QuantityParser(super.value, [super.nextParser]);
 
   QuantityParser.fromValues(num value, String? unit,
       [FhirPathParser? nextParser])
-      : super(GenericQuantity(value: value, unit: unit), nextParser);
+      : super(
+            ValidatedQuantity(
+                value: Decimal.fromString(value.toString()), code: unit),
+            nextParser);
 
   QuantityParser copyWithNextParser(FhirPathParser nextParser) =>
-      QuantityParser(value.toString(), nextParser);
+      QuantityParser(value, nextParser);
 
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
-      nextParser != null ? nextParser!.execute([value], passed) : [value];
+  List execute(List results, Map<String, dynamic> passed) {
+    print(results);
+    print(nextParser.runtimeType);
+    print(value);
+    return nextParser != null ? nextParser!.execute([value], passed) : [value];
+  }
 
   @override
   operator ==(Object o) => o is QuantityParser
       ? o.value == value
-      : o is GenericQuantity
+      : o is ValidatedQuantity
           ? o == value
           : o is String
-              ? GenericQuantity.fromString(o) == value
+              ? ValidatedQuantity.fromString(o) == value
               : false;
 }
 

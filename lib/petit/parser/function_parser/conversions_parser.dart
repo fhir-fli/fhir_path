@@ -2,10 +2,10 @@
 
 // Package imports:
 import 'package:fhir/primitive_types/primitive_types.dart';
+import 'package:ucum/ucum.dart';
 
 // Project imports:
-import '../../../antlrish/antlrish.dart';
-import '../../petit_fhir_path.dart';
+import '../../../fhir_path.dart';
 
 /// http://hl7.org/fhirpath/#iifcriterion-expression-true-result-collection-otherwise-result-collection-collection
 ///The iif function in FHIRPath is an immediate if, also known as a conditional operator (such as C’s ? : operator).
@@ -558,12 +558,19 @@ class ToQuantityParser extends FhirPathParser {
         ? []
         : results.length > 1
             ? throw _conversionException('.toQuantity()', results)
-            : results.first is GenericQuantity
+            : results.first is ValidatedQuantity
                 ? [results.first]
                 : results.first is num
-                    ? [GenericQuantity(value: results.first as num, unit: '1')]
+                    ? [
+                        ValidatedQuantity(
+                            value: Decimal.fromString(results.first.toString()),
+                            code: '1')
+                      ]
                     : results.first is String
-                        ? [GenericQuantity.fromString(results.first as String)]
+                        ? [
+                            ValidatedQuantity.fromString(
+                                results.first as String)
+                          ]
                         : [];
     if (nextParser != null) {
       return nextParser!.execute(newResults(), passed);
@@ -596,16 +603,17 @@ class ConvertsToQuantityParser extends FhirPathParser {
 
         /// otherwise if the first item is a Quantity already, a num or a
         /// bool, this is considered true
-        else if (results.first is GenericQuantity ||
+        else if (results.first is ValidatedQuantity ||
             results.first is num ||
             results.first is bool) {
           return [true];
         }
 
         /// If it's a string & convertible to a Quantity using the Regex
+        /// TODO(Dokotela): this is kind of the cheap way out, for now
         else if (results.first is String &&
-            GenericQuantity.GenericQuantityRegex.hasMatch(
-                (results.first as String).replaceAll(r"\'", "'"))) {
+            ucumUnitCodes
+                .contains(ValidatedQuantity.fromString(results.first))) {
           return [true];
         }
 
@@ -638,7 +646,7 @@ bool _isAllTypes(List results) =>
     results.first is! FhirDateTime &&
     results.first is! FhirTime &&
     results.first is! DateTime &&
-    results.first is! GenericQuantity;
+    results.first is! ValidatedQuantity;
 
 Exception _conversionException(String function, List results) =>
     FhirPathEvaluationException(

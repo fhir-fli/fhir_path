@@ -1,8 +1,8 @@
+import 'package:petitparser/parser.dart';
 import 'package:fhir/primitive_types/primitive_types.dart';
-import 'package:fhir_path/antlrish/quantity/ucum_unit_codes.dart';
+import 'package:ucum/ucum.dart';
 
 import '../fhir_path.dart';
-import 'package:petitparser/parser.dart';
 
 /// Grammar rules [FHIRPath](http://hl7.org/fhirpath/N1) Normative Release
 ///prog: line (line)*; line: ID ( '(' expr ')') ':' expr '\r'? '\n';
@@ -40,7 +40,7 @@ final Parser<FhirPathParser> fhirPathLexer = fhirPathExpression().map((value) {
 
   if (value is FhirPathParser) {
     return value;
-  } else if (value is List && value.first is FhirPathParser) {
+  } else if (value is List) {
     final parser = setupParser(value);
     if (parser != null) {
       return parser;
@@ -58,33 +58,25 @@ Parser fhirPathExpression() {
   final _function = undefined();
   final _paramList = undefined();
 
-  final Parser expressionPart = (char('(') & _expression & char(')')) |
-      _invocation |
-      (literal & char('.') & _invocation) |
-      _function |
-      literal |
-      string('\$this') |
-      string('\$index') |
-      string('\$total') |
-      externalConstant |
-      (_expression & char('.') & _invocation) |
-      (_expression & char('[') & _expression & char(']')) |
-      ((char('+') | char('-')) & _expression) |
-      (_expression &
-          (char('*') | char('/') | string('div') | string('mod')) &
-          _expression) |
-      (_expression & (char('+') | char('-') | char('&')) & _expression) |
-      (_expression & (string('is') | string('as')) & typeSpecifier) |
-      (_expression & char('|') & _expression) |
-      (_expression &
-          (string('<=') | char('<') | char('>') | string('>=') & _expression)) |
-      (_expression &
-          (char('=') | char('~') | string('!=') | string('!~')) &
-          _expression) |
-      (_expression & (string('in') | string('contains')) & _expression) |
-      (_expression & string('and') & _expression) |
-      (_expression & (string('or') | string('xor')) & _expression) |
-      (_expression & string('implies') & _expression);
+  final Parser expressionPart = ((char('(') & _expression & char(')')) |
+          _invocation.map((value) {
+            // print('invocation: $value');
+            return value;
+          }) |
+          (literal & char('.') & _invocation) |
+          _function.map((value) {
+            // print(value);
+            return value;
+          }) |
+          literal.map((value) {
+            // print('literal $value');
+            return value;
+          }) |
+          string('\$this') |
+          string('\$index') |
+          string('\$total') |
+          externalConstant) &
+      (operations & _expression).star();
 
   /// | (IDENTIFIER)? '=>' expression #lambdaExpression
 
@@ -120,6 +112,29 @@ Parser fhirPathExpression() {
   return _expression;
 }
 
+final Parser operations = char('*').trim().map((value) => StarParser()) |
+    char('/').trim().map((value) => DivSignParser()) |
+    string('div').trim().map((value) => DivStringParser()) |
+    string('mod').trim().map((value) => ModParser()) |
+    char('&').trim().map((value) => StringConcatenationParser()) |
+    string('is').seq(typeSpecifier).trim().map((value) => IsParser(value[1])) |
+    string('as').seq(typeSpecifier).trim().map((value) => AsParser(value[1])) |
+    char('|').trim().map((value) => UnionOperatorParser()) |
+    string('<=').trim().map((value) => LessEqualParser()) |
+    char('<').trim().map((value) => LessParser()) |
+    char('>').trim().map((value) => GreaterParser()) |
+    string('>=').trim().map((value) => GreaterEqualParser()) |
+    char('=').trim().map((value) => EqualsParser()) |
+    char('~').trim().map((value) => EquivalentParser()) |
+    string('!=').trim().map((value) => NotEqualsParser()) |
+    string('!~').trim().map((value) => NotEquivalentParser()) |
+    string('in').trim().map((value) => InParser()) |
+    string('contains').trim().map((value) => ContainsOperatorParser()) |
+    string('and').trim().map((value) => AndStringParser()) |
+    string('or').trim().map((value) => OrStringParser()) |
+    string('xor').trim().map((value) => XorParser()) |
+    string('implies').trim().map((value) => ImpliesParser());
+
 final Parser literal = ((STRING |
                 NULL.flatten().map((value) => EmptySetParser()) |
                 (string('true') | string('false'))
@@ -137,15 +152,33 @@ final Parser NULL = char('{').trim() & char('}').trim();
 
 final Parser externalConstant = char('%').seq(identifier | STRING);
 
-/// TODO(Dokotela): unit should be optional
-final Parser<QuantityParser> quantity = (NUMBER & (char(' ') & unit))
-    .flatten()
-    .map((value) => QuantityParser(value));
+// TODO(Dokotela): unit should be optional
+final Parser<QuantityParser> quantity = (NUMBER.flatten() & (char(' ') & unit))
+    .map((value) => QuantityParser(ValidatedQuantity(
+        value: Decimal.fromString(value[0]),
+        code: value.length > 1 ? value[1].last : null)));
 
-final Parser<String> unit = (dateTimePrecision |
-        pluralDateTimePrecision |
-        STRING.flatten().where((value) => ucumUnitCodes.contains(value)))
-    .flatten();
+final Parser<String> unit = (pluralDateTimePrecision |
+        dateTimePrecision |
+        STRING.flatten().where((value) {
+          if (value.startsWith("'")) {
+            value = value.substring(1, value.length - 1);
+          }
+          if (value.endsWith("'")) {
+            value = value.substring(0, value.length - 1);
+          }
+          return ucumUnitCodes.contains(value);
+        }).trim())
+    .flatten()
+    .map((value) {
+  if (value.startsWith("'")) {
+    value = value.substring(1, value.length - 1);
+  }
+  if (value.endsWith("'")) {
+    value = value.substring(0, value.length - 1);
+  }
+  return value;
+});
 
 final Parser<String> dateTimePrecision = (string('year') |
         string('month') |
@@ -188,7 +221,6 @@ final Parser identifier = (IDENTIFIER.map((value) => IdentifierParser(value)) |
 ///
 
 final Parser<DateParser> DATE = (char('@') & DATEFORMAT).flatten().map((value) {
-  print('DATE: $value');
   return DateParser(FhirDate(value.replaceFirst('@', '')));
 });
 
@@ -198,7 +230,6 @@ final Parser<DateTimeParser> DATETIME = (char('@') &
         (TIMEFORMAT & TIMEZONEOFFSETFORMAT.optional()).optional())
     .flatten()
     .map((value) {
-  print('DATETIME: $value');
   return DateTimeParser(FhirDateTime(value.replaceFirst('@', '')));
 });
 

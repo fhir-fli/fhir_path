@@ -1,5 +1,5 @@
 // http://hl7.org/fhirpath/#time-valued-quantities
-const timeValuedQuantitiesUnits = {
+const timeQuantitiesUnits = {
   'milliseconds',
   'millisecond',
   'seconds',
@@ -19,7 +19,7 @@ const timeValuedQuantitiesUnits = {
 };
 
 // https://www.hl7.org/fhir/fhirpath.html#quantity
-const definiteQuantityDurationUnits = {
+const definiteDurationUnits = {
   'a': 'year',
   'mo': 'month',
   'd': 'day',

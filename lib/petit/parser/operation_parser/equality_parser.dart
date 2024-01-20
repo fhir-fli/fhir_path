@@ -2,6 +2,7 @@
 
 // Package imports:
 import 'package:fhir/primitive_types/primitive_types.dart';
+import 'package:ucum/ucum.dart';
 
 // Project imports:
 import '../../petit_fhir_path.dart';
@@ -11,15 +12,13 @@ class EqualsParser extends OperatorParser {
 
   EqualsParser copyWithNextParser(FhirPathParser nextParser) =>
       EqualsParser(nextParser);
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
 
   @override
   List execute(List results, Map<String, dynamic> passed) {
-    final lhs = before.execute(results.toList(), passed);
-    final rhs = after.execute(results.toList(), passed);
+    final lhs = results;
+    final rhs = nextParser!.execute([], passed);
 
-    if (lhs.isEmpty || rhs.isEmpty) {
+    if (lhs.isEmpty || rhs is EmptyParser) {
       return [];
     } else if (lhs.length != rhs.length) {
       return [false];
@@ -39,40 +38,16 @@ class EqualsParser extends OperatorParser {
 
           /// As long as they are both valid we try and compare them
           if (lhsDateTime.isValid && rhsDateTime.isValid) {
-            try {
-              if (lhsDateTime != rhsDateTime) {
-                var lhsDatePrecision =
-                    '-'.allMatches(lhsDateTime.toString()).length;
-                lhsDatePrecision = lhsDatePrecision > 2 ? 2 : lhsDatePrecision;
-                var rhsDatePrecision =
-                    '-'.allMatches(rhsDateTime.toString()).length;
-                rhsDatePrecision = rhsDatePrecision > 2 ? 2 : rhsDatePrecision;
-                var lhsTimePrecision =
-                    ':'.allMatches(lhsDateTime.toString()).length;
-                lhsTimePrecision = lhsTimePrecision > 2 ? 2 : lhsTimePrecision;
-                var rhsTimePrecision =
-                    ':'.allMatches(rhsDateTime.toString()).length;
-                rhsTimePrecision = rhsTimePrecision > 2 ? 2 : rhsTimePrecision;
-                if (lhsDatePrecision != rhsDatePrecision ||
-                    lhsTimePrecision != rhsTimePrecision) {
-                  return <dynamic>[];
-                } else {
-                  return <dynamic>[false];
-                }
-              }
-            } catch (e) {
-              return <dynamic>[];
+            if (lhsDateTime != rhsDateTime) {
+              return <dynamic>[false];
             }
-          } else {
-            /// If not it means only one is, so this is false
-            return <dynamic>[false];
           }
         }
 
         /// If they aren't dateTimes we can just compare them as usual
         else {
-          if (lhs[i] is FhirPathQuantity || rhs[i] is FhirPathQuantity) {
-            if (lhs[i] is FhirPathQuantity) {
+          if (lhs[i] is ValidatedQuantity || rhs[i] is ValidatedQuantity) {
+            if (lhs[i] is ValidatedQuantity) {
               return <dynamic>[lhs[i] == rhs[i]];
             } else {
               return <dynamic>[rhs[i] == lhs[i]];
@@ -207,8 +182,6 @@ class NotEqualsParser extends OperatorParser {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     final equalsParser = EqualsParser();
-    equalsParser.before = this.before;
-    equalsParser.after = this.after;
     final equality = equalsParser.execute(results, passed);
     return FpNotParser().execute(equality, passed);
   }

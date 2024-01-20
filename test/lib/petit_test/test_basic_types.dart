@@ -3,15 +3,20 @@
 // Package imports:
 import 'package:fhir/primitive_types/primitive_types.dart';
 import 'package:fhir_path/antlrish/fhirpath_lexer.dart';
+import 'package:fhir_path/antlrish/walk_fhir_path.dart';
 import 'package:test/test.dart';
 
 // Project imports:
 import 'package:fhir_path/petit/petit_fhir_path.dart';
+import 'package:ucum/ucum.dart';
 
 FhirPathParser parseResult(String arg) => fhirPathLexer.parse(arg).value;
 
 void testBasicTypes() {
   group('Basic Types', () {
+    setUpAll(() {
+      UcumService();
+    });
     test('Boolean', () {
       expect(parseResult('true'), const BooleanParser(true));
       expect(parseResult('false'), const BooleanParser(false));
@@ -79,17 +84,24 @@ void testBasicTypes() {
     expect(parseResult('@T06:54'), TimeParser(FhirTime('06:54')));
   });
   test('Quantity', () {
-    expect(parseResult("4.5 'mg'"), QuantityParser("4.5 'mg'"));
-    expect(parseResult("100 '[degF]'"), QuantityParser("100 '[degF]'"));
+    expect(
+        parseResult("4.5 'mg'"),
+        QuantityParser(
+            ValidatedQuantity(value: Decimal.fromString('4.5'), code: 'mg')));
+    expect(
+        parseResult("100 '[degF]'"),
+        QuantityParser(ValidatedQuantity(
+            value: Decimal.fromString('100'), code: '[degF]')));
   });
   test('Duration quantities', () {
-    expect(walkFhirPath(context: null, pathExpression: r"1 seconds = 1 second"),
+    expect(
+        walkNewFhirPath(context: null, pathExpression: r"1 seconds = 1 second"),
         [true]);
-    expect(walkFhirPath(context: null, pathExpression: r"1 seconds = 1 's'"),
+    expect(walkNewFhirPath(context: null, pathExpression: r"1 seconds = 1 's'"),
         [true]);
-    expect(walkFhirPath(context: null, pathExpression: r"2 seconds = 2 's'"),
+    expect(walkNewFhirPath(context: null, pathExpression: r"2 seconds = 2 's'"),
         [true]);
-    expect(walkFhirPath(context: null, pathExpression: r"1 week != 1 'w'"),
+    expect(walkNewFhirPath(context: null, pathExpression: r"1 week != 1 'wk'"),
         [true]);
   });
   test('Non-Escape Sequences', () {

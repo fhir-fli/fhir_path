@@ -3,6 +3,7 @@ description: FHIRPath navigation and extraction language implemented in pure Dar
 version: 0.11.3
 homepage: https://www.fhirfli.dev/
 repository: https://github.com/MayJuun/fhir/tree/main/fhir_path
+publish_to: none
 
 environment:
   sdk: '>=3.1.0 <4.0.0'
@@ -16,6 +17,8 @@ dependencies:
   # units_converter:
   #   path: ../../units_converter
   petitparser: ^6.0.2
+  ucum:
+    path: ../../ucum
 
 dev_dependencies:
   # flutter pub run import_sorter:main
