@@ -41,38 +41,43 @@ void testBasicTypes() {
       expect(parseResult('3.1415927'), const DecimalParser(3.1415927));
     });
     test('Date', () {
-      expect(parseResult('@2015-02-04'), DateParser(FhirDate('2015-02-04')));
-      expect(parseResult('@2018-06-12'), DateParser(FhirDate('2018-06-12')));
-      expect(parseResult('@2018-06-12'), DateParser(FhirDate('2018-06-12')));
-      expect(parseResult('@2018-06-12'), DateParser(FhirDate('2018-06-12')));
-      expect(parseResult('@2018-06'), DateParser(FhirDate('2018-06')));
-      expect(parseResult('@2018'), DateParser(FhirDate('2018')));
+      expect(parseResult('@2015-02-04'),
+          DateParser(FhirDate.fromString('2015-02-04')));
+      expect(parseResult('@2018-06-12'),
+          DateParser(FhirDate.fromString('2018-06-12')));
+      expect(parseResult('@2018-06-12'),
+          DateParser(FhirDate.fromString('2018-06-12')));
+      expect(parseResult('@2018-06-12'),
+          DateParser(FhirDate.fromString('2018-06-12')));
+      expect(
+          parseResult('@2018-06'), DateParser(FhirDate.fromString('2018-06')));
+      expect(parseResult('@2018'), DateParser(FhirDate.fromString('2018')));
     });
   });
 
   test('DateTime', () {
     expect(parseResult('@2015-02-04T14:34:28+09:00'),
-        DateTimeParser(FhirDateTime('2015-02-04T05:34:28Z')));
+        DateTimeParser(FhirDateTime.fromString('2015-02-04T05:34:28Z')));
     expect(parseResult('@2018-02-04T14:38:28+09:00'),
-        DateTimeParser(FhirDateTime('2018-02-04T14:38:28+09:00')));
+        DateTimeParser(FhirDateTime.fromString('2018-02-04T14:38:28+09:00')));
     expect(parseResult('@2014-01-25T14:30:14.559'),
-        DateTimeParser(FhirDateTime('2014-01-25T14:30:14.559')));
+        DateTimeParser(FhirDateTime.fromString('2014-01-25T14:30:14.559')));
     expect(
         parseResult(
             '@2014-01-25T14:30:14.559Z // A date time with UTC timezone offset'),
-        DateTimeParser(FhirDateTime('2014-01-25T14:30:14.559Z')));
+        DateTimeParser(FhirDateTime.fromString('2014-01-25T14:30:14.559Z')));
     expect(
         parseResult(
             '@2014-01-25T14:30 // A partial DateTime with year, month, day, hour, and minute'),
-        DateTimeParser(FhirDateTime('2014-01-25T14:30')));
+        DateTimeParser(FhirDateTime.fromString('2014-01-25T14:30')));
     expect(
         parseResult(
             '@2014-03-25T // A partial DateTime with year, month, and day'),
-        DateTimeParser(FhirDateTime('2014-03-25')));
+        DateTimeParser(FhirDateTime.fromString('2014-03-25')));
     expect(parseResult('@2014-01T // A partial DateTime with year and month'),
-        DateTimeParser(FhirDateTime('2014-01')));
+        DateTimeParser(FhirDateTime.fromString('2014-01')));
     expect(parseResult('@2014T // A partial DateTime with only the year'),
-        DateTimeParser(FhirDateTime('2014')));
+        DateTimeParser(FhirDateTime.fromString('2014')));
   });
   test('Time', () {
     expect(parseResult('@T14:34:28'), TimeParser(FhirTime('14:34:28')));

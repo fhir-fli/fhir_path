@@ -268,12 +268,14 @@ class ToDateParser extends FhirPathParser {
 
   @override
   List execute(List results, Map<String, dynamic> passed) {
+    print(results.first.toString());
+    print(FhirDate.fromString(results.first.toString()).isValid);
     List newResults() => results.isEmpty
         ? []
         : results.length > 1
             ? throw _conversionException('.toDate()', results)
-            : FhirDate(results.first.toString()).isValid
-                ? [FhirDate(results.first.toString())]
+            : FhirDate.fromString(results.first.toString()).isValid
+                ? [FhirDate.fromString(results.first.toString())]
                 : [];
     if (nextParser != null) {
       return nextParser!.execute(newResults(), passed);
@@ -299,7 +301,7 @@ class ConvertsToDateParser extends FhirPathParser {
         ? []
         : results.length > 1
             ? throw _conversionException('.convertsToDate()', results)
-            : [FhirDate(results.first.toString()).isValid];
+            : [FhirDate.fromString(results.first.toString()).isValid];
     if (nextParser != null) {
       return nextParser!.execute(newResults(), passed);
     } else {
@@ -324,8 +326,8 @@ class ToDateTimeParser extends FhirPathParser {
         ? []
         : results.length > 1
             ? throw _conversionException('.toDateTime()', results)
-            : FhirDateTime(results.first.toString()).isValid
-                ? [FhirDateTime(results.first.toString())]
+            : FhirDateTime.fromString(results.first.toString()).isValid
+                ? [FhirDateTime.fromString(results.first.toString())]
                 : [];
     if (nextParser != null) {
       return nextParser!.execute(newResults(), passed);
@@ -351,8 +353,8 @@ class ConvertsToDateTimeParser extends FhirPathParser {
         ? []
         : results.length > 1
             ? throw _conversionException('.convertsToDateTime()', results)
-            : FhirDateTime(results.first.toString()).isValid
-                ? [FhirDateTime(results.first.toString()).isValid]
+            : FhirDateTime.fromString(results.first.toString()).isValid
+                ? [FhirDateTime.fromString(results.first.toString()).isValid]
                 : [];
     if (nextParser != null) {
       return nextParser!.execute(newResults(), passed);

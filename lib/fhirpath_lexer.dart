@@ -221,7 +221,7 @@ final Parser identifier = (IDENTIFIER.map((value) => IdentifierParser(value)) |
 ///
 
 final Parser<DateParser> DATE = (char('@') & DATEFORMAT).flatten().map((value) {
-  return DateParser(FhirDate(value.replaceFirst('@', '')));
+  return DateParser(FhirDate.fromString(value.replaceFirst('@', '')));
 });
 
 final Parser<DateTimeParser> DATETIME = (char('@') &
@@ -230,7 +230,7 @@ final Parser<DateTimeParser> DATETIME = (char('@') &
         (TIMEFORMAT & TIMEZONEOFFSETFORMAT.optional()).optional())
     .flatten()
     .map((value) {
-  return DateTimeParser(FhirDateTime(value.replaceFirst('@', '')));
+  return DateTimeParser(FhirDateTime.fromString(value.replaceFirst('@', '')));
 });
 
 final Parser<TimeParser> TIME = (char('@') & char('T') & TIMEFORMAT)

@@ -33,8 +33,8 @@ class EqualsParser extends OperatorParser {
             rhs[i] is FhirDate) {
           /// As long as one is, we convert them both to strings then back
           /// to DateTimes
-          final lhsDateTime = FhirDateTime(lhs[i].toString());
-          final rhsDateTime = FhirDateTime(rhs[i].toString());
+          final lhsDateTime = FhirDateTime.fromString(lhs[i].toString());
+          final rhsDateTime = FhirDateTime.fromString(rhs[i].toString());
 
           /// As long as they are both valid we try and compare them
           if (lhsDateTime.isValid && rhsDateTime.isValid) {
@@ -94,8 +94,10 @@ class EquivalentParser extends OperatorParser {
                 rhsElement is FhirDate) {
               /// As long as one is, we convert them both to strings then back
               /// to DateTimes
-              final lhsDateTime = FhirDateTime(lhsElement.toString());
-              final rhsDateTime = FhirDateTime(rhsElement.toString());
+              final lhsDateTime =
+                  FhirDateTime.fromString(lhsElement.toString());
+              final rhsDateTime =
+                  FhirDateTime.fromString(rhsElement.toString());
 
               /// As long as they are both valid we try and compare them
               if (lhsDateTime.isValid && rhsDateTime.isValid) {

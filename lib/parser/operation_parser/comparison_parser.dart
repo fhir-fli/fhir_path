@@ -199,26 +199,26 @@ List executeComparisons(List results, ParserList before, ParserList after,
             ? (lhs as FhirDate).isValid && rhs.isValid
                 ? makeComparison(comparator, lhs, rhs)
                 : throw invalidException(lhs, rhs)
-            : rhs is String && FhirDateTime(rhs).isValid
+            : rhs is String && FhirDateTime.fromString(rhs).isValid
                 ? makeComparison(comparator, lhs, rhs)
                 : throw cannotCompareException(lhs, rhs);
       case DateTime:
         return (rhs is FhirDateTimeBase && rhs.isValid)
-            ? makeComparison(comparator, FhirDateTime(lhs), rhs)
+            ? makeComparison(comparator, FhirDateTime.fromDateTime(lhs), rhs)
             : rhs is DateTime
-                ? makeComparison(
-                    comparator, FhirDateTime(lhs), FhirDateTime(rhs))
-                : rhs is String && FhirDateTime(rhs).isValid
-                    ? makeComparison(
-                        comparator, FhirDateTime(lhs), FhirDateTime(rhs))
+                ? makeComparison(comparator, FhirDateTime.fromDateTime(lhs),
+                    FhirDateTime.fromDateTime(rhs))
+                : rhs is String && FhirDateTime.fromString(rhs).isValid
+                    ? makeComparison(comparator, FhirDateTime.fromDateTime(lhs),
+                        FhirDateTime.fromString(rhs))
                     : throw cannotCompareException(lhs, rhs);
       case FhirDateTime:
         return rhs is FhirDateTimeBase
             ? (lhs as FhirDateTime).isValid && rhs.isValid
                 ? makeComparison(comparator, lhs, rhs)
                 : throw invalidException(lhs, rhs)
-            : rhs is String && FhirDateTime(rhs).isValid
-                ? makeComparison(comparator, lhs, FhirDateTime(rhs))
+            : rhs is String && FhirDateTime.fromString(rhs).isValid
+                ? makeComparison(comparator, lhs, FhirDateTime.fromString(rhs))
                 : throw cannotCompareException(lhs, rhs);
       case FhirTime:
         return rhs is FhirTime
@@ -254,8 +254,10 @@ List executeComparisons(List results, ParserList before, ParserList after,
           } else if (rhs is FhirTime && FhirTime(lhs).isValid) {
             return makeComparison(comparator, FhirTime(lhs), rhs);
           } else if ((rhs is FhirDate || rhs is FhirDateTime) &&
-              FhirDateTime(lhs).isValid) {
-            return makeComparison(comparator, FhirDateTime(lhs), rhs);
+              // TODO(Dokotela): can I just force lhs to be a string?
+              FhirDateTime.fromString(lhs.toString()).isValid) {
+            return makeComparison(
+                comparator, FhirDateTime.fromString(lhs), rhs);
           }
           throw FhirPathEvaluationException(
             'Can only compare Strings to other Strings',

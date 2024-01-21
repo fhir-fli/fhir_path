@@ -499,7 +499,8 @@ class DateTimeParser extends BaseDateTimeParser<FhirDateTime> {
           : o is FhirDateTime || o is FhirDate
               ? o == value
               : o is String
-                  ? FhirDateTime(o).isValid && FhirDateTime(o) == value
+                  ? FhirDateTime.fromString(o).isValid &&
+                      FhirDateTime.fromString(o) == value
                   : false;
 }
 
@@ -523,7 +524,8 @@ class DateParser extends BaseDateTimeParser<FhirDate> {
           : o is FhirTime || o is FhirDateTime
               ? o == value
               : o is String
-                  ? FhirDate(o).isValid && FhirDate(o) == value
+                  ? FhirDate.fromString(o).isValid &&
+                      FhirDate.fromString(o) == value
                   : false;
 }
 

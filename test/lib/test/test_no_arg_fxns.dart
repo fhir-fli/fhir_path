@@ -535,12 +535,12 @@ void testNoArgFxns() {
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "@2021-01-01.toDate()"),
-          [FhirDate('2021-01-01')]);
+          [FhirDate.fromString('2021-01-01')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "'2021-01-01'.toDate()"),
-          [FhirDate('2021-01-01')]);
+          [FhirDate.fromString('2021-01-01')]);
     });
     test('convertsToDate', () {
       expect(
@@ -559,22 +559,22 @@ void testNoArgFxns() {
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "@2021-01-01.toDateTime()"),
-          [FhirDateTime('2021-01-01')]);
+          [FhirDateTime.fromString('2021-01-01')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "'2021-01-01'.toDateTime()"),
-          [FhirDateTime('2021-01-01')]);
+          [FhirDateTime.fromString('2021-01-01')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "@2021-01-01T12:12.toDateTime()"),
-          [FhirDateTime('2021-01-01T12:12')]);
+          [FhirDateTime.fromString('2021-01-01T12:12')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "'2021-01-01T12:12'.toDateTime()"),
-          [FhirDateTime('2021-01-01T12:12')]);
+          [FhirDateTime.fromString('2021-01-01T12:12')]);
     });
     test('convertsToDateTime', () {
       expect(
