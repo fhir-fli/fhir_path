@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 // Project imports:
-import 'petit_test/petit_fhir_path_test.dart';
+import 'test/petit_fhir_path_test.dart';
 
 void main() => runApp(const MyApp());
 
