@@ -36,11 +36,15 @@ class EqualsParser extends OperatorParser {
           final lhsDateTime = FhirDateTime.fromString(lhs[i].toString());
           final rhsDateTime = FhirDateTime.fromString(rhs[i].toString());
 
-          /// As long as they are both valid we try and compare them
-          if (lhsDateTime.isValid && rhsDateTime.isValid) {
-            if (lhsDateTime != rhsDateTime) {
-              return <dynamic>[false];
+          if (lhsDateTime.precision.isEquallyPrecise(rhsDateTime.precision)) {
+            /// As long as they are both valid we try and compare them
+            if (lhsDateTime.isValid && rhsDateTime.isValid) {
+              if (lhsDateTime != rhsDateTime) {
+                return <dynamic>[false];
+              }
             }
+          } else {
+            return <dynamic>[];
           }
         }
 
@@ -99,16 +103,21 @@ class EquivalentParser extends OperatorParser {
               final rhsDateTime =
                   FhirDateTime.fromString(rhsElement.toString());
 
-              /// As long as they are both valid we try and compare them
-              if (lhsDateTime.isValid && rhsDateTime.isValid) {
-                return lhsDateTime == rhsDateTime;
+              if (lhsDateTime.precision
+                  .isEquallyPrecise(rhsDateTime.precision)) {
+                /// As long as they are both valid we try and compare them
+                if (lhsDateTime.isValid && rhsDateTime.isValid) {
+                  return lhsDateTime == rhsDateTime;
+                } else {
+                  return false;
+                }
               } else {
                 return false;
               }
             } else if (lhsElement is ValidatedQuantity ||
                 rhsElement is ValidatedQuantity) {
               if (lhsElement is ValidatedQuantity) {
-                return lhsElement.value.equivalent(rhsElement as Object);
+                return lhsElement.equivalent(rhsElement as Object);
               } else {
                 return (rhsElement as ValidatedQuantity)
                     .equivalent(lhsElement as Object);

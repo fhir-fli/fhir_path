@@ -213,10 +213,11 @@ class DecimalParser extends ValueParser<double> {
 /// A simple identifier is any alphabetical character or an underscore,
 /// followed by any number of alpha-numeric characters or underscores
 class IdentifierParser extends ValueParser<String> {
-  const IdentifierParser(super.value, [super.nextParser]);
+  final String delimiter;
+  const IdentifierParser(this.delimiter, super.value, [super.nextParser]);
 
   IdentifierParser copyWithNextParser(FhirPathParser nextParser) =>
-      IdentifierParser(value, nextParser);
+      IdentifierParser(delimiter, value, nextParser);
 
   @override
   List execute(List results, Map<String, dynamic> passed) {
@@ -302,112 +303,6 @@ class IdentifierParser extends ValueParser<String> {
 
   @override
   operator ==(Object o) => o is IdentifierParser
-      ? o.value == value
-      : o is String
-          ? o == value
-          : o.toString() == value;
-}
-
-/// Identifiers are used as labels to allow expressions to reference elements
-/// such as model types and properties. FHIRPath supports two types of
-/// identifiers, simple and delimited.
-/// A delimited identifier is any sequence of characters enclosed in
-/// backticks ( ` ):
-/// The use of backticks allows identifiers to contains spaces, commas, and
-/// other characters that would not be allowed within simple identifiers. This
-/// allows identifiers to be more descriptive, and also enables expressions to
-/// reference models that have property or type names that are not valid
-/// simple identifiers.
-class DelimitedIdentifierParser extends IdentifierParser {
-  const DelimitedIdentifierParser(super.value, [super.nextParser]);
-
-  @override
-  List execute(List results, Map<String, dynamic> passed) {
-    final identifierName = value;
-
-    final finalResults = [];
-    final finalPrimitiveExtensions =
-        List<dynamic>.filled(results.length, null, growable: false);
-
-    final passedExtensions = passed[ExtensionParser.extensionKey];
-    passed[ExtensionParser.extensionKey] = null;
-
-    if (passed.isVersion(FhirVersion.r4)
-        ? r4.resourceTypeFromStringMap.keys.contains(identifierName)
-        : passed.isVersion(FhirVersion.r5)
-            ? r5.resourceTypeFromStringMap.keys.contains(identifierName)
-            : passed.isVersion(FhirVersion.dstu2)
-                ? dstu2.resourceTypeFromStringMap.keys.contains(identifierName)
-                : stu3.resourceTypeFromStringMap.keys
-                        .contains(identifierName) &&
-                    (passed.hasNoContext
-                        ? false
-                        : passed.context?['resourceType'] == identifierName)) {
-      finalResults.add(passed.context);
-    } else {
-      results.forEachIndexed((i, r) {
-        if (r is Map) {
-          String jsonIdentifierName = identifierName;
-          dynamic rValue = r[identifierName];
-          if (rValue == null) {
-            // Support for polymorphism:
-            // If the key cannot be found in the r-map, then find
-            // a key that starts with the same word, e.g. 'value' identifier will
-            // match 'valueDateTime' key.
-            r.forEach((k, v) {
-              if (k.toString().startsWith(identifierName) &&
-                  polymorphicPrefixes.contains(identifierName) &&
-                  startsWithAPolymorphicPrefix(k.toString())) {
-                rValue = v;
-                jsonIdentifierName = k.toString();
-              }
-            });
-          }
-
-          final jsonPrimitiveExtension =
-              r['_$jsonIdentifierName'] as Map<String, dynamic>?;
-          if (jsonPrimitiveExtension != null) {
-            finalPrimitiveExtensions[i] = jsonPrimitiveExtension['extension'];
-          }
-
-          if (rValue is List) {
-            finalResults.addAll(rValue as Iterable);
-          } else if (rValue != null) {
-            finalResults.add(rValue);
-          } else if (r['resourceType'] == identifierName) {
-            finalResults.add(r);
-          }
-        } else {
-          if (identifierName == 'extension') {
-            // Special processing for extensions on primitives
-            if (passedExtensions != null) {
-              final extensionOnPrimitive = passedExtensions[i];
-              if (extensionOnPrimitive != null) {
-                finalResults.addAll(extensionOnPrimitive as Iterable);
-              }
-            } else {
-              // This primitive does not have an extension
-              // Do nothing.
-            }
-          }
-        }
-      });
-    }
-
-    passed[ExtensionParser.extensionKey] = finalPrimitiveExtensions;
-
-    return finalResults;
-  }
-
-  @override
-  String verbosePrint(int indent) =>
-      '${"  " * indent}DelimitedIdentifierParser: "$value"';
-
-  @override
-  String prettyPrint([int indent = 2]) => '`$value`';
-
-  @override
-  operator ==(Object o) => o is DelimitedIdentifierParser
       ? o.value == value
       : o is String
           ? o == value

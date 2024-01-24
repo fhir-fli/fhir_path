@@ -58,25 +58,19 @@ Parser fhirPathExpression() {
   final _function = undefined();
   final _paramList = undefined();
 
-  final Parser expressionPart = ((char('(') & _expression & char(')')) |
-          _invocation.map((value) {
-            print('invocation: $value');
-            return value;
-          }) |
+  final Parser expressionPart = (_invocation |
           (literal & char('.') & _invocation) |
-          _function.map((value) {
-            print(value);
-            return value;
-          }) |
-          literal.map((value) {
-            print('literal $value');
-            return value;
-          }) |
+          _function |
+          literal |
           string('\$this') |
           string('\$index') |
           string('\$total') |
-          externalConstant) &
-      (operations & _expression).star();
+          externalConstant |
+          (char('(')) & _expression & char(')')) &
+      (identifyingOperations |
+              (operations & _expression) |
+              (char('.') & _invocation))
+          .star();
 
   /// | (IDENTIFIER)? '=>' expression #lambdaExpression
 
@@ -112,18 +106,20 @@ Parser fhirPathExpression() {
   return _expression;
 }
 
+final Parser identifyingOperations =
+    ((string('is') | string('as')).trim() & typeSpecifier.trim()).map((value) =>
+        value[0] == 'is' ? IsParser(value[1][0]) : AsParser(value[1][0]));
+
 final Parser operations = char('*').trim().map((value) => StarParser()) |
     char('/').trim().map((value) => DivSignParser()) |
     string('div').trim().map((value) => DivStringParser()) |
     string('mod').trim().map((value) => ModParser()) |
     char('&').trim().map((value) => StringConcatenationParser()) |
-    string('is').seq(typeSpecifier).trim().map((value) => IsParser(value[1])) |
-    string('as').seq(typeSpecifier).trim().map((value) => AsParser(value[1])) |
     char('|').trim().map((value) => UnionOperatorParser()) |
     string('<=').trim().map((value) => LessEqualParser()) |
     char('<').trim().map((value) => LessParser()) |
-    char('>').trim().map((value) => GreaterParser()) |
     string('>=').trim().map((value) => GreaterEqualParser()) |
+    char('>').trim().map((value) => GreaterParser()) |
     char('=').trim().map((value) => EqualsParser()) |
     char('~').trim().map((value) => EquivalentParser()) |
     string('!=').trim().map((value) => NotEqualsParser()) |
@@ -202,16 +198,16 @@ final Parser<String> pluralDateTimePrecision = (string('years') |
 
 final Parser typeSpecifier = qualifiedIdentifier;
 
-final Parser qualifiedIdentifier =
-    identifier.seq(char('.').seq(identifier).star());
+final Parser qualifiedIdentifier = identifier & (char('.') & identifier).star();
 
-final Parser identifier = (IDENTIFIER.map((value) => IdentifierParser(value)) |
-        DELIMITEDIDENTIFIER.map((value) => DelimitedIdentifierParser(value)) |
-        string('as') |
-        string('contains') |
-        string('in') |
-        string('is'))
-    .map((value) => value);
+final Parser identifier =
+    (IDENTIFIER.map((value) => IdentifierParser('', value)) |
+            DELIMITEDIDENTIFIER.map((value) => IdentifierParser('`', value)) |
+            string('as') |
+            string('contains') |
+            string('in') |
+            string('is'))
+        .map((value) => value);
 
 /// *********************** Lexical rules ************************************
 ///

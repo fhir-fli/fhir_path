@@ -875,6 +875,11 @@ void testBasicOperators() {
       test('/ : ', () {
         expect(
             walkFhirPath(
+                context: resource.toJson(), pathExpression: '(1.2 / 1.8)'),
+            [true]);
+
+        expect(
+            walkFhirPath(
                 context: resource.toJson(),
                 pathExpression: '(1.2 / 1.8).round(8) = 0.66666667'),
             [true]);

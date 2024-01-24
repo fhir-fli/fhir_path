@@ -90,33 +90,7 @@ List<dynamic> walkFhirPath({
 FhirPathParser parseFhirPath(String pathExpression) {
   try {
     final ast = fhirPathLexer.parse(pathExpression).value;
-    // print(ast);
-    // if (ast is ParserList) {
-    //   if (ast.isEmpty) {
-    //     return ast;
-    //   } else {
-    //     // Check for combination of IdentifierParser followed by ParenthesisParser
-    //     // This indicates invalid function name
-    //     if (ast.value.length > 1) {
-    //       for (int i = 0; i < ast.value.length - 1; i++) {
-    //         if ((ast.value[i] is IdentifierParser) &&
-    //             (ast.value[i + 1] is ParenthesesParser)) {
-    //           final String functionName =
-    //               (ast.value[i] as IdentifierParser).value;
-    //           throw FhirPathInvalidExpressionException(
-    //               'Unknown function: $functionName',
-    //               pathExpression: pathExpression);
-    //         }
-    //       }
-    //     }
-
     return ast;
-    // }
-    // } else {
-    //   throw FhirPathInvalidExpressionException(
-    //       'Parsing did not result in ParserList',
-    // pathExpression: pathExpression);
-    // }
   } catch (error) {
     if (error is ParserException) {
       throw FhirPathInvalidExpressionException(

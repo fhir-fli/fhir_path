@@ -25,10 +25,10 @@ void testBasicTypes() {
           const StringParser('urn:oid:3.4.5.6.7.8'));
     });
     test('Delimited Identifier', () {
-      expect(
-          parseResult("`test string`"), const IdentifierParser('test string'));
+      expect(parseResult("`test string`"),
+          const IdentifierParser('`', 'test string'));
       expect(parseResult("`urn:oid:3.4.5.6.7.8`"),
-          const IdentifierParser('urn:oid:3.4.5.6.7.8'));
+          const IdentifierParser('`', 'urn:oid:3.4.5.6.7.8'));
     });
     test('Integer', () {
       expect(parseResult('0'), const IntegerParser(0));

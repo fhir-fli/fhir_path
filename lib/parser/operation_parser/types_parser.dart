@@ -16,92 +16,73 @@ class IsParser extends OperatorParser {
 
   IsParser copyWithNextParser(FhirPathParser nextParser) =>
       IsParser(nextParser);
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
 
   @override
   List execute(List results, Map<String, dynamic> passed) {
-    final executedBefore = before.execute(results.toList(), passed);
-    final executedAfter = after.length == 1 && after.first is IdentifierParser
-        ? [(after.first as IdentifierParser).value]
-        : after.execute(results.toList(), passed);
+    print(results);
+    print(nextParser);
+    final List<dynamic> lhs = results;
+    final List<dynamic>? rhs = nextParser == null
+        ? null
+        : nextParser is IdentifierParser
+            ? [(nextParser as IdentifierParser).value]
+            : nextParser?.execute([], passed);
 
-    return executedBefore.isEmpty ||
-            executedBefore.length != 1 ||
-            executedAfter.isEmpty ||
-            executedAfter.length != 1
+    return rhs == null ||
+            lhs.isEmpty ||
+            lhs.length != 1 ||
+            rhs.isEmpty ||
+            rhs.length != 1
         ? throw FhirPathEvaluationException(
             'the "is" operation requires two operands, this was '
             'passed the following\n'
-            'Operand1: $executedBefore\n'
-            'Operand2: $executedAfter',
+            'Operand1: $lhs\n'
+            'Operand2: $rhs',
             collection: results)
         : (passed.isVersion(FhirVersion.r4)
-                    ? r4.resourceTypeFromStringMap.keys
-                        .contains(executedAfter.first)
+                    ? r4.resourceTypeFromStringMap.keys.contains(rhs.first)
                     : passed.isVersion(FhirVersion.r5)
-                        ? r5.resourceTypeFromStringMap.keys
-                            .contains(executedAfter.first)
+                        ? r5.resourceTypeFromStringMap.keys.contains(rhs.first)
                         : passed.isVersion(FhirVersion.dstu2)
                             ? dstu2.resourceTypeFromStringMap.keys
-                                .contains(executedAfter.first)
+                                .contains(rhs.first)
                             : stu3.resourceTypeFromStringMap.keys
-                                .contains(executedAfter.first)) &&
-                executedBefore.first is Map &&
-                executedBefore.first['resourceType'] == executedAfter.first
+                                .contains(rhs.first)) &&
+                lhs.first is Map &&
+                lhs.first['resourceType'] == rhs.first
             ? [true]
-            : executedAfter.first == 'String'
-                ? [executedBefore.first is String]
-                : executedAfter.first == 'Boolean'
-                    ? [
-                        executedBefore.first is bool ||
-                            executedBefore.first is FhirBoolean
-                      ]
-                    : executedAfter.first == 'Integer'
+            : rhs.first == 'String'
+                ? [lhs.first is String]
+                : rhs.first == 'Boolean'
+                    ? [lhs.first is bool || lhs.first is FhirBoolean]
+                    : rhs.first == 'Integer'
                         ? [
-                            (executedBefore.first is int ||
-                                    executedBefore.first is FhirInteger) &&
+                            (lhs.first is int || lhs.first is FhirInteger) &&
 
                                 /// This is because of transpilation to javascript
-                                !executedBefore.first.toString().contains('.')
+                                !lhs.first.toString().contains('.')
                           ]
-                        : executedAfter.first == 'Decimal'
+                        : rhs.first == 'Decimal'
                             ? [
-                                (executedBefore.first is double ||
-                                        executedBefore.first is FhirDecimal) &&
+                                (lhs.first is double ||
+                                        lhs.first is FhirDecimal) &&
 
                                     /// This is because of transpilation to javascript
-                                    executedBefore.first
-                                        .toString()
-                                        .contains('.')
+                                    lhs.first.toString().contains('.')
                               ]
-                            : executedAfter.first == 'Date'
-                                ? [executedBefore.first is FhirDate]
-                                : executedAfter.first == 'DateTime'
+                            : rhs.first == 'Date'
+                                ? [lhs.first is FhirDate]
+                                : rhs.first == 'DateTime'
                                     ? [
-                                        executedBefore.first is DateTime ||
-                                            executedBefore.first is FhirDateTime
+                                        lhs.first is DateTime ||
+                                            lhs.first is FhirDateTime
                                       ]
-                                    : executedAfter.first == 'Time'
-                                        ? [executedBefore.first is FhirTime]
-                                        : executedAfter.first == 'Quantity'
-                                            ? [
-                                                isValidatedQuantity(
-                                                    executedBefore.first)
-                                              ]
+                                    : rhs.first == 'Time'
+                                        ? [lhs.first is FhirTime]
+                                        : rhs.first == 'Quantity'
+                                            ? [isValidatedQuantity(lhs.first)]
                                             : [false];
   }
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}IsParser'
-      '\n${before.verbosePrint(indent + 1)}'
-      '\n${after.verbosePrint(indent + 1)}';
-
-  @override
-  String prettyPrint([int indent = 2]) => 'is('
-      '\n${before.prettyPrint(indent + 1)}'
-      '\n${after.prettyPrint(indent + 1)}\n'
-      '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
 class AsParser extends OperatorParser {
@@ -114,8 +95,8 @@ class AsParser extends OperatorParser {
 
   @override
   List execute(List results, Map<String, dynamic> passed) {
-    final executedBefore = before.execute(results.toList(), passed);
-    if (executedBefore.length != 1) {
+    final lhs = before.execute(results.toList(), passed);
+    if (lhs.length != 1) {
       throw FhirPathEvaluationException(
           'The "as" operation requires a left operand with 1 item, '
           'but was passed the following\n'
@@ -143,34 +124,26 @@ class AsParser extends OperatorParser {
                             .contains(identifierValue)
                         : stu3.resourceTypeFromStringMap.keys
                             .contains(identifierValue)) &&
-            executedBefore.first is Map &&
-            executedBefore.first['resourceType'] == identifierValue) ||
-        (identifierValue.toLowerCase() == 'string' &&
-            (executedBefore.first is String)) ||
+            lhs.first is Map &&
+            lhs.first['resourceType'] == identifierValue) ||
+        (identifierValue.toLowerCase() == 'string' && (lhs.first is String)) ||
         (identifierValue.toLowerCase() == 'boolean' &&
-            (executedBefore.first is bool ||
-                executedBefore.first is FhirBoolean)) ||
+            (lhs.first is bool || lhs.first is FhirBoolean)) ||
         (identifierValue.toLowerCase() == 'integer' &&
-            (executedBefore.first is int ||
-                executedBefore.first is FhirInteger)) ||
+            (lhs.first is int || lhs.first is FhirInteger)) ||
         (identifierValue.toLowerCase() == 'decimal' &&
-            (executedBefore.first is double ||
-                executedBefore.first is FhirDecimal)) ||
-        (identifierValue.toLowerCase() == 'date' &&
-            executedBefore.first is FhirDate) ||
+            (lhs.first is double || lhs.first is FhirDecimal)) ||
+        (identifierValue.toLowerCase() == 'date' && lhs.first is FhirDate) ||
         (identifierValue.toLowerCase() == 'datetime' &&
-            (executedBefore.first is DateTime ||
-                executedBefore.first is FhirDateTime)) ||
-        (identifierValue.toLowerCase() == 'time' &&
-            executedBefore.first is FhirTime) ||
-        (identifierValue == 'quantity' &&
-            executedBefore.first is ValidatedQuantity)) {
-      return executedBefore;
+            (lhs.first is DateTime || lhs.first is FhirDateTime)) ||
+        (identifierValue.toLowerCase() == 'time' && lhs.first is FhirTime) ||
+        (identifierValue == 'quantity' && lhs.first is ValidatedQuantity)) {
+      return lhs;
     }
 
     if (FhirDatatypes.contains(identifierValue)) {
       final polymorphicString = 'value$identifierValue';
-      final polymorphicIdentifier = IdentifierParser(polymorphicString);
+      final polymorphicIdentifier = IdentifierParser('', polymorphicString);
       final polymorphicParserList = ParserList([polymorphicIdentifier]);
       return polymorphicParserList.execute(results.toList(), passed);
     }

@@ -12,22 +12,10 @@ class GreaterParser extends OperatorParser {
 
   GreaterParser copyWithNextParser(FhirPathParser nextParser) =>
       GreaterParser(nextParser);
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
 
   @override
   List execute(List results, Map<String, dynamic> passed) =>
-      executeComparisons(results, before, after, passed, Comparator.gt);
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}GreaterParser'
-      '\n${before.verbosePrint(indent + 1)}'
-      '\n${after.verbosePrint(indent + 1)}';
-
-  @override
-  String prettyPrint([int indent = 2]) => '>'
-      '\n${"  " * indent}${before.prettyPrint(indent + 1)}'
-      '\n${"  " * indent}${after.prettyPrint(indent + 1)}';
+      executeComparisons(results, nextParser, passed, Comparator.gt);
 }
 
 class LessParser extends OperatorParser {
@@ -35,22 +23,10 @@ class LessParser extends OperatorParser {
 
   LessParser copyWithNextParser(FhirPathParser nextParser) =>
       LessParser(nextParser);
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
 
   @override
   List execute(List results, Map<String, dynamic> passed) =>
-      executeComparisons(results, before, after, passed, Comparator.lt);
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}LessParser'
-      '\n${before.verbosePrint(indent + 1)}'
-      '\n${after.verbosePrint(indent + 1)}';
-
-  @override
-  String prettyPrint([int indent = 2]) => '<'
-      '\n${"  " * indent}${before.prettyPrint(indent + 1)}'
-      '\n${"  " * indent}${after.prettyPrint(indent + 1)}';
+      executeComparisons(results, nextParser, passed, Comparator.lt);
 }
 
 class GreaterEqualParser extends OperatorParser {
@@ -58,23 +34,11 @@ class GreaterEqualParser extends OperatorParser {
 
   GreaterEqualParser copyWithNextParser(FhirPathParser nextParser) =>
       GreaterEqualParser(nextParser);
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
 
   @override
   List execute(List results, Map<String, dynamic> passed) {
-    return executeComparisons(results, before, after, passed, Comparator.gte);
+    return executeComparisons(results, nextParser, passed, Comparator.gte);
   }
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}GreaterEqualParser'
-      '\n${before.verbosePrint(indent + 1)}'
-      '\n${after.verbosePrint(indent + 1)}';
-
-  @override
-  String prettyPrint([int indent = 2]) => '>='
-      '\n${"  " * indent}${before.prettyPrint(indent + 1)}'
-      '\n${"  " * indent}${after.prettyPrint(indent + 1)}';
 }
 
 class LessEqualParser extends OperatorParser {
@@ -82,42 +46,17 @@ class LessEqualParser extends OperatorParser {
 
   LessEqualParser copyWithNextParser(FhirPathParser nextParser) =>
       LessEqualParser(nextParser);
-  ParserList before = ParserList([]);
-  ParserList after = ParserList([]);
 
   @override
   List execute(List results, Map<String, dynamic> passed) =>
-      executeComparisons(results, before, after, passed, Comparator.lte);
-
-  @override
-  String verbosePrint(int indent) => '${"  " * indent}LessEqualParser'
-      '\n${before.verbosePrint(indent + 1)}'
-      '\n${after.verbosePrint(indent + 1)}';
-
-  @override
-  String prettyPrint([int indent = 2]) => '<='
-      '\n${"  " * indent}${before.prettyPrint(indent + 1)}'
-      '\n${"  " * indent}${after.prettyPrint(indent + 1)}';
+      executeComparisons(results, nextParser, passed, Comparator.lte);
 }
 
 enum Comparator { gt, gte, lt, lte }
 
-// TODO(Dokotela): review if appropriately comparing different types
-@override
-List executeComparisons(List results, ParserList before, ParserList after,
+List executeComparisons(List results, FhirPathParser? nextParser,
     Map<String, dynamic> passed, Comparator comparator,
     {bool where = false}) {
-  // TODO(Dokotela): Currently, this is going to assume that if a String is being compared
-  // with a Date, DateTime, or Time, and the String is a valid format of a Time
-  // or DateTime, then they should still be compared
-  // another type, for instance:
-  // Patient.birthDate = "1981-09-18"
-  // today() = Date("2022-04-15")
-  // this will throw an error, despite the fact that they should be comparable
-  // could consider testing it, e.g.
-  //  if (param1 is! String || param2 is! String) {
-  //    if(param)}
-
   bool stringGt(String param1, String param2) {
     final runes1 = param1.runes.toList();
     final runes2 = param2.runes.toList();
@@ -135,6 +74,15 @@ List executeComparisons(List results, ParserList before, ParserList after,
   }
 
   bool? makeComparison(Comparator comparator, dynamic param1, dynamic param2) {
+    if (param1 is FhirDateTimeBase) {
+      if (param2 is! FhirDateTimeBase) {
+        param2 = FhirDateTime.fromString(param2.toString());
+      }
+      if (!param1.precision.isEquallyPrecise(param2.precision)) {
+        return null;
+      }
+    }
+
     try {
       switch (comparator) {
         case Comparator.gt:
@@ -268,11 +216,11 @@ List executeComparisons(List results, ParserList before, ParserList after,
     }
   }
 
-  final lhs = toSingleton(before.execute(results.toList(), passed),
+  final lhs = comparisonValue(results.toList(),
       name: 'left-hand side',
       operation: comparator.toString(),
       collection: results);
-  final rhs = toSingleton(after.execute(results.toList(), passed),
+  final rhs = comparisonValue(nextParser?.execute([], passed) ?? [],
       name: 'right-hand side',
       operation: comparator.toString(),
       collection: results);
@@ -300,8 +248,7 @@ List executeComparisons(List results, ParserList before, ParserList after,
           'passed.\n'
           'LHS: $lhs\n'
           'RHS: $rhs',
-          operation: functionName,
-          arguments: [before, after]);
+          operation: functionName);
     } else if (where) {
       results.retainWhere((element) =>
           compare(comparator, element[lhs.first], rhs.first) ?? false);
@@ -331,7 +278,7 @@ Exception _wrongArgLength(String functionName, List value) =>
         operation: functionName,
         arguments: value);
 
-List<dynamic> toSingleton(
+List<dynamic> comparisonValue(
   List<dynamic> input, {
   String? name,
   String? operation,
