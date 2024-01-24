@@ -61,14 +61,21 @@ Parser fhirPathExpression() {
   final Parser expressionPart = (_invocation |
           (literal & char('.') & _invocation) |
           _function |
-          literal |
+          literal.map((value) {
+            print('LITERAL: $value');
+            return value;
+          }) |
           string('\$this') |
           string('\$index') |
           string('\$total') |
           externalConstant |
-          (char('(')) & _expression & char(')')) &
+          (char('(') & _expression & char(')'))) &
       (identifyingOperations |
-              (operations & _expression) |
+              (operations.map((value) {
+                    print('OPERATIONS: $value');
+                    return value;
+                  }) &
+                  _expression) |
               (char('.') & _invocation))
           .star();
 
@@ -110,7 +117,9 @@ final Parser identifyingOperations =
     ((string('is') | string('as')).trim() & typeSpecifier.trim()).map((value) =>
         value[0] == 'is' ? IsParser(value[1][0]) : AsParser(value[1][0]));
 
-final Parser operations = char('*').trim().map((value) => StarParser()) |
+final Parser operations = char('+').trim().map((value) => PlusParser()) |
+    char('-').trim().map((value) => MinusParser()) |
+    char('*').trim().map((value) => StarParser()) |
     char('/').trim().map((value) => DivSignParser()) |
     string('div').trim().map((value) => DivStringParser()) |
     string('mod').trim().map((value) => ModParser()) |

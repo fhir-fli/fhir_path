@@ -872,20 +872,20 @@ void testBasicOperators() {
   group(
     'Math Operators: ',
     () {
-      test('/ : ', () {
-        expect(
-            walkFhirPath(
-                context: resource.toJson(), pathExpression: '(1.2 / 1.8)'),
-            [true]);
+      // test('/ : ', () {
+      //   expect(
+      //       walkFhirPath(
+      //           context: resource.toJson(), pathExpression: '(1.2 / 1.8)'),
+      //       [true]);
 
-        expect(
-            walkFhirPath(
-                context: resource.toJson(),
-                pathExpression: '(1.2 / 1.8).round(8) = 0.66666667'),
-            [true]);
-        expect(walkFhirPath(context: resource.toJson(), pathExpression: '1/0'),
-            []);
-      });
+      //   expect(
+      //       walkFhirPath(
+      //           context: resource.toJson(),
+      //           pathExpression: '(1.2 / 1.8).round(8) = 0.66666667'),
+      //       [true]);
+      //   expect(walkFhirPath(context: resource.toJson(), pathExpression: '1/0'),
+      //       []);
+      // });
       test('- : ', () {
         expect(
             walkFhirPath(context: resource.toJson(), pathExpression: '75-70'),

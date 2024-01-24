@@ -1,0 +1,28 @@
+import '../fhir_path.dart';
+
+final orderOfOperations = {
+  StarParser: 1,
+  DivSignParser: 1,
+  DivStringParser: 1,
+  ModParser: 1,
+  PlusParser: 2,
+  MinusParser: 2,
+  StringConcatenationParser: 2,
+  IsParser: 3,
+  AsParser: 3,
+  UnionOperatorParser: 4,
+  LessEqualParser: 5,
+  LessParser: 5,
+  GreaterEqualParser: 5,
+  GreaterParser: 5,
+  EqualsParser: 6,
+  EquivalentParser: 6,
+  NotEqualsParser: 6,
+  NotEquivalentParser: 6,
+  InParser: 7,
+  ContainsOperatorParser: 7,
+  AndStringParser: 8,
+  XorParser: 9,
+  OrStringParser: 10,
+  ImpliesParser: 11,
+};
