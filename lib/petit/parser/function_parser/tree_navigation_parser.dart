@@ -49,8 +49,7 @@ class DescendantsParser extends FhirPathParser {
   @override
   List execute(List results, Map<String, dynamic> passed) {
     // According to spec, `descendants()` is shorthand for `repeat(children())`
-    final repeatParser = RepeatParser();
-    repeatParser.value = ParserList([ChildrenParser()]);
+    final repeatParser = RepeatParser(ParserList([ChildrenParser()]));
     return repeatParser.execute(results, passed);
   }
 

@@ -1,8 +1,9 @@
-// ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, always_specify_types
+// ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, always_specify_types, unnecessary_string_escapes
 
 // Package imports:
 import 'package:fhir/r4.dart';
 import 'package:test/test.dart';
+import 'package:ucum/ucum.dart';
 
 // Project imports:
 import 'package:fhir_path/petit/petit_fhir_path.dart';
@@ -536,12 +537,12 @@ void testNoArgFxns() {
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "@2021-01-01.toDate()"),
-          [FhirDate('2021-01-01')]);
+          [FhirDate.fromString('2021-01-01')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "'2021-01-01'.toDate()"),
-          [FhirDate('2021-01-01')]);
+          [FhirDate.fromString('2021-01-01')]);
     });
     test('convertsToDate', () {
       expect(
@@ -560,22 +561,22 @@ void testNoArgFxns() {
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "@2021-01-01.toDateTime()"),
-          [FhirDateTime('2021-01-01')]);
+          [FhirDateTime.fromString('2021-01-01')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "'2021-01-01'.toDateTime()"),
-          [FhirDateTime('2021-01-01')]);
+          [FhirDateTime.fromString('2021-01-01')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "@2021-01-01T12:12.toDateTime()"),
-          [FhirDateTime('2021-01-01T12:12')]);
+          [FhirDateTime.fromString('2021-01-01T12:12')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "'2021-01-01T12:12'.toDateTime()"),
-          [FhirDateTime('2021-01-01T12:12')]);
+          [FhirDateTime.fromString('2021-01-01T12:12')]);
     });
     test('convertsToDateTime', () {
       expect(
@@ -772,17 +773,16 @@ void testNoArgFxns() {
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "'4 days'.toQuantity()"),
-          [FhirPathQuantity(4, 'days')]);
+          [ValidatedQuantity(value: Decimal.fromString('4'), code: 'days')]);
 
-      // TODO(Dokotela):  toQuantity - more units
-      // expect(
-      //     walkFhirPath(
-      //         context: resource.toJson(),
-      //         pathExpression: ""10 \'mg[Hg]'".toQuantity()"),
-      //     ['true']);
+      expect(
+          walkFhirPath(
+              context: resource.toJson(),
+              pathExpression: r"'10 \'mm[Hg]\''.toQuantity()"),
+          [ValidatedQuantity(value: Decimal.fromString('10'), code: 'mm[Hg]')]);
     });
 
-    test('toQuantity', () {
+    test('ConvertsToQuantity', () {
       expect(
           walkFhirPath(
               context: resource.toJson(),
@@ -1057,7 +1057,7 @@ void testNoArgFxns() {
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "(-5.5 'mg').abs() // 5.5 'mg'"),
-          [FhirPathQuantity(5.5, "mg")]);
+          [ValidatedQuantity(value: Decimal.fromString('5.5'), code: "mg")]);
     });
     test('ceiling', () {
       expect(
@@ -1262,7 +1262,8 @@ void testNoArgFxns() {
       expect(
           walkFhirPath(context: resource.toJson(), pathExpression: "today()")
               .first,
-          FhirDate(DateTime.now().toIso8601String().split('T').first));
+          FhirDate.fromString(
+              DateTime.now().toIso8601String().split('T').first));
     });
   });
 }

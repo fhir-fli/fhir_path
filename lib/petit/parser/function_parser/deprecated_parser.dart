@@ -7,9 +7,12 @@ import '../../petit_fhir_path.dart';
 /// The as() function is defined for backwards compatibility with previous implementations
 /// of FHIRPath. However, we have chosen not to support it.
 /// DEPRECATED
-class AsFunctionParser extends ValueParser<ParserList> {
-  AsFunctionParser();
-  late ParserList value;
+class AsFunctionParser extends FunctionParser {
+  AsFunctionParser(super.value);
+
+  AsFunctionParser.empty() : super(ParserList.empty());
+
+  AsFunctionParser copyWith(ParserList value) => AsFunctionParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -46,9 +49,12 @@ class AsFunctionParser extends ValueParser<ParserList> {
 /// The as() function is defined for backwards compatibility with previous implementations
 /// of FHIRPath. However, we have chosen not to support it.
 /// DEPRECATED
-class IsFunctionParser extends ValueParser<ParserList> {
-  IsFunctionParser();
-  late ParserList value;
+class IsFunctionParser extends FunctionParser {
+  IsFunctionParser(super.value);
+
+  IsFunctionParser.empty() : super(ParserList.empty());
+
+  IsFunctionParser copyWith(ParserList value) => IsFunctionParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

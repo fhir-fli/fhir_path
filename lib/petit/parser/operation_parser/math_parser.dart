@@ -2,6 +2,7 @@
 
 // Package imports:
 import 'package:fhir/primitive_types/primitive_types.dart';
+import 'package:ucum/ucum.dart';
 
 // Project imports:
 import '../../petit_fhir_path.dart';
@@ -28,11 +29,8 @@ class UnaryNegateParser extends OperatorParser {
     if (executedAfter.first is num) {
       return [-(executedAfter.first as num)];
     }
-    if (executedAfter.first is FhirPathQuantity) {
-      return [
-        FhirPathQuantity(-(executedAfter.first as FhirPathQuantity).amount,
-            (executedAfter.first as FhirPathQuantity).unit)
-      ];
+    if (executedAfter.first is ValidatedQuantity) {
+      return [(executedAfter.first as ValidatedQuantity) * -1];
     } else {
       throw FhirPathInvalidExpressionException(
           'Unary negate needs to be followed by an integer, a decimal, or a quantity. Found instead: ${executedAfter.first}');
@@ -119,11 +117,11 @@ class StarParser extends OperatorParser {
           collection: results);
     } else if (executedBefore.first is num && executedAfter.first is num) {
       return [(executedBefore.first as num) * (executedAfter.first as num)];
-    } else if (executedBefore.first is FhirPathQuantity &&
-        executedAfter.first is FhirPathQuantity) {
+    } else if (executedBefore.first is ValidatedQuantity &&
+        executedAfter.first is ValidatedQuantity) {
       return [
-        (executedBefore.first as FhirPathQuantity) *
-            (executedAfter.first as FhirPathQuantity)
+        (executedBefore.first as ValidatedQuantity) *
+            (executedAfter.first as ValidatedQuantity)
       ];
     } else {
       throw FhirPathEvaluationException(
@@ -187,12 +185,12 @@ class DivSignParser extends OperatorParser {
       return (executedAfter.first != 0)
           ? [executedBefore.first / executedAfter.first]
           : [];
-    } else if (executedBefore.first is FhirPathQuantity &&
-        executedAfter.first is FhirPathQuantity) {
-      return ((executedAfter.first as FhirPathQuantity).amount != 0)
+    } else if (executedBefore.first is ValidatedQuantity &&
+        executedAfter.first is ValidatedQuantity) {
+      return ((executedAfter.first as ValidatedQuantity) != 0)
           ? [
-              (executedBefore.first as FhirPathQuantity) /
-                  (executedAfter.first as FhirPathQuantity)
+              (executedBefore.first as ValidatedQuantity) /
+                  (executedAfter.first as ValidatedQuantity)
             ]
           : [];
     } else {
@@ -311,11 +309,11 @@ class ModParser extends OperatorParser {
       return [];
     } else if (executedBefore.first is num && executedAfter.first is num) {
       return [executedBefore.first % executedAfter.first];
-    } else if (executedBefore.first is FhirPathQuantity &&
-        executedAfter.first is FhirPathQuantity) {
+    } else if (executedBefore.first is ValidatedQuantity &&
+        executedAfter.first is ValidatedQuantity) {
       return [
-        (executedBefore.first as FhirPathQuantity) %
-            (executedAfter.first as FhirPathQuantity)
+        (executedBefore.first as ValidatedQuantity) %
+            (executedAfter.first as ValidatedQuantity)
       ];
     } else {
       throw FhirPathEvaluationException(
@@ -387,22 +385,22 @@ class PlusParser extends OperatorParser {
             }
             break;
           }
-        case FhirPathQuantity:
+        case ValidatedQuantity:
           {
-            if (executedAfter.first is FhirPathQuantity) {
+            if (executedAfter.first is ValidatedQuantity) {
               return [
-                (executedBefore.first as FhirPathQuantity) +
-                    (executedAfter.first as FhirPathQuantity)
+                (executedBefore.first as ValidatedQuantity) +
+                    (executedAfter.first as ValidatedQuantity)
               ];
             }
             break;
           }
         case FhirDateTime:
           {
-            if (executedAfter.first is FhirPathQuantity) {
+            if (executedAfter.first is ValidatedQuantity) {
               return [
-                (executedAfter.first as FhirPathQuantity)
-                    .add(executedBefore.first)
+                ((executedAfter.first as ValidatedQuantity) +
+                        executedBefore.first)
                     .toString()
               ];
             }
@@ -410,10 +408,10 @@ class PlusParser extends OperatorParser {
           }
         case FhirDate:
           {
-            if (executedAfter.first is FhirPathQuantity) {
+            if (executedAfter.first is ValidatedQuantity) {
               return [
-                (executedAfter.first as FhirPathQuantity)
-                    .add(executedBefore.first)
+                ((executedAfter.first as ValidatedQuantity) +
+                        executedBefore.first)
                     .toString()
               ];
             }
@@ -421,10 +419,10 @@ class PlusParser extends OperatorParser {
           }
         case FhirTime:
           {
-            if (executedAfter.first is FhirPathQuantity) {
+            if (executedAfter.first is ValidatedQuantity) {
               return [
-                (executedAfter.first as FhirPathQuantity)
-                    .add(executedBefore.first)
+                ((executedAfter.first as ValidatedQuantity) +
+                        executedBefore.first)
                     .toString()
               ];
             }
@@ -434,17 +432,17 @@ class PlusParser extends OperatorParser {
           {
             if (executedAfter.first is String) {
               return [executedBefore.first + executedAfter.first];
-            } else if (executedAfter.first is FhirPathQuantity) {
-              if (FhirDateTime(executedBefore.first).isValid) {
+            } else if (executedAfter.first is ValidatedQuantity) {
+              if (FhirDateTime.fromString(executedBefore.first).isValid) {
                 return [
-                  (executedAfter.first as FhirPathQuantity)
-                      .add(FhirDateTime(executedBefore.first))
+                  ((executedAfter.first as ValidatedQuantity) +
+                          executedBefore.first)
                       .toString()
                 ];
               } else if (FhirTime(executedBefore.first).isValid) {
                 return [
-                  (executedAfter.first as FhirPathQuantity)
-                      .add(FhirTime(executedBefore.first))
+                  ((executedAfter.first as ValidatedQuantity) +
+                          executedBefore.first)
                       .toString()
                 ];
               }
@@ -527,22 +525,22 @@ class MinusParser extends OperatorParser {
             }
             break;
           }
-        case FhirPathQuantity:
+        case ValidatedQuantity:
           {
-            if (executedAfter.first is FhirPathQuantity) {
+            if (executedAfter.first is ValidatedQuantity) {
               return [
-                (executedBefore.first as FhirPathQuantity) -
-                    (executedAfter.first as FhirPathQuantity)
+                (executedBefore.first as ValidatedQuantity) -
+                    (executedAfter.first as ValidatedQuantity)
               ];
             }
             break;
           }
         case FhirDateTime:
           {
-            if (executedAfter.first is FhirPathQuantity) {
+            if (executedAfter.first is ValidatedQuantity) {
               return [
-                (executedAfter.first as FhirPathQuantity)
-                    .subtract(executedBefore.first)
+                ((executedAfter.first as ValidatedQuantity) -
+                        executedBefore.first)
                     .toString()
               ];
             }
@@ -550,10 +548,10 @@ class MinusParser extends OperatorParser {
           }
         case FhirDate:
           {
-            if (executedAfter.first is FhirPathQuantity) {
+            if (executedAfter.first is ValidatedQuantity) {
               return [
-                (executedAfter.first as FhirPathQuantity)
-                    .subtract(executedBefore.first)
+                ((executedAfter.first as ValidatedQuantity) -
+                        executedBefore.first)
                     .toString()
               ];
             }
@@ -561,10 +559,10 @@ class MinusParser extends OperatorParser {
           }
         case FhirTime:
           {
-            if (executedAfter.first is FhirPathQuantity) {
+            if (executedAfter.first is ValidatedQuantity) {
               return [
-                (executedAfter.first as FhirPathQuantity)
-                    .subtract(executedBefore.first)
+                ((executedAfter.first as ValidatedQuantity) -
+                        executedBefore.first)
                     .toString()
               ];
             }
@@ -572,17 +570,17 @@ class MinusParser extends OperatorParser {
           }
         case String:
           {
-            if (executedAfter.first is FhirPathQuantity) {
-              if (FhirDateTime(executedBefore.first).isValid) {
+            if (executedAfter.first is ValidatedQuantity) {
+              if (FhirDateTime.fromString(executedBefore.first).isValid) {
                 return [
-                  (executedAfter.first as FhirPathQuantity)
-                      .subtract(FhirDateTime(executedBefore.first))
+                  ((executedAfter.first as ValidatedQuantity) -
+                          executedBefore.first)
                       .toString()
                 ];
               } else if (FhirTime(executedBefore.first).isValid) {
                 return [
-                  (executedAfter.first as FhirPathQuantity)
-                      .subtract(FhirTime(executedBefore.first))
+                  ((executedAfter.first as ValidatedQuantity) -
+                          executedBefore.first)
                       .toString()
                 ];
               }

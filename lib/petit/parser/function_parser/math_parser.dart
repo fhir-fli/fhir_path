@@ -4,6 +4,8 @@
 import 'dart:math';
 
 // Project imports:
+import 'package:ucum/ucum.dart';
+
 import '../../petit_fhir_path.dart';
 
 class AbsParser extends FhirPathParser {
@@ -20,10 +22,8 @@ class AbsParser extends FhirPathParser {
               ? (results.first as num).abs().isNaN
                   ? []
                   : [(results.first as num).abs()]
-              : results.first is FhirPathQuantity
-                  ? (results.first as FhirPathQuantity).abs().isNaN
-                      ? []
-                      : [(results.first as FhirPathQuantity).abs()]
+              : results.first is ValidatedQuantity
+                  ? [(results.first as ValidatedQuantity).abs()]
                   : throw _wrongTypes('.abs()', results, 'none');
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -172,9 +172,12 @@ class LnParser extends FhirPathParser {
   String prettyPrint([int indent = 2]) => '.ln()';
 }
 
-class LogParser extends ValueParser<ParserList> {
-  LogParser();
-  late ParserList value;
+class LogParser extends FunctionParser {
+  LogParser(super.value);
+
+  LogParser.empty() : super(ParserList.empty());
+
+  LogParser copyWith(ParserList value) => LogParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -216,9 +219,12 @@ class LogParser extends ValueParser<ParserList> {
       '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
-class PowerParser extends ValueParser<ParserList> {
-  PowerParser();
-  late ParserList value;
+class PowerParser extends FunctionParser {
+  PowerParser(super.value);
+
+  PowerParser.empty() : super(ParserList.empty());
+
+  PowerParser copyWith(ParserList value) => PowerParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -264,9 +270,12 @@ class PowerParser extends ValueParser<ParserList> {
       '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
-class RoundParser extends ValueParser<ParserList> {
-  RoundParser();
-  late ParserList value;
+class RoundParser extends FunctionParser {
+  RoundParser(super.value);
+
+  RoundParser.empty() : super(ParserList.empty());
+
+  RoundParser copyWith(ParserList value) => RoundParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -347,9 +356,12 @@ class SqrtParser extends FhirPathParser {
   String prettyPrint([int indent = 2]) => '.sqrt()';
 }
 
-class TruncateParser extends ValueParser {
-  TruncateParser();
-  dynamic value;
+class TruncateParser extends FunctionParser {
+  TruncateParser(super.value);
+
+  TruncateParser.empty() : super(ParserList.empty());
+
+  TruncateParser copyWith(ParserList value) => TruncateParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -371,7 +383,7 @@ class TruncateParser extends ValueParser {
   /// that you use [prettyPrint] instead
   @override
   String verbosePrint(int indent) =>
-      '${"  " * indent}TruncateParser\n${value?.verbosePrint(indent + 1)}';
+      '${"  " * indent}TruncateParser\n${value.verbosePrint(indent + 1)}';
 
   /// Uses a rough approximation of reverse polish notation to render the
   /// parsed value of a FHIRPath in a more human readable way than
@@ -379,12 +391,8 @@ class TruncateParser extends ValueParser {
   /// and nested according to this package
   @override
   String prettyPrint([int indent = 2]) {
-    if (value == null) {
-      return '.truncate()';
-    } else {
-      return '.truncate(\n${value?.prettyPrint(indent + 1)}\n'
-          '${indent <= 0 ? "" : "  " * (indent - 1)})';
-    }
+    return '.truncate(\n${value.prettyPrint(indent + 1)}\n'
+        '${indent <= 0 ? "" : "  " * (indent - 1)})';
   }
 }
 

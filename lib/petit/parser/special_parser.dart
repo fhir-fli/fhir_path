@@ -7,9 +7,7 @@ import 'package:collection/collection.dart';
 import '../petit_fhir_path.dart';
 
 class BracketsIndexParser extends ValueParser<int> {
-  BracketsIndexParser(String thisValue)
-      : value = int.parse(thisValue.substring(1, thisValue.length - 1));
-  int value;
+  BracketsIndexParser(super.value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -141,7 +139,7 @@ class ThisParser extends FhirPathParser {
   String prettyPrint([int indent = 2]) => 'this';
 }
 
-class TotalParser extends ValueParser<String> {
+class TotalParser extends FhirPathParser {
   TotalParser();
 
   /// The iterable, nested function that evaluates the entire FHIRPath
@@ -181,9 +179,12 @@ class TotalParser extends ValueParser<String> {
 ///   value.aggregate(iif($total.empty(), $this, iif($this < $total, $this, $total)))
 /// and average would be expressed as:
 ///   value.aggregate($total + $this, 0) / value.count()
-class AggregateParser extends ValueParser<ParserList> {
-  AggregateParser();
-  late ParserList value;
+class AggregateParser extends FunctionParser {
+  AggregateParser(super.value);
+
+  AggregateParser.empty() : super(ParserList.empty());
+
+  AggregateParser copyWith(ParserList value) => AggregateParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

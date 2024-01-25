@@ -7,13 +7,17 @@ import 'package:fhir/primitive_types/primitive_types.dart';
 import 'package:fhir/r4.dart' as r4;
 import 'package:fhir/r5.dart' as r5;
 import 'package:fhir/stu3.dart' as stu3;
+import 'package:ucum/ucum.dart';
 
 // Project imports:
 import '../../petit_fhir_path.dart';
 
 class FpWhereParser extends FunctionParser {
-  FpWhereParser();
-  late ParserList value;
+  FpWhereParser(super.value);
+
+  FpWhereParser.empty() : super(ParserList.empty());
+
+  FpWhereParser copyWith(ParserList value) => FpWhereParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -60,9 +64,12 @@ class FpWhereParser extends FunctionParser {
       '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
-class SelectParser extends ValueParser<ParserList> {
-  SelectParser();
-  late ParserList value;
+class SelectParser extends FunctionParser {
+  SelectParser(super.value);
+
+  SelectParser.empty() : super(ParserList.empty());
+
+  SelectParser copyWith(ParserList value) => SelectParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -99,9 +106,12 @@ class SelectParser extends ValueParser<ParserList> {
       '.select(\n${"  " * indent}${value.prettyPrint(indent + 1)}\n)';
 }
 
-class RepeatParser extends ValueParser<ParserList> {
-  RepeatParser();
-  late ParserList value;
+class RepeatParser extends FunctionParser {
+  RepeatParser(super.value);
+
+  RepeatParser.empty() : super(ParserList.empty());
+
+  RepeatParser copyWith(ParserList value) => RepeatParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -151,9 +161,12 @@ class RepeatParser extends ValueParser<ParserList> {
       '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
-class OfTypeParser extends ValueParser<ParserList> {
-  OfTypeParser();
-  late ParserList value;
+class OfTypeParser extends FunctionParser {
+  OfTypeParser(super.value);
+
+  OfTypeParser.empty() : super(ParserList.empty());
+
+  OfTypeParser copyWith(ParserList value) => OfTypeParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -205,7 +218,7 @@ class OfTypeParser extends ValueParser<ParserList> {
           ((executedValue.first as IdentifierParser).value == 'time' &&
               e is FhirTime) ||
           ((executedValue.first as IdentifierParser).value == 'quantity' &&
-              e is FhirPathQuantity)) {
+              e is ValidatedQuantity)) {
         finalResults.add(e);
       }
     });
@@ -233,12 +246,14 @@ class OfTypeParser extends ValueParser<ParserList> {
       '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
-class ExtensionParser extends ValueParser<ParserList> {
+class ExtensionParser extends FunctionParser {
+  ExtensionParser(super.value);
+
+  ExtensionParser.empty() : super(ParserList.empty());
+
+  ExtensionParser copyWith(ParserList value) => ExtensionParser(value);
+
   static const extensionKey = '__extension';
-
-  ExtensionParser();
-
-  @override
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -255,15 +270,14 @@ class ExtensionParser extends ValueParser<ParserList> {
 
     // .extension(exturl) is short-hand for .extension.where(url='exturl')
     final urlEquals = EqualsParser();
-    urlEquals.before = ParserList([IdentifierParser('url')]);
+    urlEquals.before = ParserList([IdentifierParser('', 'url')]);
     urlEquals.after = ParserList([StringParser("'$extensionUrl'")]);
     final extensionUrlPredicate = ParserList([
       urlEquals,
     ]);
-    final whereParser = FpWhereParser();
-    whereParser.value = extensionUrlPredicate;
+    final whereParser = FpWhereParser(extensionUrlPredicate);
     final extensionParsers =
-        ParserList([IdentifierParser('extension'), whereParser]);
+        ParserList([IdentifierParser('', 'extension'), whereParser]);
 
     return extensionParsers.execute(results.toList(), passed);
   }

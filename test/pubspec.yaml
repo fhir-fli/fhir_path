@@ -5,13 +5,15 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
-  fhir: ^0.11.3
-  # fhir:
-  #   path: ../../fhir
+  # fhir: ^0.11.4
+  fhir:
+    path: ../../fhir
   fhir_path:
     path: ../../fhir_path
   flutter:
     sdk: flutter
+  ucum:
+    path: ../../../ucum
 
 dev_dependencies:
   flutter_lints: ^2.0.2

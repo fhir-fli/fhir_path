@@ -24,15 +24,16 @@ abstract class FhirPathParser {
 
 /// ValueParser: basic parser that holds a value
 abstract class ValueParser<T> extends FhirPathParser {
-  ValueParser();
-  late T value;
+  ValueParser(this.value);
+  final T value;
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed);
+
   @override
-  String toString();
+  String toString() => '$runtimeType($value)';
 }
 
 /// OperatorParser: operators
@@ -57,9 +58,10 @@ abstract class OperatorParser extends FhirPathParser {
 }
 
 /// ParserList: anything that is a List of FhirPathParsers
-class ParserList extends FhirPathParser {
-  ParserList(this.value);
-  List<FhirPathParser> value;
+class ParserList extends ValueParser<List<FhirPathParser>> {
+  ParserList(super.value);
+
+  ParserList.empty() : super([]);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

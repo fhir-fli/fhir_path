@@ -6,6 +6,7 @@ import 'package:fhir/primitive_types/primitive_types.dart';
 import 'package:fhir/r4.dart' as r4;
 import 'package:fhir/r5.dart' as r5;
 import 'package:fhir/stu3.dart' as stu3;
+import 'package:ucum/ucum.dart';
 
 // Project imports:
 import '../../petit_fhir_path.dart';
@@ -83,7 +84,10 @@ class IsParser extends OperatorParser {
                                     : executedAfter.first == 'Time'
                                         ? [executedBefore.first is FhirTime]
                                         : executedAfter.first == 'Quantity'
-                                            ? [isQuantity(executedBefore.first)]
+                                            ? [
+                                                isValidatedQuantity(
+                                                    executedBefore.first)
+                                              ]
                                             : [false];
   }
 
@@ -169,13 +173,13 @@ class AsParser extends OperatorParser {
         (identifierValue.toLowerCase() == 'time' &&
             executedBefore.first is FhirTime) ||
         (identifierValue == 'quantity' &&
-            executedBefore.first is FhirPathQuantity)) {
+            executedBefore.first is ValidatedQuantity)) {
       return executedBefore;
     }
 
     if (FhirDatatypes.contains(identifierValue)) {
       final polymorphicString = 'value$identifierValue';
-      final polymorphicIdentifier = IdentifierParser(polymorphicString);
+      final polymorphicIdentifier = IdentifierParser('', polymorphicString);
       final polymorphicParserList = ParserList([polymorphicIdentifier]);
       return polymorphicParserList.execute(results.toList(), passed);
     }

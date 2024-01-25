@@ -3167,7 +3167,7 @@ void testFhirPathTestSuite() {
     //       [false]);
     // });
 
-    // TODO(Dokotela): testEquality28 - comparing Quantity object with FhirPathQuantity
+    // TODO(Dokotela): testEquality28 - comparing Quantity object with ValidatedQuantity
     // test("testEquality28", () {
     //   expect(
     //       walkFhirPath(
@@ -3509,7 +3509,7 @@ void testFhirPathTestSuite() {
           [true]);
     });
 
-    // TODO(Dokotela): Compare Quantity objects and FhirPathQuantity
+    // TODO(Dokotela): Compare Quantity objects and ValidatedQuantity
     // test("testEquivalent22", () {
     //   expect(
     //       walkFhirPath(
@@ -3674,7 +3674,7 @@ void testFhirPathTestSuite() {
     //       [false]);
     // });
 
-    // TODO(Dokotela): Compare Quantity objects to FhirPathQuantity
+    // TODO(Dokotela): Compare Quantity objects to ValidatedQuantity
     // test("testNotEquivalent22", () {
     //   expect(
     //       walkFhirPath(
@@ -3826,7 +3826,7 @@ void testFhirPathTestSuite() {
           [false]);
     });
 
-    // TODO(Dokotela): Compare Quantity objects with FhirPathQuantity
+    // TODO(Dokotela): Compare Quantity objects with ValidatedQuantity
     // test("testLessThan22", () {
     //   expect(
     //       walkFhirPath(
@@ -4026,7 +4026,7 @@ void testFhirPathTestSuite() {
           [false]);
     });
 
-    // TODO(Dokotela): compare Quantity objects with FhirPathQuantity
+    // TODO(Dokotela): compare Quantity objects with ValidatedQuantity
     // test("testLessOrEqual22", () {
     //   expect(
     //       walkFhirPath(
@@ -4227,7 +4227,7 @@ void testFhirPathTestSuite() {
           [true]);
     });
 
-    // TODO(Dokotela): compare Quantity objects with FhirPathQuantity
+    // TODO(Dokotela): compare Quantity objects with ValidatedQuantity
     // test("testGreatorOrEqual22", () {
     //   expect(
     //       walkFhirPath(
@@ -4419,7 +4419,7 @@ void testFhirPathTestSuite() {
           [true]);
     });
 
-    // Compare Quantity objects to FhirPathQuantity
+    // Compare Quantity objects to ValidatedQuantity
     // test("testGreaterThan22", () {
     //   expect(
     //       walkFhirPath(

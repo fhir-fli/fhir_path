@@ -138,7 +138,8 @@ final Parser<SqrtParser> sqrtLexer =
 
 /// identifies truncates
 final Parser<TruncateParser> truncateLexer =
-    (string('truncate()') | string('.truncate()')).map((_) => TruncateParser());
+    (string('truncate()') | string('.truncate()'))
+        .map((_) => TruncateParser.empty());
 
 /// identifies uppers
 final Parser<UpperParser> upperLexer =

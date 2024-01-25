@@ -43,7 +43,7 @@ class NowParser extends FhirPathParser {
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) =>
-      [FhirDateTime(DateTime.now())];
+      [FhirDateTime.fromDateTime(DateTime.now())];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -99,7 +99,7 @@ class TodayParser extends FhirPathParser {
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) =>
-      [FhirDate(DateTime.now().toIso8601String().split('T').first)];
+      [FhirDate.fromString(DateTime.now().toIso8601String().split('T').first)];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -119,9 +119,12 @@ class TodayParser extends FhirPathParser {
   String prettyPrint([int indent = 2]) => '.today()';
 }
 
-class TraceParser extends ValueParser {
-  TraceParser();
-  dynamic value;
+class TraceParser extends FunctionParser {
+  TraceParser(super.value);
+
+  TraceParser.empty() : super(ParserList.empty());
+
+  TraceParser copyWith(ParserList value) => TraceParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

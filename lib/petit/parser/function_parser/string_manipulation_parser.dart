@@ -3,9 +3,12 @@
 // Project imports:
 import '../../petit_fhir_path.dart';
 
-class IndexOfParser extends ValueParser<ParserList> {
-  IndexOfParser();
-  late ParserList value;
+class IndexOfParser extends FunctionParser {
+  IndexOfParser(super.value);
+
+  IndexOfParser.empty() : super(ParserList.empty());
+
+  IndexOfParser copyWith(ParserList value) => IndexOfParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -49,9 +52,12 @@ class IndexOfParser extends ValueParser<ParserList> {
       '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
-class SubstringParser extends ValueParser<ParserList> {
-  SubstringParser();
-  late ParserList value;
+class SubstringParser extends FunctionParser {
+  SubstringParser(super.value);
+
+  SubstringParser.empty() : super(ParserList.empty());
+
+  SubstringParser copyWith(ParserList value) => SubstringParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -119,9 +125,12 @@ class SubstringParser extends ValueParser<ParserList> {
       '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
-class StartsWithParser extends ValueParser<ParserList> {
-  StartsWithParser();
-  late ParserList value;
+class StartsWithParser extends FunctionParser {
+  StartsWithParser(super.value);
+
+  StartsWithParser.empty() : super(ParserList.empty());
+
+  StartsWithParser copyWith(ParserList value) => StartsWithParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -164,9 +173,12 @@ class StartsWithParser extends ValueParser<ParserList> {
       '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
-class EndsWithParser extends ValueParser<ParserList> {
-  EndsWithParser();
-  late ParserList value;
+class EndsWithParser extends FunctionParser {
+  EndsWithParser(super.value);
+
+  EndsWithParser.empty() : super(ParserList.empty());
+
+  EndsWithParser copyWith(ParserList value) => EndsWithParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -210,9 +222,13 @@ class EndsWithParser extends ValueParser<ParserList> {
 }
 
 // http://hl7.org/fhirpath/#containssubstring-string-boolean
-class ContainsFunctionParser extends ValueParser<ParserList> {
-  ContainsFunctionParser();
-  late ParserList value;
+class ContainsFunctionParser extends FunctionParser {
+  ContainsFunctionParser(super.value);
+
+  ContainsFunctionParser.empty() : super(ParserList.empty());
+
+  ContainsFunctionParser copyWith(ParserList value) =>
+      ContainsFunctionParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -308,9 +324,12 @@ class LowerParser extends FhirPathParser {
   String prettyPrint([int indent = 2]) => '.lower()';
 }
 
-class ReplaceParser extends ValueParser<ParserList> {
-  ReplaceParser();
-  late ParserList value;
+class ReplaceParser extends FunctionParser {
+  ReplaceParser(super.value);
+
+  ReplaceParser.empty() : super(ParserList.empty());
+
+  ReplaceParser copyWith(ParserList value) => ReplaceParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -351,9 +370,12 @@ class ReplaceParser extends ValueParser<ParserList> {
           '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
-class FpMatchesParser extends ValueParser<ParserList> {
-  FpMatchesParser();
-  late ParserList value;
+class FpMatchesParser extends FunctionParser {
+  FpMatchesParser(super.value);
+
+  FpMatchesParser.empty() : super(ParserList.empty());
+
+  FpMatchesParser copyWith(ParserList value) => FpMatchesParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -393,9 +415,13 @@ class FpMatchesParser extends ValueParser<ParserList> {
       '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
-class ReplaceMatchesParser extends ValueParser<ParserList> {
-  ReplaceMatchesParser();
-  late ParserList value;
+class ReplaceMatchesParser extends FunctionParser {
+  ReplaceMatchesParser(super.value);
+
+  ReplaceMatchesParser.empty() : super(ParserList.empty());
+
+  ReplaceMatchesParser copyWith(ParserList value) =>
+      ReplaceMatchesParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

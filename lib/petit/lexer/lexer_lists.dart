@@ -76,19 +76,19 @@ final functionLexer = unionFunctionLexer |
     deprecatedLexer;
 
 /// Lexer for all types of white space
-final wsLexer = whiteSpaceLexer | lineCommentLexer | multiLineCommentLexer;
+final wsLexer = WS | COMMENT | LINE_COMMENT;
 
 /// Lexers identifying special formatting of certain types of data
-final literalLexer = stringLexer |
+final literalLexer = quantityLiteral |
+    STRING |
     envVariableLexer |
-    delimitedIdentifierLexer |
-    booleanLexer |
-    quantityLexer |
-    identifierLexer |
-    numberLexer |
-    dateTimeLexer |
-    dateLexer |
-    timeLexer;
+    DELIMITEDIDENTIFIER |
+    booleanLiteral |
+    IDENTIFIER |
+    NUMBER |
+    DATETIME |
+    DATE |
+    TIME;
 
 /// All lexers for functions that don't accept arguments
 final simpleLexer = toBooleanLexer |

@@ -2,6 +2,7 @@
 
 // Package imports:
 import 'package:fhir/primitive_types/primitive_types.dart';
+import 'package:ucum/ucum.dart';
 
 // Project imports:
 import '../../petit_fhir_path.dart';
@@ -238,26 +239,26 @@ List executeComparisons(List results, ParserList before, ParserList after,
             ? (lhs as FhirDate).isValid && rhs.isValid
                 ? makeComparison(comparator, lhs, rhs)
                 : throw invalidException(lhs, rhs)
-            : rhs is String && FhirDateTime(rhs).isValid
+            : rhs is String && FhirDateTime.fromString(rhs).isValid
                 ? makeComparison(comparator, lhs, rhs)
                 : throw cannotCompareException(lhs, rhs);
       case DateTime:
         return (rhs is FhirDateTimeBase && rhs.isValid)
-            ? makeComparison(comparator, FhirDateTime(lhs), rhs)
+            ? makeComparison(comparator, FhirDateTime.fromDateTime(lhs), rhs)
             : rhs is DateTime
-                ? makeComparison(
-                    comparator, FhirDateTime(lhs), FhirDateTime(rhs))
-                : rhs is String && FhirDateTime(rhs).isValid
-                    ? makeComparison(
-                        comparator, FhirDateTime(lhs), FhirDateTime(rhs))
+                ? makeComparison(comparator, FhirDateTime.fromDateTime(lhs),
+                    FhirDateTime.fromDateTime(rhs))
+                : rhs is String && FhirDateTime.fromString(rhs).isValid
+                    ? makeComparison(comparator, FhirDateTime.fromDateTime(lhs),
+                        FhirDateTime.fromString(rhs))
                     : throw cannotCompareException(lhs, rhs);
       case FhirDateTime:
         return rhs is FhirDateTimeBase
             ? (lhs as FhirDateTime).isValid && rhs.isValid
                 ? makeComparison(comparator, lhs, rhs)
                 : throw invalidException(lhs, rhs)
-            : rhs is String && FhirDateTime(rhs).isValid
-                ? makeComparison(comparator, lhs, FhirDateTime(rhs))
+            : rhs is String && FhirDateTime.fromString(rhs).isValid
+                ? makeComparison(comparator, lhs, FhirDateTime.fromString(rhs))
                 : throw cannotCompareException(lhs, rhs);
       case FhirTime:
         return rhs is FhirTime
@@ -267,12 +268,12 @@ List executeComparisons(List results, ParserList before, ParserList after,
             : rhs is String && FhirTime(rhs).isValid
                 ? makeComparison(comparator, lhs, FhirTime(rhs))
                 : throw cannotCompareException(lhs, rhs);
-      case FhirPathQuantity:
-        return rhs is FhirPathQuantity
+      case ValidatedQuantity:
+        return rhs is ValidatedQuantity
             ? makeComparison(comparator, lhs, rhs)
             : rhs is String
                 ? makeComparison(
-                    comparator, lhs, FhirPathQuantity.fromString(rhs))
+                    comparator, lhs, ValidatedQuantity.fromString(rhs))
                 : throw cannotCompareException(lhs, rhs);
 
       /// Default should be when lhs is a String
@@ -292,9 +293,17 @@ List executeComparisons(List results, ParserList before, ParserList after,
                         : !stringGt(lhs, rhs);
           } else if (rhs is FhirTime && FhirTime(lhs).isValid) {
             return makeComparison(comparator, FhirTime(lhs), rhs);
-          } else if ((rhs is FhirDate || rhs is FhirDateTime) &&
-              FhirDateTime(lhs).isValid) {
-            return makeComparison(comparator, FhirDateTime(lhs), rhs);
+          } else if ((rhs is FhirDate || rhs is FhirDateTime)) {
+            if (lhs is String && FhirDateTime.fromString(lhs).isValid) {
+              return makeComparison(
+                  comparator, FhirDateTime.fromString(lhs), rhs);
+            } else if (lhs is DateTime &&
+                FhirDateTime.fromDateTime(lhs).isValid) {
+              return makeComparison(
+                  comparator, FhirDateTime.fromDateTime(lhs), rhs);
+            } else if (lhs is FhirDateTimeBase && lhs.isValid) {
+              return makeComparison(comparator, lhs, rhs);
+            }
           }
           throw FhirPathEvaluationException(
             'Can only compare Strings to other Strings',
@@ -360,7 +369,7 @@ const _allowedTypes = [
   FhirDate,
   FhirDateTime,
   FhirTime,
-  FhirPathQuantity,
+  ValidatedQuantity,
 ];
 
 Exception _wrongArgLength(String functionName, List value) =>

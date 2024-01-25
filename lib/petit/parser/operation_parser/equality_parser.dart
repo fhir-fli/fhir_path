@@ -2,6 +2,7 @@
 
 // Package imports:
 import 'package:fhir/primitive_types/primitive_types.dart';
+import 'package:ucum/ucum.dart';
 
 // Project imports:
 import '../../petit_fhir_path.dart';
@@ -33,8 +34,8 @@ class EqualsParser extends OperatorParser {
             rhs[i] is FhirDate) {
           /// As long as one is, we convert them both to strings then back
           /// to DateTimes
-          final lhsDateTime = FhirDateTime(lhs[i].toString());
-          final rhsDateTime = FhirDateTime(rhs[i].toString());
+          final lhsDateTime = FhirDateTime.fromString(lhs[i].toString());
+          final rhsDateTime = FhirDateTime.fromString(rhs[i].toString());
 
           /// As long as they are both valid we try and compare them
           if (lhsDateTime.isValid && rhsDateTime.isValid) {
@@ -70,8 +71,8 @@ class EqualsParser extends OperatorParser {
 
         /// If they aren't dateTimes we can just compare them as usual
         else {
-          if (lhs[i] is FhirPathQuantity || rhs[i] is FhirPathQuantity) {
-            if (lhs[i] is FhirPathQuantity) {
+          if (lhs[i] is ValidatedQuantity || rhs[i] is ValidatedQuantity) {
+            if (lhs[i] is ValidatedQuantity) {
               return <dynamic>[lhs[i] == rhs[i]];
             } else {
               return <dynamic>[rhs[i] == lhs[i]];
@@ -142,8 +143,10 @@ class EquivalentParser extends OperatorParser {
                 rhsElement is FhirDate) {
               /// As long as one is, we convert them both to strings then back
               /// to DateTimes
-              final lhsDateTime = FhirDateTime(lhsElement.toString());
-              final rhsDateTime = FhirDateTime(rhsElement.toString());
+              final lhsDateTime =
+                  FhirDateTime.fromString(lhsElement.toString());
+              final rhsDateTime =
+                  FhirDateTime.fromString(rhsElement.toString());
 
               /// As long as they are both valid we try and compare them
               if (lhsDateTime.isValid && rhsDateTime.isValid) {
@@ -151,12 +154,12 @@ class EquivalentParser extends OperatorParser {
               } else {
                 return false;
               }
-            } else if (lhsElement is FhirPathQuantity ||
-                rhsElement is FhirPathQuantity) {
-              if (lhsElement is FhirPathQuantity) {
+            } else if (lhsElement is ValidatedQuantity ||
+                rhsElement is ValidatedQuantity) {
+              if (lhsElement is ValidatedQuantity) {
                 return lhsElement.equivalent(rhsElement as Object);
               } else {
-                return (rhsElement as FhirPathQuantity)
+                return (rhsElement as ValidatedQuantity)
                     .equivalent(lhsElement as Object);
               }
             } else if (lhsElement is num || rhsElement is num) {
@@ -228,7 +231,10 @@ class NotEqualsParser extends OperatorParser {
     final equalsParser = EqualsParser();
     equalsParser.before = this.before;
     equalsParser.after = this.after;
+    print(before);
+    print(after);
     final equality = equalsParser.execute(results, passed);
+    print(equality);
     return FpNotParser().execute(equality, passed);
   }
 

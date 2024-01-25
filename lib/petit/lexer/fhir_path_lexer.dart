@@ -26,8 +26,10 @@ Parser<FhirPathParser> lexer() {
 
   /// Calls the operatorValues function to check if any arguments need
   /// to be passed to the current Parser
-  lexerFunctions.set((functionLexer & tokenizer.star() & char(')'))
-      .map((val) => val[0]..value = operatorValues(val[1] as List)));
+  lexerFunctions.set((functionLexer & tokenizer.star() & char(')')).map((val) {
+    print('VAL: $val');
+    return val[0].copyWith(operatorValues(val[1] as List));
+  }));
 
   /// Calls the operatorValues function to check if any arguments need
   /// to be passed to the current ParenthesesParser

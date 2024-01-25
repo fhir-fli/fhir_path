@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
 // Package imports:
-import 'package:fhir/primitive_types/primitive_types.dart';
+import 'package:ucum/ucum.dart';
 
 // Project imports:
 import '../petit_fhir_path.dart';
@@ -11,7 +11,7 @@ class SingletonEvaluation {
   /// Returns a singleton, based on the input.
   ///
   /// Throws if input is not empty, or has single entry.
-  /// Creates FhirPathQuantity from map inputs.
+  /// Creates ValidatedQuantity from map inputs.
   ///
   /// Anything else is merely returned unmodified.
   static List<dynamic> toSingleton(
@@ -36,8 +36,10 @@ class SingletonEvaluation {
     if (item is Map) {
       if (item['value'] != null && item['code'] != null) {
         return [
-          FhirPathQuantity(FhirDecimal(item['value']).value ?? double.nan,
-              item['code'] as String)
+          ValidatedQuantity(
+              value: Decimal.fromString(
+                  ((item['value']).value ?? double.nan).toString()),
+              code: item['code'] as String)
         ];
       }
     }

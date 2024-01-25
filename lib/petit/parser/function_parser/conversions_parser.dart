@@ -2,6 +2,7 @@
 
 // Package imports:
 import 'package:fhir/primitive_types/primitive_types.dart';
+import 'package:ucum/ucum.dart';
 
 // Project imports:
 import '../../petit_fhir_path.dart';
@@ -16,8 +17,11 @@ import '../../petit_fhir_path.dart';
 /// If criterion is false or an empty collection, the function returns otherwise-result, unless the optional otherwise-result is not given, in which case the function returns an empty collection.
 /// Note that short-circuit behavior is expected in this function. In other words, true-result should only be evaluated if the criterion evaluates to true, and otherwise-result should only be evaluated otherwise. For implementations, this means delaying evaluation of the arguments.
 class IifParser extends FunctionParser {
-  IifParser();
-  late ParserList value;
+  IifParser(super.value);
+
+  IifParser.empty() : super(ParserList.empty());
+
+  IifParser copyWith(ParserList value) => IifParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -301,8 +305,8 @@ class ToDateParser extends FhirPathParser {
       ? []
       : results.length > 1
           ? throw _conversionException('.toDate()', results)
-          : FhirDate(results.first.toString()).isValid
-              ? [FhirDate(results.first.toString())]
+          : FhirDate.fromString(results.first.toString()).isValid
+              ? [FhirDate.fromString(results.first.toString())]
               : [];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -334,7 +338,7 @@ class ConvertsToDateParser extends FhirPathParser {
       ? []
       : results.length > 1
           ? throw _conversionException('.convertsToDate()', results)
-          : [FhirDate(results.first.toString()).isValid];
+          : [FhirDate.fromString(results.first.toString()).isValid];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -365,8 +369,8 @@ class ToDateTimeParser extends FhirPathParser {
       ? []
       : results.length > 1
           ? throw _conversionException('.toDateTime()', results)
-          : FhirDateTime(results.first.toString()).isValid
-              ? [FhirDateTime(results.first.toString())]
+          : FhirDateTime.fromString(results.first.toString()).isValid
+              ? [FhirDateTime.fromString(results.first.toString())]
               : [];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -398,8 +402,8 @@ class ConvertsToDateTimeParser extends FhirPathParser {
       ? []
       : results.length > 1
           ? throw _conversionException('.convertsToDateTime()', results)
-          : FhirDateTime(results.first.toString()).isValid
-              ? [FhirDateTime(results.first.toString()).isValid]
+          : FhirDateTime.fromString(results.first.toString()).isValid
+              ? [FhirDateTime.fromString(results.first.toString()).isValid]
               : [];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -635,11 +639,13 @@ class ConvertsToTimeParser extends FhirPathParser {
   String prettyPrint([int indent = 2]) => '.convertsToTime()';
 }
 
-/// Converts input to a [Quantity] if possible
-class ToQuantityParser extends FhirPathParser {
-  dynamic value;
+/// Converts input to a [ValidatedQuantity] if possible
+class ToQuantityParser extends FunctionParser {
+  ToQuantityParser(super.value);
 
-  ToQuantityParser();
+  ToQuantityParser.empty() : super(ParserList.empty());
+
+  ToQuantityParser copyWith(ParserList value) => ToQuantityParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -648,12 +654,16 @@ class ToQuantityParser extends FhirPathParser {
       ? []
       : results.length > 1
           ? throw _conversionException('.toQuantity()', results)
-          : results.first is FhirPathQuantity
+          : results.first is ValidatedQuantity
               ? [results.first]
               : results.first is num
-                  ? [FhirPathQuantity(results.first as num, '1')]
+                  ? [
+                      ValidatedQuantity(
+                          value: Decimal.fromString(results.first.toString()),
+                          code: '1')
+                    ]
                   : results.first is String
-                      ? [FhirPathQuantity.fromString(results.first as String)]
+                      ? [ValidatedQuantity.fromString(results.first as String)]
                       : [];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -674,11 +684,14 @@ class ToQuantityParser extends FhirPathParser {
   String prettyPrint([int indent = 2]) => '.toQuantity()';
 }
 
-/// Checks if input can be converted to a [Quantity]
-class ConvertsToQuantityParser extends FhirPathParser {
-  dynamic value;
+/// Checks if input can be converted to a [ValidatedQuantity]
+class ConvertsToQuantityParser extends FunctionParser {
+  ConvertsToQuantityParser(super.value);
 
-  ConvertsToQuantityParser();
+  ConvertsToQuantityParser.empty() : super(ParserList.empty());
+
+  ConvertsToQuantityParser copyWith(ParserList value) =>
+      ConvertsToQuantityParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -694,16 +707,17 @@ class ConvertsToQuantityParser extends FhirPathParser {
 
       /// otherwise if the first item is a Quantity already, a num or a
       /// bool, this is considered true
-      else if (results.first is FhirPathQuantity ||
+      else if ((results.first is ValidatedQuantity &&
+              (results.first as ValidatedQuantity).isValid()) ||
           results.first is num ||
           results.first is bool) {
         return [true];
       }
 
       /// If it's a string & convertible to a Quantity using the Regex
+      /// TODO(Dokotela): this is kind of the cheap way out, for now
       else if (results.first is String &&
-          FhirPathQuantity.fhirPathQuantityRegex
-              .hasMatch((results.first as String).replaceAll(r"\'", "'"))) {
+          ValidatedQuantity.fromString(results.first).isValid()) {
         return [true];
       }
 
@@ -743,7 +757,7 @@ bool _isAllTypes(List results) =>
     results.first is! FhirDateTime &&
     results.first is! FhirTime &&
     results.first is! DateTime &&
-    results.first is! FhirPathQuantity;
+    results.first is! ValidatedQuantity;
 
 Exception _conversionException(String function, List results) =>
     FhirPathEvaluationException(

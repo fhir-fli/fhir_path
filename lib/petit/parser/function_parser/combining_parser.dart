@@ -1,6 +1,5 @@
 // ignore_for_file: annotate_overrides, overridden_fields
 
-// Project imports:
 import '../../petit_fhir_path.dart';
 
 /// Merge the two collections into a single collection,
@@ -8,8 +7,11 @@ import '../../petit_fhir_path.dart';
 /// determine equality). There is no expectation of order in
 /// the resulting collection.
 class UnionFunctionParser extends FunctionParser {
-  UnionFunctionParser();
-  late ParserList value;
+  UnionFunctionParser(super.value);
+
+  UnionFunctionParser.empty() : super(ParserList.empty());
+
+  UnionFunctionParser copyWith(ParserList value) => UnionFunctionParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
@@ -50,8 +52,11 @@ class UnionFunctionParser extends FunctionParser {
 /// with a non-empty collection will return the non-empty collection.
 /// There is no expectation of order in the resulting collection.
 class CombineParser extends FunctionParser {
-  CombineParser();
-  late ParserList value;
+  CombineParser(super.value);
+
+  CombineParser.empty() : super(ParserList.empty());
+
+  CombineParser copyWith(ParserList value) => CombineParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
