@@ -384,9 +384,12 @@ class SubsetOfParser extends FunctionParser {
       '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
 
-class SupersetOfParser extends FhirPathParser {
-  SupersetOfParser();
-  dynamic value;
+class SupersetOfParser extends FunctionParser {
+  SupersetOfParser(super.value);
+
+  SupersetOfParser.empty() : super(ParserList.empty());
+
+  SupersetOfParser copyWith(ParserList value) => SupersetOfParser(value);
 
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time

@@ -443,7 +443,9 @@ class StringParser extends ValueParser<String> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) => [value];
+  List execute(List results, Map<String, dynamic> passed) {
+    return [value];
+  }
 
   @override
   String verbosePrint(int indent) => "${'  ' * indent}StringParser: '$value'";
@@ -468,7 +470,7 @@ class DateTimeParser extends BaseDateTimeParser<FhirDateTime> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) => [value.toString()];
+  List execute(List results, Map<String, dynamic> passed) => [value];
 
   @override
   String toString() => '$runtimeType: $value';

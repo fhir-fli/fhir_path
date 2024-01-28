@@ -2,6 +2,7 @@
 
 // Package imports:
 import 'package:fhir/primitive_types/primitive_types.dart';
+import 'package:fhir/r4.dart';
 import 'package:ucum/ucum.dart';
 
 // Project imports:
@@ -359,6 +360,7 @@ class PlusParser extends OperatorParser {
   List execute(List results, Map<String, dynamic> passed) {
     final executedBefore = before.execute(results.toList(), passed);
     final executedAfter = after.execute(results.toList(), passed);
+
     if (executedBefore.isEmpty || executedAfter.isEmpty) {
       return [];
     } else if (executedBefore.length != 1 || executedAfter.length != 1) {
@@ -369,7 +371,9 @@ class PlusParser extends OperatorParser {
           'Operand 2: $executedAfter',
           operation: '+',
           collection: results);
-    } else
+    } else {
+      print('${executedBefore.first} - ${executedBefore.first.runtimeType}');
+      print('${executedAfter.first} - ${executedAfter.first.runtimeType}');
       switch (executedBefore.first.runtimeType) {
         case int:
           {
@@ -392,15 +396,25 @@ class PlusParser extends OperatorParser {
                 (executedBefore.first as ValidatedQuantity) +
                     (executedAfter.first as ValidatedQuantity)
               ];
+            } else if (executedAfter.first is FhirDateTimeBase) {
+              if ((executedBefore.first as ValidatedQuantity).isDuration) {
+                return [
+                  executedAfter.first +
+                      extendedDurationFromValidatedQuantity(
+                          executedBefore.first)
+                ];
+              }
             }
             break;
           }
         case FhirDateTime:
           {
-            if (executedAfter.first is ValidatedQuantity) {
+            if (executedAfter.first is ValidatedQuantity &&
+                (executedAfter.first as ValidatedQuantity).isDuration) {
               return [
-                ((executedAfter.first as ValidatedQuantity) +
-                        executedBefore.first)
+                (executedBefore.first +
+                        extendedDurationFromValidatedQuantity(
+                            executedAfter.first as ValidatedQuantity))
                     .toString()
               ];
             }
@@ -408,10 +422,12 @@ class PlusParser extends OperatorParser {
           }
         case FhirDate:
           {
-            if (executedAfter.first is ValidatedQuantity) {
+            if (executedAfter.first is ValidatedQuantity &&
+                (executedAfter.first as ValidatedQuantity).isDuration) {
               return [
-                ((executedAfter.first as ValidatedQuantity) +
-                        executedBefore.first)
+                (executedBefore.first +
+                        extendedDurationFromValidatedQuantity(
+                            executedAfter.first as ValidatedQuantity))
                     .toString()
               ];
             }
@@ -419,10 +435,11 @@ class PlusParser extends OperatorParser {
           }
         case FhirTime:
           {
-            if (executedAfter.first is ValidatedQuantity) {
+            if (executedAfter.first is ValidatedQuantity &&
+                (executedAfter.first as ValidatedQuantity).isDuration) {
               return [
-                ((executedAfter.first as ValidatedQuantity) +
-                        executedBefore.first)
+                (addToFhirTime(executedBefore.first,
+                        (executedAfter.first as ValidatedQuantity)))
                     .toString()
               ];
             }
@@ -432,17 +449,19 @@ class PlusParser extends OperatorParser {
           {
             if (executedAfter.first is String) {
               return [executedBefore.first + executedAfter.first];
-            } else if (executedAfter.first is ValidatedQuantity) {
+            } else if (executedAfter.first is ValidatedQuantity &&
+                (executedAfter.first as ValidatedQuantity).isDuration) {
               if (FhirDateTime.fromString(executedBefore.first).isValid) {
                 return [
-                  ((executedAfter.first as ValidatedQuantity) +
-                          executedBefore.first)
+                  (FhirDateTime.fromString(executedBefore.first) +
+                          extendedDurationFromValidatedQuantity(
+                              executedAfter.first))
                       .toString()
                 ];
               } else if (FhirTime(executedBefore.first).isValid) {
                 return [
-                  ((executedAfter.first as ValidatedQuantity) +
-                          executedBefore.first)
+                  addToFhirTime(FhirTime(executedBefore.first),
+                          executedAfter.first as ValidatedQuantity)
                       .toString()
                 ];
               }
@@ -452,6 +471,7 @@ class PlusParser extends OperatorParser {
         default:
           break;
       }
+    }
     throw FhirPathEvaluationException(
         'The "+" operator only accepts (FHIR) Integers, '
         'Decimals, Quantities, String or (Dart) int, double, num, '
@@ -537,10 +557,12 @@ class MinusParser extends OperatorParser {
           }
         case FhirDateTime:
           {
-            if (executedAfter.first is ValidatedQuantity) {
+            if (executedAfter.first is ValidatedQuantity &&
+                (executedAfter.first as ValidatedQuantity).isDuration) {
               return [
-                ((executedAfter.first as ValidatedQuantity) -
-                        executedBefore.first)
+                (executedBefore.first -
+                        extendedDurationFromValidatedQuantity(
+                            executedAfter.first as ValidatedQuantity))
                     .toString()
               ];
             }
@@ -548,10 +570,12 @@ class MinusParser extends OperatorParser {
           }
         case FhirDate:
           {
-            if (executedAfter.first is ValidatedQuantity) {
+            if (executedAfter.first is ValidatedQuantity &&
+                (executedAfter.first as ValidatedQuantity).isDuration) {
               return [
-                ((executedAfter.first as ValidatedQuantity) -
-                        executedBefore.first)
+                (executedBefore.first -
+                        extendedDurationFromValidatedQuantity(
+                            executedAfter.first as ValidatedQuantity))
                     .toString()
               ];
             }
@@ -559,10 +583,11 @@ class MinusParser extends OperatorParser {
           }
         case FhirTime:
           {
-            if (executedAfter.first is ValidatedQuantity) {
+            if (executedAfter.first is ValidatedQuantity &&
+                (executedAfter.first as ValidatedQuantity).isDuration) {
               return [
-                ((executedAfter.first as ValidatedQuantity) -
-                        executedBefore.first)
+                subtractFromFhirTime(executedBefore.first,
+                        (executedAfter.first as ValidatedQuantity))
                     .toString()
               ];
             }
@@ -570,17 +595,19 @@ class MinusParser extends OperatorParser {
           }
         case String:
           {
-            if (executedAfter.first is ValidatedQuantity) {
+            if (executedAfter.first is ValidatedQuantity &&
+                (executedAfter.first as ValidatedQuantity).isDuration) {
               if (FhirDateTime.fromString(executedBefore.first).isValid) {
                 return [
-                  ((executedAfter.first as ValidatedQuantity) -
-                          executedBefore.first)
+                  (FhirDateTime.fromString(executedBefore.first) -
+                          extendedDurationFromValidatedQuantity(
+                              executedAfter.first))
                       .toString()
                 ];
               } else if (FhirTime(executedBefore.first).isValid) {
                 return [
-                  ((executedAfter.first as ValidatedQuantity) -
-                          executedBefore.first)
+                  subtractFromFhirTime(FhirTime(executedBefore.first),
+                          executedAfter.first as ValidatedQuantity)
                       .toString()
                 ];
               }
@@ -699,3 +726,38 @@ class StringConcatenationParser extends OperatorParser {
       '\n${"  " * indent}${after.prettyPrint(indent + 1)}\n'
       '${indent <= 0 ? "" : "  " * (indent - 1)})';
 }
+
+ExtendedDuration extendedDurationFromValidatedQuantity(
+  ValidatedQuantity validatedQuantity,
+) =>
+    ExtendedDuration(
+      years: validatedQuantity.years?.toInt() ?? 0,
+      months: validatedQuantity.months?.toInt() ?? 0,
+      days: validatedQuantity.days?.toInt() ?? 0,
+      hours: validatedQuantity.hours?.toInt() ?? 0,
+      minutes: validatedQuantity.minutes?.toInt() ?? 0,
+      seconds: validatedQuantity.seconds?.toInt() ?? 0,
+      milliseconds: validatedQuantity.milliseconds?.toInt() ?? 0,
+    );
+
+FhirTime addToFhirTime(
+  FhirTime fhirTime,
+  ValidatedQuantity validatedQuantity,
+) =>
+    fhirTime.plus(
+      hours: validatedQuantity.hours?.toInt() ?? 0,
+      minutes: validatedQuantity.minutes?.toInt() ?? 0,
+      seconds: validatedQuantity.seconds?.toInt() ?? 0,
+      milliseconds: validatedQuantity.milliseconds?.toInt() ?? 0,
+    );
+
+FhirTime subtractFromFhirTime(
+  FhirTime fhirTime,
+  ValidatedQuantity validatedQuantity,
+) =>
+    fhirTime.subtract(
+      hours: validatedQuantity.hours?.toInt() ?? 0,
+      minutes: validatedQuantity.minutes?.toInt() ?? 0,
+      seconds: validatedQuantity.seconds?.toInt() ?? 0,
+      milliseconds: validatedQuantity.milliseconds?.toInt() ?? 0,
+    );

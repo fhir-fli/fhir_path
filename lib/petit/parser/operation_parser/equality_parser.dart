@@ -37,35 +37,15 @@ class EqualsParser extends OperatorParser {
           final lhsDateTime = FhirDateTime.fromString(lhs[i].toString());
           final rhsDateTime = FhirDateTime.fromString(rhs[i].toString());
 
-          /// As long as they are both valid we try and compare them
-          if (lhsDateTime.isValid && rhsDateTime.isValid) {
-            try {
+          if (lhsDateTime.precision.isEquallyPrecise(rhsDateTime.precision)) {
+            /// As long as they are both valid we try and compare them
+            if (lhsDateTime.isValid && rhsDateTime.isValid) {
               if (lhsDateTime != rhsDateTime) {
-                var lhsDatePrecision =
-                    '-'.allMatches(lhsDateTime.toString()).length;
-                lhsDatePrecision = lhsDatePrecision > 2 ? 2 : lhsDatePrecision;
-                var rhsDatePrecision =
-                    '-'.allMatches(rhsDateTime.toString()).length;
-                rhsDatePrecision = rhsDatePrecision > 2 ? 2 : rhsDatePrecision;
-                var lhsTimePrecision =
-                    ':'.allMatches(lhsDateTime.toString()).length;
-                lhsTimePrecision = lhsTimePrecision > 2 ? 2 : lhsTimePrecision;
-                var rhsTimePrecision =
-                    ':'.allMatches(rhsDateTime.toString()).length;
-                rhsTimePrecision = rhsTimePrecision > 2 ? 2 : rhsTimePrecision;
-                if (lhsDatePrecision != rhsDatePrecision ||
-                    lhsTimePrecision != rhsTimePrecision) {
-                  return <dynamic>[];
-                } else {
-                  return <dynamic>[false];
-                }
+                return <dynamic>[false];
               }
-            } catch (e) {
-              return <dynamic>[];
             }
           } else {
-            /// If not it means only one is, so this is false
-            return <dynamic>[false];
+            return <dynamic>[];
           }
         }
 
@@ -148,19 +128,16 @@ class EquivalentParser extends OperatorParser {
               final rhsDateTime =
                   FhirDateTime.fromString(rhsElement.toString());
 
-              /// As long as they are both valid we try and compare them
-              if (lhsDateTime.isValid && rhsDateTime.isValid) {
-                return lhsDateTime == rhsDateTime;
+              if (lhsDateTime.precision
+                  .isEquallyPrecise(rhsDateTime.precision)) {
+                /// As long as they are both valid we try and compare them
+                if (lhsDateTime.isValid && rhsDateTime.isValid) {
+                  return lhsDateTime == rhsDateTime;
+                } else {
+                  return false;
+                }
               } else {
                 return false;
-              }
-            } else if (lhsElement is ValidatedQuantity ||
-                rhsElement is ValidatedQuantity) {
-              if (lhsElement is ValidatedQuantity) {
-                return lhsElement.equivalent(rhsElement as Object);
-              } else {
-                return (rhsElement as ValidatedQuantity)
-                    .equivalent(lhsElement as Object);
               }
             } else if (lhsElement is num || rhsElement is num) {
               final sigDigsLhs = num.tryParse(lhsElement.toString())
@@ -187,6 +164,10 @@ class EquivalentParser extends OperatorParser {
             } else if (lhsElement is String || rhsElement is String) {
               return lhsElement.toString().toLowerCase() ==
                   rhsElement.toString().toLowerCase();
+            } else if (lhsElement is ValidatedQuantity) {
+              return lhsElement.equivalent(rhsElement);
+            } else if (rhsElement is ValidatedQuantity) {
+              return rhsElement.equivalent(lhsElement);
             } else {
               return lhsElement == rhsElement || rhsElement == lhsElement;
             }
@@ -231,10 +212,7 @@ class NotEqualsParser extends OperatorParser {
     final equalsParser = EqualsParser();
     equalsParser.before = this.before;
     equalsParser.after = this.after;
-    print(before);
-    print(after);
     final equality = equalsParser.execute(results, passed);
-    print(equality);
     return FpNotParser().execute(equality, passed);
   }
 

@@ -23,24 +23,17 @@ class FpWhereParser extends FunctionParser {
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) {
-    final returnList =
-        IterationContext.withIterationContext((iterationContext) {
-      final iterationResult = [];
-      results.forEachIndexed((i, element) {
-        iterationContext.indexValue = i;
-        iterationContext.thisValue = element;
-        final newResult = value.execute([element], passed);
-        if (newResult.isNotEmpty) {
-          if (!(newResult.length == 1 && newResult.first == false)) {
-            iterationResult.add(element);
-          }
+    final iterationResult = [];
+    for (final element in results) {
+      final newResult = value.execute([element], passed);
+      if (newResult.isNotEmpty) {
+        if (!(newResult.length == 1 && newResult.first == false)) {
+          iterationResult.add(element);
         }
-      });
+      }
+    }
 
-      return iterationResult;
-    }, passed);
-
-    return returnList;
+    return iterationResult;
   }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -120,7 +113,9 @@ class RepeatParser extends FunctionParser {
     final finalResults = [];
     results.forEach((r) {
       value.execute([r], passed).forEach((e) {
-        if (notFoundInList(finalResults, e)) {
+        if (value.first is ChildrenParser) {
+          finalResults.add(e);
+        } else if (notFoundInList(finalResults, e)) {
           finalResults.add(e);
         }
       });
@@ -131,7 +126,9 @@ class RepeatParser extends FunctionParser {
       len = finalResults.length;
       results.forEach((r) {
         value.execute([r], passed).forEach((e) {
-          if (notFoundInList(finalResults, e)) {
+          if (value.first is ChildrenParser) {
+            finalResults.add(e);
+          } else if (notFoundInList(finalResults, e)) {
             finalResults.add(e);
           }
         });
@@ -271,7 +268,7 @@ class ExtensionParser extends FunctionParser {
     // .extension(exturl) is short-hand for .extension.where(url='exturl')
     final urlEquals = EqualsParser();
     urlEquals.before = ParserList([IdentifierParser('', 'url')]);
-    urlEquals.after = ParserList([StringParser("'$extensionUrl'")]);
+    urlEquals.after = ParserList([StringParser('$extensionUrl')]);
     final extensionUrlPredicate = ParserList([
       urlEquals,
     ]);

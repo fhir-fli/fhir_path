@@ -8,14 +8,22 @@ import 'package:ucum/ucum.dart';
 import '../../petit_fhir_path.dart';
 
 /// http://hl7.org/fhirpath/#iifcriterion-expression-true-result-collection-otherwise-result-collection-collection
-///The iif function in FHIRPath is an immediate if, also known as a conditional operator (such as C’s ? : operator).
+/// The iif function in FHIRPath is an immediate if, also known as a conditional
+/// operator (such as C’s ? : operator).
 /// The criterion expression is expected to evaluate to a Boolean.
-/// See: http://hl7.org/fhirpath/#singleton-evaluation-of-collections for rules of Boolean evaluation.
+/// See: http://hl7.org/fhirpath/#singleton-evaluation-of-collections for rules
+/// of Boolean evaluation.
 /// Any collection with a single non-boolean item is true.
 ///
-/// If criterion is true, the function returns the value of the true-result argument.
-/// If criterion is false or an empty collection, the function returns otherwise-result, unless the optional otherwise-result is not given, in which case the function returns an empty collection.
-/// Note that short-circuit behavior is expected in this function. In other words, true-result should only be evaluated if the criterion evaluates to true, and otherwise-result should only be evaluated otherwise. For implementations, this means delaying evaluation of the arguments.
+/// If criterion is true, the function returns the value of the true-result
+/// argument.
+/// If criterion is false or an empty collection, the function returns
+/// otherwise-result, unless the optional otherwise-result is not given, in
+/// which case the function returns an empty collection.
+/// Note that short-circuit behavior is expected in this function. In other
+/// words, true-result should only be evaluated if the criterion evaluates to
+/// true, and otherwise-result should only be evaluated otherwise. For
+/// implementations, this means delaying evaluation of the arguments.
 class IifParser extends FunctionParser {
   IifParser(super.value);
 
@@ -38,43 +46,39 @@ class IifParser extends FunctionParser {
       );
     }
 
-    final criterionResultParser = value.first as CommaParser;
-    final List<dynamic> criterionCollection = [];
+    final CommaParser criterionResultParser = value.first as CommaParser;
+
+    FhirPathParser criterionExpressionParser;
+    FhirPathParser trueResultParser;
+    FhirPathParser? otherwiseResultParser;
+
     if (criterionResultParser.before.first is CommaParser) {
-      criterionCollection.addAll(
-          (criterionResultParser.before.first as CommaParser)
-              .before
-              .execute([], passed));
+      criterionExpressionParser =
+          (criterionResultParser.before.first as CommaParser).before;
+      trueResultParser =
+          (criterionResultParser.before.first as CommaParser).after;
+      otherwiseResultParser = criterionResultParser.after;
     } else {
-      criterionCollection
-          .addAll(criterionResultParser.before.execute([], passed));
+      criterionExpressionParser = criterionResultParser.before;
+      trueResultParser = criterionResultParser.after;
     }
+
+    final criterionCollection =
+        criterionExpressionParser.execute(results.toList(), passed);
 
     final criterion = SingletonEvaluation.toBool(criterionCollection,
         name: 'criterion expression', operation: 'iif', collection: results);
 
     // Short-circuit: Only evaluate what matches the criterion.
     if (criterion == true) {
-      final trueResultParser = criterionResultParser.before.first is CommaParser
-          ? (criterionResultParser.before.first as CommaParser).after
-          : (criterionResultParser.after.first is CommaParser)
-              ? (criterionResultParser.after.first as CommaParser).before
-              : criterionResultParser.after.first;
-
-      final trueResult = trueResultParser.execute([], passed);
-
-      return trueResult;
+      final newResults = trueResultParser.execute(results, passed);
+      return newResults;
     } else {
-      final otherwiseResultParser =
-          (criterionResultParser.after.first is CommaParser)
-              ? (criterionResultParser.after.first as CommaParser).after
-              : criterionResultParser.before.first is CommaParser
-                  ? criterionResultParser.after
-                  : EmptySetParser();
-
-      final otherwiseResult = otherwiseResultParser.execute([], passed);
-
-      return otherwiseResult;
+      if (otherwiseResultParser == null) {
+        return [];
+      } else {
+        return otherwiseResultParser.execute(results, passed);
+      }
     }
   }
 

@@ -12,8 +12,11 @@ class BracketsIndexParser extends ValueParser<int> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
-      results.isEmpty || value > results.length - 1 ? [] : [results[value]];
+  List execute(List results, Map<String, dynamic> passed) {
+    return results.isEmpty || value > results.length - 1
+        ? []
+        : [results[value]];
+  }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -118,8 +121,7 @@ class ThisParser extends FhirPathParser {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
-      [IterationContext.current(passed).thisValue];
+  List execute(List results, Map<String, dynamic> passed) => results;
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in

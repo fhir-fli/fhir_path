@@ -85,8 +85,9 @@ class IsParser extends OperatorParser {
                                         ? [executedBefore.first is FhirTime]
                                         : executedAfter.first == 'Quantity'
                                             ? [
-                                                isValidatedQuantity(
-                                                    executedBefore.first)
+                                                ValidatedQuantity
+                                                    .isValidatedQuantity(
+                                                        executedBefore.first)
                                               ]
                                             : [false];
   }

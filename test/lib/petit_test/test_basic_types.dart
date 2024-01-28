@@ -224,6 +224,7 @@ void testBasicTypes() {
           ((parseResult("'\3' // '3'") as ParserList).first as StringParser)
               .value,
           StringParser('3').value);
+      // TODO(Dokotela) - fix this test
       // expect(parseResult("""'\u005' // 'u005'"""), 'u005');
       expect(
           ((parseResult("'\' // ''") as ParserList).first as StringParser)

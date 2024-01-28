@@ -45,14 +45,12 @@ final Parser<String> unit = (pluralDateTimePrecision |
             .map((value) => value.value))
     .flatten()
     .map((value) {
-  print('UNIT: $value');
   if (value.startsWith("'")) {
     value = value.substring(1, value.length - 1);
   }
   if (value.endsWith("'")) {
     value = value.substring(0, value.length - 1);
   }
-  print('VALUE: $value');
   return value;
 });
 

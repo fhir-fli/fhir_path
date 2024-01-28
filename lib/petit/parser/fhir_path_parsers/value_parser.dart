@@ -24,8 +24,9 @@ class ParenthesesParser extends ValueParser<ParserList> {
   /// The iterable, nested function that evaluates the entire FHIRPath
   /// expression one object at a time
   @override
-  List execute(List results, Map<String, dynamic> passed) =>
-      value.execute(results, passed);
+  List execute(List results, Map<String, dynamic> passed) {
+    return value.execute(results, passed);
+  }
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in

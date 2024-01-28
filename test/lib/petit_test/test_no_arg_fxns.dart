@@ -1,6 +1,8 @@
 // ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, always_specify_types, unnecessary_string_escapes
 
 // Package imports:
+import 'dart:convert';
+
 import 'package:fhir/r4.dart';
 import 'package:test/test.dart';
 import 'package:ucum/ucum.dart';
@@ -1050,7 +1052,7 @@ void testNoArgFxns() {
       expect(
         () => walkFhirPath(
             context: resource.toJson(), pathExpression: "today() + 5.5 'mg'"),
-        throwsA(const TypeMatcher<FhirPathEvaluationException>()),
+        throwsA(const TypeMatcher<FhirPathException>()),
       );
 
       expect(
@@ -1231,8 +1233,96 @@ void testNoArgFxns() {
             }
           ]);
     });
-
-    // TODO(Dokotela): descendants
+    test('Descendants', () {
+      expect(
+          walkFhirPath(
+              context: resource.toJson(),
+              pathExpression: "Patient.name.descendants()"),
+          [
+            'official',
+            'Faulkenberry',
+            'Jason',
+            'Grey',
+            'official',
+            'Faulkenberry',
+            'Jason',
+            'Grey',
+            'Niel',
+            'Kristin',
+            'Smith',
+            'John',
+            'Jacob',
+            'Jingleheimer'
+          ]);
+      // TODO(Dokotela): fix this
+      // expect(
+      //     walkFhirPath(
+      //         context: resource.toJson(),
+      //         pathExpression:
+      //             "Patient.address[1].period.extension.descendants()"),
+      //     [
+      //       [
+      //         {
+      //           "extension": [
+      //             {
+      //               "extension": [
+      //                 {
+      //                   "valueCount": {"unit": "Kg"}
+      //                 },
+      //                 {
+      //                   "valueCount": {"unit": "Km"}
+      //                 }
+      //               ],
+      //               "valueCount": {"unit": "Kg"}
+      //             },
+      //             {
+      //               "valueCount": {"unit": "Km"}
+      //             }
+      //           ],
+      //           "valueCount": {"unit": "Kg"}
+      //         },
+      //         {
+      //           "valueCount": {"unit": "Km"}
+      //         },
+      //         {"unit": "Kg"},
+      //         {"unit": "Km"},
+      //         {
+      //           "extension": [
+      //             {
+      //               "valueCount": {"unit": "Kg"}
+      //             },
+      //             {
+      //               "valueCount": {"unit": "Km"}
+      //             }
+      //           ],
+      //           "valueCount": {"unit": "Kg"}
+      //         },
+      //         {
+      //           "valueCount": {"unit": "Km"}
+      //         },
+      //         {"unit": "Kg"},
+      //         {"unit": "Km"},
+      //         "Kg",
+      //         "Km",
+      //         {
+      //           "valueCount": {"unit": "Kg"}
+      //         },
+      //         {
+      //           "valueCount": {"unit": "Km"}
+      //         },
+      //         {"unit": "Kg"},
+      //         {"unit": "Km"},
+      //         "Kg",
+      //         "Km",
+      //         {"unit": "Kg"},
+      //         {"unit": "Km"},
+      //         "Kg",
+      //         "Km",
+      //         "Kg",
+      //         "Km"
+      //       ]
+      //     ]);
+    });
 
     test('DateTimeFunctions', () {
       final startNow = DateTime.now();
