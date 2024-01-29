@@ -189,13 +189,22 @@ final Parser<WhiteSpaceParser> LINE_COMMENT =
         .flatten()
         .map((value) => WhiteSpaceParser(value));
 
-final Parser<String> ESC = char('\\')
-    .seq(pattern('`\'\\/fnrt'))
-    .or(UNICODE)
-    .flatten()
-    .map((value) => value == r"\'" ? "'" : jsonDecode('"$value"'));
+final Parser<String> ESC = ((char('\\') & pattern('`\'\\/fnrt')).flatten() |
+        (char('\\') & UNICODE).map((value) {
+          return String.fromCharCodes(
+              [int.parse(value[1].replaceAll('u', ''), radix: 16)]);
+        }))
+    .map((value) {
+  return value == r"\'"
+      ? "'"
+      : value == r"\`"
+          ? '`'
+          : jsonDecode('"$value"');
+});
 
 final Parser<String> UNICODE =
-    string('u').seq(HEX).seq(HEX).seq(HEX).seq(HEX).flatten();
+    string('u').seq(HEX).seq(HEX).seq(HEX).seq(HEX).flatten().map((value) {
+  return value;
+});
 
 final Parser<String> HEX = pattern('0-9a-fA-F').flatten();

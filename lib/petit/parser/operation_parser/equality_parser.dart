@@ -52,6 +52,9 @@ class EqualsParser extends OperatorParser {
         /// If they aren't dateTimes we can just compare them as usual
         else {
           if (lhs[i] is ValidatedQuantity || rhs[i] is ValidatedQuantity) {
+            print(lhs[i]);
+            print(rhs[i]);
+            print(lhs[i] == rhs[i]);
             if (lhs[i] is ValidatedQuantity) {
               return <dynamic>[lhs[i] == rhs[i]];
             } else {
@@ -139,6 +142,10 @@ class EquivalentParser extends OperatorParser {
               } else {
                 return false;
               }
+            } else if (lhsElement is ValidatedQuantity) {
+              return lhsElement.equivalent(rhsElement);
+            } else if (rhsElement is ValidatedQuantity) {
+              return rhsElement.equivalent(lhsElement);
             } else if (lhsElement is num || rhsElement is num) {
               final sigDigsLhs = num.tryParse(lhsElement.toString())
                   ?.toStringAsExponential()
@@ -164,10 +171,6 @@ class EquivalentParser extends OperatorParser {
             } else if (lhsElement is String || rhsElement is String) {
               return lhsElement.toString().toLowerCase() ==
                   rhsElement.toString().toLowerCase();
-            } else if (lhsElement is ValidatedQuantity) {
-              return lhsElement.equivalent(rhsElement);
-            } else if (rhsElement is ValidatedQuantity) {
-              return rhsElement.equivalent(lhsElement);
             } else {
               return lhsElement == rhsElement || rhsElement == lhsElement;
             }

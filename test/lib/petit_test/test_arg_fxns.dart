@@ -821,14 +821,14 @@ void testArgFxns() {
     });
 
     // TODO(Dokotela): complex-extension
-    // test('complex-extension', () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: questionnaireResponse,
-    //           pathExpression:
-    //               r'%context.repeat(item).answer.value.extension(%`ext-ordinalValue`).value.sum()'),
-    //       [13]);
-    // });
+    test('complex-extension', () {
+      expect(
+          walkFhirPath(
+              context: questionnaireResponse,
+              pathExpression:
+                  r'%context.repeat(item).answer.value.extension(%`ext-ordinalValue`).value.sum()'),
+          [13]);
+    });
 
     test('iif-basic', () {
       expect(
@@ -836,7 +836,6 @@ void testArgFxns() {
       expect(
           walkFhirPath(context: null, pathExpression: 'iif(false, 1, 0)'), [0]);
       expect(walkFhirPath(context: null, pathExpression: 'iif({}, 1, 0)'), [0]);
-      // TODO(Dokotela): is this correct functionality? non-empty, non-bool is true.
       expect(walkFhirPath(context: null, pathExpression: 'iif(5, 1, 0)'), [1]);
       expect(walkFhirPath(context: null, pathExpression: 'iif(true, 1)'), [1]);
       expect(walkFhirPath(context: null, pathExpression: 'iif(false, 1)'), []);

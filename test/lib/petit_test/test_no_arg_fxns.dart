@@ -1,8 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, always_specify_types, unnecessary_string_escapes
 
 // Package imports:
-import 'dart:convert';
-
 import 'package:fhir/r4.dart';
 import 'package:test/test.dart';
 import 'package:ucum/ucum.dart';

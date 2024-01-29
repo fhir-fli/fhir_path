@@ -175,24 +175,16 @@ List executeComparisons(List results, ParserList before, ParserList after,
   }
 
   bool? makeComparison(Comparator comparator, dynamic param1, dynamic param2) {
-    if (param1 is FhirDateTimeBase) {
-      if (param2 is! FhirDateTimeBase) {
-        param2 = FhirDateTime.fromString(param2.toString());
-      }
-      if (!param1.precision.isEquallyPrecise(param2.precision)) {
-        return null;
-      }
-    }
     try {
       switch (comparator) {
         case Comparator.gt:
-          return param1 > param2 as bool;
+          return param1 > param2 as bool?;
         case Comparator.gte:
-          return param1 >= param2 as bool;
+          return param1 >= param2 as bool?;
         case Comparator.lt:
-          return param1 < param2 as bool;
+          return param1 < param2 as bool?;
         case Comparator.lte:
-          return param1 <= param2 as bool;
+          return param1 <= param2 as bool?;
       }
     } catch (e) {
       if (e is UnequalPrecision) {

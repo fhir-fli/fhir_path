@@ -716,11 +716,7 @@ class ConvertsToQuantityParser extends FunctionParser {
           results.first is num ||
           results.first is bool) {
         return [true];
-      }
-
-      /// If it's a string & convertible to a Quantity using the Regex
-      /// TODO(Dokotela): this is kind of the cheap way out, for now
-      else if (results.first is String &&
+      } else if (results.first is String &&
           ValidatedQuantity.fromString(results.first).isValid()) {
         return [true];
       }

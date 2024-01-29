@@ -372,8 +372,6 @@ class PlusParser extends OperatorParser {
           operation: '+',
           collection: results);
     } else {
-      print('${executedBefore.first} - ${executedBefore.first.runtimeType}');
-      print('${executedAfter.first} - ${executedAfter.first.runtimeType}');
       switch (executedBefore.first.runtimeType) {
         case int:
           {
