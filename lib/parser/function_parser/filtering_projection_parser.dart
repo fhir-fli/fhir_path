@@ -122,7 +122,9 @@ class RepeatParser extends FunctionParser {
     });
     var len = -1;
     print('LENGTH = $len');
-    while (len != finalResults.length) {
+    int count = 0;
+    while (len != finalResults.length && count < 12) {
+      count++;
       results = finalResults.toList();
       len = finalResults.length;
       results.forEach((r) {
