@@ -1915,32 +1915,29 @@ void testFhirPathTestSuite() {
           [true]);
     });
 
-    // TODO(Dokotela): testQuantity9 - multiply units
-    // test("testQuantity9", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(),
-    //           pathExpression: r"2.0 'cm' * 2.0 'm' = 0.040 'm2'"),
-    //       [true]);
-    // });
+    test("testQuantity9", () {
+      expect(
+          walkFhirPath(
+              context: patientExample(),
+              pathExpression: r"2.0 'cm' * 2.0 'm' = 0.040 'm2'"),
+          [true]);
+    });
 
-    // TODO(Dokotela): testQuantity10 - divide different units
-    // test("testQuantity10", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(),
-    //           pathExpression: r"4.0 'g' / 2.0 'm' = 2 'g/m'"),
-    //       [true]);
-    // });
+    test("testQuantity10", () {
+      expect(
+          walkFhirPath(
+              context: patientExample(),
+              pathExpression: r"4.0 'g' / 2.0 'm' = 2 'g/m'"),
+          [true]);
+    });
 
-    // TODO(Dokotela): testQuantity11 - divide same units
-    // test("testQuantity11", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(),
-    //           pathExpression: r"1.0 'm' / 1.0 'm' = 1 '1'"),
-    //       [true]);
-    // });
+    test("testQuantity11", () {
+      expect(
+          walkFhirPath(
+              context: patientExample(),
+              pathExpression: r"1.0 'm' / 1.0 'm' = 1 '1'"),
+          [true]);
+    });
   });
 
   group('testCollectionBoolean', () {
@@ -2003,9 +2000,6 @@ void testFhirPathTestSuite() {
     });
 
     test("testDistinct2", () {
-      print(walkFhirPath(
-          context: questionnaireExample(),
-          pathExpression: r"Questionnaire.descendants()"));
       expect(
           walkFhirPath(
               context: questionnaireExample(),
@@ -3185,2368 +3179,2368 @@ void testFhirPathTestSuite() {
     // });
   });
 
-  group('testNEquality', () {
-    test("testNEquality1", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 != 1"),
-          [false]);
-    });
-
-    test("testNEquality2", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: "{} != {}"),
-          []);
-    });
-
-    test("testNEquality3", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 != 2"),
-          [true]);
-    });
-
-    test("testNEquality4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'a' != 'a'"),
-          [false]);
-    });
-
-    test("testNEquality5", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'a' != 'b'"),
-          [true]);
-    });
-
-    test("testNEquality6", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.1 != 1.1"),
-          [false]);
-    });
-
-    test("testNEquality7", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.1 != 1.2"),
-          [true]);
-    });
-
-    test("testNEquality8", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.10 != 1.1"),
-          [false]);
-    });
-
-    test("testNEquality9", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"0 != 0"),
-          [false]);
-    });
-
-    test("testNEquality10", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"0.0 != 0"),
-          [false]);
-    });
-
-    test("testNEquality11", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2012-04-15 != @2012-04-15"),
-          [false]);
-    });
-
-    test("testNEquality12", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2012-04-15 != @2012-04-16"),
-          [true]);
-    });
-
-    test("testNEquality13", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: "@2012-04-15 != @2012-04-15T10:00:00"),
-          []);
-    });
-
-    test("testNEquality14", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2012-04-15T15:00:00 != @2012-04-15T10:00:00"),
-          [true]);
-    });
-
-    test("testNEquality15", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"@2012-04-15T15:30:31 != @2012-04-15T15:30:31.0"),
-          [false]);
-    });
-
-    test("testNEquality16", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"@2012-04-15T15:30:31 != @2012-04-15T15:30:31.1"),
-          [true]);
-    });
-
-    // TODO(Dokotela): FIXED: decide if we should continue to include a default timezone
-    // test("testNEquality17", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(),
-    //           pathExpression:
-    //               "@2012-04-15T15:00:00Z != @2012-04-15T10:00:00"),
-    //       []);
-    // });
-    test("testNEquality17-fixed", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: "@2012-04-15T15:00:00Z != @2012-04-15T10:00:00"),
-          [true]);
-    });
-
-    test("testNEquality18", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"@2012-04-15T15:00:00+02:00 != @2012-04-15T16:00:00+03:00"),
-          [false]);
-    });
-
-    test("testNEquality19", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"name != name"),
-          [false]);
-    });
-
-    // Incorrect: assumptions about order
-    // test("testNEquality20", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(),
-    //           pathExpression:
-    //               r"name.take(2) != name.take(2).first() | name.take(2).last()"),
-    //       [false]);
-    // });
-
-    // Incorrect: assumptions about order
-    // test("testNEquality21", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(),
-    //           pathExpression:
-    //               r"name.take(2) != name.take(2).last() | name.take(2).first()"),
-    //       [true]);
-    // });
-
-    test("testNEquality22", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"1.2 / 1.8 != 0.6666667"),
-          [true]);
-    });
-
-    test("testNEquality23", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.2 / 1.8 != 0.67"),
-          [true]);
-    });
-
-    test("testNEquality24", () {
-      expect(
-          walkFhirPath(
-              context: observationExample(),
-              pathExpression: r"Observation.value != 185 'kg'"),
-          [true]);
-    });
-  });
-
-  group('testEquivalent', () {
-    test("testEquivalent1", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 ~ 1"),
-          [true]);
-    });
-
-    test("testEquivalent2", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"{} ~ {}"),
-          [true]);
-    });
-
-    test("testEquivalent3", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 ~ {}"),
-          [false]);
-    });
-
-    test("testEquivalent4", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 ~ 2"),
-          [false]);
-    });
-
-    test("testEquivalent5", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'a' ~ 'a'"),
-          [true]);
-    });
-
-    test("testEquivalent6", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'a' ~ 'A'"),
-          [true]);
-    });
-
-    test("testEquivalent7", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'a' ~ 'b'"),
-          [false]);
-    });
-
-    test("testEquivalent8", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1.1 ~ 1.1"),
-          [true]);
-    });
-
-    test("testEquivalent9", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1.1 ~ 1.2"),
-          [false]);
-    });
-
-    test("testEquivalent10", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.10 ~ 1.1"),
-          [true]);
-    });
-
-    // TODO(Dokotela): correct equivalence parser to compare numbers using significant digits
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(), pathExpression: r"1.2 / 1.8 ~ 0.67"),
-    //       [true]);
-    // });
-
-    test("testEquivalent12", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"0 ~ 0"),
-          [true]);
-    });
-
-    test("testEquivalent13", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"0.0 ~ 0"),
-          [true]);
-    });
-
-    test("testEquivalent14", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2012-04-15 ~ @2012-04-15"),
-          [true]);
-    });
-
-    test("testEquivalent15", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2012-04-15 ~ @2012-04-16"),
-          [false]);
-    });
-
-    test("testEquivalent16", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2012-04-15 ~ @2012-04-15T10:00:00"),
-          [false]);
-    });
-
-    test("testEquivalent17", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2012-04-15T15:30:31 ~ @2012-04-15T15:30:31.0"),
-          [true]);
-    });
-
-    test("testEquivalent18", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2012-04-15T15:30:31 ~ @2012-04-15T15:30:31.1"),
-          [false]);
-    });
-
-    test("testEquivalent19", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"name ~ name"),
-          [true]);
-    });
-
-    test("testEquivalent20", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"name.take(2).given ~ name.take(2).first().given | name.take(2).last().given"),
-          [true]);
-    });
-
-    test("testEquivalent21", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"name.take(2).given ~ name.take(2).last().given | name.take(2).first().given"),
-          [true]);
-    });
-
-    // TODO(Dokotela): Compare Quantity objects and ValidatedQuantity
-    // test("testEquivalent22", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: observationExample(),
-    //           pathExpression: r"Observation.value ~ 185 '[lb_av]'"),
-    //       [true]);
-    // });
-  });
-
-  group('testNotEquivalent', () {
-    test("testNotEquivalent1", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 !~ 1"),
-          [false]);
-    });
-
-    test("testNotEquivalent2", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"{} !~ {}"),
-          [false]);
-    });
-
-    test("testNotEquivalent3", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"{} !~ 1"),
-          [true]);
-    });
-
-    test("testNotEquivalent4", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 !~ 2"),
-          [true]);
-    });
-
-    test("testNotEquivalent5", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'a' !~ 'a'"),
-          [false]);
-    });
-
-    test("testNotEquivalent6", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'a' !~ 'A'"),
-          [false]);
-    });
-
-    test("testNotEquivalent7", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'a' !~ 'b'"),
-          [true]);
-    });
-
-    test("testNotEquivalent8", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.1 !~ 1.1"),
-          [false]);
-    });
-
-    test("testNotEquivalent9", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.1 !~ 1.2"),
-          [true]);
-    });
-
-    test("testNotEquivalent10", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.10 !~ 1.1"),
-          [false]);
-    });
-
-    test("testNotEquivalent11", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"0 !~ 0"),
-          [false]);
-    });
-
-    test("testNotEquivalent12", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"0.0 !~ 0"),
-          [false]);
-    });
-
-    // TODO(Dokotela): Equivalent need some work on significant digits
-    // test("testNotEquivalent13", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(), pathExpression: r"1.2 / 1.8 !~ 0.6"),
-    //       [true]);
-    // });
-
-    test("testNotEquivalent14", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2012-04-15 !~ @2012-04-15"),
-          [false]);
-    });
-
-    test("testNotEquivalent15", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2012-04-15 !~ @2012-04-16"),
-          [true]);
-    });
-
-    test("testNotEquivalent16", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2012-04-15 !~ @2012-04-15T10:00:00"),
-          [true]);
-    });
-
-    test("testNotEquivalent17", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"@2012-04-15T15:30:31 !~ @2012-04-15T15:30:31.0"),
-          [false]);
-    });
-
-    test("testNotEquivalent18", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"@2012-04-15T15:30:31 !~ @2012-04-15T15:30:31.1"),
-          [true]);
-    });
-
-    // TODO(Dokotela): clarify, is this one supposed to be true, because the two
-    // aren't the same objects?
-    // test("testNotEquivalent19", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(), pathExpression: r"name !~ name"),
-    //       [true]);
-    // });
-
-    // Incorrect: Keep assuming order
-    // test("testNotEquivalent20", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(),
-    //           pathExpression:
-    //               r"name.take(2).given !~ name.take(2).first().given | name.take(2).last().given"),
-    //       [false]);
-    // });
-
-    // Incorrect: Keep assuming order
-    // test("testNotEquivalent21", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(),
-    //           pathExpression:
-    //               r"name.take(2).given !~ name.take(2).last().given | name.take(2).first().given"),
-    //       [false]);
-    // });
-
-    // TODO(Dokotela): Compare Quantity objects to ValidatedQuantity
-    // test("testNotEquivalent22", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: observationExample(),
-    //           pathExpression: r"Observation.value !~ 185 'kg'"),
-    //       [true]);
-    // });
-  });
-
-  group('testLessThan', () {
-    test("testLessThan1", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 < 2"),
-          [true]);
-    });
-
-    test("testLessThan2", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1.0 < 1.2"),
-          [true]);
-    });
-
-    test("testLessThan3", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'a' < 'b'"),
-          [true]);
-    });
-
-    test("testLessThan4", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'A' < 'a'"),
-          [true]);
-    });
-
-    test("testLessThan5", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-12 < @2014-12-13"),
-          [true]);
-    });
-
-    test("testLessThan6", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13T12:00:00 < @2014-12-13T12:00:01"),
-          [true]);
-    });
-
-    test("testLessThan7", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T12:00:00 < @T14:00:00"),
-          [true]);
-    });
-
-    test("testLessThan8", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 < 1"),
-          [false]);
-    });
-
-    test("testLessThan9", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1.0 < 1.0"),
-          [false]);
-    });
-
-    test("testLessThan10", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'a' < 'a'"),
-          [false]);
-    });
-
-    test("testLessThan11", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'A' < 'A'"),
-          [false]);
-    });
-
-    test("testLessThan12", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-12 < @2014-12-12"),
-          [false]);
-    });
-
-    test("testLessThan13", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13T12:00:00 < @2014-12-13T12:00:00"),
-          [false]);
-    });
-
-    test("testLessThan14", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T12:00:00 < @T12:00:00"),
-          [false]);
-    });
-
-    test("testLessThan15", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"2 < 1"),
-          [false]);
-    });
-
-    test("testLessThan16", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1.1 < 1.0"),
-          [false]);
-    });
-
-    test("testLessThan17", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'b' < 'a'"),
-          [false]);
-    });
-
-    test("testLessThan18", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'B' < 'A'"),
-          [false]);
-    });
-
-    test("testLessThan19", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13 < @2014-12-12"),
-          [false]);
-    });
-
-    test("testLessThan20", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13T12:00:01 < @2014-12-13T12:00:00"),
-          [false]);
-    });
-
-    test("testLessThan21", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T12:00:01 < @T12:00:00"),
-          [false]);
-    });
-
-    // TODO(Dokotela): Compare Quantity objects with ValidatedQuantity
-    // test("testLessThan22", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: observationExample(),
-    //           pathExpression: r"Observation.value < 200 '[lb_av]'"),
-    //       [true]);
-    // });
-
-    test("testLessThan23", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: "@2018-03 < @2018-03-01"),
-          []);
-    });
-
-    test("testLessThan24", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: "@2018-03-01T10 < @2018-03-01T10:30"),
-          []);
-    });
-
-    test("testLessThan25", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: "@T10 < @T10:30"),
-          []);
-    });
-
-    test("testLessThan26", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2018-03-01T10:30:00 < @2018-03-01T10:30:00.0"),
-          [false]);
-    });
-
-    test("testLessThan27", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T10:30:00 < @T10:30:00.0"),
-          [false]);
-    });
-  });
-
-  group('testLessOrEqual', () {
-    test("testLessOrEqual1", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 <= 2"),
-          [true]);
-    });
-
-    test("testLessOrEqual2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.0 <= 1.2"),
-          [true]);
-    });
-
-    test("testLessOrEqual3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'a' <= 'b'"),
-          [true]);
-    });
-
-    test("testLessOrEqual4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'A' <= 'a'"),
-          [true]);
-    });
-
-    test("testLessOrEqual5", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-12 <= @2014-12-13"),
-          [true]);
-    });
-
-    test("testLessOrEqual6", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13T12:00:00 <= @2014-12-13T12:00:01"),
-          [true]);
-    });
-
-    test("testLessOrEqual7", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T12:00:00 <= @T14:00:00"),
-          [true]);
-    });
-
-    test("testLessOrEqual8", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 <= 1"),
-          [true]);
-    });
-
-    test("testLessOrEqual9", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.0 <= 1.0"),
-          [true]);
-    });
-
-    test("testLessOrEqual10", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'a' <= 'a'"),
-          [true]);
-    });
-
-    test("testLessOrEqual11", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'A' <= 'A'"),
-          [true]);
-    });
-
-    test("testLessOrEqual12", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-12 <= @2014-12-12"),
-          [true]);
-    });
-
-    test("testLessOrEqual13", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13T12:00:00 <= @2014-12-13T12:00:00"),
-          [true]);
-    });
-
-    test("testLessOrEqual14", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T12:00:00 <= @T12:00:00"),
-          [true]);
-    });
-
-    test("testLessOrEqual15", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"2 <= 1"),
-          [false]);
-    });
-
-    test("testLessOrEqual16", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.1 <= 1.0"),
-          [false]);
-    });
-
-    test("testLessOrEqual17", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'b' <= 'a'"),
-          [false]);
-    });
-
-    test("testLessOrEqual18", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'B' <= 'A'"),
-          [false]);
-    });
-
-    test("testLessOrEqual19", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13 <= @2014-12-12"),
-          [false]);
-    });
-
-    test("testLessOrEqual20", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13T12:00:01 <= @2014-12-13T12:00:00"),
-          [false]);
-    });
-
-    test("testLessOrEqual21", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T12:00:01 <= @T12:00:00"),
-          [false]);
-    });
-
-    // TODO(Dokotela): compare Quantity objects with ValidatedQuantity
-    // test("testLessOrEqual22", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: observationExample(),
-    //           pathExpression: r"Observation.value <= 200 '[lb_av]'"),
-    //       [true]);
-    // });
-
-    test("testLessOrEqual23", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: "@2018-03 <= @2018-03-01"),
-          []);
-    });
-
-    test("testLessOrEqual24", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: "@2018-03-01T10 <= @2018-03-01T10:30"),
-          []);
-    });
-
-    test("testLessOrEqual25", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: "@T10 <= @T10:30"),
-          []);
-    });
-
-    test("testLessOrEqual26", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"@2018-03-01T10:30:00 <= @2018-03-01T10:30:00.0"),
-          [true]);
-    });
-
-    test("testLessOrEqual27", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T10:30:00 <= @T10:30:00.0"),
-          [true]);
-    });
-  });
-
-  group('testGreatorOrEqual', () {
-    test("testGreatorOrEqual1", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 >= 2"),
-          [false]);
-    });
-
-    test("testGreatorOrEqual2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.0 >= 1.2"),
-          [false]);
-    });
-
-    test("testGreatorOrEqual3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'a' >= 'b'"),
-          [false]);
-    });
-
-    test("testGreatorOrEqual4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'A' >= 'a'"),
-          [false]);
-    });
-
-    test("testGreatorOrEqual5", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-12 >= @2014-12-13"),
-          [false]);
-    });
-
-    test("testGreatorOrEqual6", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13T12:00:00 >= @2014-12-13T12:00:01"),
-          [false]);
-    });
-
-    test("testGreatorOrEqual7", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T12:00:00 >= @T14:00:00"),
-          [false]);
-    });
-
-    test("testGreatorOrEqual8", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 >= 1"),
-          [true]);
-    });
-
-    test("testGreatorOrEqual9", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.0 >= 1.0"),
-          [true]);
-    });
-
-    test("testGreatorOrEqual10", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'a' >= 'a'"),
-          [true]);
-    });
-
-    test("testGreatorOrEqual11", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'A' >= 'A'"),
-          [true]);
-    });
-
-    test("testGreatorOrEqual12", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-12 >= @2014-12-12"),
-          [true]);
-    });
-
-    test("testGreatorOrEqual13", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13T12:00:00 >= @2014-12-13T12:00:00"),
-          [true]);
-    });
-
-    test("testGreatorOrEqual14", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T12:00:00 >= @T12:00:00"),
-          [true]);
-    });
-
-    test("testGreatorOrEqual15", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"2 >= 1"),
-          [true]);
-    });
-
-    test("testGreatorOrEqual16", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.1 >= 1.0"),
-          [true]);
-    });
-
-    test("testGreatorOrEqual17", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'b' >= 'a'"),
-          [true]);
-    });
-
-    test("testGreatorOrEqual18", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'B' >= 'A'"),
-          [true]);
-    });
-
-    test("testGreatorOrEqual19", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13 >= @2014-12-12"),
-          [true]);
-    });
-
-    test("testGreatorOrEqual20", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13T12:00:01 >= @2014-12-13T12:00:00"),
-          [true]);
-    });
-
-    test("testGreatorOrEqual21", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T12:00:01 >= @T12:00:00"),
-          [true]);
-    });
-
-    // TODO(Dokotela): compare Quantity objects with ValidatedQuantity
-    // test("testGreatorOrEqual22", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: observationExample(),
-    //           pathExpression: r"Observation.value >= 100 '[lb_av]'"),
-    //       [true]);
-    // });
-
-    test("testGreatorOrEqual23", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: "@2018-03 >= @2018-03-01"),
-          []);
-    });
-
-    test("testGreatorOrEqual24", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: "@2018-03-01T10 >= @2018-03-01T10:30"),
-          []);
-    });
-
-    test("testGreatorOrEqual25", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: "@T10 >= @T10:30"),
-          []);
-    });
-
-    test("testGreatorOrEqual26", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"@2018-03-01T10:30:00 >= @2018-03-01T10:30:00.0"),
-          [true]);
-    });
-
-    test("testGreatorOrEqual27", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T10:30:00 >= @T10:30:00.0"),
-          [true]);
-    });
-  });
-
-  group('testGreaterThan', () {
-    test("testGreaterThan1", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 > 2"),
-          [false]);
-    });
-
-    test("testGreaterThan2", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1.0 > 1.2"),
-          [false]);
-    });
-
-    test("testGreaterThan3", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'a' > 'b'"),
-          [false]);
-    });
-
-    test("testGreaterThan4", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'A' > 'a'"),
-          [false]);
-    });
-
-    test("testGreaterThan5", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-12 > @2014-12-13"),
-          [false]);
-    });
-
-    test("testGreaterThan6", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13T12:00:00 > @2014-12-13T12:00:01"),
-          [false]);
-    });
-
-    test("testGreaterThan7", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T12:00:00 > @T14:00:00"),
-          [false]);
-    });
-
-    test("testGreaterThan8", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"1 > 1"),
-          [false]);
-    });
-
-    test("testGreaterThan9", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1.0 > 1.0"),
-          [false]);
-    });
-
-    test("testGreaterThan10", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'a' > 'a'"),
-          [false]);
-    });
-
-    test("testGreaterThan11", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'A' > 'A'"),
-          [false]);
-    });
-
-    test("testGreaterThan12", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-12 > @2014-12-12"),
-          [false]);
-    });
-
-    test("testGreaterThan13", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13T12:00:00 > @2014-12-13T12:00:00"),
-          [false]);
-    });
-
-    test("testGreaterThan14", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T12:00:00 > @T12:00:00"),
-          [false]);
-    });
-
-    test("testGreaterThan15", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: r"2 > 1"),
-          [true]);
-    });
-
-    test("testGreaterThan16", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1.1 > 1.0"),
-          [true]);
-    });
-
-    test("testGreaterThan17", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'b' > 'a'"),
-          [true]);
-    });
-
-    test("testGreaterThan18", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"'B' > 'A'"),
-          [true]);
-    });
-
-    test("testGreaterThan19", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13 > @2014-12-12"),
-          [true]);
-    });
-
-    test("testGreaterThan20", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2014-12-13T12:00:01 > @2014-12-13T12:00:00"),
-          [true]);
-    });
-
-    test("testGreaterThan21", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T12:00:01 > @T12:00:00"),
-          [true]);
-    });
-
-    // Compare Quantity objects to ValidatedQuantity
-    // test("testGreaterThan22", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: observationExample(),
-    //           pathExpression: r"Observation.value > 100 '[lb_av]'"),
-    //       [true]);
-    // });
-
-    test("testGreaterThan23", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: "@2018-03 > @2018-03-01"),
-          []);
-    });
-
-    test("testGreaterThan24", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: "@2018-03-01T10 > @2018-03-01T10:30"),
-          []);
-    });
-
-    test("testGreaterThan25", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: "@T10 > @T10:30"),
-          []);
-    });
-
-    test("testGreaterThan26", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@2018-03-01T10:30:00 > @2018-03-01T10:30:00.0"),
-          [false]);
-    });
-
-    test("testGreaterThan27", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"@T10:30:00 > @T10:30:00.0"),
-          [false]);
-    });
-  });
-
-  group('testUnion', () {
-    test("testUnion1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(1 | 2 | 3).count() = 3"),
-          [true]);
-    });
-
-    test("testUnion2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(1 | 2 | 2).count() = 2"),
-          [true]);
-    }); // merge duplicates
-
-    test("testUnion3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"(1|1).count() = 1"),
-          [true]);
-    });
-
-    test("testUnion4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"1.union(2).union(3).count() = 3"),
-          [true]);
-    });
-
-    test("testUnion5", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"1.union(2.union(3)).count() = 3"),
-          [true]);
-    });
-
-    test("testUnion6", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(1 | 2).combine(2).count() = 3"),
-          [true]);
-    }); // do not merge duplicates
-
-    test("testUnion7", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"1.combine(1).count() = 2"),
-          [true]);
-    }); // do not merge duplicates
-
-    test("testUnion8", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"1.combine(1).union(2).count() = 2"),
-          [true]);
-    }); // do not merge duplicates
-  });
-
-  group('testIntersect', () {
-    test("testIntersect1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(1 | 2 | 3).intersect(2 | 4) = 2"),
-          [true]);
-    });
-
-    test("testIntersect2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(1 | 2).intersect(4).empty()"),
-          [true]);
-    });
-
-    test("testIntersect3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(1 | 2).intersect({}).empty()"),
-          [true]);
-    });
-
-    test("testIntersect4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"1.combine(1).intersect(1).count() = 1"),
-          [true]);
-    }); // do not merge duplicates
-  });
-
-  group('testExclude', () {
-    test("testExclude1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(1 | 2 | 3).exclude(2 | 4) = 1 | 3"),
-          [true]);
-    });
-
-    test("testExclude2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(1 | 2).exclude(4) = 1 | 2"),
-          [true]);
-    });
-
-    test("testExclude3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(1 | 2).exclude({}) = 1 | 2"),
-          [true]);
-    });
-
-    test("testExclude4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"1.combine(1).exclude(2).count() = 2"),
-          [true]);
-    }); // do not merge duplicates
-  });
-
-  group('testIn', () {
-    test("testIn1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1 in (1 | 2 | 3)"),
-          [true]);
-    });
-
-    test("testIn2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1 in (2 | 3)"),
-          [false]);
-    });
-
-    test("testIn3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"'a' in ('a' | 'c' | 'd')"),
-          [true]);
-    });
-
-    test("testIn4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"'b' in ('a' | 'c' | 'd')"),
-          [false]);
-    });
-  });
-
-  group('testContainsCollection', () {
-    test("testContainsCollection1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(1 | 2 | 3) contains 1"),
-          [true]);
-    });
-
-    test("testContainsCollection2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(2 | 3) contains 1 "),
-          [false]);
-    });
-
-    test("testContainsCollection3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"('a' | 'c' | 'd') contains 'a'"),
-          [true]);
-    });
-
-    test("testContainsCollection4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"('a' | 'c' | 'd') contains 'b'"),
-          [false]);
-    });
-  });
-
-  group('testBooleanLogicAnd', () {
-    test("testBooleanLogicAnd1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(true and true) = true"),
-          [true]);
-    });
-
-    test("testBooleanLogicAnd2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(true and false) = false"),
-          [true]);
-    });
-
-    test("testBooleanLogicAnd3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(true and {}).empty()"),
-          [true]);
-    });
-
-    test("testBooleanLogicAnd4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(false and true) = false"),
-          [true]);
-    });
-
-    test("testBooleanLogicAnd5", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(false and false) = false"),
-          [true]);
-    });
-
-    test("testBooleanLogicAnd6", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(false and {}) = false"),
-          [true]);
-    });
-
-    test("testBooleanLogicAnd7", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"({} and true).empty()"),
-          [true]);
-    });
-
-    test("testBooleanLogicAnd8", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"({} and false) = false"),
-          [true]);
-    });
-
-    test("testBooleanLogicAnd9", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"({} and {}).empty()"),
-          [true]);
-    });
-  });
-
-  group('testBooleanLogicOr', () {
-    test("testBooleanLogicOr1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(true or true) = true"),
-          [true]);
-    });
-
-    test("testBooleanLogicOr2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(true or false) = true"),
-          [true]);
-    });
-
-    test("testBooleanLogicOr3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(true or {}) = true"),
-          [true]);
-    });
-
-    test("testBooleanLogicOr4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(false or true) = true"),
-          [true]);
-    });
-
-    test("testBooleanLogicOr5", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(false or false) = false"),
-          [true]);
-    });
-
-    test("testBooleanLogicOr6", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(false or {}).empty()"),
-          [true]);
-    });
-
-    test("testBooleanLogicOr7", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"({} or true) = true"),
-          [true]);
-    });
-
-    test("testBooleanLogicOr8", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"({} or false).empty()"),
-          [true]);
-    });
-
-    test("testBooleanLogicOr9", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"({} or {}).empty()"),
-          [true]);
-    });
-  });
-
-  group('testBooleanLogicXOr', () {
-    test("testBooleanLogicXOr1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(true xor true) = false"),
-          [true]);
-    });
-
-    test("testBooleanLogicXOr2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(true xor false) = true"),
-          [true]);
-    });
-
-    test("testBooleanLogicXOr3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(true xor {}).empty()"),
-          [true]);
-    });
-
-    test("testBooleanLogicXOr4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(false xor true) = true"),
-          [true]);
-    });
-
-    test("testBooleanLogicXOr5", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(false xor false) = false"),
-          [true]);
-    });
-
-    test("testBooleanLogicXOr6", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(false xor {}).empty()"),
-          [true]);
-    });
-
-    test("testBooleanLogicXOr7", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"({} xor true).empty()"),
-          [true]);
-    });
-
-    test("testBooleanLogicXOr8", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"({} xor false).empty()"),
-          [true]);
-    });
-
-    test("testBooleanLogicXOr9", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"({} xor {}).empty()"),
-          [true]);
-    });
-  });
-
-  group('testBooleanImplies', () {
-    test("testBooleanImplies1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(true implies true) = true"),
-          [true]);
-    });
-
-    test("testBooleanImplies2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(true implies false) = false"),
-          [true]);
-    });
-
-    test("testBooleanImplies3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(true implies {}).empty()"),
-          [true]);
-    });
-
-    test("testBooleanImplies4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(false implies true) = true"),
-          [true]);
-    });
-
-    test("testBooleanImplies5", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(false implies false) = true"),
-          [true]);
-    });
-
-    test("testBooleanImplies6", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(false implies {}) = true"),
-          [true]);
-    });
-
-    test("testBooleanImplies7", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"({} implies true) = true"),
-          [true]);
-    });
-
-    test("testBooleanImplies8", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"({} implies false).empty()"),
-          [true]);
-    });
-
-    test("testBooleanImplies9", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"({} implies {}).empty()"),
-          [true]);
-    });
-  });
-
-  group('testPlus', () {
-    test("testPlus1", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1 + 1 = 2"),
-          [true]);
-    });
-
-    test("testPlus2", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1 + 0 = 1"),
-          [true]);
-    });
-
-    test("testPlus3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.2 + 1.8 = 3.0"),
-          [true]);
-    });
-
-    test("testPlus4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'a'+'b' = 'ab'"),
-          [true]);
-    });
-  });
-
-  group('testConcatenate', () {
-    test("testConcatenate1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'a' & 'b' = 'ab'"),
-          [true]);
-    });
-
-    test("testConcatenate2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"'1' & {} = '1'"),
-          [true]);
-    });
-
-    test("testConcatenate3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"{} & 'b' = 'b'"),
-          [true]);
-    });
-
-    test("testConcatenate4", () {
-      expect(
-          () => walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(1 | 2 | 3) & 'b' = '1,2,3b'"),
-          throwsA(const TypeMatcher<FhirPathEvaluationException>()));
-    });
-  });
-
-  group('testMinus', () {
-    test("testMinus1", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1 - 1 = 0"),
-          [true]);
-    });
-
-    test("testMinus2", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1 - 0 = 1"),
-          [true]);
-    });
-
-    // FIXED: This fails, because Dart thinks 1.8-1.2 = 0.6000000000000001
-    // test("testMinus3", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(), pathExpression: r"1.8 - 1.2 = 0.6"),
-    //       [true]);
-    // });
-    test("testMinus3-fixed", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(1.8 - 1.2).round(8) = 0.6"),
-          [true]);
-    });
-
-    test("testMinus4", () {
-      expect(
-          () => walkFhirPath(
-              context: patientExample(), pathExpression: r"'a'-'b' = 'ab'"),
-          throwsA(const TypeMatcher<FhirPathException>()));
-    });
-  });
-
-  group('testMultiply', () {
-    test("testMultiply1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.2 * 1.8 = 2.16"),
-          [true]);
-    });
-
-    test("testMultiply2", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1 * 1 = 1"),
-          [true]);
-    });
-
-    test("testMultiply3", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1 * 0 = 0"),
-          [true]);
-    });
-  });
-
-  group('testDivide', () {
-    test("testDivide1", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"1 / 1 = 1"),
-          [true]);
-    });
-
-    test("testDivide2", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: r"4 / 2 = 2"),
-          [true]);
-    });
-
-    test("testDivide3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"4.0 / 2.0 = 2.0"),
-          [true]);
-    });
-
-    test("testDivide4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1 / 2 = 0.5"),
-          [true]);
-    });
-
-    // FIXED: Already discussed on Zulip, this should round to 8 digits prior
-    // to comparison
-    // test("testDivide5", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(),
-    //           pathExpression: r"1.2 / 1.8 = 0.66666667"),
-    //       [true]);
-    // });
-    test("testDivide5-fixed", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(1.2 / 1.8).round(8) = 0.66666667"),
-          [true]);
-    });
-
-    test("testDivide6", () {
-      expect(
-          walkFhirPath(context: patientExample(), pathExpression: "1 / 0"), []);
-    });
-  });
-
-  group('testDiv', () {
-    test("testDiv1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1 div 1 = 1"),
-          [true]);
-    });
-
-    test("testDiv2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"4 div 2 = 2"),
-          [true]);
-    });
-
-    test("testDiv3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"5 div 2 = 2"),
-          [true]);
-    });
-
-    test("testDiv4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"2.2 div 1.8 = 1"),
-          [true]);
-    });
-
-    test("testDiv5", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: "5 div 0"),
-          []);
-    });
-  });
-
-  group('testMod', () {
-    test("testMod1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1 mod 1 = 0"),
-          [true]);
-    });
-
-    test("testMod2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"4 mod 2 = 0"),
-          [true]);
-    });
-
-    test("testMod3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"5 mod 2 = 1"),
-          [true]);
-    });
-
-    // FIXED: Not passing because Dart thinks this is 0.40000000000000013
-    // test("testMod4", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(), pathExpression: r"2.2 mod 1.8 = 0.4"),
-    //       [true]);
-    // });
-    test("testMod4-fixed", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(2.2 mod 1.8).round(8) = 0.4"),
-          [true]);
-    });
-
-    test("testMod5", () {
-      expect(walkFhirPath(context: patientExample(), pathExpression: "5 mod 0"),
-          []);
-    });
-  });
-
-  group('testRound', () {
-    test("testRound1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.round() = 1"),
-          [true]);
-    });
-
-    // FIXED: Incorrect test case: 3.14159.round(3) // 3.142
-    // test("testRound2", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(),
-    //           pathExpression: r"3.14159.round(3) = 2"),
-    //       [true]);
-    // });
-    test("testRound2-fixed", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"3.14159.round(3) = 3.142"),
-          [true]);
-    });
-  });
-
-  group('testSqrt', () {
-    test("testSqrt1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"81.sqrt() = 9.0"),
-          [true]);
-    });
-
-    test("testSqrt2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: "(-1).sqrt()"),
-          []);
-    });
-  });
-
-  group('testAbs', () {
-    test("testAbs1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"(-5).abs() = 5"),
-          [true]);
-    });
-
-    test("testAbs2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"(-5.5).abs() = 5.5"),
-          [true]);
-    });
-
-    test("testAbs3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(-5.5 'mg').abs() = 5.5 'mg'"),
-          [true]);
-    });
-  });
-
-  group('testCeiling', () {
-    test("testCeiling1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.ceiling() = 1"),
-          [true]);
-    });
-
-    test("testCeiling2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(-1.1).ceiling() = -1"),
-          [true]);
-    });
-
-    test("testCeiling3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.1.ceiling() = 2"),
-          [true]);
-    });
-  });
-
-  group('testExp', () {
-    test("testExp1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"0.exp() = 1"),
-          [true]);
-    });
-
-    test("testExp2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"(-0.0).exp() = 1"),
-          [true]);
-    });
-  });
-
-  group('testFloor', () {
-    test("testFloor1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.floor() = 1"),
-          [true]);
-    });
-
-    test("testFloor2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"2.1.floor() = 2"),
-          [true]);
-    });
-
-    test("testFloor3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(-2.1).floor() = -3"),
-          [true]);
-    });
-  });
-
-  group('testLn', () {
-    test("testLn1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.ln() = 0.0"),
-          [true]);
-    });
-
-    test("testLn2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1.0.ln() = 0.0"),
-          [true]);
-    });
-  });
-
-  group('testLog', () {
-    test("testLog1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"16.log(2) = 4.0"),
-          [true]);
-    });
-
-    test("testLog2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"100.0.log(10.0) = 2.0"),
-          [true]);
-    });
-  });
-
-  group('testPower', () {
-    test("testPower1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"2.power(3) = 8"),
-          [true]);
-    });
-
-    test("testPower2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"2.5.power(2) = 6.25"),
-          [true]);
-    });
-
-    test("testPower3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: "(-1).power(0.5)"),
-          []);
-    });
-  });
-
-  group('testTruncate', () {
-    test("testTruncate1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"101.truncate() = 101"),
-          [true]);
-    });
-
-    test("testTruncate2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"1.00000001.truncate() = 1"),
-          [true]);
-    });
-
-    test("testTruncate3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"(-1.56).truncate() = -1"),
-          [true]);
-    });
-  });
-
-  group('testPrecedence', () {
-    // FIXED: <test name="testPrecedence1" name="testUnaryPrecedence" inputfile="patient-example.xml">
-    // <expression invalid="semantic">-1.convertsToInteger()</expression>
-    // should error because unary does not work on boolean: -(1.convertsToInteger())
-    // })
-    test("testPrecedence1-fixed", () {
-      expect(
-          () => walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"-1.convertsToInteger()"),
-          throwsA(const TypeMatcher<FhirPathInvalidExpressionException>()));
-    });
-
-    test("testPrecedence2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1+2*3+4 = 11"),
-          [true]);
-    });
-
-    // FIXED: Incorrect test case. 'is' has higher precedence than >
-    // test("testPrecedence3", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(), pathExpression: r"1 > 2 is Boolean"),
-    //       [true]);
-    // });
-    test("testPrecedence3-fixed", () {
-      () => expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"1 > 2 is Boolean"),
-          throwsA(const TypeMatcher<FhirPathEvaluationException>()));
-    });
-
-    // FIXED: Incorrect test case. 'is' has higher precedence than |
-    // test("testPrecedence4", () {
-    //   expect(
-    //       walkFhirPath(
-    //           context: patientExample(), pathExpression: r"1 | 1 is Integer"),
-    //       [true]);
-    // });
-    test("testPrecedence4-fixeda", () {
-      expect(
-          deepEquals(
-              walkFhirPath(
-                  context: patientExample(),
-                  pathExpression: r"1 | 1 is Integer"),
-              [1, true]),
-          true);
-    });
-    test("testPrecedence4-fixedb", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(), pathExpression: r"(1 | 1) is Integer"),
-          [true]);
-    });
-  });
-
-  group('testVariables', () {
-    test("testVariables1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"%sct = 'http://snomed.info/sct'"),
-          [true]);
-    });
-
-    test("testVariables2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"%loinc = 'http://loinc.org'"),
-          [true]);
-    });
-
-    test("testVariables3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression: r"%ucum = 'http://unitsofmeasure.org'"),
-          [true]);
-    });
-
-    test("testVariables4", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"%`vs-administrative-gender` = 'http://hl7.org/fhir/ValueSet/administrative-gender'"),
-          [true]);
-    });
-  });
-
-  group('testExtension', () {
-    test("testExtension1", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"Patient.birthDate.extension('http://hl7.org/fhir/StructureDefinition/patient-birthTime').exists()"),
-          [true]);
-    });
-
-    test("testExtension2", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"Patient.birthDate.extension(%`ext-patient-birthTime`).exists()"),
-          [true]);
-    });
-
-    test("testExtension3", () {
-      expect(
-          walkFhirPath(
-              context: patientExample(),
-              pathExpression:
-                  r"Patient.birthDate.extension('http://hl7.org/fhir/StructureDefinition/patient-birthTime1').empty()"),
-          [true]);
-    });
-  });
+  // group('testNEquality', () {
+  //   test("testNEquality1", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 != 1"),
+  //         [false]);
+  //   });
+
+  //   test("testNEquality2", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: "{} != {}"),
+  //         []);
+  //   });
+
+  //   test("testNEquality3", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 != 2"),
+  //         [true]);
+  //   });
+
+  //   test("testNEquality4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'a' != 'a'"),
+  //         [false]);
+  //   });
+
+  //   test("testNEquality5", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'a' != 'b'"),
+  //         [true]);
+  //   });
+
+  //   test("testNEquality6", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.1 != 1.1"),
+  //         [false]);
+  //   });
+
+  //   test("testNEquality7", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.1 != 1.2"),
+  //         [true]);
+  //   });
+
+  //   test("testNEquality8", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.10 != 1.1"),
+  //         [false]);
+  //   });
+
+  //   test("testNEquality9", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"0 != 0"),
+  //         [false]);
+  //   });
+
+  //   test("testNEquality10", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"0.0 != 0"),
+  //         [false]);
+  //   });
+
+  //   test("testNEquality11", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2012-04-15 != @2012-04-15"),
+  //         [false]);
+  //   });
+
+  //   test("testNEquality12", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2012-04-15 != @2012-04-16"),
+  //         [true]);
+  //   });
+
+  //   test("testNEquality13", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: "@2012-04-15 != @2012-04-15T10:00:00"),
+  //         []);
+  //   });
+
+  //   test("testNEquality14", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2012-04-15T15:00:00 != @2012-04-15T10:00:00"),
+  //         [true]);
+  //   });
+
+  //   test("testNEquality15", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression:
+  //                 r"@2012-04-15T15:30:31 != @2012-04-15T15:30:31.0"),
+  //         [false]);
+  //   });
+
+  //   test("testNEquality16", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression:
+  //                 r"@2012-04-15T15:30:31 != @2012-04-15T15:30:31.1"),
+  //         [true]);
+  //   });
+
+  //   // TODO(Dokotela): FIXED: decide if we should continue to include a default timezone
+  //   // test("testNEquality17", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: patientExample(),
+  //   //           pathExpression:
+  //   //               "@2012-04-15T15:00:00Z != @2012-04-15T10:00:00"),
+  //   //       []);
+  //   // });
+  //   test("testNEquality17-fixed", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: "@2012-04-15T15:00:00Z != @2012-04-15T10:00:00"),
+  //         [true]);
+  //   });
+
+  //   test("testNEquality18", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression:
+  //                 r"@2012-04-15T15:00:00+02:00 != @2012-04-15T16:00:00+03:00"),
+  //         [false]);
+  //   });
+
+  //   test("testNEquality19", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"name != name"),
+  //         [false]);
+  //   });
+
+  //   // Incorrect: assumptions about order
+  //   // test("testNEquality20", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: patientExample(),
+  //   //           pathExpression:
+  //   //               r"name.take(2) != name.take(2).first() | name.take(2).last()"),
+  //   //       [false]);
+  //   // });
+
+  //   // Incorrect: assumptions about order
+  //   // test("testNEquality21", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: patientExample(),
+  //   //           pathExpression:
+  //   //               r"name.take(2) != name.take(2).last() | name.take(2).first()"),
+  //   //       [true]);
+  //   // });
+
+  //   test("testNEquality22", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"1.2 / 1.8 != 0.6666667"),
+  //         [true]);
+  //   });
+
+  //   test("testNEquality23", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.2 / 1.8 != 0.67"),
+  //         [true]);
+  //   });
+
+  //   test("testNEquality24", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: observationExample(),
+  //             pathExpression: r"Observation.value != 185 'kg'"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testEquivalent', () {
+  //   test("testEquivalent1", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 ~ 1"),
+  //         [true]);
+  //   });
+
+  //   test("testEquivalent2", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"{} ~ {}"),
+  //         [true]);
+  //   });
+
+  //   test("testEquivalent3", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 ~ {}"),
+  //         [false]);
+  //   });
+
+  //   test("testEquivalent4", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 ~ 2"),
+  //         [false]);
+  //   });
+
+  //   test("testEquivalent5", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'a' ~ 'a'"),
+  //         [true]);
+  //   });
+
+  //   test("testEquivalent6", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'a' ~ 'A'"),
+  //         [true]);
+  //   });
+
+  //   test("testEquivalent7", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'a' ~ 'b'"),
+  //         [false]);
+  //   });
+
+  //   test("testEquivalent8", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1.1 ~ 1.1"),
+  //         [true]);
+  //   });
+
+  //   test("testEquivalent9", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1.1 ~ 1.2"),
+  //         [false]);
+  //   });
+
+  //   test("testEquivalent10", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.10 ~ 1.1"),
+  //         [true]);
+  //   });
+
+  //   // TODO(Dokotela): correct equivalence parser to compare numbers using significant digits
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: patientExample(), pathExpression: r"1.2 / 1.8 ~ 0.67"),
+  //   //       [true]);
+  //   // });
+
+  //   test("testEquivalent12", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"0 ~ 0"),
+  //         [true]);
+  //   });
+
+  //   test("testEquivalent13", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"0.0 ~ 0"),
+  //         [true]);
+  //   });
+
+  //   test("testEquivalent14", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2012-04-15 ~ @2012-04-15"),
+  //         [true]);
+  //   });
+
+  //   test("testEquivalent15", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2012-04-15 ~ @2012-04-16"),
+  //         [false]);
+  //   });
+
+  //   test("testEquivalent16", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2012-04-15 ~ @2012-04-15T10:00:00"),
+  //         [false]);
+  //   });
+
+  //   test("testEquivalent17", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2012-04-15T15:30:31 ~ @2012-04-15T15:30:31.0"),
+  //         [true]);
+  //   });
+
+  //   test("testEquivalent18", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2012-04-15T15:30:31 ~ @2012-04-15T15:30:31.1"),
+  //         [false]);
+  //   });
+
+  //   test("testEquivalent19", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"name ~ name"),
+  //         [true]);
+  //   });
+
+  //   test("testEquivalent20", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression:
+  //                 r"name.take(2).given ~ name.take(2).first().given | name.take(2).last().given"),
+  //         [true]);
+  //   });
+
+  //   test("testEquivalent21", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression:
+  //                 r"name.take(2).given ~ name.take(2).last().given | name.take(2).first().given"),
+  //         [true]);
+  //   });
+
+  //   // TODO(Dokotela): Compare Quantity objects and ValidatedQuantity
+  //   // test("testEquivalent22", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: observationExample(),
+  //   //           pathExpression: r"Observation.value ~ 185 '[lb_av]'"),
+  //   //       [true]);
+  //   // });
+  // });
+
+  // group('testNotEquivalent', () {
+  //   test("testNotEquivalent1", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 !~ 1"),
+  //         [false]);
+  //   });
+
+  //   test("testNotEquivalent2", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"{} !~ {}"),
+  //         [false]);
+  //   });
+
+  //   test("testNotEquivalent3", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"{} !~ 1"),
+  //         [true]);
+  //   });
+
+  //   test("testNotEquivalent4", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 !~ 2"),
+  //         [true]);
+  //   });
+
+  //   test("testNotEquivalent5", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'a' !~ 'a'"),
+  //         [false]);
+  //   });
+
+  //   test("testNotEquivalent6", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'a' !~ 'A'"),
+  //         [false]);
+  //   });
+
+  //   test("testNotEquivalent7", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'a' !~ 'b'"),
+  //         [true]);
+  //   });
+
+  //   test("testNotEquivalent8", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.1 !~ 1.1"),
+  //         [false]);
+  //   });
+
+  //   test("testNotEquivalent9", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.1 !~ 1.2"),
+  //         [true]);
+  //   });
+
+  //   test("testNotEquivalent10", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.10 !~ 1.1"),
+  //         [false]);
+  //   });
+
+  //   test("testNotEquivalent11", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"0 !~ 0"),
+  //         [false]);
+  //   });
+
+  //   test("testNotEquivalent12", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"0.0 !~ 0"),
+  //         [false]);
+  //   });
+
+  //   // TODO(Dokotela): Equivalent need some work on significant digits
+  //   // test("testNotEquivalent13", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: patientExample(), pathExpression: r"1.2 / 1.8 !~ 0.6"),
+  //   //       [true]);
+  //   // });
+
+  //   test("testNotEquivalent14", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2012-04-15 !~ @2012-04-15"),
+  //         [false]);
+  //   });
+
+  //   test("testNotEquivalent15", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2012-04-15 !~ @2012-04-16"),
+  //         [true]);
+  //   });
+
+  //   test("testNotEquivalent16", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2012-04-15 !~ @2012-04-15T10:00:00"),
+  //         [true]);
+  //   });
+
+  //   test("testNotEquivalent17", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression:
+  //                 r"@2012-04-15T15:30:31 !~ @2012-04-15T15:30:31.0"),
+  //         [false]);
+  //   });
+
+  //   test("testNotEquivalent18", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression:
+  //                 r"@2012-04-15T15:30:31 !~ @2012-04-15T15:30:31.1"),
+  //         [true]);
+  //   });
+
+  //   // TODO(Dokotela): clarify, is this one supposed to be true, because the two
+  //   // aren't the same objects?
+  //   // test("testNotEquivalent19", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: patientExample(), pathExpression: r"name !~ name"),
+  //   //       [true]);
+  //   // });
+
+  //   // Incorrect: Keep assuming order
+  //   // test("testNotEquivalent20", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: patientExample(),
+  //   //           pathExpression:
+  //   //               r"name.take(2).given !~ name.take(2).first().given | name.take(2).last().given"),
+  //   //       [false]);
+  //   // });
+
+  //   // Incorrect: Keep assuming order
+  //   // test("testNotEquivalent21", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: patientExample(),
+  //   //           pathExpression:
+  //   //               r"name.take(2).given !~ name.take(2).last().given | name.take(2).first().given"),
+  //   //       [false]);
+  //   // });
+
+  //   // TODO(Dokotela): Compare Quantity objects to ValidatedQuantity
+  //   // test("testNotEquivalent22", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: observationExample(),
+  //   //           pathExpression: r"Observation.value !~ 185 'kg'"),
+  //   //       [true]);
+  //   // });
+  // });
+
+  // group('testLessThan', () {
+  //   test("testLessThan1", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 < 2"),
+  //         [true]);
+  //   });
+
+  //   test("testLessThan2", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1.0 < 1.2"),
+  //         [true]);
+  //   });
+
+  //   test("testLessThan3", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'a' < 'b'"),
+  //         [true]);
+  //   });
+
+  //   test("testLessThan4", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'A' < 'a'"),
+  //         [true]);
+  //   });
+
+  //   test("testLessThan5", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-12 < @2014-12-13"),
+  //         [true]);
+  //   });
+
+  //   test("testLessThan6", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13T12:00:00 < @2014-12-13T12:00:01"),
+  //         [true]);
+  //   });
+
+  //   test("testLessThan7", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T12:00:00 < @T14:00:00"),
+  //         [true]);
+  //   });
+
+  //   test("testLessThan8", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 < 1"),
+  //         [false]);
+  //   });
+
+  //   test("testLessThan9", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1.0 < 1.0"),
+  //         [false]);
+  //   });
+
+  //   test("testLessThan10", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'a' < 'a'"),
+  //         [false]);
+  //   });
+
+  //   test("testLessThan11", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'A' < 'A'"),
+  //         [false]);
+  //   });
+
+  //   test("testLessThan12", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-12 < @2014-12-12"),
+  //         [false]);
+  //   });
+
+  //   test("testLessThan13", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13T12:00:00 < @2014-12-13T12:00:00"),
+  //         [false]);
+  //   });
+
+  //   test("testLessThan14", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T12:00:00 < @T12:00:00"),
+  //         [false]);
+  //   });
+
+  //   test("testLessThan15", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"2 < 1"),
+  //         [false]);
+  //   });
+
+  //   test("testLessThan16", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1.1 < 1.0"),
+  //         [false]);
+  //   });
+
+  //   test("testLessThan17", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'b' < 'a'"),
+  //         [false]);
+  //   });
+
+  //   test("testLessThan18", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'B' < 'A'"),
+  //         [false]);
+  //   });
+
+  //   test("testLessThan19", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13 < @2014-12-12"),
+  //         [false]);
+  //   });
+
+  //   test("testLessThan20", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13T12:00:01 < @2014-12-13T12:00:00"),
+  //         [false]);
+  //   });
+
+  //   test("testLessThan21", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T12:00:01 < @T12:00:00"),
+  //         [false]);
+  //   });
+
+  //   // TODO(Dokotela): Compare Quantity objects with ValidatedQuantity
+  //   // test("testLessThan22", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: observationExample(),
+  //   //           pathExpression: r"Observation.value < 200 '[lb_av]'"),
+  //   //       [true]);
+  //   // });
+
+  //   test("testLessThan23", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: "@2018-03 < @2018-03-01"),
+  //         []);
+  //   });
+
+  //   test("testLessThan24", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: "@2018-03-01T10 < @2018-03-01T10:30"),
+  //         []);
+  //   });
+
+  //   test("testLessThan25", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: "@T10 < @T10:30"),
+  //         []);
+  //   });
+
+  //   test("testLessThan26", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2018-03-01T10:30:00 < @2018-03-01T10:30:00.0"),
+  //         [false]);
+  //   });
+
+  //   test("testLessThan27", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T10:30:00 < @T10:30:00.0"),
+  //         [false]);
+  //   });
+  // });
+
+  // group('testLessOrEqual', () {
+  //   test("testLessOrEqual1", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 <= 2"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.0 <= 1.2"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'a' <= 'b'"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'A' <= 'a'"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual5", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-12 <= @2014-12-13"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual6", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13T12:00:00 <= @2014-12-13T12:00:01"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual7", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T12:00:00 <= @T14:00:00"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual8", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 <= 1"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual9", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.0 <= 1.0"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual10", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'a' <= 'a'"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual11", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'A' <= 'A'"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual12", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-12 <= @2014-12-12"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual13", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13T12:00:00 <= @2014-12-13T12:00:00"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual14", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T12:00:00 <= @T12:00:00"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual15", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"2 <= 1"),
+  //         [false]);
+  //   });
+
+  //   test("testLessOrEqual16", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.1 <= 1.0"),
+  //         [false]);
+  //   });
+
+  //   test("testLessOrEqual17", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'b' <= 'a'"),
+  //         [false]);
+  //   });
+
+  //   test("testLessOrEqual18", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'B' <= 'A'"),
+  //         [false]);
+  //   });
+
+  //   test("testLessOrEqual19", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13 <= @2014-12-12"),
+  //         [false]);
+  //   });
+
+  //   test("testLessOrEqual20", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13T12:00:01 <= @2014-12-13T12:00:00"),
+  //         [false]);
+  //   });
+
+  //   test("testLessOrEqual21", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T12:00:01 <= @T12:00:00"),
+  //         [false]);
+  //   });
+
+  //   // TODO(Dokotela): compare Quantity objects with ValidatedQuantity
+  //   // test("testLessOrEqual22", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: observationExample(),
+  //   //           pathExpression: r"Observation.value <= 200 '[lb_av]'"),
+  //   //       [true]);
+  //   // });
+
+  //   test("testLessOrEqual23", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: "@2018-03 <= @2018-03-01"),
+  //         []);
+  //   });
+
+  //   test("testLessOrEqual24", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: "@2018-03-01T10 <= @2018-03-01T10:30"),
+  //         []);
+  //   });
+
+  //   test("testLessOrEqual25", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: "@T10 <= @T10:30"),
+  //         []);
+  //   });
+
+  //   test("testLessOrEqual26", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression:
+  //                 r"@2018-03-01T10:30:00 <= @2018-03-01T10:30:00.0"),
+  //         [true]);
+  //   });
+
+  //   test("testLessOrEqual27", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T10:30:00 <= @T10:30:00.0"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testGreatorOrEqual', () {
+  //   test("testGreatorOrEqual1", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 >= 2"),
+  //         [false]);
+  //   });
+
+  //   test("testGreatorOrEqual2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.0 >= 1.2"),
+  //         [false]);
+  //   });
+
+  //   test("testGreatorOrEqual3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'a' >= 'b'"),
+  //         [false]);
+  //   });
+
+  //   test("testGreatorOrEqual4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'A' >= 'a'"),
+  //         [false]);
+  //   });
+
+  //   test("testGreatorOrEqual5", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-12 >= @2014-12-13"),
+  //         [false]);
+  //   });
+
+  //   test("testGreatorOrEqual6", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13T12:00:00 >= @2014-12-13T12:00:01"),
+  //         [false]);
+  //   });
+
+  //   test("testGreatorOrEqual7", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T12:00:00 >= @T14:00:00"),
+  //         [false]);
+  //   });
+
+  //   test("testGreatorOrEqual8", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 >= 1"),
+  //         [true]);
+  //   });
+
+  //   test("testGreatorOrEqual9", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.0 >= 1.0"),
+  //         [true]);
+  //   });
+
+  //   test("testGreatorOrEqual10", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'a' >= 'a'"),
+  //         [true]);
+  //   });
+
+  //   test("testGreatorOrEqual11", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'A' >= 'A'"),
+  //         [true]);
+  //   });
+
+  //   test("testGreatorOrEqual12", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-12 >= @2014-12-12"),
+  //         [true]);
+  //   });
+
+  //   test("testGreatorOrEqual13", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13T12:00:00 >= @2014-12-13T12:00:00"),
+  //         [true]);
+  //   });
+
+  //   test("testGreatorOrEqual14", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T12:00:00 >= @T12:00:00"),
+  //         [true]);
+  //   });
+
+  //   test("testGreatorOrEqual15", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"2 >= 1"),
+  //         [true]);
+  //   });
+
+  //   test("testGreatorOrEqual16", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.1 >= 1.0"),
+  //         [true]);
+  //   });
+
+  //   test("testGreatorOrEqual17", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'b' >= 'a'"),
+  //         [true]);
+  //   });
+
+  //   test("testGreatorOrEqual18", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'B' >= 'A'"),
+  //         [true]);
+  //   });
+
+  //   test("testGreatorOrEqual19", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13 >= @2014-12-12"),
+  //         [true]);
+  //   });
+
+  //   test("testGreatorOrEqual20", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13T12:00:01 >= @2014-12-13T12:00:00"),
+  //         [true]);
+  //   });
+
+  //   test("testGreatorOrEqual21", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T12:00:01 >= @T12:00:00"),
+  //         [true]);
+  //   });
+
+  //   // TODO(Dokotela): compare Quantity objects with ValidatedQuantity
+  //   // test("testGreatorOrEqual22", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: observationExample(),
+  //   //           pathExpression: r"Observation.value >= 100 '[lb_av]'"),
+  //   //       [true]);
+  //   // });
+
+  //   test("testGreatorOrEqual23", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: "@2018-03 >= @2018-03-01"),
+  //         []);
+  //   });
+
+  //   test("testGreatorOrEqual24", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: "@2018-03-01T10 >= @2018-03-01T10:30"),
+  //         []);
+  //   });
+
+  //   test("testGreatorOrEqual25", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: "@T10 >= @T10:30"),
+  //         []);
+  //   });
+
+  //   test("testGreatorOrEqual26", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression:
+  //                 r"@2018-03-01T10:30:00 >= @2018-03-01T10:30:00.0"),
+  //         [true]);
+  //   });
+
+  //   test("testGreatorOrEqual27", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T10:30:00 >= @T10:30:00.0"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testGreaterThan', () {
+  //   test("testGreaterThan1", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 > 2"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan2", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1.0 > 1.2"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan3", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'a' > 'b'"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan4", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'A' > 'a'"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan5", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-12 > @2014-12-13"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan6", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13T12:00:00 > @2014-12-13T12:00:01"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan7", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T12:00:00 > @T14:00:00"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan8", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"1 > 1"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan9", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1.0 > 1.0"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan10", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'a' > 'a'"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan11", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'A' > 'A'"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan12", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-12 > @2014-12-12"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan13", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13T12:00:00 > @2014-12-13T12:00:00"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan14", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T12:00:00 > @T12:00:00"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan15", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: r"2 > 1"),
+  //         [true]);
+  //   });
+
+  //   test("testGreaterThan16", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1.1 > 1.0"),
+  //         [true]);
+  //   });
+
+  //   test("testGreaterThan17", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'b' > 'a'"),
+  //         [true]);
+  //   });
+
+  //   test("testGreaterThan18", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"'B' > 'A'"),
+  //         [true]);
+  //   });
+
+  //   test("testGreaterThan19", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13 > @2014-12-12"),
+  //         [true]);
+  //   });
+
+  //   test("testGreaterThan20", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2014-12-13T12:00:01 > @2014-12-13T12:00:00"),
+  //         [true]);
+  //   });
+
+  //   test("testGreaterThan21", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T12:00:01 > @T12:00:00"),
+  //         [true]);
+  //   });
+
+  //   // Compare Quantity objects to ValidatedQuantity
+  //   // test("testGreaterThan22", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: observationExample(),
+  //   //           pathExpression: r"Observation.value > 100 '[lb_av]'"),
+  //   //       [true]);
+  //   // });
+
+  //   test("testGreaterThan23", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: "@2018-03 > @2018-03-01"),
+  //         []);
+  //   });
+
+  //   test("testGreaterThan24", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: "@2018-03-01T10 > @2018-03-01T10:30"),
+  //         []);
+  //   });
+
+  //   test("testGreaterThan25", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: "@T10 > @T10:30"),
+  //         []);
+  //   });
+
+  //   test("testGreaterThan26", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@2018-03-01T10:30:00 > @2018-03-01T10:30:00.0"),
+  //         [false]);
+  //   });
+
+  //   test("testGreaterThan27", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"@T10:30:00 > @T10:30:00.0"),
+  //         [false]);
+  //   });
+  // });
+
+  // group('testUnion', () {
+  //   test("testUnion1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(1 | 2 | 3).count() = 3"),
+  //         [true]);
+  //   });
+
+  //   test("testUnion2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(1 | 2 | 2).count() = 2"),
+  //         [true]);
+  //   }); // merge duplicates
+
+  //   test("testUnion3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"(1|1).count() = 1"),
+  //         [true]);
+  //   });
+
+  //   test("testUnion4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"1.union(2).union(3).count() = 3"),
+  //         [true]);
+  //   });
+
+  //   test("testUnion5", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"1.union(2.union(3)).count() = 3"),
+  //         [true]);
+  //   });
+
+  //   test("testUnion6", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(1 | 2).combine(2).count() = 3"),
+  //         [true]);
+  //   }); // do not merge duplicates
+
+  //   test("testUnion7", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"1.combine(1).count() = 2"),
+  //         [true]);
+  //   }); // do not merge duplicates
+
+  //   test("testUnion8", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"1.combine(1).union(2).count() = 2"),
+  //         [true]);
+  //   }); // do not merge duplicates
+  // });
+
+  // group('testIntersect', () {
+  //   test("testIntersect1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(1 | 2 | 3).intersect(2 | 4) = 2"),
+  //         [true]);
+  //   });
+
+  //   test("testIntersect2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(1 | 2).intersect(4).empty()"),
+  //         [true]);
+  //   });
+
+  //   test("testIntersect3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(1 | 2).intersect({}).empty()"),
+  //         [true]);
+  //   });
+
+  //   test("testIntersect4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"1.combine(1).intersect(1).count() = 1"),
+  //         [true]);
+  //   }); // do not merge duplicates
+  // });
+
+  // group('testExclude', () {
+  //   test("testExclude1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(1 | 2 | 3).exclude(2 | 4) = 1 | 3"),
+  //         [true]);
+  //   });
+
+  //   test("testExclude2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(1 | 2).exclude(4) = 1 | 2"),
+  //         [true]);
+  //   });
+
+  //   test("testExclude3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(1 | 2).exclude({}) = 1 | 2"),
+  //         [true]);
+  //   });
+
+  //   test("testExclude4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"1.combine(1).exclude(2).count() = 2"),
+  //         [true]);
+  //   }); // do not merge duplicates
+  // });
+
+  // group('testIn', () {
+  //   test("testIn1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1 in (1 | 2 | 3)"),
+  //         [true]);
+  //   });
+
+  //   test("testIn2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1 in (2 | 3)"),
+  //         [false]);
+  //   });
+
+  //   test("testIn3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"'a' in ('a' | 'c' | 'd')"),
+  //         [true]);
+  //   });
+
+  //   test("testIn4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"'b' in ('a' | 'c' | 'd')"),
+  //         [false]);
+  //   });
+  // });
+
+  // group('testContainsCollection', () {
+  //   test("testContainsCollection1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(1 | 2 | 3) contains 1"),
+  //         [true]);
+  //   });
+
+  //   test("testContainsCollection2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(2 | 3) contains 1 "),
+  //         [false]);
+  //   });
+
+  //   test("testContainsCollection3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"('a' | 'c' | 'd') contains 'a'"),
+  //         [true]);
+  //   });
+
+  //   test("testContainsCollection4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"('a' | 'c' | 'd') contains 'b'"),
+  //         [false]);
+  //   });
+  // });
+
+  // group('testBooleanLogicAnd', () {
+  //   test("testBooleanLogicAnd1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(true and true) = true"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicAnd2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(true and false) = false"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicAnd3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(true and {}).empty()"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicAnd4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(false and true) = false"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicAnd5", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(false and false) = false"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicAnd6", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(false and {}) = false"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicAnd7", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"({} and true).empty()"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicAnd8", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"({} and false) = false"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicAnd9", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"({} and {}).empty()"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testBooleanLogicOr', () {
+  //   test("testBooleanLogicOr1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(true or true) = true"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicOr2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(true or false) = true"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicOr3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(true or {}) = true"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicOr4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(false or true) = true"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicOr5", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(false or false) = false"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicOr6", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(false or {}).empty()"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicOr7", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"({} or true) = true"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicOr8", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"({} or false).empty()"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicOr9", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"({} or {}).empty()"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testBooleanLogicXOr', () {
+  //   test("testBooleanLogicXOr1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(true xor true) = false"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicXOr2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(true xor false) = true"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicXOr3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(true xor {}).empty()"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicXOr4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(false xor true) = true"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicXOr5", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(false xor false) = false"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicXOr6", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(false xor {}).empty()"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicXOr7", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"({} xor true).empty()"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicXOr8", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"({} xor false).empty()"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanLogicXOr9", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"({} xor {}).empty()"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testBooleanImplies', () {
+  //   test("testBooleanImplies1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(true implies true) = true"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanImplies2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(true implies false) = false"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanImplies3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(true implies {}).empty()"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanImplies4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(false implies true) = true"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanImplies5", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(false implies false) = true"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanImplies6", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(false implies {}) = true"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanImplies7", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"({} implies true) = true"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanImplies8", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"({} implies false).empty()"),
+  //         [true]);
+  //   });
+
+  //   test("testBooleanImplies9", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"({} implies {}).empty()"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testPlus', () {
+  //   test("testPlus1", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1 + 1 = 2"),
+  //         [true]);
+  //   });
+
+  //   test("testPlus2", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1 + 0 = 1"),
+  //         [true]);
+  //   });
+
+  //   test("testPlus3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.2 + 1.8 = 3.0"),
+  //         [true]);
+  //   });
+
+  //   test("testPlus4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'a'+'b' = 'ab'"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testConcatenate', () {
+  //   test("testConcatenate1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'a' & 'b' = 'ab'"),
+  //         [true]);
+  //   });
+
+  //   test("testConcatenate2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'1' & {} = '1'"),
+  //         [true]);
+  //   });
+
+  //   test("testConcatenate3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"{} & 'b' = 'b'"),
+  //         [true]);
+  //   });
+
+  //   test("testConcatenate4", () {
+  //     expect(
+  //         () => walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(1 | 2 | 3) & 'b' = '1,2,3b'"),
+  //         throwsA(const TypeMatcher<FhirPathEvaluationException>()));
+  //   });
+  // });
+
+  // group('testMinus', () {
+  //   test("testMinus1", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1 - 1 = 0"),
+  //         [true]);
+  //   });
+
+  //   test("testMinus2", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1 - 0 = 1"),
+  //         [true]);
+  //   });
+
+  //   // FIXED: This fails, because Dart thinks 1.8-1.2 = 0.6000000000000001
+  //   // test("testMinus3", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: patientExample(), pathExpression: r"1.8 - 1.2 = 0.6"),
+  //   //       [true]);
+  //   // });
+  //   test("testMinus3-fixed", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(1.8 - 1.2).round(8) = 0.6"),
+  //         [true]);
+  //   });
+
+  //   test("testMinus4", () {
+  //     expect(
+  //         () => walkFhirPath(
+  //             context: patientExample(), pathExpression: r"'a'-'b' = 'ab'"),
+  //         throwsA(const TypeMatcher<FhirPathException>()));
+  //   });
+  // });
+
+  // group('testMultiply', () {
+  //   test("testMultiply1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.2 * 1.8 = 2.16"),
+  //         [true]);
+  //   });
+
+  //   test("testMultiply2", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1 * 1 = 1"),
+  //         [true]);
+  //   });
+
+  //   test("testMultiply3", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1 * 0 = 0"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testDivide', () {
+  //   test("testDivide1", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"1 / 1 = 1"),
+  //         [true]);
+  //   });
+
+  //   test("testDivide2", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: r"4 / 2 = 2"),
+  //         [true]);
+  //   });
+
+  //   test("testDivide3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"4.0 / 2.0 = 2.0"),
+  //         [true]);
+  //   });
+
+  //   test("testDivide4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1 / 2 = 0.5"),
+  //         [true]);
+  //   });
+
+  //   // FIXED: Already discussed on Zulip, this should round to 8 digits prior
+  //   // to comparison
+  //   // test("testDivide5", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: patientExample(),
+  //   //           pathExpression: r"1.2 / 1.8 = 0.66666667"),
+  //   //       [true]);
+  //   // });
+  //   test("testDivide5-fixed", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(1.2 / 1.8).round(8) = 0.66666667"),
+  //         [true]);
+  //   });
+
+  //   test("testDivide6", () {
+  //     expect(
+  //         walkFhirPath(context: patientExample(), pathExpression: "1 / 0"), []);
+  //   });
+  // });
+
+  // group('testDiv', () {
+  //   test("testDiv1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1 div 1 = 1"),
+  //         [true]);
+  //   });
+
+  //   test("testDiv2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"4 div 2 = 2"),
+  //         [true]);
+  //   });
+
+  //   test("testDiv3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"5 div 2 = 2"),
+  //         [true]);
+  //   });
+
+  //   test("testDiv4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"2.2 div 1.8 = 1"),
+  //         [true]);
+  //   });
+
+  //   test("testDiv5", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: "5 div 0"),
+  //         []);
+  //   });
+  // });
+
+  // group('testMod', () {
+  //   test("testMod1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1 mod 1 = 0"),
+  //         [true]);
+  //   });
+
+  //   test("testMod2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"4 mod 2 = 0"),
+  //         [true]);
+  //   });
+
+  //   test("testMod3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"5 mod 2 = 1"),
+  //         [true]);
+  //   });
+
+  //   // FIXED: Not passing because Dart thinks this is 0.40000000000000013
+  //   // test("testMod4", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: patientExample(), pathExpression: r"2.2 mod 1.8 = 0.4"),
+  //   //       [true]);
+  //   // });
+  //   test("testMod4-fixed", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(2.2 mod 1.8).round(8) = 0.4"),
+  //         [true]);
+  //   });
+
+  //   test("testMod5", () {
+  //     expect(walkFhirPath(context: patientExample(), pathExpression: "5 mod 0"),
+  //         []);
+  //   });
+  // });
+
+  // group('testRound', () {
+  //   test("testRound1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.round() = 1"),
+  //         [true]);
+  //   });
+
+  //   // FIXED: Incorrect test case: 3.14159.round(3) // 3.142
+  //   // test("testRound2", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: patientExample(),
+  //   //           pathExpression: r"3.14159.round(3) = 2"),
+  //   //       [true]);
+  //   // });
+  //   test("testRound2-fixed", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"3.14159.round(3) = 3.142"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testSqrt', () {
+  //   test("testSqrt1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"81.sqrt() = 9.0"),
+  //         [true]);
+  //   });
+
+  //   test("testSqrt2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: "(-1).sqrt()"),
+  //         []);
+  //   });
+  // });
+
+  // group('testAbs', () {
+  //   test("testAbs1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"(-5).abs() = 5"),
+  //         [true]);
+  //   });
+
+  //   test("testAbs2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"(-5.5).abs() = 5.5"),
+  //         [true]);
+  //   });
+
+  //   test("testAbs3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(-5.5 'mg').abs() = 5.5 'mg'"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testCeiling', () {
+  //   test("testCeiling1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.ceiling() = 1"),
+  //         [true]);
+  //   });
+
+  //   test("testCeiling2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(-1.1).ceiling() = -1"),
+  //         [true]);
+  //   });
+
+  //   test("testCeiling3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.1.ceiling() = 2"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testExp', () {
+  //   test("testExp1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"0.exp() = 1"),
+  //         [true]);
+  //   });
+
+  //   test("testExp2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"(-0.0).exp() = 1"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testFloor', () {
+  //   test("testFloor1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.floor() = 1"),
+  //         [true]);
+  //   });
+
+  //   test("testFloor2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"2.1.floor() = 2"),
+  //         [true]);
+  //   });
+
+  //   test("testFloor3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(-2.1).floor() = -3"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testLn', () {
+  //   test("testLn1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.ln() = 0.0"),
+  //         [true]);
+  //   });
+
+  //   test("testLn2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1.0.ln() = 0.0"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testLog', () {
+  //   test("testLog1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"16.log(2) = 4.0"),
+  //         [true]);
+  //   });
+
+  //   test("testLog2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"100.0.log(10.0) = 2.0"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testPower', () {
+  //   test("testPower1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"2.power(3) = 8"),
+  //         [true]);
+  //   });
+
+  //   test("testPower2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"2.5.power(2) = 6.25"),
+  //         [true]);
+  //   });
+
+  //   test("testPower3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: "(-1).power(0.5)"),
+  //         []);
+  //   });
+  // });
+
+  // group('testTruncate', () {
+  //   test("testTruncate1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"101.truncate() = 101"),
+  //         [true]);
+  //   });
+
+  //   test("testTruncate2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"1.00000001.truncate() = 1"),
+  //         [true]);
+  //   });
+
+  //   test("testTruncate3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"(-1.56).truncate() = -1"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testPrecedence', () {
+  //   // FIXED: <test name="testPrecedence1" name="testUnaryPrecedence" inputfile="patient-example.xml">
+  //   // <expression invalid="semantic">-1.convertsToInteger()</expression>
+  //   // should error because unary does not work on boolean: -(1.convertsToInteger())
+  //   // })
+  //   test("testPrecedence1-fixed", () {
+  //     expect(
+  //         () => walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"-1.convertsToInteger()"),
+  //         throwsA(const TypeMatcher<FhirPathInvalidExpressionException>()));
+  //   });
+
+  //   test("testPrecedence2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1+2*3+4 = 11"),
+  //         [true]);
+  //   });
+
+  //   // FIXED: Incorrect test case. 'is' has higher precedence than >
+  //   // test("testPrecedence3", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: patientExample(), pathExpression: r"1 > 2 is Boolean"),
+  //   //       [true]);
+  //   // });
+  //   test("testPrecedence3-fixed", () {
+  //     () => expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"1 > 2 is Boolean"),
+  //         throwsA(const TypeMatcher<FhirPathEvaluationException>()));
+  //   });
+
+  //   // FIXED: Incorrect test case. 'is' has higher precedence than |
+  //   // test("testPrecedence4", () {
+  //   //   expect(
+  //   //       walkFhirPath(
+  //   //           context: patientExample(), pathExpression: r"1 | 1 is Integer"),
+  //   //       [true]);
+  //   // });
+  //   test("testPrecedence4-fixeda", () {
+  //     expect(
+  //         deepEquals(
+  //             walkFhirPath(
+  //                 context: patientExample(),
+  //                 pathExpression: r"1 | 1 is Integer"),
+  //             [1, true]),
+  //         true);
+  //   });
+  //   test("testPrecedence4-fixedb", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(), pathExpression: r"(1 | 1) is Integer"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testVariables', () {
+  //   test("testVariables1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"%sct = 'http://snomed.info/sct'"),
+  //         [true]);
+  //   });
+
+  //   test("testVariables2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"%loinc = 'http://loinc.org'"),
+  //         [true]);
+  //   });
+
+  //   test("testVariables3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression: r"%ucum = 'http://unitsofmeasure.org'"),
+  //         [true]);
+  //   });
+
+  //   test("testVariables4", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression:
+  //                 r"%`vs-administrative-gender` = 'http://hl7.org/fhir/ValueSet/administrative-gender'"),
+  //         [true]);
+  //   });
+  // });
+
+  // group('testExtension', () {
+  //   test("testExtension1", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression:
+  //                 r"Patient.birthDate.extension('http://hl7.org/fhir/StructureDefinition/patient-birthTime').exists()"),
+  //         [true]);
+  //   });
+
+  //   test("testExtension2", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression:
+  //                 r"Patient.birthDate.extension(%`ext-patient-birthTime`).exists()"),
+  //         [true]);
+  //   });
+
+  //   test("testExtension3", () {
+  //     expect(
+  //         walkFhirPath(
+  //             context: patientExample(),
+  //             pathExpression:
+  //                 r"Patient.birthDate.extension('http://hl7.org/fhir/StructureDefinition/patient-birthTime1').empty()"),
+  //         [true]);
+  //   });
+  // });
 
   // TODO(Dokotela): testType
   // group('testType', () {

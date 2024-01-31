@@ -9,12 +9,12 @@ import 'test_paths.dart';
 import 'test_questionnaire.dart';
 
 void fhirPathTest() {
-  testArgFxns();
-  testBasicOperators();
   testBasicTypes();
-  testDateTimes();
-  testFhirPathTestSuite();
-  testNoArgFxns();
   testPaths();
+  testDateTimes();
+  testNoArgFxns();
   testQuestionnaire();
+  testBasicOperators();
+  testArgFxns();
+  testFhirPathTestSuite();
 }

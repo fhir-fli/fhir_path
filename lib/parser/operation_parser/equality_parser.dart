@@ -37,15 +37,11 @@ class EqualsParser extends OperatorParser {
           final lhsDateTime = FhirDateTime.fromString(lhs[i].toString());
           final rhsDateTime = FhirDateTime.fromString(rhs[i].toString());
 
-          if (lhsDateTime.precision.isEquallyPrecise(rhsDateTime.precision)) {
-            /// As long as they are both valid we try and compare them
-            if (lhsDateTime.isValid && rhsDateTime.isValid) {
-              if (lhsDateTime != rhsDateTime) {
-                return <dynamic>[false];
-              }
-            }
+          final equals = lhsDateTime.isEqual(rhsDateTime);
+          if (equals != null) {
+            return [equals];
           } else {
-            return <dynamic>[];
+            return [];
           }
         }
 
@@ -128,14 +124,9 @@ class EquivalentParser extends OperatorParser {
               final rhsDateTime =
                   FhirDateTime.fromString(rhsElement.toString());
 
-              if (lhsDateTime.precision
-                  .isEquallyPrecise(rhsDateTime.precision)) {
-                /// As long as they are both valid we try and compare them
-                if (lhsDateTime.isValid && rhsDateTime.isValid) {
-                  return lhsDateTime == rhsDateTime;
-                } else {
-                  return false;
-                }
+              final equals = lhsDateTime.isEqual(rhsDateTime);
+              if (equals != null) {
+                return equals;
               } else {
                 return false;
               }

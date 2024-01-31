@@ -39,7 +39,7 @@ final Parser<String> unit = (pluralDateTimePrecision |
         dateTimePrecision |
         STRING
             .where((value) {
-              return ucumUnitCodes.contains(value.value);
+              return UcumService().validate(value.value) == null;
             })
             .trim()
             .map((value) => value.value))

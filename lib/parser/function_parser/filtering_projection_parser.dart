@@ -110,28 +110,21 @@ class RepeatParser extends FunctionParser {
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) {
-    final finalResults = [];
+    final List<dynamic> finalResults = <dynamic>[];
     results.forEach((r) {
       value.execute([r], passed).forEach((e) {
-        if (value.first is ChildrenParser) {
-          finalResults.add(e);
-        } else if (notFoundInList(finalResults, e)) {
+        if (notFoundInList(finalResults, e)) {
           finalResults.add(e);
         }
       });
     });
     var len = -1;
-    print('LENGTH = $len');
-    int count = 0;
-    while (len != finalResults.length && count < 12) {
-      count++;
+    while (len != finalResults.length) {
       results = finalResults.toList();
       len = finalResults.length;
       results.forEach((r) {
         value.execute([r], passed).forEach((e) {
-          if (value.first is ChildrenParser) {
-            finalResults.add(e);
-          } else if (notFoundInList(finalResults, e)) {
+          if (notFoundInList(finalResults, e)) {
             finalResults.add(e);
           }
         });

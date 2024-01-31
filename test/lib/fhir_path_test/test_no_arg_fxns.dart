@@ -1241,10 +1241,6 @@ void testNoArgFxns() {
             'Faulkenberry',
             'Jason',
             'Grey',
-            'official',
-            'Faulkenberry',
-            'Jason',
-            'Grey',
             'Niel',
             'Kristin',
             'Smith',
@@ -1253,80 +1249,60 @@ void testNoArgFxns() {
             'Jingleheimer'
           ]);
       // TODO(Dokotela): fix this
-      // expect(
-      //     walkFhirPath(
-      //         context: resource.toJson(),
-      //         pathExpression:
-      //             "Patient.address[1].period.extension.descendants()"),
-      //     [
-      //       [
-      //         {
-      //           "extension": [
-      //             {
-      //               "extension": [
-      //                 {
-      //                   "valueCount": {"unit": "Kg"}
-      //                 },
-      //                 {
-      //                   "valueCount": {"unit": "Km"}
-      //                 }
-      //               ],
-      //               "valueCount": {"unit": "Kg"}
-      //             },
-      //             {
-      //               "valueCount": {"unit": "Km"}
-      //             }
-      //           ],
-      //           "valueCount": {"unit": "Kg"}
-      //         },
-      //         {
-      //           "valueCount": {"unit": "Km"}
-      //         },
-      //         {"unit": "Kg"},
-      //         {"unit": "Km"},
-      //         {
-      //           "extension": [
-      //             {
-      //               "valueCount": {"unit": "Kg"}
-      //             },
-      //             {
-      //               "valueCount": {"unit": "Km"}
-      //             }
-      //           ],
-      //           "valueCount": {"unit": "Kg"}
-      //         },
-      //         {
-      //           "valueCount": {"unit": "Km"}
-      //         },
-      //         {"unit": "Kg"},
-      //         {"unit": "Km"},
-      //         "Kg",
-      //         "Km",
-      //         {
-      //           "valueCount": {"unit": "Kg"}
-      //         },
-      //         {
-      //           "valueCount": {"unit": "Km"}
-      //         },
-      //         {"unit": "Kg"},
-      //         {"unit": "Km"},
-      //         "Kg",
-      //         "Km",
-      //         {"unit": "Kg"},
-      //         {"unit": "Km"},
-      //         "Kg",
-      //         "Km",
-      //         "Kg",
-      //         "Km"
-      //       ]
-      //     ]);
+      expect(
+          walkFhirPath(
+              context: resource.toJson(),
+              pathExpression:
+                  "Patient.address[1].period.extension.descendants()"),
+          [
+            {
+              "extension": [
+                {
+                  "extension": [
+                    {
+                      "valueCount": {"unit": "Kg"}
+                    },
+                    {
+                      "valueCount": {"unit": "Km"}
+                    }
+                  ],
+                  "valueCount": {"unit": "Kg"}
+                },
+                {
+                  "valueCount": {"unit": "Km"}
+                }
+              ],
+              "valueCount": {"unit": "Kg"}
+            },
+            {
+              "valueCount": {"unit": "Km"}
+            },
+            {"unit": "Kg"},
+            {"unit": "Km"},
+            {
+              "extension": [
+                {
+                  "valueCount": {"unit": "Kg"}
+                },
+                {
+                  "valueCount": {"unit": "Km"}
+                }
+              ],
+              "valueCount": {"unit": "Kg"}
+            },
+            "Kg",
+            "Km",
+            {
+              "valueCount": {"unit": "Kg"}
+            },
+          ]);
     });
 
     test('DateTimeFunctions', () {
-      final startNow = DateTime.now();
+      final startNow = FhirDateTime.fromDateTime(DateTime.now()).value;
       final resultNow =
           walkFhirPath(context: resource.toJson(), pathExpression: "now()");
-      final endNow = DateTime.now();
+      final endNow = FhirDateTime.fromDateTime(DateTime.now()).value;
       expect(
           (toDateTime(startNow).isBefore(toDateTime(resultNow.first)) ||
                   toDateTime(startNow)

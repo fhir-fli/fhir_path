@@ -10,7 +10,6 @@ class ChildrenParser extends FhirPathParser {
   List execute(List results, Map<String, dynamic> passed) {
     final finalResults = [];
     for (final r in results) {
-      print('child $r');
       if (r is Map) {
         r.forEach((key, value) {
           if (value is List) {
