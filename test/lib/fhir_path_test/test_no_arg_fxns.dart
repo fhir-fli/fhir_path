@@ -1248,7 +1248,6 @@ void testNoArgFxns() {
             'Jacob',
             'Jingleheimer'
           ]);
-      // TODO(Dokotela): fix this
       expect(
           walkFhirPath(
               context: resource.toJson(),

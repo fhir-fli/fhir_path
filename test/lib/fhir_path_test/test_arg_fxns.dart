@@ -820,7 +820,6 @@ void testArgFxns() {
           [3.142]);
     });
 
-    // TODO(Dokotela): complex-extension
     test('complex-extension', () {
       expect(
           walkFhirPath(

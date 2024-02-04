@@ -90,7 +90,6 @@ class EqualsParser extends OperatorParser {
       '\n${"  " * indent}${after.prettyPrint(indent + 1)}';
 }
 
-// TODO(Dokotela): write test
 class EquivalentParser extends OperatorParser {
   EquivalentParser();
   ParserList before = ParserList([]);
@@ -135,25 +134,29 @@ class EquivalentParser extends OperatorParser {
             } else if (rhsElement is ValidatedQuantity) {
               return rhsElement.equivalent(lhsElement);
             } else if (lhsElement is num || rhsElement is num) {
-              final sigDigsLhs = num.tryParse(lhsElement.toString())
+              final num? lhsNum = num.tryParse(lhsElement.toString());
+              final num? rhsNum = num.tryParse(rhsElement.toString());
+              final int? sigDigsLhs = lhsNum
                   ?.toStringAsExponential()
-                  .split('e');
-              final sigDigsRhs = num.tryParse(rhsElement.toString())
+                  .split('e')
+                  .first
+                  .replaceAll('.', '')
+                  .length;
+              final int? sigDigsRhs = rhsNum
                   ?.toStringAsExponential()
-                  .split('e');
+                  .split('e')
+                  .first
+                  .replaceAll('.', '')
+                  .length;
               if (sigDigsLhs == null || sigDigsRhs == null) {
                 return false;
               } else {
-                if (sigDigsLhs.first.length < sigDigsRhs.first.length) {
-                  return num.parse('${sigDigsLhs.first}e${sigDigsLhs.last}') ==
-                      num.parse(
-                          '${sigDigsRhs.first.toString().substring(0, sigDigsLhs.first.length)}'
-                          'e${sigDigsRhs.last}');
+                if (sigDigsLhs < sigDigsRhs) {
+                  return lhsNum?.toStringAsPrecision(sigDigsLhs) ==
+                      rhsNum?.toStringAsPrecision(sigDigsLhs);
                 } else {
-                  return num.parse(
-                          '${sigDigsLhs.first.toString().substring(0, sigDigsRhs.first.length)}'
-                          'e${sigDigsLhs.last}') ==
-                      num.parse('${sigDigsRhs.first}e${sigDigsRhs.last}');
+                  return lhsNum?.toStringAsPrecision(sigDigsRhs) ==
+                      rhsNum?.toStringAsPrecision(sigDigsRhs);
                 }
               }
             } else if (lhsElement is String || rhsElement is String) {

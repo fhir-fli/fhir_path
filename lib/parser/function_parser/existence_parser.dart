@@ -498,7 +498,6 @@ class IsDistinctParser extends FhirPathParser {
   List execute(List results, Map<String, dynamic> passed) {
     final resultsList = [];
     for (final r in results) {
-      print(r);
       if (notFoundInList(resultsList, r)) {
         resultsList.add(r);
       }
