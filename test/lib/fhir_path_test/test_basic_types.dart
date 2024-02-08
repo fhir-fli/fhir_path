@@ -64,37 +64,35 @@ void testBasicTypes() {
       expect(
           (((parseResult('@2015-02-04') as ParserList)).first as ValueParser)
               .value,
-          (ParserList([DateParser(FhirDate.fromString('2015-02-04'))]).first
+          (ParserList([DateParser(FhirDate('2015-02-04'))]).first
                   as ValueParser)
               .value);
       expect(
           (((parseResult('@2018-06-12') as ParserList)).first as ValueParser)
               .value,
-          (ParserList([DateParser(FhirDate.fromString('2018-06-12'))]).first
+          (ParserList([DateParser(FhirDate('2018-06-12'))]).first
                   as ValueParser)
               .value);
       expect(
           (((parseResult('@2018-06-12') as ParserList)).first as ValueParser)
               .value,
-          (ParserList([DateParser(FhirDate.fromString('2018-06-12'))]).first
+          (ParserList([DateParser(FhirDate('2018-06-12'))]).first
                   as ValueParser)
               .value);
       expect(
           (((parseResult('@2018-06-12') as ParserList)).first as ValueParser)
               .value,
-          (ParserList([DateParser(FhirDate.fromString('2018-06-12'))]).first
+          (ParserList([DateParser(FhirDate('2018-06-12'))]).first
                   as ValueParser)
               .value);
       expect(
           (((parseResult('@2018-06') as ParserList)).first as ValueParser)
               .value,
-          (ParserList([DateParser(FhirDate.fromString('2018-06'))]).first
-                  as ValueParser)
+          (ParserList([DateParser(FhirDate('2018-06'))]).first as ValueParser)
               .value);
       expect(
           (((parseResult('@2018') as ParserList)).first as ValueParser).value,
-          (ParserList([DateParser(FhirDate.fromString('2018'))]).first
-                  as ValueParser)
+          (ParserList([DateParser(FhirDate('2018'))]).first as ValueParser)
               .value);
     });
     test('DateTime', () {
@@ -103,8 +101,7 @@ void testBasicTypes() {
                   as ValueParser)
               .value,
           (ParserList([
-            DateTimeParser(
-                FhirDateTime.fromDateTime(DateTime.utc(2015, 2, 4, 5, 34, 28)))
+            DateTimeParser(FhirDateTime(DateTime.utc(2015, 2, 4, 5, 34, 28)))
           ]).first as ValueParser)
               .value);
       expect(
@@ -112,16 +109,15 @@ void testBasicTypes() {
                   as ValueParser)
               .value,
           (ParserList([
-            DateTimeParser(FhirDateTime.fromString('2018-02-04T14:38:28+09:00'))
+            DateTimeParser(FhirDateTime('2018-02-04T14:38:28+09:00'))
           ]).first as ValueParser)
               .value);
       expect(
           (((parseResult('@2014-01-25T14:30:14.559') as ParserList)).first
                   as ValueParser)
               .value,
-          (ParserList([
-            DateTimeParser(FhirDateTime.fromString('2014-01-25T14:30:14.559'))
-          ]).first as ValueParser)
+          (ParserList([DateTimeParser(FhirDateTime('2014-01-25T14:30:14.559'))])
+                  .first as ValueParser)
               .value);
       expect(
           ((parseResult('@2014-01-25T14:30:14.559Z // A date time with UTC timezone offset')
@@ -129,7 +125,7 @@ void testBasicTypes() {
                   .first as ValueParser)
               .value,
           (ParserList([
-            DateTimeParser(FhirDateTime.fromString('2014-01-25T14:30:14.559Z'))
+            DateTimeParser(FhirDateTime('2014-01-25T14:30:14.559Z'))
           ]).first as ValueParser)
               .value);
       expect(
@@ -137,32 +133,31 @@ void testBasicTypes() {
                       as ParserList)
                   .first as ValueParser)
               .value,
-          (ParserList([
-            DateTimeParser(FhirDateTime.fromString('2014-01-25T14:30'))
-          ]).first as ValueParser)
+          (ParserList([DateTimeParser(FhirDateTime('2014-01-25T14:30'))]).first
+                  as ValueParser)
               .value);
       expect(
           ((parseResult('@2014-03-25T // A partial DateTime with year, month, and day')
                       as ParserList)
                   .first as ValueParser)
               .value,
-          (ParserList([DateTimeParser(FhirDateTime.fromString('2014-03-25'))])
-                  .first as ValueParser)
+          (ParserList([DateTimeParser(FhirDateTime('2014-03-25'))]).first
+                  as ValueParser)
               .value);
       expect(
           ((parseResult('@2014-01T // A partial DateTime with year and month')
                       as ParserList)
                   .first as ValueParser)
               .value,
-          (ParserList([DateTimeParser(FhirDateTime.fromString('2014-01T'))])
-                  .first as ValueParser)
+          (ParserList([DateTimeParser(FhirDateTime('2014-01T'))]).first
+                  as ValueParser)
               .value);
       expect(
           ((parseResult('@2014T // A partial DateTime with only the year')
                       as ParserList)
                   .first as ValueParser)
               .value,
-          (ParserList([DateTimeParser(FhirDateTime.fromString('2014T'))]).first
+          (ParserList([DateTimeParser(FhirDateTime('2014T'))]).first
                   as ValueParser)
               .value);
     });

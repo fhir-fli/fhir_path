@@ -13,7 +13,7 @@ dependencies:
   fhir:
     path: ../fhir
   ucum:
-    path: ../../ucum
+    path: ../ucum
   petitparser: ^6.0.2
 
 dev_dependencies:

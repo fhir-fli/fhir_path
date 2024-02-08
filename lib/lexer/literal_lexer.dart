@@ -23,7 +23,7 @@ final Parser<BooleanParser> booleanLiteral = (string('true') | string('false'))
 
 /// Allows environmental variables to be passed to FHIRPath
 final Parser<EnvVariableParser> envVariableLexer =
-    (char('%') & (IDENTIFIER | DELIMITEDIDENTIFIER))
+    (char('%') & (IDENTIFIER | DELIMITEDIDENTIFIER | DOUBLEQUOTEDIDENTIFIER))
         .flatten()
         .map((value) => EnvVariableParser(value));
 
@@ -77,7 +77,7 @@ final Parser<String> pluralDateTimePrecision = (string('years') |
 /// Follows DateTime format specified in FHIRPath (I have also updated the FHIR)
 /// package to follow many of these guidelines
 final Parser<DateParser> DATE = (char('@') & DATEFORMAT).flatten().map((value) {
-  return DateParser(FhirDate.fromString(value.replaceFirst('@', '')));
+  return DateParser(FhirDate(value.replaceFirst('@', '')));
 });
 
 final Parser<DateTimeParser> DATETIME = (char('@') &
@@ -86,7 +86,7 @@ final Parser<DateTimeParser> DATETIME = (char('@') &
         (TIMEFORMAT & TIMEZONEOFFSETFORMAT.optional()).optional())
     .flatten()
     .map((value) {
-  return DateTimeParser(FhirDateTime.fromString(value.replaceFirst('@', '')));
+  return DateTimeParser(FhirDateTime(value.replaceFirst('@', '')));
 });
 
 final Parser<TimeParser> TIME = (char('@') & char('T') & TIMEFORMAT)

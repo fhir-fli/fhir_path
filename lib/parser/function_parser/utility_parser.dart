@@ -43,7 +43,7 @@ class NowParser extends FhirPathParser {
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) =>
-      [FhirDateTime.fromDateTime(DateTime.now())];
+      [FhirDateTime(DateTime.now())];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -99,7 +99,7 @@ class TodayParser extends FhirPathParser {
   /// expression one object at a time
   @override
   List execute(List results, Map<String, dynamic> passed) =>
-      [FhirDate.fromString(DateTime.now().toIso8601String().split('T').first)];
+      [FhirDate(DateTime.now().toIso8601String().split('T').first)];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in

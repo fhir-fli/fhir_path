@@ -309,8 +309,8 @@ class ToDateParser extends FhirPathParser {
       ? []
       : results.length > 1
           ? throw _conversionException('.toDate()', results)
-          : FhirDate.fromString(results.first.toString()).isValid
-              ? [FhirDate.fromString(results.first.toString())]
+          : FhirDate(results.first.toString()).isValid
+              ? [FhirDate(results.first.toString())]
               : [];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -342,7 +342,7 @@ class ConvertsToDateParser extends FhirPathParser {
       ? []
       : results.length > 1
           ? throw _conversionException('.convertsToDate()', results)
-          : [FhirDate.fromString(results.first.toString()).isValid];
+          : [FhirDate(results.first.toString()).isValid];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
   /// of the Parsers that are used in this package by the names used in
@@ -373,8 +373,8 @@ class ToDateTimeParser extends FhirPathParser {
       ? []
       : results.length > 1
           ? throw _conversionException('.toDateTime()', results)
-          : FhirDateTime.fromString(results.first.toString()).isValid
-              ? [FhirDateTime.fromString(results.first.toString())]
+          : FhirDateTime(results.first.toString()).isValid
+              ? [FhirDateTime(results.first.toString())]
               : [];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL
@@ -406,8 +406,8 @@ class ConvertsToDateTimeParser extends FhirPathParser {
       ? []
       : results.length > 1
           ? throw _conversionException('.convertsToDateTime()', results)
-          : FhirDateTime.fromString(results.first.toString()).isValid
-              ? [FhirDateTime.fromString(results.first.toString()).isValid]
+          : FhirDateTime(results.first.toString()).isValid
+              ? [FhirDateTime(results.first.toString()).isValid]
               : [];
 
   /// To print the entire parsed FHIRPath expression, this includes ALL

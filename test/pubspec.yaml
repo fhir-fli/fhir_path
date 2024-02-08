@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   ucum:
-    path: ../../../ucum
+    path: ../../ucum
 
 dev_dependencies:
   flutter_lints: ^2.0.2

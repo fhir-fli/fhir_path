@@ -83,6 +83,7 @@ final literalLexer = quantityLiteral |
     STRING |
     envVariableLexer |
     DELIMITEDIDENTIFIER |
+    DOUBLEQUOTEDIDENTIFIER |
     booleanLiteral |
     IDENTIFIER |
     NUMBER |

@@ -537,12 +537,12 @@ void testNoArgFxns() {
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "@2021-01-01.toDate()"),
-          [FhirDate.fromString('2021-01-01')]);
+          [FhirDate('2021-01-01')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "'2021-01-01'.toDate()"),
-          [FhirDate.fromString('2021-01-01')]);
+          [FhirDate('2021-01-01')]);
     });
     test('convertsToDate', () {
       expect(
@@ -561,22 +561,22 @@ void testNoArgFxns() {
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "@2021-01-01.toDateTime()"),
-          [FhirDateTime.fromString('2021-01-01')]);
+          [FhirDateTime('2021-01-01')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "'2021-01-01'.toDateTime()"),
-          [FhirDateTime.fromString('2021-01-01')]);
+          [FhirDateTime('2021-01-01')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "@2021-01-01T12:12.toDateTime()"),
-          [FhirDateTime.fromString('2021-01-01T12:12')]);
+          [FhirDateTime('2021-01-01T12:12')]);
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "'2021-01-01T12:12'.toDateTime()"),
-          [FhirDateTime.fromString('2021-01-01T12:12')]);
+          [FhirDateTime('2021-01-01T12:12')]);
     });
     test('convertsToDateTime', () {
       expect(
@@ -1298,10 +1298,10 @@ void testNoArgFxns() {
     });
 
     test('DateTimeFunctions', () {
-      final startNow = FhirDateTime.fromDateTime(DateTime.now()).value;
+      final startNow = FhirDateTime(DateTime.now()).value;
       final resultNow =
           walkFhirPath(context: resource.toJson(), pathExpression: "now()");
-      final endNow = FhirDateTime.fromDateTime(DateTime.now()).value;
+      final endNow = FhirDateTime(DateTime.now()).value;
       expect(
           (toDateTime(startNow).isBefore(toDateTime(resultNow.first)) ||
                   toDateTime(startNow)
@@ -1325,8 +1325,7 @@ void testNoArgFxns() {
       expect(
           walkFhirPath(context: resource.toJson(), pathExpression: "today()")
               .first,
-          FhirDate.fromString(
-              DateTime.now().toIso8601String().split('T').first));
+          FhirDate(DateTime.now().toIso8601String().split('T').first));
     });
   });
 }

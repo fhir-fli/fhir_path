@@ -449,9 +449,9 @@ class PlusParser extends OperatorParser {
               return [executedBefore.first + executedAfter.first];
             } else if (executedAfter.first is ValidatedQuantity &&
                 (executedAfter.first as ValidatedQuantity).isDuration) {
-              if (FhirDateTime.fromString(executedBefore.first).isValid) {
+              if (FhirDateTime(executedBefore.first).isValid) {
                 return [
-                  (FhirDateTime.fromString(executedBefore.first) +
+                  (FhirDateTime(executedBefore.first) +
                           extendedDurationFromValidatedQuantity(
                               executedAfter.first))
                       .toString()
@@ -595,9 +595,9 @@ class MinusParser extends OperatorParser {
           {
             if (executedAfter.first is ValidatedQuantity &&
                 (executedAfter.first as ValidatedQuantity).isDuration) {
-              if (FhirDateTime.fromString(executedBefore.first).isValid) {
+              if (FhirDateTime(executedBefore.first).isValid) {
                 return [
-                  (FhirDateTime.fromString(executedBefore.first) -
+                  (FhirDateTime(executedBefore.first) -
                           extendedDurationFromValidatedQuantity(
                               executedAfter.first))
                       .toString()
