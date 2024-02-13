@@ -31,7 +31,7 @@ final Parser<EnvVariableParser> envVariableLexer =
 final Parser<QuantityParser> quantityLiteral =
     (NUMBER.flatten() & (char(' ') & unit)).map((value) {
   return QuantityParser(ValidatedQuantity(
-      value: Decimal.fromString(value[0]),
+      value: UcumDecimal.fromString(value[0]),
       code: value.length > 1 ? value[1].last : null));
 });
 

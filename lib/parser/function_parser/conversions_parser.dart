@@ -663,7 +663,8 @@ class ToQuantityParser extends FunctionParser {
               : results.first is num
                   ? [
                       ValidatedQuantity(
-                          value: Decimal.fromString(results.first.toString()),
+                          value:
+                              UcumDecimal.fromString(results.first.toString()),
                           code: '1')
                     ]
                   : results.first is String

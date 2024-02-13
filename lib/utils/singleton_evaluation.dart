@@ -37,7 +37,7 @@ class SingletonEvaluation {
       if (item['value'] != null && item['code'] != null) {
         return [
           ValidatedQuantity(
-              value: Decimal.fromString(
+              value: UcumDecimal.fromString(
                   ((item['value']).value ?? double.nan).toString()),
               code: item['code'] as String)
         ];

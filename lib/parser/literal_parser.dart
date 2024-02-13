@@ -157,7 +157,7 @@ class QuantityParser extends ValueParser<ValidatedQuantity> {
         ? value == other.value
         : other is ValidatedQuantity
             ? value == other
-            : other is Decimal
+            : other is UcumDecimal
                 ? value.value == other
                 : other is String
                     ? value == ValidatedQuantity.fromString(other)

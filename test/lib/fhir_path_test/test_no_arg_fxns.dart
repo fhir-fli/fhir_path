@@ -773,13 +773,18 @@ void testNoArgFxns() {
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "'4 days'.toQuantity()"),
-          [ValidatedQuantity(value: Decimal.fromString('4'), code: 'days')]);
+          [
+            ValidatedQuantity(value: UcumDecimal.fromString('4'), code: 'days')
+          ]);
 
       expect(
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: r"'10 \'mm[Hg]\''.toQuantity()"),
-          [ValidatedQuantity(value: Decimal.fromString('10'), code: 'mm[Hg]')]);
+          [
+            ValidatedQuantity(
+                value: UcumDecimal.fromString('10'), code: 'mm[Hg]')
+          ]);
     });
 
     test('ConvertsToQuantity', () {
@@ -1057,7 +1062,9 @@ void testNoArgFxns() {
           walkFhirPath(
               context: resource.toJson(),
               pathExpression: "(-5.5 'mg').abs() // 5.5 'mg'"),
-          [ValidatedQuantity(value: Decimal.fromString('5.5'), code: "mg")]);
+          [
+            ValidatedQuantity(value: UcumDecimal.fromString('5.5'), code: "mg")
+          ]);
     });
     test('ceiling', () {
       expect(
