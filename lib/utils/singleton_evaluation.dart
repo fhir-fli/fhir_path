@@ -34,12 +34,12 @@ class SingletonEvaluation {
 
     final item = input.first;
     if (item is Map) {
-      if (item['value'] != null && item['code'] != null) {
+      if (item['value'] != null && item['unit'] != null) {
         return [
           ValidatedQuantity(
               value: UcumDecimal.fromString(
                   ((item['value']).value ?? double.nan).toString()),
-              code: item['code'] as String)
+              unit: item['unit'] as String)
         ];
       }
     }

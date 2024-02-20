@@ -188,7 +188,7 @@ void testBasicTypes() {
       expect(
           (parseResult("4.5 'mg'") as ParserList).first,
           QuantityParser(ValidatedQuantity(
-              value: UcumDecimal.fromString('4.5'), code: 'mg')));
+              value: UcumDecimal.fromString('4.5'), unit: 'mg')));
       expect(
         ((parseResult("100 '[degF]'") as ParserList).first as ValueParser)
             .value,

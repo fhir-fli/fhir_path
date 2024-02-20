@@ -774,7 +774,7 @@ void testNoArgFxns() {
               context: resource.toJson(),
               pathExpression: "'4 days'.toQuantity()"),
           [
-            ValidatedQuantity(value: UcumDecimal.fromString('4'), code: 'days')
+            ValidatedQuantity(value: UcumDecimal.fromString('4'), unit: 'days')
           ]);
 
       expect(
@@ -783,7 +783,7 @@ void testNoArgFxns() {
               pathExpression: r"'10 \'mm[Hg]\''.toQuantity()"),
           [
             ValidatedQuantity(
-                value: UcumDecimal.fromString('10'), code: 'mm[Hg]')
+                value: UcumDecimal.fromString('10'), unit: 'mm[Hg]')
           ]);
     });
 
@@ -1063,7 +1063,7 @@ void testNoArgFxns() {
               context: resource.toJson(),
               pathExpression: "(-5.5 'mg').abs() // 5.5 'mg'"),
           [
-            ValidatedQuantity(value: UcumDecimal.fromString('5.5'), code: "mg")
+            ValidatedQuantity(value: UcumDecimal.fromString('5.5'), unit: "mg")
           ]);
     });
     test('ceiling', () {
@@ -1326,8 +1326,8 @@ void testNoArgFxns() {
       final endTimeOfDay = FhirTime(
           DateTime.now().toIso8601String().split('T').last.substring(0, 12));
       expect(
-          startTimeOfDay <= (resultTimeOfDay as FhirTime) &&
-              endTimeOfDay >= resultTimeOfDay,
+          (startTimeOfDay <= (resultTimeOfDay as FhirTime) ?? false) &&
+              (endTimeOfDay >= resultTimeOfDay ?? false),
           true);
       expect(
           walkFhirPath(context: resource.toJson(), pathExpression: "today()")

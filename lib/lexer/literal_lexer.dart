@@ -32,7 +32,7 @@ final Parser<QuantityParser> quantityLiteral =
     (NUMBER.flatten() & (char(' ') & unit)).map((value) {
   return QuantityParser(ValidatedQuantity(
       value: UcumDecimal.fromString(value[0]),
-      code: value.length > 1 ? value[1].last : null));
+      unit: value.length > 1 ? value[1].last : null));
 });
 
 final Parser<String> unit = (pluralDateTimePrecision |
