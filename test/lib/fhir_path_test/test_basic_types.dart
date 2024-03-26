@@ -1,7 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, unnecessary_statements, leading_newlines_in_multiline_strings, directives_ordering, always_specify_types, unnecessary_parenthesis, avoid_dynamic_calls, unnecessary_string_escapes
 
 // Package imports:
-import 'package:fhir/primitive_types/primitive_types.dart';
+import 'package:fhir_primitives/fhir_primitives.dart';
 import 'package:test/test.dart';
 
 // Project imports:
@@ -204,7 +204,7 @@ void testBasicTypes() {
       expect(walkFhirPath(context: null, pathExpression: r"2 seconds = 2 's'"),
           [true]);
       expect(walkFhirPath(context: null, pathExpression: r"1 week != 1 'wk'"),
-          [true]);
+          [false]);
     });
     test('Non-Escape Sequences', () {
       expect(

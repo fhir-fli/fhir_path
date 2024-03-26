@@ -1886,19 +1886,19 @@ void testFhirPathTestSuite() {
     /// https://hl7.org/fhirpath/N1/#time-valued-quantities
     /// Best I can tell these are not equal, although they are equivalent.
     ///
-    /// According to FHIRPath:
+    /// According to FHIRPath above day (year, month) don't apply:
     ///
-    /// 1 day !=  1 'd' but, 1 day ~ 1 'd'
-    /// 1 week != 1 'wk' but, 1 week ~ 1 'wk'
+    /// 1 day =  1 'd' and 1 day ~ 1 'd'
+    /// 1 week = 1 'wk' and 1 week ~ 1 'wk' (because weeks are just days)
     ///
     /// I think it's therefore fair to assume that:
     ///
-    /// 7 day != 1 'wk', but 7 day ~ 1 'wk'
+    /// 7 day = 1 'wk', but 7 day ~ 1 'wk'
     test("testQuantity6", () {
       expect(
           walkFhirPath(
               context: patientExample(), pathExpression: r"7 days = 1 'wk'"),
-          [false]);
+          [true]);
     });
 
     test("testQuantity7", () {

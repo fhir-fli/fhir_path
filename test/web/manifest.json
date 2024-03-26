@@ -1,6 +1,6 @@
 {
-    "name": "fhir_path_test",
-    "short_name": "fhir_path_test",
+    "name": "test",
+    "short_name": "test",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

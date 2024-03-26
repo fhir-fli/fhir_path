@@ -9,8 +9,8 @@ dependencies:
   flutter:
     sdk: flutter
   # fhir: ^0.11.0
-  fhir:
-    path: ../../fhir
+  fhir_r4:
+    path: ../../fhir_r4
   fhir_path:
     path: ../../fhir_path
   google_fonts: ^4.0.4
@@ -22,3 +22,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+dependency_overrides:
+  meta: ^1.12.0

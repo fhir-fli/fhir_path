@@ -1,7 +1,7 @@
 // ignore_for_file: annotate_overrides, overridden_fields, noop_primitive_operations, unnecessary_this
 
 // Package imports:
-import 'package:fhir/primitive_types/primitive_types.dart';
+import 'package:fhir_primitives/fhir_primitives.dart';
 import 'package:ucum/ucum.dart';
 
 // Project imports:

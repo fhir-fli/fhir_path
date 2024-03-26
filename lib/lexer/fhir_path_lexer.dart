@@ -56,16 +56,13 @@ ParserList operatorValues(List fullList) {
   } else {
     // Replace +/- with unary representation based on simple rules
     fullList.forEachIndexed(
-      (i, entry) => {
-        if (entry is MinusParser || entry is PlusParser)
-          {
-            if (i == 0 || fullList[i - 1] is OperatorParser)
-              {
-                fullList[i] = entry is MinusParser
-                    ? UnaryNegateParser()
-                    : UnaryPlusParser()
-              }
+      (i, entry) {
+        if (entry is MinusParser || entry is PlusParser) {
+          if (i == 0 || fullList[i - 1] is OperatorParser) {
+            fullList[i] =
+                entry is MinusParser ? UnaryNegateParser() : UnaryPlusParser();
           }
+        }
       },
     );
 
