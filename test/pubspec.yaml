@@ -6,8 +6,10 @@ environment:
 
 dependencies:
   fhir_primitives: ^0.1.0
-  fhir_r4:
-    path: ../../fhir_r4
+  fhir: ^0.12.0
+  fhir_path:
+    path:
+      ../.
   flutter:
     sdk: flutter
   ucum: ^0.4.0

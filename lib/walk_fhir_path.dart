@@ -1,8 +1,8 @@
 // Package imports:
-import 'package:fhir_dstu2/fhir_dstu2.dart' as dstu2;
-import 'package:fhir_r4/fhir_r4.dart' as r4;
-import 'package:fhir_r5/fhir_r5.dart' as r5;
-import 'package:fhir_stu3/fhir_stu3.dart' as stu3;
+import 'package:fhir/dstu2.dart' as dstu2;
+import 'package:fhir/r4.dart' as r4;
+import 'package:fhir/r5.dart' as r5;
+import 'package:fhir/stu3.dart' as stu3;
 import 'package:petitparser/core.dart';
 
 // Project imports:
