@@ -1,7 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, avoid_escaping_inner_quotes, always_specify_types
 
 // Package imports:
-import 'package:fhir_r4/fhir_r4.dart';
+import 'package:fhir/r4.dart';
 import 'package:test/test.dart';
 
 // Project imports:

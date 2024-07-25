@@ -1,8 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, unnecessary_statements, leading_newlines_in_multiline_strings, directives_ordering, always_specify_types
 
 // Package imports:
-import 'package:fhir_primitives/fhir_primitives.dart';
-import 'package:fhir_r4/fhir_r4.dart';
+import 'package:fhir/r4.dart';
 import 'package:test/test.dart';
 
 // Project imports:

@@ -1,8 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages, prefer_single_quotes, always_specify_types, unnecessary_string_escapes
 
 // Package imports:
-import 'package:fhir_primitives/fhir_primitives.dart';
-import 'package:fhir_r4/fhir_r4.dart';
+import 'package:fhir/r4.dart';
 import 'package:test/test.dart';
 import 'package:ucum/ucum.dart';
 
@@ -1327,8 +1326,8 @@ void testNoArgFxns() {
       final endTimeOfDay = FhirTime(
           DateTime.now().toIso8601String().split('T').last.substring(0, 12));
       expect(
-          (startTimeOfDay <= (resultTimeOfDay as FhirTime) ?? false) &&
-              (endTimeOfDay >= resultTimeOfDay ?? false),
+          (startTimeOfDay <= (resultTimeOfDay as FhirTime)) &&
+              (endTimeOfDay >= resultTimeOfDay),
           true);
       expect(
           walkFhirPath(context: resource.toJson(), pathExpression: "today()")

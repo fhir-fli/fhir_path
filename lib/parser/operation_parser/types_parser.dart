@@ -1,11 +1,11 @@
 // ignore_for_file: annotate_overrides, overridden_fields, avoid_dynamic_calls
 
 // Package imports:
-import 'package:fhir_dstu2/fhir_dstu2.dart' as dstu2;
-import 'package:fhir_primitives/fhir_primitives.dart';
-import 'package:fhir_r4/fhir_r4.dart' as r4;
-import 'package:fhir_r5/fhir_r5.dart' as r5;
-import 'package:fhir_stu3/fhir_stu3.dart' as stu3;
+import 'package:fhir/dstu2.dart' as dstu2;
+import 'package:fhir/primitive_types/primitive_types.dart';
+import 'package:fhir/r4.dart' as r4;
+import 'package:fhir/r5.dart' as r5;
+import 'package:fhir/stu3.dart' as stu3;
 import 'package:ucum/ucum.dart';
 
 // Project imports:
