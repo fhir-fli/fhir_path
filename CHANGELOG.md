@@ -1,5 +1,9 @@
 # fhir_path
 
+## [0.12.0]
+
+* Integrating PR from [tigloo](https://github.com/tigloo)
+
 ## [0.11.3]
 
 * updated dependencies
