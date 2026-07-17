@@ -4,7 +4,7 @@
 > petitparser-based FHIRPath library (`walkFhirPath`). From 0.13.0 the
 > package is the fhir-fli family's standalone, model-independent FHIRPath
 > engine — a new codebase with a new API, developed at
-> [fhir-fli/fhirpath](https://github.com/fhir-fli/fhirpath). Users of the
+> [fhir-fli/fhir_path](https://github.com/fhir-fli/fhir_path). Users of the
 > legacy API should either stay on 0.12.0 or migrate to
 > `FHIRPathEngine` via a version binding (`fhir_r4_path` / `fhir_r5_path`
 > / `fhir_r6_path`), which is the recommended entry point.

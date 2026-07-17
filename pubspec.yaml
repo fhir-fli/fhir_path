@@ -5,8 +5,8 @@ description: >-
   fhir_r4/r5/r6_path.
 version: 0.13.0
 homepage: https://www.fhirfli.dev/
-repository: https://github.com/fhir-fli/fhirpath
-issue_tracker: https://github.com/fhir-fli/fhirpath/issues
+repository: https://github.com/fhir-fli/fhir_path
+issue_tracker: https://github.com/fhir-fli/fhir_path/issues
 
 topics:
   - fhir
