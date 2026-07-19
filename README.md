@@ -85,7 +85,7 @@ and should not be caught.
 Implement `FhirNode` (package `fhir_node`) for your data model and the
 `IWorkerContext` / `IFhirValueFactory` interfaces for type metadata and
 value construction. `example/stub_model.dart` is a complete minimal
-implementation exercised by `example/fhirpath_example.dart`; the
+implementation exercised by `example/fhir_path_example.dart`; the
 `fhir_r*_path` packages are the production ones.
 
 ## Conformance
