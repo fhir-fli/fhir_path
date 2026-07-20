@@ -1,3 +1,7 @@
+## 0.13.1
+
+- Example file renamed to `fhir_path_example.dart` so pub.dev's analyzer recognizes it; no code changes
+
 ## 0.13.0
 
 > **Complete rewrite.** Versions up to 0.12.0 were the original
