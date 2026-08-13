@@ -1520,7 +1520,16 @@ class FhirPathFunctions {
         : await fpContext.worker.fetchValueSet(url);
 
     if (vs == null) {
-      return [];
+      // The spec is explicit: "If the valueset cannot be resolved as a uri to
+      // a value set, an error is thrown." Returning empty instead makes
+      // `where(code.memberOf(...)).count()` answer 0, which is
+      // indistinguishable from a genuine none — a caller cannot tell "nothing
+      // matched" from "nobody could look".
+      throw PathEngineException(
+        'Unable to resolve value set $url',
+        location: exp.start,
+        expression: exp.toString(),
+      );
     }
 
     final l = focus.first;
