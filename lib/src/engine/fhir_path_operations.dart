@@ -579,35 +579,49 @@ class FhirPathOperations {
             .resolveValueSet(engine, execContext.appInfo, url)
         : await fpContext.worker.fetchValueSet(url);
 
-    if (vs != null) {
-      for (final l in left) {
-        if (['code', 'string', 'uri'].contains(l.fhirType)) {
-          final result = await fpContext.worker.validateCodeForCodingValue(
-            fpContext.terminologyServiceOptions.withGuessSystem(),
-            l,
-            vs,
-          );
-          if (result.isOk) {
-            ans = true;
-          }
-        } else if (l.fhirType == 'Coding') {
-          final result = await fpContext.worker.validateCodeForCodingValue(
-            fpContext.terminologyServiceOptions,
-            l,
-            vs,
-          );
-          if (result.isOk) {
-            ans = true;
-          }
-        } else if (l.fhirType == 'CodeableConcept') {
-          final vr = await fpContext.worker.validateCodeForCodeableConceptValue(
-            fpContext.terminologyServiceOptions,
-            l,
-            vs,
-          );
-          if (vr.isOk) {
-            ans = true;
-          }
+    if (vs == null) {
+      // Same rule as the function form: "If the valueset cannot be resolved as
+      // a uri to a value set, an error is thrown." Answering `false` says the
+      // code is not in the set, when what happened is that nobody could look.
+      throw PathEngineException(
+        'Unable to resolve value set $url',
+        location: expr.start,
+        expression: expr.toString(),
+      );
+    }
+
+    // Membership in the value set is the whole question — see `funcMemberOf`
+    // for why the wider "and valid in its code system" reading answers `false`
+    // offline for a code the value set plainly lists.
+    final options = fpContext.terminologyServiceOptions.withCheckValueSetOnly();
+
+    for (final l in left) {
+      if (['code', 'string', 'uri'].contains(l.fhirType)) {
+        final result = await fpContext.worker.validateCodeForCodingValue(
+          options.withGuessSystem(),
+          l,
+          vs,
+        );
+        if (result.isOk) {
+          ans = true;
+        }
+      } else if (l.fhirType == 'Coding') {
+        final result = await fpContext.worker.validateCodeForCodingValue(
+          options,
+          l,
+          vs,
+        );
+        if (result.isOk) {
+          ans = true;
+        }
+      } else if (l.fhirType == 'CodeableConcept') {
+        final vr = await fpContext.worker.validateCodeForCodeableConceptValue(
+          options,
+          l,
+          vs,
+        );
+        if (vr.isOk) {
+          ans = true;
         }
       }
     }

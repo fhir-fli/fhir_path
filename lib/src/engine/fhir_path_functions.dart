@@ -1532,10 +1532,26 @@ class FhirPathFunctions {
       );
     }
 
+    // `memberOf` asks one question: is this code IN this value set. The spec
+    // is worded as membership throughout — "returns true if the code is a
+    // member of the given valueset", "returns true if any code in the concept
+    // is a member of the given valueset" — and says nothing about the code
+    // also being valid in its own code system.
+    //
+    // That difference decides real answers. A value set enumerating SNOMED
+    // concepts is answerable from the enumeration alone, and SNOMED is
+    // licensed, so no offline deployment has the code system to hand. Asking
+    // the wider question there produces `false` for a code that is plainly
+    // listed in the value set — a confident wrong answer, and silent.
+    final options = fpContext.terminologyServiceOptions.withCheckValueSetOnly();
+
     final l = focus.first;
     if (['code', 'string', 'uri'].contains(l.fhirType)) {
       final result = await fpContext.worker.validateCodeForCodingValue(
-        fpContext.terminologyServiceOptions,
+        // A bare code carries no system, so the system is taken from the value
+        // set — which is why the spec qualifies this case with "so long as the
+        // valueset only contains one codesystem".
+        options.withGuessSystem(),
         l,
         vs,
       );
@@ -1544,7 +1560,7 @@ class FhirPathFunctions {
       );
     } else if (l.fhirType == 'Coding') {
       final result = await fpContext.worker.validateCodeForCodingValue(
-        fpContext.terminologyServiceOptions,
+        options,
         l,
         vs,
       );
@@ -1553,7 +1569,7 @@ class FhirPathFunctions {
       );
     } else if (l.fhirType == 'CodeableConcept') {
       final result = await fpContext.worker.validateCodeForCodeableConceptValue(
-        fpContext.terminologyServiceOptions,
+        options,
         l,
         vs,
       );
