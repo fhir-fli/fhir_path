@@ -1,3 +1,9 @@
+## 0.14.0
+
+- BREAKING: `memberOf` now throws `PathEngineException` when the value set cannot be resolved, instead of returning an empty collection. The spec is explicit ("If the valueset cannot be resolved as a uri to a value set, an error is thrown"), and the old behavior made `where(code.memberOf(...)).count()` answer a confident `0` that a caller could not distinguish from a genuine none
+- BREAKING: `memberOf` now asks only whether the code is in the value set, not whether it is also valid in its own code system. A value set enumerating SNOMED concepts is answerable from the enumeration alone, and SNOMED is licensed — the wider question returned `false` offline for a code the value set plainly lists. The operator form (`memberOf(...)` as an operation) had both defects and now matches the function form
+- Divergence from the Java reference, taken on the spec's wording: Java's `funcMemberOf` passes plain validation options
+
 ## 0.13.1
 
 - Example file renamed to `fhir_path_example.dart` so pub.dev's analyzer recognizes it; no code changes
