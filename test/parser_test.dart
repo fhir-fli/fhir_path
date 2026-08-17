@@ -161,6 +161,33 @@ Future<void> main() async {
       );
     });
 
+    // Belt to the above's braces: if a Future is ever bound again — by another
+    // un-awaited call, or by a caller passing one in `environment` — the
+    // lookup must say so rather than answer with an empty collection, which is
+    // what made the original bug invisible.
+    test('a variable bound to a Future is an error, not an empty answer',
+        () async {
+      await expectLater(
+        engine.evaluateWithContext(
+          null,
+          patient,
+          patient,
+          patient,
+          engine.parse('%pending'),
+          environment: <String, dynamic>{
+            'pending': Future<List<Object>>.value(<Object>[]),
+          },
+        ),
+        throwsA(
+          isA<PathEngineException>().having(
+            (e) => e.toString(),
+            'names the missing await',
+            contains('missing await'),
+          ),
+        ),
+      );
+    });
+
     test('a defined variable carries the expression it was given', () async {
       final result = await engine.evaluate(
         patient,

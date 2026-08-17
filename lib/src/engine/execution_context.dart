@@ -56,6 +56,17 @@ class ExecutionContext {
       return <FhirNode>[];
     }
     final variable = definedVariables![name];
+    // A Future here means someone bound the result of an un-awaited call.
+    // Nothing legitimately binds one, and the fallback below would answer with
+    // an empty collection — which is exactly what made the missing `await` in
+    // funcDefineVariable invisible: every two-parameter defineVariable quietly
+    // returned nothing. Say so instead of answering emptily.
+    if (variable is Future) {
+      throw PathEngineException(
+        'Variable %$name was bound to a Future rather than a value. This is a '
+        'missing await where the variable was defined.',
+      );
+    }
     if (variable is List<FhirNode>) {
       return variable;
     } else if (variable is Function) {
