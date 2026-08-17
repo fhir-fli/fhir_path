@@ -139,5 +139,36 @@ Future<void> main() async {
       );
       expect(result.map((n) => n.primitiveValue), ['Peter']);
     });
+
+    // Regression. funcDefineVariable did not await engine.execute for the
+    // two-parameter form, so the variable held a Future rather than the value
+    // it resolved to. setDefinedVariable takes `dynamic`, so nothing
+    // complained and every use of defineVariable(name, expression) was
+    // quietly wrong — a variable compared against anything was never equal to
+    // it, and the expression simply returned nothing.
+    test('defineVariable binds the value, not the Future that produced it',
+        () async {
+      final result = await engine.evaluate(
+        patient,
+        engine.parse(
+          r"name.given.defineVariable('g', $this).where(%g = %g).count()",
+        ),
+      );
+      expect(
+        result.single.primitiveValue,
+        '2',
+        reason: 'the variable has to hold a value that can be compared',
+      );
+    });
+
+    test('a defined variable carries the expression it was given', () async {
+      final result = await engine.evaluate(
+        patient,
+        engine.parse(
+          "name.defineVariable('surname', family).select(%surname)",
+        ),
+      );
+      expect(result.map((n) => n.primitiveValue), ['Chalmers']);
+    });
   });
 }

@@ -1605,8 +1605,13 @@ class FhirPathFunctions {
     final nl =
         await engine.execute(execContext, focus, exp.parameters[0], true);
     final name = nl.first.primitiveValue.toString();
+    // AWAITED. This was `engine.execute(...)` with no await, so the
+    // two-parameter form stored a Future rather than the value it resolves
+    // to. setDefinedVariable takes `dynamic`, so nothing complained and every
+    // use of defineVariable(name, expression) was quietly wrong: the variable
+    // was never equal to anything and the expression returned nothing.
     final value = exp.parameters.length == 2
-        ? engine.execute(execContext, focus, exp.parameters[1], true)
+        ? await engine.execute(execContext, focus, exp.parameters[1], true)
         : focus;
 
     execContext.setDefinedVariable(name, value, fpContext.worker);
