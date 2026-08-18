@@ -1,3 +1,8 @@
+## 0.14.1
+
+- Fixed: `defineVariable(name, expression)` bound the Future returned by evaluating the expression rather than the value it resolved to, because `funcDefineVariable` did not await it. `setDefinedVariable` took `dynamic`, so nothing complained, and the variable compared unequal to everything — the expression simply returned an empty collection. Every use of the two-parameter form was affected; the one-parameter form, which binds the focus, was not
+- A variable bound to a `Future` is now an error naming the missing await, instead of being answered as an empty collection. That silent fallback is why the bug above read as "this expression matched nothing" rather than as a defect, and why it survived a release
+
 ## 0.14.0
 
 - BREAKING: `memberOf` now throws `PathEngineException` when the value set cannot be resolved, instead of returning an empty collection. The spec is explicit ("If the valueset cannot be resolved as a uri to a value set, an error is thrown"), and the old behavior made `where(code.memberOf(...)).count()` answer a confident `0` that a caller could not distinguish from a genuine none
