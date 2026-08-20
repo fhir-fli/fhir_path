@@ -141,9 +141,10 @@ class ExpressionNode {
           b.write(constant.toString().escapeJson());
         }
       case ExpressionNodeKind.group:
-        b.write('(');
-        b.write(group.toString());
-        b.write(')');
+        b
+          ..write('(')
+          ..write(group.toString())
+          ..write(')');
       case null:
       case ExpressionNodeKind.unary:
     }
@@ -189,8 +190,9 @@ class ExpressionNode {
       case ExpressionNodeKind.constant:
         b.write(constant);
       case ExpressionNodeKind.function:
-        b.write(function?.toCode());
-        b.write('(');
+        b
+          ..write(function?.toCode())
+          ..write('(');
         var first = true;
         for (final n in parameters) {
           if (!first) {

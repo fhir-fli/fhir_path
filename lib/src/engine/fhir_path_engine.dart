@@ -1397,9 +1397,10 @@ class FHIRPathEngine {
           result.update(await evaluateFunctionType(context, focus, exp));
 
         case ExpressionNodeKind.unary:
-          result.addType(TypeDetails.FP_Integer);
-          result.addType(TypeDetails.FP_Decimal);
-          result.addType(TypeDetails.FP_Quantity);
+          result
+            ..addType(TypeDetails.FP_Integer)
+            ..addType(TypeDetails.FP_Decimal)
+            ..addType(TypeDetails.FP_Quantity);
 
         case ExpressionNodeKind.constant:
           result.update(resolveConstantType(context, exp.constant, exp, true));
