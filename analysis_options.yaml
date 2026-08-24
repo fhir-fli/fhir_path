@@ -1,5 +1,9 @@
 include: package:very_good_analysis/analysis_options.yaml
 analyzer:
+  exclude:
+    # CI checks the R4 binding out here to resolve it from source; it is not
+    # this package's code and is not ours to analyse or format.
+    - .fhir_r4/**
   errors:
     avoid_positional_boolean_parameters: ignore
     always_put_required_named_parameters_first: ignore

@@ -29,5 +29,13 @@ dependencies:
   ucum: ^0.9.0
 
 dev_dependencies:
+  # The engine's semantics are tested against a real FHIR model rather than a
+  # stub, because part of the behaviour under test lives in the model: the
+  # engine constructs every result through IFhirValueFactory, which the
+  # binding implements. Pub allows this cycle because it is a dev dependency
+  # and fhir_r4 itself does not depend on this package — fhir_r4_path's
+  # dependency on fhir_path resolves to the package being developed here.
+  fhir_r4: ^0.8.0
+  fhir_r4_path: ^0.8.1
   test: ^1.29.0
   very_good_analysis: ^10.0.0
