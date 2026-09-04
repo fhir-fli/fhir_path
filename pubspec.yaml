@@ -35,7 +35,7 @@ dev_dependencies:
   # binding implements. Pub allows this cycle because it is a dev dependency
   # and fhir_r4 itself does not depend on this package — fhir_r4_path's
   # dependency on fhir_path resolves to the package being developed here.
-  fhir_r4: ^0.8.0
-  fhir_r4_path: ^0.8.1
+  fhir_r4: ^0.12.0
+  fhir_r4_path: ^0.12.0
   test: ^1.29.0
   very_good_analysis: ^10.0.0
