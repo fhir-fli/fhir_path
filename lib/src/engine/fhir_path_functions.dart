@@ -1846,8 +1846,20 @@ class FhirPathFunctions {
       String? s = utilities.convertToString(item);
       if (item.fhirType == 'Reference') {
         refContext = item;
+        // Java (org.hl7.fhir.r4.fhirpath FHIRPathEngine.funcResolve, read
+        // 2026-09-14): `Property p = item.getChildByName("reference"); if (p
+        // != null && p.hasValues()) { url = convertToString(p.getValues()
+        // .get(0)); }`. The reference element is a primitive; its string IS
+        // the value. This used to look for a primitive CHILD of it and so
+        // never resolved a literal reference: `subject.where(resolve() is
+        // Patient)` was empty for every stored reference.
         final property = item.getChildByName('reference');
-        if (property != null && utilities.nodeHasValues(property)) {
+        if (property == null) {
+          s = null;
+        } else if (property.isPrimitive) {
+          s = property.primitiveValue;
+        } else if (utilities.nodeHasValues(property)) {
+          s = null;
           for (final child in property.listChildrenNames()) {
             final prop = property.getChildByName(child);
             if (prop != null && prop.isPrimitive) {

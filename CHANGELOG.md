@@ -1,3 +1,13 @@
+## 0.14.2
+
+- `resolve()` on a literal reference now hands the reference string to the
+  host's `resolveReference`, as the Java reference does (`FHIRPathEngine
+  .funcResolve`: `url = convertToString(p.getValues().get(0))` on the
+  `reference` property). The port looked for a primitive CHILD of the
+  reference element and so never resolved a literal reference; with a host
+  service wired, `subject.where(resolve() is Patient)` was always empty.
+  Contained (`#id`) resolution is unchanged. `test/resolve_test.dart`.
+
 ## 0.14.1
 
 - Fixed: `defineVariable(name, expression)` bound the Future returned by evaluating the expression rather than the value it resolved to, because `funcDefineVariable` did not await it. `setDefinedVariable` took `dynamic`, so nothing complained, and the variable compared unequal to everything — the expression simply returned an empty collection. Every use of the two-parameter form was affected; the one-parameter form, which binds the focus, was not
