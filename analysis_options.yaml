@@ -9,4 +9,3 @@ analyzer:
     always_put_required_named_parameters_first: ignore
     document_ignores: ignore
     comment_references: ignore
-    avoid_catches_without_on_clauses: ignore

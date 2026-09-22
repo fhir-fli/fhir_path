@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:fhir_node/fhir_node.dart';
 import 'package:fhir_path/src/internal.dart';
 import 'package:fhir_path/src/utils/path_string_extensions.dart';
+import 'package:ucum/ucum.dart' show UcumException;
 
 /// Internal functions class for FHIRPath engine.
 ///
@@ -1902,7 +1903,9 @@ class FhirPathFunctions {
               s,
               refContext,
             );
-          } catch (e) {
+          } on Exception catch (_) {
+            // Whatever the host's resolver throws: an unresolvable
+            // reference is an empty result, as in the Java engine.
             res = null;
           }
         }
@@ -2242,7 +2245,7 @@ class FhirPathFunctions {
       try {
         return utilities
             .makeBoolean(fpContext.worker.ucumService.isComparable(u1, u2));
-      } catch (e) {
+      } on UcumException catch (_) {
         return utilities.makeBoolean(false);
       }
     } else {
@@ -2838,13 +2841,10 @@ class FhirPathFunctions {
       final value = int.tryParse(base.primitiveValue ?? '') ??
           double.tryParse(base.primitiveValue ?? '');
       if (value != null) {
-        try {
-          final val = sqrt(value);
-          if (!val.isNaN) {
-            result.add(fpContext.factory.decimal(val));
-          }
-        } catch (e) {
-          // Do nothing on error
+        // A result the decimal type cannot hold (NaN, infinity) is empty.
+        final val = sqrt(value);
+        if (val.isFinite) {
+          result.add(fpContext.factory.decimal(val));
         }
       }
     } else {
@@ -2921,10 +2921,9 @@ class FhirPathFunctions {
     if (utilities.isNumericNode(base)) {
       final value = utilities.nodeNum(base);
       if (value != null) {
-        try {
+        // ceil of an infinite or NaN double has no integer: empty.
+        if (value.isFinite) {
           result.add(fpContext.factory.integer(value.ceil()));
-        } catch (e) {
-          // Do nothing on error
         }
       }
     } else {
@@ -2962,10 +2961,9 @@ class FhirPathFunctions {
     if (utilities.isNumericNode(base)) {
       final value = utilities.nodeNum(base);
       if (value != null) {
-        try {
+        // floor of an infinite or NaN double has no integer: empty.
+        if (value.isFinite) {
           result.add(fpContext.factory.integer(value.floor()));
-        } catch (e) {
-          // Do nothing on error
         }
       }
     } else {
@@ -3004,10 +3002,10 @@ class FhirPathFunctions {
       final value = int.tryParse(base.primitiveValue ?? '') ??
           double.tryParse(base.primitiveValue ?? '');
       if (value != null) {
-        try {
-          result.add(fpContext.factory.decimal(log(value)));
-        } catch (e) {
-          // Do nothing on error
+        // ln of zero or a negative is not a decimal: empty.
+        final val = log(value);
+        if (val.isFinite) {
+          result.add(fpContext.factory.decimal(val));
         }
       }
     } else {
@@ -3062,13 +3060,10 @@ class FhirPathFunctions {
       final value = int.tryParse(base.primitiveValue ?? '') ??
           double.tryParse(base.primitiveValue ?? '');
       if (exponent != null && value != null) {
-        try {
-          final res = pow(value, exponent);
-          if (!res.isNaN) {
-            result.add(fpContext.factory.decimal(res));
-          }
-        } catch (e) {
-          // Do nothing on error
+        // A power the decimal type cannot hold (NaN, infinity) is empty.
+        final res = pow(value, exponent);
+        if (res.isFinite) {
+          result.add(fpContext.factory.decimal(res));
         }
       }
     } else {
@@ -3137,10 +3132,10 @@ class FhirPathFunctions {
       final d = int.tryParse(base.primitiveValue ?? '') ??
           double.tryParse(base.primitiveValue ?? '');
       if (d != null) {
-        try {
-          result.add(fpContext.factory.decimal(exp(d)));
-        } catch (e) {
-          // Do nothing on error
+        // exp past the double range is infinite: empty.
+        final val = exp(d);
+        if (val.isFinite) {
+          result.add(fpContext.factory.decimal(val));
         }
       }
     } else {
@@ -3193,10 +3188,10 @@ class FhirPathFunctions {
       final d = int.tryParse(base.primitiveValue ?? '') ??
           double.tryParse(base.primitiveValue ?? '');
       if (e != null && d != null) {
-        try {
-          result.add(fpContext.factory.decimal(log(d) / log(e)));
-        } catch (e) {
-          // Do nothing on error
+        // log of zero, a negative, or to base 1 is not a decimal: empty.
+        final val = log(d) / log(e);
+        if (val.isFinite) {
+          result.add(fpContext.factory.decimal(val));
         }
       }
     } else {

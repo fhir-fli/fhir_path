@@ -1081,18 +1081,20 @@ class FhirPathOperations {
     final r = right.first;
 
     if (utilities.isNumericNode(l) && utilities.isNumericNode(r)) {
-      try {
-        final ln = utilities.nodeNum(l);
-        final rn = utilities.nodeNum(r);
-        if (ln == null || rn == null || rn == 0) {
-          return <FhirNode>[];
-        }
-        // FHIRPath division always yields a decimal.
-        result
-            .add(fpContext.factory.decimal(ln / rn, disallowExtensions: false));
-      } catch (e) {
+      final ln = utilities.nodeNum(l);
+      final rn = utilities.nodeNum(r);
+      if (ln == null || rn == null || rn == 0) {
         return <FhirNode>[];
       }
+      // FHIRPath division always yields a decimal; a quotient the type
+      // cannot hold (infinity) is empty.
+      final quotient = ln / rn;
+      if (!quotient.isFinite) {
+        return <FhirNode>[];
+      }
+      result.add(
+        fpContext.factory.decimal(quotient, disallowExtensions: false),
+      );
     } else if (utilities.isQuantityNode(l) && utilities.isQuantityNode(r)) {
       final pl = utilities.qtyToPair(l);
       final pr = utilities.qtyToPair(r);

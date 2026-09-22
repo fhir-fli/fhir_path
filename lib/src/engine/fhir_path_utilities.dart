@@ -321,7 +321,7 @@ class FhirPathUtilities {
       if (parsedValue == BigInt.zero) return FpEquality.false_;
       if (parsedValue == BigInt.one) return FpEquality.true_;
       return FpEquality.null_;
-    } catch (e) {
+    } on FormatException catch (_) {
       return FpEquality.null_;
     }
   }
@@ -561,13 +561,12 @@ class FhirPathUtilities {
       };
       final ucum = calendarToUcum[qtyUnit(q)];
       if (ucum != null) {
+        final value = qtyValue(q);
+        if (value == null) return null;
         try {
-          final p = Pair(
-            value: UcumDecimal.fromNum(qtyValue(q)!),
-            unit: ucum,
-          );
+          final p = Pair(value: UcumDecimal.fromNum(value), unit: ucum);
           return fpContext.worker.ucumService.getCanonicalForm(p);
-        } catch (e) {
+        } on UcumException catch (_) {
           return null;
         }
       }
@@ -586,13 +585,13 @@ class FhirPathUtilities {
     if (qtySystem(q) != 'http://unitsofmeasure.org') {
       return null;
     }
+    final value = qtyValue(q);
+    if (value == null) return null;
     try {
-      final p = Pair(
-        value: UcumDecimal.fromNum(qtyValue(q)!),
-        unit: qtyCode(q) ?? '1',
-      );
+      final p =
+          Pair(value: UcumDecimal.fromNum(value), unit: qtyCode(q) ?? '1');
       return fpContext.worker.ucumService.getCanonicalForm(p);
-    } catch (e) {
+    } on UcumException catch (_) {
       return null;
     }
   }
@@ -786,17 +785,18 @@ class FhirPathUtilities {
     if (qtySystem(q) != 'http://unitsofmeasure.org') {
       return null;
     }
+    final value = qtyValue(q);
+    if (value == null) return null;
     try {
       final pair = Pair(
-        value: UcumDecimal.fromNum(qtyValue(q)!),
+        value: UcumDecimal.fromNum(value),
         unit: qtyCode(q) ?? '1',
       );
       final canonicalPair = fpContext.worker.ucumService.getCanonicalForm(pair);
-      return fpContext.factory.decimal(
-        canonicalPair.value.asDouble,
-        disallowExtensions: false,
-      );
-    } catch (e) {
+      final canonical = canonicalPair.value.asDouble;
+      if (!canonical.isFinite) return null;
+      return fpContext.factory.decimal(canonical, disallowExtensions: false);
+    } on UcumException catch (_) {
       return null;
     }
   }
@@ -878,12 +878,11 @@ class FhirPathUtilities {
     if (qtySystem(q) != 'http://unitsofmeasure.org') {
       return null;
     }
+    final value = qtyValue(q);
+    if (value == null) return null;
     try {
-      return Pair(
-        value: UcumDecimal.fromNum(qtyValue(q)!),
-        unit: qtyCode(q) ?? '1',
-      );
-    } catch (e) {
+      return Pair(value: UcumDecimal.fromNum(value), unit: qtyCode(q) ?? '1');
+    } on UcumException catch (_) {
       return null;
     }
   }

@@ -50,7 +50,7 @@ class FHIRPathEngine {
     try {
       parse(path);
       return true;
-    } catch (e) {
+    } on PathEngineException catch (_) {
       return false;
     }
   }
