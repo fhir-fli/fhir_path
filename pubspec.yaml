@@ -3,7 +3,7 @@ description: >-
   Model-independent FHIRPath engine — a Dart port of the Java reference.
   Navigates any FHIR version through the FhirNode contract; bindings are
   fhir_r4/r5/r6_path.
-version: 0.14.2
+version: 0.15.0
 homepage: https://www.fhirfli.dev/
 repository: https://github.com/fhir-fli/fhir_path
 issue_tracker: https://github.com/fhir-fli/fhir_path/issues
@@ -24,6 +24,9 @@ environment:
 dependencies:
   collection: ^1.19.1
   fhir_node: ^0.6.0
+  # The terminology server client and the online resource cache.
+  http: ^1.6.0
+  meta: ^1.16.0
   # 0.9.0 minimum: earlier ucum exported a conflicting Utilities symbol and
   # had incorrect affine temperature conversions.
   ucum: ^0.9.0

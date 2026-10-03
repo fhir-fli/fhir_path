@@ -1,3 +1,11 @@
+## 0.15.0
+
+- **The worker context, resource caches and terminology layer live here now**, written over `FhirNode`: `FhirWorkerContext`, `ResourceCache` / `CanonicalResourceCache` / `OnlineResourceCache(parse:)`, `ValueSetChecker`, `ValueSetExpanderSimple`, `TerminologyCache`, `FhirToolingClient`, `ValidationResult`, the logging and exception types. Until now each `fhir_r*_path` binding carried its own typed copy (39 files, about 3,300 lines, three times over). A binding supplies one `FhirModelBinding` (version, type table, value factory, JSON codec, the two casts) and subclasses the worker; nothing else is per version but `TypeConvertor`.
+- The caches return `FhirNode`. A caller that wants its model's class casts (the binding's node IS its typed object); `fhir_r*_path` adds a `TypedResourceCache` extension (`structureDefinition`, `codeSystem`, `valueSet`, `canonical<T>`). `getResourceMap` is gone (no callers).
+- `ValidationResult.severity` is `ValidationSeverity`, its `definition` a `ConceptDefinition`, `asCoding()` a `CodingValue`; `TerminologyServiceErrorClass` is a Dart enum. `FhirToolingClient` takes and returns Parameters as JSON maps.
+- Behaviour, measured against the old copies: `ValueSetChecker.codeInValueSet` now applies `compose.exclude` (the old code returned true on the first include match before reading any exclude; quoted from hl7.org/fhir/R4B/valueset-definitions.html, fetched 2026-10-03: exclude is "Exclude one or more codes from the value set"). The worker's `hasDataType` asked an ElementDefinition whether its own type name was in an empty list, which was always false; it is Java's "has a type" now.
+- New dependency: `http`.
+
 ## 0.14.2
 
 - `resolve()` on a literal reference now hands the reference string to the
