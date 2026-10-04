@@ -1,5 +1,10 @@
 ## 0.15.0
 
+- `FhirModelBinding` extends fhir_node 0.6.1's `ResourceModel`
+  (`resourceTypeNames` comes from the type table: kind `resource`,
+  derivation `specialization`); the terminology tests' stub is fhir_node's
+  `JsonNode`.
+
 - **The worker context, resource caches and terminology layer live here now**, written over `FhirNode`: `FhirWorkerContext`, `ResourceCache` / `CanonicalResourceCache` / `OnlineResourceCache(parse:)`, `ValueSetChecker`, `ValueSetExpanderSimple`, `TerminologyCache`, `FhirToolingClient`, `ValidationResult`, the logging and exception types. Until now each `fhir_r*_path` binding carried its own typed copy (39 files, about 3,300 lines, three times over). A binding supplies one `FhirModelBinding` (version, type table, value factory, JSON codec, the two casts) and subclasses the worker; nothing else is per version but `TypeConvertor`.
 - The caches return `FhirNode`. A caller that wants its model's class casts (the binding's node IS its typed object); `fhir_r*_path` adds a `TypedResourceCache` extension (`structureDefinition`, `codeSystem`, `valueSet`, `canonical<T>`). `getResourceMap` is gone (no callers).
 - `ValidationResult.severity` is `ValidationSeverity`, its `definition` a `ConceptDefinition`, `asCoding()` a `CodingValue`; `TerminologyServiceErrorClass` is a Dart enum. `FhirToolingClient` takes and returns Parameters as JSON maps.

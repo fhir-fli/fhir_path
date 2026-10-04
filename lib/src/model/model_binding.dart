@@ -49,12 +49,23 @@ class TypeHierarchyEntry {
 /// A binding package (fhir_r4_path, fhir_r5_path, fhir_r6_path) implements
 /// this once, over its own generated model, and hands it to
 /// [FhirWorkerContext].
-abstract class FhirModelBinding {
+abstract class FhirModelBinding extends ResourceModel<FhirNode> {
   /// Makes the binding.
   const FhirModelBinding();
 
   /// The FHIR version the model implements, e.g. '4.3.0'.
+  @override
   String get fhirVersion;
+
+  /// The resource type names of this version: the [typeHierarchy] entries
+  /// of kind `resource` and derivation `specialization` (the filter the
+  /// Java reference's TypeManager applies), abstract ones included.
+  @override
+  Set<String> get resourceTypeNames => {
+        for (final info in typeHierarchy.values)
+          if (info.kind == 'resource' && info.derivation == 'specialization')
+            info.name,
+      };
 
   /// Every core type, keyed by StructureDefinition.name.
   Map<String, TypeHierarchyEntry> get typeHierarchy;
@@ -63,9 +74,11 @@ abstract class FhirModelBinding {
   IFhirValueFactory get valueFactory;
 
   /// A resource of this model from its JSON.
+  @override
   FhirNode fromJson(Map<String, dynamic> json);
 
   /// The JSON of a node of this model.
+  @override
   Map<String, dynamic> toJson(FhirNode node);
 
   /// Whether [typeName] names a type of this model (primitive, data type,

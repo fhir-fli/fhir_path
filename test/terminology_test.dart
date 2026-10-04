@@ -1,3 +1,4 @@
+import 'package:fhir_node/fhir_node.dart';
 import 'package:fhir_path/fhir_path.dart';
 import 'package:test/test.dart';
 
@@ -9,7 +10,7 @@ import 'support/json_stub.dart';
 void main() {
   const binding = StubBinding();
 
-  final codeSystem = nodeFromJson({
+  final codeSystem = JsonNode.resource({
     'resourceType': 'CodeSystem',
     'id': 'cs1',
     'url': 'http://example.org/cs',
@@ -25,7 +26,7 @@ void main() {
       {'code': 'b', 'display': 'Beta'},
     ],
   });
-  final composed = nodeFromJson({
+  final composed = JsonNode.resource({
     'resourceType': 'ValueSet',
     'id': 'vs1',
     'url': 'http://example.org/vs',
@@ -42,7 +43,7 @@ void main() {
       ],
     },
   });
-  final wholeSystem = nodeFromJson({
+  final wholeSystem = JsonNode.resource({
     'resourceType': 'ValueSet',
     'id': 'vs2',
     'url': 'http://example.org/vs-all',
@@ -61,7 +62,7 @@ void main() {
       ],
     },
   });
-  final expanded = nodeFromJson({
+  final expanded = JsonNode.resource({
     'resourceType': 'ValueSet',
     'id': 'vs3',
     'url': 'http://example.org/vs-expanded',
@@ -109,7 +110,7 @@ void main() {
 
     test('a resource with no id is still filed', () async {
       final cache = CanonicalResourceCache()
-        ..see(nodeFromJson({'resourceType': 'ValueSet', 'url': 'u:noid'}));
+        ..see(JsonNode.resource({'resourceType': 'ValueSet', 'url': 'u:noid'}));
       expect(await cache.getCanonicalResource('u:noid'), isNotNull);
     });
   });
@@ -219,7 +220,7 @@ void main() {
 
     test('a value set with no compose cannot be expanded', () async {
       final outcome = await ValueSetExpanderSimple(worker()).expand(
-        nodeFromJson({'resourceType': 'ValueSet', 'url': 'u:empty'}),
+        JsonNode.resource({'resourceType': 'ValueSet', 'url': 'u:empty'}),
         null,
       );
       expect(outcome.isOk, isFalse);
@@ -254,7 +255,7 @@ void main() {
     test('a loaded StructureDefinition joins the walk', () async {
       final w = FhirWorkerContext(binding: binding);
       await w.loadStructureDefinition(
-        nodeFromJson({
+        JsonNode.resource({
           'resourceType': 'StructureDefinition',
           'name': 'MyAge',
           'url': 'http://hl7.org/fhir/StructureDefinition/MyAge',
@@ -271,7 +272,7 @@ void main() {
     test('fetchValueSet and validation through the binding', () async {
       final w = worker();
       expect(await w.fetchValueSet('http://example.org/vs'), composed);
-      final coding = nodeFromJson(
+      const coding = JsonNode(
         {'system': 'http://example.org/cs', 'code': 'a'},
         'Coding',
       );
@@ -281,7 +282,7 @@ void main() {
         composed,
       );
       expect(r.isOk, isTrue);
-      final notCoding = nodeFromJson({'value': '1'}, 'Quantity');
+      const notCoding = JsonNode({'value': '1'}, 'Quantity');
       final bad = await w.validateCodeForCodingValue(
         ValidationOptions(),
         notCoding,
@@ -293,7 +294,7 @@ void main() {
   });
 
   test('CodingValue and ConceptValue read any model by name', () {
-    final cc = nodeFromJson(
+    const cc = JsonNode(
       {
         'coding': [
           {'system': 's', 'code': 'c', 'display': 'd'},

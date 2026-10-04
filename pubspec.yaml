@@ -23,7 +23,7 @@ environment:
 # the separate fhir_r4_path / fhir_r5_path / fhir_r6_path binding packages.
 dependencies:
   collection: ^1.19.1
-  fhir_node: ^0.6.0
+  fhir_node: ^0.6.1
   # The terminology server client and the online resource cache.
   http: ^1.6.0
   meta: ^1.16.0
