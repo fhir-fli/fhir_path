@@ -1,5 +1,9 @@
 ## 0.15.0
 
+- `ElementNode`, an ElementDefinition read by element name (path, types,
+  cardinality, binding, pattern, bounds, constraints, extension urls),
+  shared by fhir_validation and fhir_mapping.
+
 - `FhirModelBinding` extends fhir_node 0.6.1's `ResourceModel`
   (`resourceTypeNames` comes from the type table: kind `resource`,
   derivation `specialization`); the terminology tests' stub is fhir_node's

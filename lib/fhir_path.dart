@@ -55,6 +55,7 @@ export 'src/exceptions/value_set_expansion.dart';
 export 'src/logging/client_logger.dart';
 export 'src/logging/log_category.dart';
 export 'src/logging/logging_service.dart';
+export 'src/model/element_node.dart';
 export 'src/model/model_binding.dart';
 export 'src/terminology/code_in_value_set_result.dart';
 export 'src/terminology/coding_value.dart';
