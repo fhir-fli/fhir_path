@@ -36,18 +36,6 @@ jobs:
             echo "    path: ${GITHUB_WORKSPACE}/.fhir_r4/packages/fhir_r4"
             echo "  fhir_r4_path:"
             echo "    path: ${GITHUB_WORKSPACE}/.fhir_r4/packages/fhir_r4_path"
-            # fhir_node 0.6.1 (ResourceModel, which FhirModelBinding extends)
-            # until it is on pub.dev.
-            echo "  fhir_node:"
-            echo "    git:"
-            echo "      url: https://github.com/fhir-fli/fhir_node.git"
-            echo "      ref: main"
-            # ucum 0.9.1 (FormatException from ValidatedQuantity.fromString)
-            # until it is on pub.dev (2026-10-04).
-            echo "  ucum:"
-            echo "    git:"
-            echo "      url: https://github.com/fhir-fli/ucum.git"
-            echo "      ref: main"
           } > pubspec_overrides.yaml
 
       - name: Install dependencies
