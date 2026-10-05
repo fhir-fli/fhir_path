@@ -42,6 +42,12 @@ jobs:
             echo "    git:"
             echo "      url: https://github.com/fhir-fli/fhir_node.git"
             echo "      ref: main"
+            # ucum 0.9.1 (FormatException from ValidatedQuantity.fromString)
+            # until it is on pub.dev (2026-10-04).
+            echo "  ucum:"
+            echo "    git:"
+            echo "      url: https://github.com/fhir-fli/ucum.git"
+            echo "      ref: main"
           } > pubspec_overrides.yaml
 
       - name: Install dependencies
