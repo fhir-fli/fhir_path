@@ -67,7 +67,7 @@ void main() {
     expect(
       contact.extensionUrls,
       [
-        'http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name'
+        'http://hl7.org/fhir/StructureDefinition/structuredefinition-explicit-type-name',
       ],
     );
     expect(contact.contentReference, isNull);
