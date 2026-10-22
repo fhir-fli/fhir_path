@@ -104,4 +104,16 @@ abstract class FhirModelBinding extends ResourceModel<FhirNode> {
   /// [node] read as a CodeableConcept, or null. The model decides what
   /// stands for one (a CodeableConcept, a code; R5 adds a string).
   ConceptValue? asCodeableConcept(FhirNode node);
+
+  /// Why [xhtml] breaks the markup rules of a narrative (txt-1: only the
+  /// allowed elements and attributes), empty when it does not, as the model
+  /// checks its own narratives. This is what FHIRPath's `htmlChecks()`
+  /// answers from. `null`, the default, says the model does not check, and
+  /// the engine keeps its old answer.
+  List<String>? narrativeMarkupProblems(String xhtml) => null;
+
+  /// Whether [xhtml] has some text or an image (txt-2; HL7
+  /// FHIRPathEngine.checkForContent), for `htmlChecks2()`, or `null`, the
+  /// default, when the model does not check.
+  bool? narrativeHasContent(String xhtml) => null;
 }

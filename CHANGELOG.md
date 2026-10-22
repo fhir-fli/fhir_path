@@ -1,3 +1,7 @@
+## 0.15.1
+
+- **`htmlChecks()` and `htmlChecks2()` answer.** Both returned false for every input. They now answer from the model's own narrative check, through two new `FhirModelBinding` methods, `narrativeMarkupProblems` and `narrativeHasContent`, as HL7's FHIRPathEngine does (hapifhir/org.hl7.fhir.core): `htmlChecks()` is txt-1, empty unless there is one item, an xhtml value as it is and a string wrapped in a div, and from R6 also asks for content; `htmlChecks2()` is txt-2. Both methods default to `null`, and a binding that does not override them gets the old answer, false, so the 0.14.0 bindings work unchanged.
+
 ## 0.15.0
 
 - `ElementNode`, an ElementDefinition read by element name (path, types,
