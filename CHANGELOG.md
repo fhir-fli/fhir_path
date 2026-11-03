@@ -1,3 +1,16 @@
+## Unreleased
+
+- `typeCodeCanonical(code)`: the canonical a type code names. A relative code
+  is resolved against `http://hl7.org/fhir/StructureDefinition/`; an
+  absolute one (a logical model, a FHIRPath system type) is kept. Quoted from
+  ElementDefinition.type.code (packaged profiles-types.ndjson, 4.3.0); HAPI
+  and Firely resolve the same way.
+- `FhirWorkerContext.fetchTypeDefinition` asks the cache for that one
+  canonical. It also tried the bare name and
+  `http://terminology.hl7.org/StructureDefinition/<name>`; the spec gives
+  neither, and every StructureDefinition terminology.hl7.org publishes is
+  an extension, so a type name could only ever find the wrong resource there.
+
 ## 0.15.0
 
 - `ElementNode`, an ElementDefinition read by element name (path, types,
