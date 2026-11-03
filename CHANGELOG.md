@@ -1,4 +1,4 @@
-## Unreleased
+## 0.15.1
 
 - `typeCodeCanonical(code)`: the canonical a type code names. A relative code
   is resolved against `http://hl7.org/fhir/StructureDefinition/`; an
