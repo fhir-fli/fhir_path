@@ -628,15 +628,13 @@ class FhirWorkerContext implements IWorkerContext {
     return details;
   }
 
-  Future<FhirNode?> fetchTypeDefinition(String typeName) async {
-    return await resourceCache.getStructureDefinition(typeName) ??
-        await resourceCache.getStructureDefinition(
-          'http://hl7.org/fhir/StructureDefinition/$typeName',
-        ) ??
-        await resourceCache.getStructureDefinition(
-          'http://terminology.hl7.org/StructureDefinition/$typeName',
-        );
-  }
+  /// The StructureDefinition that type code [typeName] names, at the one
+  /// canonical [typeCodeCanonical] gives it. This tried the bare name and
+  /// then a terminology.hl7.org address as well; the spec resolves a
+  /// relative code against http://hl7.org/fhir/StructureDefinition only, and
+  /// the terminology.hl7.org address found an extension, never a type.
+  Future<FhirNode?> fetchTypeDefinition(String typeName) =>
+      resourceCache.getStructureDefinition(typeCodeCanonical(typeName));
 
   /// The canonical resource at [uri] (and [version]), of [type] when given.
   Future<FhirNode?> fetchResource({
