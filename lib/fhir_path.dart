@@ -31,6 +31,7 @@ export 'src/context/element_definition_match.dart';
 export 'src/context/fhir_worker_context.dart';
 export 'src/context/online_resource_cache.dart';
 export 'src/context/resource_cache.dart';
+export 'src/context/type_code.dart';
 export 'src/engine/collection_status.dart';
 export 'src/engine/execution_context.dart';
 export 'src/engine/execution_type_context.dart';

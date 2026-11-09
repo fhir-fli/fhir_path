@@ -1,6 +1,19 @@
-## 0.15.1
+## 0.15.2
 
 - **`htmlChecks()` and `htmlChecks2()` answer.** Both returned false for every input. They now answer from the model's own narrative check, through two new `FhirModelBinding` methods, `narrativeMarkupProblems` and `narrativeHasContent`, as HL7's FHIRPathEngine does (hapifhir/org.hl7.fhir.core): `htmlChecks()` is txt-1, empty unless there is one item, an xhtml value as it is and a string wrapped in a div, and from R6 also asks for content; `htmlChecks2()` is txt-2. Both methods default to `null`, and a binding that does not override them gets the old answer, false, so the 0.14.0 bindings work unchanged.
+
+## 0.15.1
+
+- `typeCodeCanonical(code)`: the canonical a type code names. A relative code
+  is resolved against `http://hl7.org/fhir/StructureDefinition/`; an
+  absolute one (a logical model, a FHIRPath system type) is kept. Quoted from
+  ElementDefinition.type.code (packaged profiles-types.ndjson, 4.3.0); HAPI
+  and Firely resolve the same way.
+- `FhirWorkerContext.fetchTypeDefinition` asks the cache for that one
+  canonical. It also tried the bare name and
+  `http://terminology.hl7.org/StructureDefinition/<name>`; the spec gives
+  neither, and every StructureDefinition terminology.hl7.org publishes is
+  an extension, so a type name could only ever find the wrong resource there.
 
 ## 0.15.0
 
