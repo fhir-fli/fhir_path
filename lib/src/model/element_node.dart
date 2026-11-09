@@ -122,4 +122,25 @@ class ElementConstraint {
 
   /// `constraint.human`, the text.
   String? get human => node.getChildByName('human')?.primitiveValue;
+
+  /// `constraint.key`, the constraint's id (`ele-1`, `txt-1`).
+  String? get key => node.getChildByName('key')?.primitiveValue;
+
+  /// `constraint.severity`: `error` or `warning` (ConstraintSeverity). A
+  /// validator reports a failed constraint at this level.
+  String? get severity => node.getChildByName('severity')?.primitiveValue;
+
+  /// Whether the constraint carries the
+  /// `elementdefinition-bestpractice` extension set to true. HL7's
+  /// validator reports such a constraint at a level its settings choose,
+  /// not at [severity].
+  bool get isBestPractice => node.getChildrenByName('extension').any(
+        (e) =>
+            e.getChildByName('url')?.primitiveValue == bestPracticeExtension &&
+            e.getChildByName('valueBoolean')?.primitiveValue == 'true',
+      );
+
+  /// The best-practice extension's url.
+  static const bestPracticeExtension =
+      'http://hl7.org/fhir/StructureDefinition/elementdefinition-bestpractice';
 }
