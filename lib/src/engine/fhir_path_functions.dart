@@ -4,7 +4,9 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:fhir_node/fhir_node.dart';
+import 'package:fhir_path/src/context/fhir_worker_context.dart';
 import 'package:fhir_path/src/internal.dart';
+import 'package:fhir_path/src/model/model_binding.dart';
 import 'package:fhir_path/src/utils/path_string_extensions.dart';
 import 'package:ucum/ucum.dart' show UcumException;
 
@@ -2180,36 +2182,58 @@ class FhirPathFunctions {
     return [fpContext.factory.string(joined, disallowExtensions: false)];
   }
 
+  /// `htmlChecks()`: txt-1, the narrative's markup. As HL7's FHIRPathEngine
+  /// (hapifhir/org.hl7.fhir.core 430c03b, read 2026-10-21): empty unless
+  /// there is one item; an xhtml value is checked as it is, a string is
+  /// wrapped in a `div` first; anything else is empty. From R6 on, txt-1
+  /// also asks for content, so the content check is added. The model
+  /// decides the markup rules ([FhirModelBinding.narrativeMarkupProblems]);
+  /// a model that does not check gets the old answer, false.
   List<FhirNode> funcHtmlChecks1(
     ExecutionContext execContext,
     List<FhirNode> focus,
     ExpressionNode exp,
   ) {
-    if (focus.length != 1) {
+    if (focus.length != 1) return [];
+    final node = focus.first;
+    final value = node.primitiveValue;
+    final String xhtml;
+    if (node.fhirType == 'xhtml' && value != null) {
+      xhtml = value;
+    } else if (node.fhirType == 'string' && value != null) {
+      xhtml = '<div xmlns="http://www.w3.org/1999/xhtml">$value</div>';
+    } else {
+      return [];
+    }
+    final binding = _binding;
+    final problems = binding?.narrativeMarkupProblems(xhtml);
+    if (binding == null || problems == null) {
       return [fpContext.factory.boolean(false, disallowExtensions: false)];
     }
-    return [fpContext.factory.boolean(false, disallowExtensions: false)];
-    // final xhtml = focus.first.getXhtml();
-    // if (xhtml == null) {
-    //   return [FhirBoolean(false)];
-    // }
-    // return [FhirBoolean(checkHtmlNames(xhtml))];
+    var ok = problems.isEmpty;
+    if (ok && VersionUtilities.isR6Ver(fpContext.worker.getVersion())) {
+      ok = binding.narrativeHasContent(xhtml) ?? false;
+    }
+    return [fpContext.factory.boolean(ok, disallowExtensions: false)];
   }
 
+  /// `htmlChecks2()`: txt-2, some text or an image. As HL7's FHIRPathEngine:
+  /// false unless there is one xhtml item.
   List<FhirNode> funcHtmlChecks2(
     ExecutionContext execContext,
     List<FhirNode> focus,
     ExpressionNode exp,
   ) {
-    if (focus.length != 1) {
-      return [fpContext.factory.boolean(false, disallowExtensions: false)];
-    }
-    return [fpContext.factory.boolean(false, disallowExtensions: false)];
-    // final xhtml = focus.first.getXhtml();
-    // if (xhtml == null) {
-    //   return [FhirBoolean(false)];
-    // }
-    // return [FhirBoolean(checkForContent(xhtml))];
+    final value = focus.length == 1 && focus.first.fhirType == 'xhtml'
+        ? focus.first.primitiveValue
+        : null;
+    final ok = value == null ? null : _binding?.narrativeHasContent(value);
+    return [fpContext.factory.boolean(ok ?? false, disallowExtensions: false)];
+  }
+
+  FhirModelBinding? get _binding {
+    final worker = fpContext.worker;
+    return worker is FhirWorkerContext ? worker.binding : null;
   }
 
   Future<List<FhirNode>> funcComparable(
