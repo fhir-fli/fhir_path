@@ -4,6 +4,8 @@ import 'package:fhir_r4/fhir_r4.dart';
 import 'package:fhir_r4_path/fhir_r4_path.dart' show R4ModelBinding;
 import 'package:test/test.dart';
 
+import 'support/json_stub.dart';
+
 /// `htmlChecks()` and `htmlChecks2()` (Narrative txt-1 and txt-2) answer
 /// from the model's own narrative check, as HL7's FHIRPathEngine
 /// (hapifhir/org.hl7.fhir.core 430c03b): one item, xhtml as is, a string
@@ -18,11 +20,11 @@ class _CheckingBinding extends R4ModelBinding {
   String get fhirVersion => version;
 
   @override
-  List<String>? narrativeMarkupProblems(String xhtml) =>
+  List<String> narrativeMarkupProblems(String xhtml) =>
       xhtml.contains('<script') ? ['script'] : [];
 
   @override
-  bool? narrativeHasContent(String xhtml) =>
+  bool narrativeHasContent(String xhtml) =>
       xhtml.replaceAll(RegExp('<[^>]*>'), '').trim().isNotEmpty;
 }
 
@@ -107,10 +109,12 @@ void main() {
     );
   });
 
+  // fhir_r4_path 0.14.1 overrides the hook, so a binding that leaves it at
+  // the default stands in for a model that does not check.
   test('a model that does not check keeps the old answer, false', () async {
     expect(
       await run(
-        const R4ModelBinding(),
+        const StubBinding(),
         patient('<div $ns>Seen</div>'),
         'text.div.htmlChecks()',
       ),

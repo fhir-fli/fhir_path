@@ -72,4 +72,16 @@ void main() {
     );
     expect(contact.contentReference, isNull);
   });
+
+  test('a constraint carries its key, severity and best-practice flag', () {
+    final byKey = {
+      for (final c in elements['Patient']!.constraints) c.key: c,
+      for (final c in elements['Patient.contact']!.constraints) c.key: c,
+    };
+    expect(byKey['pat-1']?.severity, 'error');
+    expect(byKey['pat-1']?.isBestPractice, isFalse);
+    // dom-6 is a warning flagged elementdefinition-bestpractice = true.
+    expect(byKey['dom-6']?.severity, 'warning');
+    expect(byKey['dom-6']?.isBestPractice, isTrue);
+  });
 }
